@@ -1,0 +1,57 @@
+<script>
+    import { onMount } from 'svelte'
+    import PostItem from "./PostItem.svelte";
+    import { Button } from 'flowbite-svelte';
+    import PocketBase from 'pocketbase';
+    export let fetchDataFunction;
+    export let posts = [];
+    let itemsPerPage = 5; // Number of items to load per page
+    let currentPage = 1;
+  
+    function loadMore() {
+      currentPage++;
+    }
+  
+    $: visiblePosts = posts.slice(0, currentPage * itemsPerPage);
+    
+  </script>
+
+  {#if posts.length > 0}
+    <ul>
+      {#each posts as post (post.id)}
+        <PostItem item={post}/>
+      {/each}
+    </ul>
+  {:else}
+    <p>No posts available yet, please choose at least one condition and medication</p>
+  {/if}
+
+  
+  {#if visiblePosts.length < posts.length}
+    <button on:click={loadMore}>Load More</button>
+  {/if}
+
+  <style>
+    p {
+      color: white;
+      text-align: center;
+      
+    }
+
+    button {
+      color: #202142;
+      background-color: #202142;
+      color: #ffff;
+      border: 0;
+      border-radius: 8px;
+      width: 100px;
+      height: 40px;
+      cursor: pointer;
+    }
+  
+    button:hover {
+      transform: scale(0.98);
+      opacity: 0.9;
+    }
+  
+  </style>
