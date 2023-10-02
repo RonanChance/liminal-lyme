@@ -7,6 +7,8 @@
 	import { Toast } from 'flowbite-svelte';
 	import { ExclamationCircleSolid } from 'flowbite-svelte-icons';
 
+	let toastMessage = "";
+
 	let selectedMedications = []
 	let selectedIllnesses = []
 	
@@ -17,11 +19,12 @@
 	try {
 			if (selectedMedications.length === 0 || selectedIllnesses.length === 0) {
 				// Either selectedMedications or selectedIllnesses is empty, show a toast
+				toastMessage = "Select at least one medication and one condition";
 				showToast();
 				return;
 			}
-			const medicationsFilter = selectedMedications.map(medication => `Tags?~'${medication}'`).join(' || ');
-			const illnessesFilter = selectedIllnesses.map(illness => `Tags?~'${illness}'`).join(' || ');
+			const medicationsFilter = selectedMedications.map(medication => `Tags?~'${medication}'`).join(' && ');
+			const illnessesFilter = selectedIllnesses.map(illness => `Tags?~'${illness}'`).join(' && ');
 
 			// Combine the medications and illnesses filters using the AND operator
 			const filterQuery = `(${medicationsFilter}) && (${illnessesFilter})`;
@@ -35,6 +38,12 @@
 			result_list = fetched_posts.items;
 			console.log(fetched_posts);
 			console.log(result_list);
+
+			if (result_list.length === 0) {
+				toastMessage = "No matches found.. check back soon!";
+				showToast();
+			}
+
 		} catch (error) {
 			console.error('Error fetching posts:', error);
 		}
@@ -69,7 +78,7 @@
 		  <ExclamationCircleSolid class="w-5 h-5" />
 		  <span class="sr-only">Warning icon</span>
 		</svelte:fragment>
-		Include at least one condition and one medication.
+		{toastMessage}
 	  </Toast>
 	{/if}
 </div>

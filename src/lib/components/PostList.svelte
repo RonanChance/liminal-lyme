@@ -23,7 +23,7 @@
       {/each}
     </ul>
   {:else}
-    <p>No posts available yet, please choose at least one condition and medication</p>
+    <p>Select a condition and a medication to get started!</p>
   {/if}
 
   
