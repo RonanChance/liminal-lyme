@@ -4,6 +4,9 @@
     import Card from './Card.svelte'
     import { Button } from 'flowbite-svelte';
     export let item
+    import snarkdown from 'snarkdown'
+    // import marked from 'marked';
+    // import svelte-markdown from 'svelte-markdown'
 
     // const dispatch = createEventDispatcher()
 
@@ -29,7 +32,8 @@
         <!-- <Button href={item.Link} class="p-2 float-right custom-button bg-[#e14b00]">  Reddit <span style="margin-left: 7px;"></span> <LinkSolid size=xs/> </Button> -->
     </div>
     <div class="str-name">
-        <span class="bg-gray-100 text-gray-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-400">@{item.Author} {formatDate(item.Date)}</span>
+        <span class="bg-gray-100 text-gray-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-400">@{item.Author} </span>
+        <!-- {formatDate(item.Date)} -->
     </div>
     <div class="num-rating">
         <AngleUpSolid size=xs /> 
@@ -39,7 +43,8 @@
         <ChevronRightSolid style="bg-white" size=xs/>
     </a>
     <div class="str-review">
-        {item.Comment}
+        <!-- {@html item.Comment.split('\n').map(paragraph => `<p>${paragraph}</p>`).join('')} -->
+        {@html snarkdown(item.Comment)}
     </div>
 </Card>
 
@@ -78,5 +83,9 @@
         /* background-color: #20214224; */
         /* border-radius: 5%; */
         padding: 15px;
+        max-width: 100%;
+        word-wrap: break-word;
+        overflow: hidden;
+        white-space: pre-wrap;
     }
 </style>

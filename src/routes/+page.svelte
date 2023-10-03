@@ -66,8 +66,8 @@
 	} 
 
 
-	const illnesses = ['Lyme', 'RMSF', 'Babesia'];
-	const medications = ['Lyrica', 'Lamictal', 'Doxycycline'];
+	const illnesses = ['Babesia', 'Bartonella', 'Lyme Disease', 'Rocky Mountain Spotted Fever'];
+	const medications = ['Amoxicillin', 'Azithromycin', 'Ceftriaxone', 'Doxycycline'];
 
 </script>
 
@@ -100,7 +100,7 @@
 	.toast-container {
     position: fixed;
     left: 50%;
-	top: 5%;
+	top: 75px;
     transform: translate(-50%, -50%);
     padding: 16px;
   }
