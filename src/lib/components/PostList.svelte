@@ -1,41 +1,48 @@
 <script>
-    import { onMount } from 'svelte'
-    import PostItem from "./PostItem.svelte";
-    import { Button } from 'flowbite-svelte';
-    import PocketBase from 'pocketbase';
-    export let fetchDataFunction;
-    export let posts = [];
-    let itemsPerPage = 5; // Number of items to load per page
-    let currentPage = 1;
-  
-    function loadMore() {
-      currentPage++;
-    }
-  
-    $: visiblePosts = posts.slice(0, currentPage * itemsPerPage);
-    
-  </script>
+  import { onMount } from 'svelte'
+  import PostItem from "./PostItem.svelte";
+  import { Button } from 'flowbite-svelte';
+  import PocketBase from 'pocketbase';
 
-  {#if posts.length > 0}
-    <ul>
-      {#each posts as post (post.id)}
-        <PostItem item={post}/>
-      {/each}
-    </ul>
-  {:else}
-    <p>Select a condition and a medication to get started!</p>
-  {/if}
+  export let fetchDataFunction;
+  export let posts = [];
+  let itemsPerPage = 10; // Number of items to load per page
+  let currentPage = 1;
 
-  
-  {#if visiblePosts.length < posts.length}
-    <button on:click={loadMore}>Load More</button>
-  {/if}
+  function loadMore() {
+    currentPage++;
+  }
+
+  $: visiblePosts = posts.slice(0, currentPage * itemsPerPage);
+
+  onMount(loadMore);
+</script>
+
+{#if posts.length > 0}
+  <ul>
+    {#each visiblePosts as post (post.id)}
+      <PostItem item={post}/>
+    {/each}
+  </ul>
+  <div class="button-container">
+    {#if visiblePosts.length < posts.length}
+      <button on:click={loadMore}>Load More</button>
+    {/if}
+  </div>
+{:else}
+  <p>Select a condition and a medication to get started!</p>
+{/if}
 
   <style>
     p {
       color: white;
       text-align: center;
       
+    }
+
+    .button-container {
+      display: flex;
+      justify-content: center;
     }
 
     button {

@@ -23,15 +23,15 @@
 				showToast();
 				return;
 			}
-			const medicationsFilter = selectedMedications.map(medication => `Tags?~'${medication}'`).join(' && ');
-			const illnessesFilter = selectedIllnesses.map(illness => `Tags?~'${illness}'`).join(' && ');
+			const medicationsFilter = selectedMedications.map(medication => `tags?~'${medication}'`).join(' && ');
+			const illnessesFilter = selectedIllnesses.map(illness => `tags?~'${illness}'`).join(' && ');
 
 			// Combine the medications and illnesses filters using the AND operator
 			const filterQuery = `(${medicationsFilter}) && (${illnessesFilter})`;
 
 			// `Tags?~'Lyme' && Tags?~'Doxycycline'`
 			const fetched_posts = await pb.collection('posts').getList(1, 50, {
-			sort: '-Score',
+			sort: '-score',
 			filter: filterQuery,
 			});
 
@@ -84,24 +84,28 @@
 </div>
 <div class="intro-container">
 	<IntroInfo />
-<main class="container">
-	<div class="centered-select" id="area-1">
-		<MSelect options={illnesses} placeholderString={'Conditions'} on:choices={filterIllnesses}/>
-		<MSelect options={medications} placeholderString={'Medications'} on:choices={filterMedications}/>
-		<button type="button" on:click={fetchDataForPostList} class="bg-[#43bbde] text-white hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-			<SearchOutline />
-		</button>
-	</div>
-	<PostList fetchDataFunction={fetchDataForPostList} posts={result_list}/>
-</main>
+	<main class="container">
+		<div class="centered-select" id="area-1">
+			<MSelect options={illnesses} placeholderString={'Conditions'} on:choices={filterIllnesses}/>
+			<MSelect options={medications} placeholderString={'Medications'} on:choices={filterMedications}/>
+			<button type="button" on:click={fetchDataForPostList} class="bg-[#43bbde] text-white hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+				<SearchOutline />
+			</button>
+		</div>
+		<div class="post-area">
+			<PostList fetchDataFunction={fetchDataForPostList} posts={result_list}/>
+		</div>
+	</main>
 </div>
 
 <style>
+	.post-area {
+		padding-bottom: 15%;
+	}
 	.toast-container {
-    position: fixed;
-    left: 50%;
-	top: 75px;
-    transform: translate(-50%, -50%);
-    padding: 16px;
-  }
+		position: fixed;
+		left: 50%;
+		top: 10%;
+		transform: translate(-50%, -50%);
+  	}
 </style>

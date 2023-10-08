@@ -9,7 +9,7 @@
 <div class="text-center">
 
 <h1>
-Your <span class="highlighted-word">Health</span>.
+Your <span class="highlighted-word">Health</span>. <br />
 Your <span class="highlighted-word">Medication</span>.
 </h1>
 

@@ -38,6 +38,12 @@ body {
     min-height: 100%;
 }
 
+.top-nav-bar{
+    font-size: 15pt;
+    padding-top: 1%;
+    padding-bottom: 2%;
+}
+
 html {
     min-height: 100%;
     height: 100%;
@@ -49,7 +55,7 @@ ul {
 
 .container {
     backdrop-filter: blur(4.75px);
-	max-width: 1000px;
+	max-width: 60%;
 	margin: 0pt auto;
 }
 
@@ -81,3 +87,60 @@ div.multiselect > ul.selected > li {
     --sms-selected-bg: #43bbde;
     --sms-selected-text-color: white;
 }
+
+.mainlogo {
+    width: 250px;
+    height: auto; /* Automatically adjust the height to maintain aspect ratio */
+}
+
+
+
+@media (max-width: 768px) {
+    .mainlogo {
+        width: 150px;
+        height: auto; /* Automatically adjust the height to maintain aspect ratio */
+    }
+
+    h1 {
+        font-size: 25pt;
+        max-width: 80%;
+        margin: 0 auto;
+        padding-bottom: 5%;
+    }
+    
+    h2 {
+        font-size: 15pt;
+        max-width: 80%;
+        margin: 0 auto;
+        padding-bottom: 5%;
+    }
+    
+    h3 {
+        font-size: 10pt;
+        max-width: 80%;
+        margin: 0 auto;
+    }
+
+    .container {
+        max-width: 90%;
+    }
+
+    .side-link {
+        position: absolute;
+        top: 0;
+        right: 0;
+        color: #fff;
+        background: #e14b00;
+        border-radius: 10px 0 0 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px;
+    }
+
+    .centered-select {
+        flex-direction: column; /* Stack elements vertically */
+        align-items: center;
+    }
+
+  }
