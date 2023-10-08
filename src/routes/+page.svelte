@@ -14,7 +14,7 @@
 	
 	let fetched_posts = [];
     let result_list = [];
-	const pb = new PocketBase('http://127.0.0.1:8090');
+	const pb = new PocketBase('');
 	async function fetchDataForPostList() {
 	try {
 			if (selectedMedications.length === 0 || selectedIllnesses.length === 0) {
