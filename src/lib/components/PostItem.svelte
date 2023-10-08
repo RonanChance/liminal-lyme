@@ -25,6 +25,12 @@
         return `${year}-${month}-${day}`;
     }
 
+        function decodeHTMLEntities(html) {
+        const textarea = document.createElement('textarea');
+        textarea.innerHTML = html;
+        return textarea.value;
+    }
+
 </script>
 
 <Card>
@@ -48,7 +54,7 @@
     </a>
     <div class="str-review">
         <!-- {@html item.Comment.split('\n').map(paragraph => `<p>${paragraph}</p>`).join('')} -->
-        {@html snarkdown(item.body)}
+        {@html decodeHTMLEntities(item.body)}
     </div>
 </Card>
 
@@ -84,8 +90,6 @@
         padding: 0 5px; /* Adjust padding for spacing */
     }
     .str-review {
-        /* background-color: #20214224; */
-        /* border-radius: 5%; */
         max-width: 105%;
         word-wrap: break-word;
         overflow: hidden;
