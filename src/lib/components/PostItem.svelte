@@ -36,7 +36,7 @@
 <Card>
     <div class="tags">
         {#each item.tags as tag, index}
-            <span class="bg-[#43bbde] text-[#ffff] text-xs font-medium mr-2 px-2.5 py-0.5 rounded">{tag}</span>
+            <span class="bg-[#43bbde] text-[#ffff] text-xs font-medium mr-2 px-2.5 py-0.5 rounded" style="white-space: nowrap; display: inline-block;">{tag}</span>
         {/each}
         <!-- <Button href={item.Link} class="p-2 float-right custom-button bg-[#e14b00]">  Reddit <span style="margin-left: 7px;"></span> <LinkSolid size=xs/> </Button> -->
     </div>
