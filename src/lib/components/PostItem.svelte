@@ -36,20 +36,21 @@
 <Card>
     <div class="tags">
         {#each item.tags as tag, index}
-            <span class="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">{tag}</span>
+            <span class="bg-[#43bbde] text-[#ffff] text-xs font-medium mr-2 px-2.5 py-0.5 rounded">{tag}</span>
         {/each}
         <!-- <Button href={item.Link} class="p-2 float-right custom-button bg-[#e14b00]">  Reddit <span style="margin-left: 7px;"></span> <LinkSolid size=xs/> </Button> -->
     </div>
-    <div class="str-name">
-        <span class="bg-gray-100 text-gray-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-400">@{item.author} </span>
-        <span class="bg-gray-100 text-gray-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-400">{formatDate(item.date)} </span>
+    <div class="str-name-subreddit-date">
+        <span class="bg-gray-100 text-gray-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-400" style="white-space: nowrap; display: inline-block;">@{item.author}</span>
+        <span class="bg-gray-100 text-gray-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-400" style="white-space: nowrap; display: inline-block;">r/{item.subreddit}</span>
+        <span class="bg-gray-100 text-gray-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-400" style="white-space: nowrap; display: inline-block;">{formatDate(item.date)}</span>
         <!-- {formatDate(item.Date)} -->
     </div>
     <div class="num-rating">
         <AngleUpSolid size=xs /> 
         {item.score}
     </div>
-    <a class="side-link" href="{item.permalink}">
+    <a class="side-link" href="{item.permalink}" target="_blank">
         <ChevronRightSolid style="bg-white" size=xs/>
     </a>
     <div class="str-review">
@@ -59,6 +60,9 @@
 </Card>
 
 <style>
+    .str-name-subreddit-date{
+        padding-bottom: 10pt;
+    }
     .num-rating{
         position: absolute;
         top: -20px;

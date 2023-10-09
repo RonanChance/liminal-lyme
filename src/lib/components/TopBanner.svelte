@@ -18,9 +18,9 @@
           <li>
             <a href="/" class="navtext homelink" aria-current="page">Home</a>
           </li>
-          <!-- <li>
+          <li>
             <a href="/about" class="navtext aboutlink">About</a>
-          </li> -->
+          </li>
         </ul>
       </div>
     </div>

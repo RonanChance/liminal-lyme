@@ -6,8 +6,11 @@
 	import PocketBase from 'pocketbase';
 	import { Toast } from 'flowbite-svelte';
 	import { ExclamationCircleSolid } from 'flowbite-svelte-icons';
+	import { Spinner } from 'flowbite-svelte';
+    import MedicalDisclaimer from '../lib/components/MedicalDisclaimer.svelte';
 
 	let toastMessage = "";
+	let isLoading = false;
 
 	let selectedMedications = []
 	let selectedIllnesses = []
@@ -17,6 +20,7 @@
 	const pb = new PocketBase('https://openrxndatabase.hop.sh/');
 	async function fetchDataForPostList() {
 	try {
+		isLoading = true;
 			if (selectedMedications.length === 0 || selectedIllnesses.length === 0) {
 				// Either selectedMedications or selectedIllnesses is empty, show a toast
 				toastMessage = "Select at least one medication and one condition";
@@ -31,8 +35,8 @@
 
 			// `Tags?~'Lyme' && Tags?~'Doxycycline'`
 			const fetched_posts = await pb.collection('posts').getList(1, 50, {
-			sort: '-score',
-			filter: filterQuery,
+				sort: '-score',
+				filter: filterQuery,
 			});
 
 			result_list = fetched_posts.items;
@@ -46,6 +50,10 @@
 
 		} catch (error) {
 			console.error('Error fetching posts:', error);
+			}
+		
+		finally {
+				isLoading = false;
 		}
 	}
 
@@ -88,19 +96,26 @@
 		<div class="centered-select" id="area-1">
 			<MSelect options={illnesses} placeholderString={'Conditions'} on:choices={filterIllnesses}/>
 			<MSelect options={medications} placeholderString={'Medications'} on:choices={filterMedications}/>
-			<button type="button" on:click={fetchDataForPostList} class="bg-[#43bbde] text-white hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-				<SearchOutline />
+			<button type="button" on:click={fetchDataForPostList} class="bg-[#43bbde] text-white hover:bg-[#ffff] hover:text-[#43bbde] focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+				{#if isLoading}
+					<Spinner size={6} />
+				{:else}
+					<SearchOutline />
+				{/if}
 			</button>
 		</div>
 		<div class="post-area">
 			<PostList fetchDataFunction={fetchDataForPostList} posts={result_list}/>
+		</div>
+		<div class="med-disclaimer">
+			<MedicalDisclaimer />
 		</div>
 	</main>
 </div>
 
 <style>
 	.post-area {
-		padding-bottom: 15%;
+		padding-bottom: 5%;
 	}
 	.toast-container {
 		position: fixed;

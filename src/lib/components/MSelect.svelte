@@ -13,4 +13,4 @@
 
 </script>
 
-<MultiSelect bind:selected options={options} placeholder={placeholderString}/>
+<MultiSelect bind:selected options={options} placeholder={placeholderString} inputmode='none'/>

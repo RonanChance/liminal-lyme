@@ -27,6 +27,11 @@ h3 {
     margin-bottom: 10pt;
 }
 
+p {
+    color: white;
+    font-size: 10pt;
+}
+
 body {
     font-family: 'Poppins', sans-serif;
     background-color: #101C32;
