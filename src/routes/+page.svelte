@@ -79,17 +79,6 @@
 
 </script>
 
-<div class="toast-container">
-	{#if isToastVisible}
-	<Toast color="orange">
-		<svelte:fragment slot="icon">
-		  <ExclamationCircleSolid class="w-5 h-5" />
-		  <span class="sr-only">Warning icon</span>
-		</svelte:fragment>
-		{toastMessage}
-	  </Toast>
-	{/if}
-</div>
 <div class="intro-container">
 	<IntroInfo />
 	<main class="container">
@@ -112,10 +101,24 @@
 		</div>
 	</main>
 </div>
+<div class="toast-container">
+	{#if isToastVisible}
+	<Toast color="orange">
+		<svelte:fragment slot="icon">
+		  <ExclamationCircleSolid class="w-5 h-5" />
+		  <span class="sr-only">Warning icon</span>
+		</svelte:fragment>
+		{toastMessage}
+	  </Toast>
+	{/if}
+</div>
 
 <style>
 	.post-area {
 		padding-bottom: 5%;
+	}
+	.med-disclaimer {
+		padding-bottom: 20%;
 	}
 	.toast-container {
 		position: fixed;

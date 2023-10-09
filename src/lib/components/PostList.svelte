@@ -30,7 +30,7 @@
     {/if}
   </div>
 {:else}
-  <p>Select a condition and a medication to get started!</p>
+  <p>Select a <span class="highlighted-word">condition</span> and a <span class="highlighted-word">medication</span> to get started!</p>
 {/if}
 
   <style>
@@ -38,6 +38,10 @@
       color: white;
       text-align: center;
       
+    }
+
+    .highlighted-word {
+      color: #43bbde;
     }
 
     .button-container {

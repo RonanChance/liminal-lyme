@@ -32,6 +32,11 @@ p {
     font-size: 10pt;
 }
 
+.navbar-container {
+    padding-top: 2%;
+    padding-bottom: 2%;
+}
+
 body {
     font-family: 'Poppins', sans-serif;
     background-color: #101C32;
@@ -69,7 +74,7 @@ ul {
 	justify-content: center;
     display: flex;
     gap: 3px;
-    padding-top: 50pt;
+    /* padding-top: 50pt; */
     padding-bottom: 20pt;
 	/* margin: 25px; */
 }
@@ -92,9 +97,25 @@ div.multiselect > ul.selected > li {
     height: auto; /* Automatically adjust the height to maintain aspect ratio */
 }
 
+.Accordion-container {
+    align-items: center;
+    flex-direction: column;
+    width: 50%;
+    margin-left: 25%;
+}
+
 
 
 @media (max-width: 768px) {
+
+    .Accordion-container {
+        /* align-items: center;
+        flex-direction: column; */
+        width: 100%;
+        margin: 0 auto;
+        /* margin-left: 5%; */
+    }
+    
     .mainlogo {
         width: 150px;
         height: auto; /* Automatically adjust the height to maintain aspect ratio */
@@ -140,6 +161,11 @@ div.multiselect > ul.selected > li {
     .centered-select {
         flex-direction: column; /* Stack elements vertically */
         align-items: center;
+    }
+    
+    .navbar-container {
+        padding-top: 3%;
+        padding-bottom: 3%;
     }
 
   }
