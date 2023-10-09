@@ -14,7 +14,11 @@
     <Accordion >
         <AccordionItem class="bg-gray-100" >
             <span slot="header">What is this website?</span>
-            <p class="text-lg mb-2 text-white ">This website aims to connect individuals managing symptoms during treatment to the relevant experiences of others. 
+            <p class="text-lg mb-2 text-white "> This website aims to make the reactions people have during treatment accessible to you. 
+            
+            <br/><br/> 
+            
+            Medical data is often reduced to 1's and 0's, but we want to supercharge the value of written experience in your recovery. 
                 
             <br/><br/> 
             
@@ -28,7 +32,7 @@
 
             <br/><br/> 
 
-            We provide a searchable database open to the public of the reactions people experience during the treatment of their illness, hence the name OpenRXN.
+            We provide a tool, open to anyone, to find reactions people have during treatment, hence the name OpenRXN.
         </AccordionItem>
         <AccordionItem class="bg-gray-100">
             <span slot="header">Where is the data from?</span>
