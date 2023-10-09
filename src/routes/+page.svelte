@@ -14,7 +14,7 @@
 	
 	let fetched_posts = [];
     let result_list = [];
-	const pb = new PocketBase('');
+	const pb = new PocketBase('https://openrxndatabase.hop.sh/');
 	async function fetchDataForPostList() {
 	try {
 			if (selectedMedications.length === 0 || selectedIllnesses.length === 0) {
