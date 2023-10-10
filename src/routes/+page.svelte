@@ -14,24 +14,46 @@
 
 	let selectedMedications = []
 	let selectedIllnesses = []
+
+	const illnesses = ['All Conditions (ANY)', 'Babesia', 'Bartonella', 'Lyme Disease', 'Rocky Mountain Spotted Fever'];
+	const medications = ['All Antibiotics (ANY)', 'Amoxicillin', 'Azithromycin', 'Ceftriaxone', 'Doxycycline'];
 	
 	let fetched_posts = [];
     let result_list = [];
 	const pb = new PocketBase('https://openrxndatabase.hop.sh/');
+	// const pb = new PocketBase('http://127.0.0.1:8090');
+	
 	async function fetchDataForPostList() {
-	try {
-		isLoading = true;
+		try {
+			isLoading = true;
 			if (selectedMedications.length === 0 || selectedIllnesses.length === 0) {
 				// Either selectedMedications or selectedIllnesses is empty, show a toast
 				toastMessage = "Select at least one medication and one condition";
 				showToast();
 				return;
 			}
+			
+			// handle "any" condition choice
+			if (selectedIllnesses.includes("All Conditions (ANY)")){
+				selectedIllnesses = ["All Conditions (ANY)"];
+			}
+
+			// handle "any" antibiotic choice
+			if (selectedMedications.includes("All Antibiotics (ANY)")){
+				selectedMedications = ["All Antibiotics (ANY)"];
+			}
+			
+			console.log(selectedIllnesses)
+			console.log(selectedMedications)
 			const medicationsFilter = selectedMedications.map(medication => `tags?~'${medication}'`).join(' && ');
 			const illnessesFilter = selectedIllnesses.map(illness => `tags?~'${illness}'`).join(' && ');
+			
+			console.log(medicationsFilter)
+			console.log(illnessesFilter)
 
 			// Combine the medications and illnesses filters using the AND operator
 			const filterQuery = `(${medicationsFilter}) && (${illnessesFilter})`;
+			console.log(filterQuery)
 
 			// `Tags?~'Lyme' && Tags?~'Doxycycline'`
 			const fetched_posts = await pb.collection('posts').getList(1, 50, {
@@ -54,8 +76,8 @@
 		
 		finally {
 				isLoading = false;
+			}
 		}
-	}
 
 	let isToastVisible = false;
 	function showToast() {
@@ -72,10 +94,6 @@
 	const filterIllnesses = (e) => {
 		selectedIllnesses = e.detail
 	} 
-
-
-	const illnesses = ['Babesia', 'Bartonella', 'Lyme Disease', 'Rocky Mountain Spotted Fever'];
-	const medications = ['Amoxicillin', 'Azithromycin', 'Ceftriaxone', 'Doxycycline'];
 
 </script>
 
