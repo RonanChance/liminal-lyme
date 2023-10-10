@@ -48,17 +48,19 @@
         <AccordionItem class="bg-gray-100">
             <span slot="header">How can I support this project?</span>
             <p class="text-lg mb-2 text-white">
-                You can support this project by contributing to the <a href="https://www.github.com/RonanChance" target="_blank" rel="noreferrer" class="text-blue-600"> Github </a>
+                You can support this project by contributing to the <a href="https://www.github.com/RonanChance" target="_blank" rel="noreferrer" class="text-blue-600">Github</a>.
                 <br/><br/>
-                And reach out to me if you have any questions, recommendations, or just want to network! 
+                And reach out to me if you have any questions, recommendations, or just want to network.
+                <br/><br/>
+                Email: Ronan@OpenRXN.com
                 <br/><br/>
             </p>
             <div class="githublinkedin">
                 <a href="https://www.github.com/RonanChance">
-                    <GithubSolid class="w-8 h-8" role="button"/>
+                    <GithubSolid class="w-8 h-8 text-white" role="button"/>
                 </a>
                 <a href="https://www.linkedin.com/in/ronancdonovan">
-                    <LinkedinSolid class="w-8 h-8" role="button"/>
+                    <LinkedinSolid class="w-8 h-8 text-white" role="button"/>
                 </a>
             </div>
         </AccordionItem>
