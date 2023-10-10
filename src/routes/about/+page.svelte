@@ -3,7 +3,7 @@
     import TopBanner from '../../lib/components/TopBanner.svelte'
     import { AccordionItem, Accordion } from 'flowbite-svelte';
 
-    const subreddits = ['AlternativeHealth', 'AlternativeHealth', 'Anxiety', 'Anxiety', 'CampingandHiking', 'CampingandHiking', 'camping', 'camping', 'ChronicIllness', 'ChronicIllness', 'ChronicPain', 'ChronicPain', 'healthcare', 'healthcare', 'Health', 'Health', 'IAmA', 'Lyme', 'Lyme', 'medicine', 'medicine', 'Outdoors', 'Outdoors', 'Survival', 'Survival'];
+    const subreddits = ['AlternativeHealth', 'Anxiety', 'CampingandHiking', 'ChronicIllness', 'ChronicPain', 'Health', 'IAmA', 'Lyme', 'Outdoors', 'Survival', 'camping', 'healthcare', 'medicine'];
 </script>
 
 <TopBanner />
@@ -18,7 +18,7 @@
             
             <br/><br/> 
             
-            Medical data is often reduced to 1's and 0's, but we want to supercharge the value of written experience in your recovery. 
+            Medical data often lacks nuanced information that is only discernable through personal narrative. We want to supercharge these narratives to empower your recovery. 
                 
             <br/><br/> 
             
