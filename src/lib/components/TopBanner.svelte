@@ -4,7 +4,7 @@
 
 
 <div class="navbar-container">
-  <Navbar class="bg-sky-500/0">
+  <Navbar class="bg-sky-500 bg-opacity-0">
     <NavBrand href="/">
       <img src="/logo.png" class="mainlogo" alt="OpenRXN" />
     </NavBrand>
