@@ -36,7 +36,7 @@
 <Card>
     <div class="tags">
         {#each item.tags as tag, index}
-            {#if tag !== "All Antibiotics (ANY)" && tag !== "All Conditions (ANY)"}
+            {#if tag !== "ALL MEDICATIONS (ANY)" && tag !== "ALL CONDITIONS (ANY)"}
                 <span class="bg-[#43bbde] text-[#ffff] text-xs font-medium mr-2 px-2.5 py-0.5 rounded" style="display: inline-block;">{tag}</span>
             {/if}
         {/each}

@@ -15,13 +15,14 @@
 	let selectedMedications = []
 	let selectedIllnesses = []
 
-	const illnesses = ['All Conditions (ANY)', 'Babesia', 'Bartonella', 'Lyme Disease', 'Rocky Mountain Spotted Fever'];
-	const medications = ['All Antibiotics (ANY)', 'Amoxicillin', 'Azithromycin', 'Ceftriaxone', 'Doxycycline'];
-	
+	const illnesses = ['ALL CONDITIONS (ANY)', 'LYME DISEASE', 'BARTONELLA', 'ROCKY MOUNTAIN SPOTTED FEVER', 'BABESIA']
+	const medications = ['ALL MEDICATIONS (ANY)', 'ZINC', 'MINOCYCLINE', 'ESCITALOPRAM', 'VENLAFAXINE', 'ALPRAZOLAM', 'PAROXETINE', 'AZITHROMYCIN', 'DOXYCYCLINE', 'LEVOTHYROXINE', 'PENICILLIN G', 'CLONAZEPAM', 'HYDROXYZINE', 'FLUOXETINE', 'OMEPRAZOLE', 'SERTRALINE', 'PANTOPRAZOLE', 'DIPHENHYDRAMINE', 'ARIPIPRAZOLE', 'DULOXETINE', 'TRAZODONE', 'ACETAMINOPHEN', 'LORAZEPAM', 'PREGABALIN', 'FENTANYL', 'CITALOPRAM', 'TINIDAZOLE', 'TOPIRAMATE', 'CETIRIZINE', 'LYMECYCLINE', 'CEFTRIAXONE', 'CHOLESTYRAMINE', 'METRONIDAZOLE', 'AMOXICILLIN', 'TETRACYCLINE', 'VALACICLOVIR', 'ONDANSETRON', 'CEPHALEXIN', 'CYCLOBENZAPRINE', 'HYDROCORTISONE', 'FLUCONAZOLE', 'CLINDAMYCIN', 'CLARITHROMYCIN', 'NAPROXEN', 'NYSTATIN', 'MELOXICAM', 'CEFUROXIME', 'NORTRIPTYLINE', 'AMITRIPTYLINE', 'OXYCODONE', 'ESOMEPRAZOLE', 'NALTREXONE', 'CELECOXIB', 'NIACIN', 'BOTULINUM TOXIN TYPE A', 'RIFAMPIN', 'HYDROXYCHLOROQUINE', 'METHOTREXATE', 'DAPTOMYCIN']
+	const tag_counts = {'LYME DISEASE': 3858, 'ALL CONDITIONS (ANY)': 4064, 'ZINC': 103, 'ALL MEDICATIONS (ANY)': 4064, 'MINOCYCLINE': 203, 'ESCITALOPRAM': 91, 'BARTONELLA': 771, 'VENLAFAXINE': 54, 'ALPRAZOLAM': 128, 'PAROXETINE': 21, 'AZITHROMYCIN': 314, 'DOXYCYCLINE': 1379, 'LEVOTHYROXINE': 80, 'PENICILLIN G': 112, 'CLONAZEPAM': 36, 'HYDROXYZINE': 34, 'FLUOXETINE': 76, 'OMEPRAZOLE': 71, 'SERTRALINE': 89, 'PANTOPRAZOLE': 36, 'DIPHENHYDRAMINE': 86, 'ARIPIPRAZOLE': 20, 'DULOXETINE': 104, 'TRAZODONE': 30, 'ACETAMINOPHEN': 144, 'LORAZEPAM': 25, 'PREGABALIN': 89, 'ROCKY MOUNTAIN SPOTTED FEVER': 120, 'FENTANYL': 25, 'CITALOPRAM': 31, 'TINIDAZOLE': 84, 'TOPIRAMATE': 22, 'CETIRIZINE': 60, 'LYMECYCLINE': 80, 'CEFTRIAXONE': 103, 'BABESIA': 408, 'CHOLESTYRAMINE': 37, 'METRONIDAZOLE': 173, 'AMOXICILLIN': 264, 'TETRACYCLINE': 51, 'VALACICLOVIR': 36, 'ONDANSETRON': 38, 'CEPHALEXIN': 42, 'CYCLOBENZAPRINE': 38, 'HYDROCORTISONE': 28, 'FLUCONAZOLE': 32, 'CLINDAMYCIN': 55, 'CLARITHROMYCIN': 118, 'NAPROXEN': 52, 'NYSTATIN': 67, 'MELOXICAM': 51, 'CEFUROXIME': 66, 'NORTRIPTYLINE': 34, 'AMITRIPTYLINE': 56, 'OXYCODONE': 33, 'ESOMEPRAZOLE': 33, 'NALTREXONE': 79, 'CELECOXIB': 24, 'NIACIN': 31, 'BOTULINUM TOXIN TYPE A': 38, 'RIFAMPIN': 20, 'HYDROXYCHLOROQUINE': 53, 'METHOTREXATE': 23, 'DAPTOMYCIN': 21}
+
 	let fetched_posts = [];
     let result_list = [];
-	const pb = new PocketBase('https://openrxndatabase.hop.sh/');
-	// const pb = new PocketBase('http://127.0.0.1:8090');
+	// const pb = new PocketBase('https://openrxndatabase.hop.sh/');
+	const pb = new PocketBase('http://127.0.0.1:8090');
 	
 	async function fetchDataForPostList() {
 		try {
@@ -34,13 +35,13 @@
 			}
 			
 			// handle "any" condition choice
-			if (selectedIllnesses.includes("All Conditions (ANY)")){
-				selectedIllnesses = ["All Conditions (ANY)"];
+			if (selectedIllnesses.includes("ALL CONDITIONS (ANY)")){
+				selectedIllnesses = ["ALL CONDITIONS (ANY)"];
 			}
 
-			// handle "any" antibiotic choice
-			if (selectedMedications.includes("All Antibiotics (ANY)")){
-				selectedMedications = ["All Antibiotics (ANY)"];
+			// handle "any" medication choice
+			if (selectedMedications.includes("ALL MEDICATIONS (ANY)")){
+				selectedMedications = ["ALL MEDICATIONS (ANY)"];
 			}
 			
 			// console.log(selectedIllnesses)
@@ -110,8 +111,8 @@
 	<IntroInfo />
 	<main class="container">
 		<div class="centered-select" id="area-1">
-			<MSelect options={illnesses} placeholderString={'Conditions'} on:choices={filterIllnesses}/>
-			<MSelect options={medications} placeholderString={'Medications'} on:choices={filterMedications}/>
+			<MSelect options={illnesses} placeholderString={'Conditions'} tag_counts={tag_counts} on:choices={filterIllnesses}/>
+			<MSelect options={medications} placeholderString={'Medications'} tag_counts={tag_counts} on:choices={filterMedications}/>
 			<button type="button" on:click={fetchDataForPostList} class="bg-[#43bbde] text-white hover:bg-[#ffff] hover:text-[#43bbde] focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
 				{#if isLoading}
 					<Spinner size={6} />

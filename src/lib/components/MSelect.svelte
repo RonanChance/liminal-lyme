@@ -1,16 +1,20 @@
 <script>
-    import { createEventDispatcher } from 'svelte'
-    const dispatch = createEventDispatcher()
-    import MultiSelect from 'svelte-multiselect'
+    import { createEventDispatcher } from 'svelte';
+    import MultiSelect from 'svelte-multiselect';
+    import CountSlot from './CountSlot.svelte';
 
-    let selected = []
-    export let options = []
-    export let placeholderString = ''
-    
+    const dispatch = createEventDispatcher();
+
+    let selected = [];
+    export let options = [];
+    export let placeholderString = '';
+    export let tag_counts = {};
+
     $: {
         dispatch('choices', selected);
     }
-
 </script>
 
-<MultiSelect bind:selected options={options} placeholder={placeholderString} inputmode='none'/>
+<MultiSelect bind:selected options={options} placeholder={placeholderString} taginputmode='none' let:option>
+    <CountSlot {option} {tag_counts} {selected} />
+</MultiSelect>
