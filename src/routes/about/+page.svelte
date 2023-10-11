@@ -3,7 +3,7 @@
     import TopBanner from '../../lib/components/TopBanner.svelte'
     import { AccordionItem, Accordion } from 'flowbite-svelte';
 
-    const subreddits = ['AlternativeHealth', 'Anxiety', 'AskDocs', 'AskDoctorSmeeee', 'CampingandHiking', 'ChronicIllness', 'ChronicPain', 'Connecticut', 'Health', 'IAmA', 'Lyme', 'Outdoors', 'Survival', 'askdoctors', 'camping', 'covidlonghaulers', 'healthcare', 'medicine'];
+    const subreddits = ['AlternativeHealth', 'Anxiety', 'AskDocs', 'askdoctors', 'AskDoctorSmeeee', 'camping', 'CampingandHiking', 'ChronicIllness', 'ChronicPain', 'Connecticut', 'covidlonghaulers', 'Health', 'healthcare', 'IAmA', 'Lyme', 'medicine', 'Outdoors', 'Survival', 'WhatIsThisBug']
 </script>
 
 <TopBanner />

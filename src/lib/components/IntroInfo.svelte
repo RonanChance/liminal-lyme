@@ -30,7 +30,7 @@
 
 <style>
   .text-center {
-    padding-bottom: 5%;
+    padding-bottom: 2%;
   }
   .highlighted-word {
     color: #43bbde; 
