@@ -1,10 +1,7 @@
 <script>
     import { Popover, Button, Tooltip } from 'flowbite-svelte';
     import { onMount } from 'svelte';
-    import TopBanner from './TopBanner.svelte'
 </script>
-
-<TopBanner />
 
 <div class="text-center">
 

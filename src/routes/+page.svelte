@@ -8,6 +8,7 @@
 	import { ExclamationCircleSolid } from 'flowbite-svelte-icons';
 	import { Spinner } from 'flowbite-svelte';
     import MedicalDisclaimer from '../lib/components/MedicalDisclaimer.svelte';
+	import TopBanner from '../lib/components/TopBanner.svelte'
 
 	let toastMessage = "";
 	let isLoading = false;
@@ -47,8 +48,8 @@
 			// console.log(selectedIllnesses)
 			// console.log(selectedMedications)
 			
-			let medicationsFilter = selectedMedications.map(medication => `tags?~'${medication}'`).join(' && ');
-			let illnessesFilter = selectedIllnesses.map(illness => `tags?~'${illness}'`).join(' && ');
+			let medicationsFilter = selectedMedications.map(medication => `tags?='${medication}'`).join(' && ');
+			let illnessesFilter = selectedIllnesses.map(illness => `tags?='${illness}'`).join(' && ');
 			let filterQuery = `(${medicationsFilter}) && (${illnessesFilter})`;
 			// // use this if you want to make it possible to search with just one parameter in the future
 			// if (selectedMedications.length >= 1 && selectedIllnesses.length >= 1){
@@ -63,7 +64,7 @@
 			
 			// console.log(medicationsFilter)
 			// console.log(illnessesFilter)
-			// console.log(filterQuery)
+			console.log(filterQuery)
 
 			// `Tags?~'Lyme' && Tags?~'Doxycycline'`
 			const fetched_posts = await pb.collection('posts').getList(1, 50, {
@@ -107,6 +108,7 @@
 
 </script>
 
+<TopBanner />
 <div class="intro-container">
 	<IntroInfo />
 	<main class="container">
