@@ -29,9 +29,6 @@
 </div>
 
 <style>
-  .text-center {
-    padding-bottom: 2%;
-  }
   .highlighted-word {
     color: #43bbde; 
   }

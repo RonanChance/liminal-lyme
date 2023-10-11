@@ -113,7 +113,7 @@
 		<div class="centered-select" id="area-1">
 			<MSelect options={illnesses} placeholderString={'Conditions'} tag_counts={tag_counts} on:choices={filterIllnesses}/>
 			<MSelect options={medications} placeholderString={'Medications'} tag_counts={tag_counts} on:choices={filterMedications}/>
-			<button type="button" on:click={fetchDataForPostList} class="bg-[#43bbde] text-white hover:bg-[#ffff] hover:text-[#43bbde] focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+			<button type="button" on:click={fetchDataForPostList} class="bg-[#43bbde] text-white hover:bg-[#ffff] hover:text-[#43bbde] font-medium rounded-lg text-sm p-2.5 items-center mr-2">
 				{#if isLoading}
 					<Spinner size={6} />
 				{:else}
