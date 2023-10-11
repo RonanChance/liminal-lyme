@@ -117,7 +117,7 @@
 				{#if isLoading}
 					<Spinner size={6} />
 				{:else}
-					<SearchOutline />
+					<SearchOutline size="lg"/>
 				{/if}
 			</button>
 		</div>
