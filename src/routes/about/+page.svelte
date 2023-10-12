@@ -14,7 +14,7 @@
     <Accordion >
         <AccordionItem class="bg-gray-100" >
             <span slot="header">What is this website?</span>
-            <p class="text-lg mb-2 text-white "> This website aims to make the reactions people have during treatment accessible to you. 
+            <p class="text-lg mb-2 text-white "> This website aims to make the reactions people have during treatment accessible to you.
             
             <br/><br/> 
             
@@ -23,7 +23,6 @@
             <br/><br/> 
             
             The hope is that this data provides a better basis of understanding for your own healthcare, whether you are dealing with an acute or persistent issue.
-            
         </AccordionItem>
         <AccordionItem class="bg-gray-100" >
             <span slot="header">What does "OpenRXN" even mean?</span>
