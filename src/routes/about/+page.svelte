@@ -7,8 +7,6 @@
 </script>
 
 <TopBanner />
-<!-- <h1>Inspiration</h1> -->
-<!-- After contracting Rocky Mountain Spotted Fever & Lyme Disease from a trip to North Carolina, I became incredibly ill. My recovery took many months and many antibiotics/supplements. This website is something I wanted during my acute phase of sickness, and I hope it serves you well.  -->
 
 <div class="Accordion-container">
     <Accordion >
@@ -45,9 +43,20 @@
             </p>
         </AccordionItem>
         <AccordionItem class="bg-gray-100">
+            <span slot="header">What is the inspiration for this site?</span>
+            <p class="text-lg p-6 mb-4 text-white ">
+                I contracted Rocky Mountain Spotted Fever & Lyme Disease from a trip to North Carolina in late 2021 and became incredibly ill. 
+                My recovery took many months and various antibiotics/supplements. 
+                I was researching and reading whatever I could manage about tickborne disease, but I always found peoples own stories the most insightful.
+                <br/><br/> 
+                I wished I could compile all these expriences to see how others managed their symptoms and medications.
+                This website is something I wanted during my acute phase of sickness, and I hope it serves you well.
+            </p>
+        </AccordionItem>
+        <AccordionItem class="bg-gray-100">
             <span slot="header">How can I support this project?</span>
             <p class="text-lg mb-2 text-white">
-                You can support this project by contributing to the <a href="https://www.github.com/RonanChance" target="_blank" rel="noreferrer" class="text-blue-600">Github</a>.
+                You can support this project by contributing to the <a href="https://github.com/RonanChance/OpenRXN" target="_blank" rel="noreferrer" class="text-blue-600">Github</a>.
                 <br/><br/>
                 And reach out to me if you have any questions, recommendations, or just want to network.
                 <br/><br/>

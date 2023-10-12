@@ -5,8 +5,6 @@
 </script>
   
 <span>
-<!-- {option} -->
-<!-- {tag_counts[option]} -->
 {option} 
 <span class="tag-count">{#if selected.includes(option)}{/if}{#if !selected.includes(option)}({tag_counts[option]}){/if}</span>
 </span>

@@ -113,11 +113,8 @@ div.multiselect > ul.selected > li {
 @media (max-width: 768px) {
 
     .Accordion-container {
-        /* align-items: center;
-        flex-direction: column; */
         width: 100%;
         margin: 0 auto;
-        /* margin-left: 5%; */
     }
     
     .mainlogo {

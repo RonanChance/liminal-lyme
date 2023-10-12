@@ -51,16 +51,6 @@
 			let medicationsFilter = selectedMedications.map(medication => `tags?~'${medication}'`).join(' && ');
 			let illnessesFilter = selectedIllnesses.map(illness => `tags?~'${illness}'`).join(' && ');
 			let filterQuery = `(${medicationsFilter}) && (${illnessesFilter})`;
-			// // use this if you want to make it possible to search with just one parameter in the future
-			// if (selectedMedications.length >= 1 && selectedIllnesses.length >= 1){
-			// }
-			// else if (selectedMedications.length >= 1) {
-			// 	medicationsFilter = selectedMedications.map(medication => `tags?~'${medication}'`).join(' && ');
-			// 	filterQuery = `(${medicationsFilter})`;
-			// } else {
-			// 	illnessesFilter = selectedIllnesses.map(illness => `tags?~'${illness}'`).join(' && ');
-			// 	filterQuery = `(${illnessesFilter})`;
-			// }
 			
 			// console.log(medicationsFilter)
 			// console.log(illnessesFilter)

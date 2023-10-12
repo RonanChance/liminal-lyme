@@ -5,14 +5,7 @@
     import { Button } from 'flowbite-svelte';
     export let item
     import snarkdown from 'snarkdown'
-    // import marked from 'marked';
-    // import svelte-markdown from 'svelte-markdown'
 
-    // const dispatch = createEventDispatcher()
-
-    // const handleDelete = (itemId) => {
-    //     dispatch('delete-doctor', itemId)
-    // }
     function formatDate(dateString) {
         // Remove the time part and the milliseconds and replace ' ' with 'T' for compatibility
         dateString = dateString.split(' ')[0] + 'T' + dateString.split(' ')[1].split('.')[0] + 'Z';
@@ -40,13 +33,11 @@
                 <span class="bg-[#43bbde] text-[#ffff] text-xs font-medium mr-2 px-2.5 py-0.5 rounded" style="display: inline-block;">{tag}</span>
             {/if}
         {/each}
-        <!-- <Button href={item.Link} class="p-2 float-right custom-button bg-[#e14b00]">  Reddit <span style="margin-left: 7px;"></span> <LinkSolid size=xs/> </Button> -->
     </div>
     <div class="str-name-subreddit-date">
         <span class="bg-gray-100 text-gray-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-400" style="white-space: nowrap; display: inline-block;">@{item.author}</span>
         <span class="bg-gray-100 text-gray-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-400" style="white-space: nowrap; display: inline-block;">r/{item.subreddit}</span>
         <span class="bg-gray-100 text-gray-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-400" style="white-space: nowrap; display: inline-block;">{formatDate(item.date)}</span>
-        <!-- {formatDate(item.Date)} -->
     </div>
     <div class="num-rating">
         <AngleUpSolid size=xs /> 
@@ -56,7 +47,6 @@
         <ChevronRightSolid style="bg-white" size=xs/>
     </a>
     <div class="str-review">
-        <!-- {@html item.Comment.split('\n').map(paragraph => `<p>${paragraph}</p>`).join('')} -->
         {@html decodeHTMLEntities(item.body)}
     </div>
 </Card>

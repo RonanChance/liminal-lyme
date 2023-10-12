@@ -11,6 +11,3 @@
     <Button href="/about" class="text-white hover:text-[#43bbde]" color="#ffff">About</Button>
   </Navbar>
 </div>
-
-<style>
-</style>
