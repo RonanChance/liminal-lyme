@@ -34,7 +34,7 @@
         <AccordionItem class="bg-gray-100">
             <span slot="header">Where is the data from?</span>
             <p class="text-lg p-6 mb-4 text-white ">
-                The current version of the website is using Reddit posts between June 2005 to December 2022 from the following subreddits: <br/><br/>
+                The current version of the website is using Reddit content between June 2005 to December 2022 from the following subreddits: <br/><br/>
                 {#each subreddits as subreddit}
                     <li>
                     <a href="https://www.reddit.com/r/{subreddit}" target="_blank" rel="noreferrer" class="text-blue-600"> {subreddit} </a>
