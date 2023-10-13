@@ -47,9 +47,9 @@
             <p class="text-lg p-6 mb-4 text-white ">
                 I contracted Rocky Mountain Spotted Fever & Lyme Disease from a trip to North Carolina in late 2021 and became incredibly ill. 
                 My recovery took many months and various antibiotics/supplements. 
-                I was researching and reading whatever I could manage about tickborne disease, but I always found peoples own stories the most insightful.
+                During treatment  I researched and read whatever I could manage about tickborne disease, but I always found peoples experiences the most insightful.
                 <br/><br/> 
-                I wished I could compile all these expriences to see how others managed their symptoms and medications.
+                I wished I could compile all these stories to see how others managed their symptoms and medications.
                 This website is something I wanted during my acute phase of sickness, and I hope it serves you well.
             </p>
         </AccordionItem>
