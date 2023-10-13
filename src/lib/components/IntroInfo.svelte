@@ -49,7 +49,7 @@
       y: 100,
       delay: 50,
       duration: 1000
-  }}><div class="emoji inline">🤒</div> Condition + <div class="emoji inline">💊</div> Medication = <div class="emoji inline">🙂</div> Informed Patient</h2>
+  }}><div class="emoji inline">🤒</div> Condition + <div class="emoji inline">💊</div> Medication <span class="second-line">= <div class="emoji inline">🙂</div> Informed Patient</span></h2>
 
     <h3 in:fly|global={{
       y: 100,
@@ -94,6 +94,9 @@
     color: #43bbde;
   }
   @media (max-width: 768px) {
+    .second-line{
+      display: block;
+    }
     h2 {
       font-size: 18px;
     }
