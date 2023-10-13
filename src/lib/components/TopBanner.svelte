@@ -11,3 +11,12 @@
     <Button href="/about" class="text-white hover:text-[#43bbde]" color="#ffff">About</Button>
   </Navbar>
 </div>
+
+<style>
+  .mainlogo{
+    transition: transform 0.2s;
+  }
+  .mainlogo:hover{
+    transform: rotate(-4deg);
+  }
+</style>

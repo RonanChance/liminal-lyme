@@ -8,7 +8,12 @@
 	import { ExclamationCircleSolid } from 'flowbite-svelte-icons';
 	import { Spinner } from 'flowbite-svelte';
     import MedicalDisclaimer from '../lib/components/MedicalDisclaimer.svelte';
-	import TopBanner from '../lib/components/TopBanner.svelte'
+	import TopBanner from '../lib/components/TopBanner.svelte';
+	import { onMount } from 'svelte';
+	import { fade, fly } from 'svelte/transition'
+
+	let animate = false;
+    onMount(() => animate = true);
 
 	let toastMessage = "";
 	let isLoading = false;
@@ -101,25 +106,27 @@
 <TopBanner />
 <div class="intro-container">
 	<IntroInfo />
-	<main class="container">
-		<div class="centered-select" id="area-1">
-			<MSelect options={illnesses} placeholderString={'Conditions'} tag_counts={tag_counts} on:choices={filterIllnesses}/>
-			<MSelect options={medications} placeholderString={'Medications'} tag_counts={tag_counts} on:choices={filterMedications}/>
-			<button type="button" on:click={fetchDataForPostList} class="bg-[#43bbde] text-white hover:bg-[#ffff] hover:text-[#43bbde] font-medium rounded-lg text-sm p-2.5 items-center mr-2">
-				{#if isLoading}
-					<Spinner size={6} />
-				{:else}
-					<SearchOutline size="lg"/>
-				{/if}
-			</button>
-		</div>
-		<div class="post-area">
-			<PostList fetchDataFunction={fetchDataForPostList} posts={result_list}/>
-		</div>
-		<div class="med-disclaimer">
-			<MedicalDisclaimer />
-		</div>
-	</main>
+	{#if animate}
+		<main class="container" in:fly={{y:50, delay: 500, duration: 1500}}>
+			<div class="centered-select" id="area-1">
+				<MSelect options={illnesses} placeholderString={'Conditions'} tag_counts={tag_counts} on:choices={filterIllnesses}/>
+				<MSelect options={medications} placeholderString={'Medications'} tag_counts={tag_counts} on:choices={filterMedications}/>
+				<button type="button" on:click={fetchDataForPostList} class="bg-[#43bbde] text-white hover:bg-[#ffff] hover:text-[#43bbde] font-medium rounded-lg text-sm p-2.5 items-center mr-2">
+					{#if isLoading}
+						<Spinner size={6} />
+					{:else}
+						<SearchOutline size="lg"/>
+					{/if}
+				</button>
+			</div>
+			<div class="post-area">
+				<PostList fetchDataFunction={fetchDataForPostList} posts={result_list}/>
+			</div>
+			<div class="med-disclaimer">
+				<MedicalDisclaimer />
+			</div>
+		</main>
+	{/if}
 </div>
 <div class="toast-container">
 	{#if isToastVisible}
