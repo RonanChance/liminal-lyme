@@ -6,7 +6,7 @@
     let animate = false;
     onMount(() => animate = true);
 
-    const words = [' Health.', ' Medication.', 'Battle.', 'Insight.', 'Health.']
+    const words = [' Health.', ' Medication.', 'Journey.', 'Insight.', 'Health.']
     let currentIndex = 0;
     let currentWord = words[currentIndex];
 
