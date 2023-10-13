@@ -32,11 +32,6 @@ p {
     font-size: 10pt;
 }
 
-.navbar-container {
-    padding-top: 2%;
-    padding-bottom: 2%;
-}
-
 body {
     font-family: 'Poppins', sans-serif;
     background-color: #101C32;
@@ -162,11 +157,6 @@ div.multiselect > ul.selected > li {
     .centered-select {
         flex-direction: column; /* Stack elements vertically */
         align-items: center;
-    }
-    
-    .navbar-container {
-        padding-top: 3%;
-        padding-bottom: 3%;
     }
 
     .text-center {

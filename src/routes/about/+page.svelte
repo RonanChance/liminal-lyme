@@ -12,24 +12,17 @@
     <Accordion >
         <AccordionItem class="bg-gray-100" >
             <span slot="header">What is this website?</span>
-            <p class="text-lg mb-2 text-white "> This website aims to make the reactions people have during treatment accessible to you.
+            <p class="text-lg mb-2 text-white ">This website aims to make the reactions people have during treatment accessible to you.
             
-            <br/><br/> 
-            
-            Medical data often lacks nuanced information that is only discernable through personal narrative. We want to supercharge these narratives to empower your recovery. 
+            <br/><br/>Medical data often lacks nuanced information that is only discernable through personal narrative. We want to supercharge these narratives to empower your recovery. 
                 
-            <br/><br/> 
-            
-            The hope is that this data provides a better basis of understanding for your own healthcare, whether you are dealing with an acute or persistent issue.
+            <br/><br/>The hope is that this data provides a better basis of understanding for your own healthcare, whether you are dealing with an acute or persistent issue.
         </AccordionItem>
         <AccordionItem class="bg-gray-100" >
             <span slot="header">What does "OpenRXN" even mean?</span>
             <p class="text-lg mb-2 text-white ">
             Good question! The medical abbreviation <a href="https://en.wikipedia.org/wiki/List_of_medical_abbreviations:_R" target="_blank" rel="noreferrer" class="text-blue-600"> RXN </a> is short for "Reaction". 
-
-            <br/><br/> 
-
-            We provide a tool, open to anyone, to find reactions people have during treatment, hence the name OpenRXN.
+            <br/><br/>We provide a tool, open to anyone, to find reactions people have during treatment, hence the name OpenRXN.
         </AccordionItem>
         <AccordionItem class="bg-gray-100">
             <span slot="header">Where is the data from?</span>
@@ -47,9 +40,8 @@
             <p class="text-lg p-6 mb-4 text-white ">
                 I contracted Rocky Mountain Spotted Fever & Lyme Disease from a trip to North Carolina in late 2021 and became incredibly ill. 
                 My recovery took many months and various antibiotics/supplements. 
-                During treatment  I researched and read whatever I could manage about tickborne disease, but I always found peoples experiences the most insightful.
-                <br/><br/> 
-                I wished I could compile all these stories to see how others managed their symptoms and medications.
+                During treatment  I researched and read whatever I could manage about tickborne disease, but I always found actual experiences the most insightful.
+                <br/><br/>I wished I could compile all these stories to see how others managed their symptoms and medications.
                 This website is something I wanted during my acute phase of sickness, and I hope it serves you well.
             </p>
         </AccordionItem>
@@ -57,10 +49,8 @@
             <span slot="header">How can I support this project?</span>
             <p class="text-lg mb-2 text-white">
                 You can support this project by contributing to the <a href="https://github.com/RonanChance/OpenRXN" target="_blank" rel="noreferrer" class="text-blue-600">Github</a>.
-                <br/><br/>
-                And reach out to me if you have any questions, recommendations, or just want to network.
-                <br/><br/>
-                Email: Ronan@OpenRXN.com
+                <br/><br/>And reach out to me if you have any questions, recommendations, or just want to network.
+                <br/><br/>Email: Ronan@OpenRXN.com
                 <br/><br/>
             </p>
             <div class="githublinkedin">
