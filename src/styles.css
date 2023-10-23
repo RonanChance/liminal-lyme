@@ -34,12 +34,13 @@ p {
 
 body {
     font-family: 'Poppins', sans-serif;
-    background-color: #101C32;
+    background-image: url("lib/assets/background.svg");
+    /* background-color: #101C32;
     opacity: 1;
     background-image: radial-gradient(#809ac9 2px, #101C32 2px);
     background-size: 40px 40px;
-    background-color: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(4.75px);
+    background-color: rgba(255, 255, 255, 0.15); */
+    backdrop-filter: blur(5px);
     min-height: 100%;
 }
 
@@ -53,13 +54,13 @@ ul {
 }
 
 .container {
-    backdrop-filter: blur(4.75px);
+    /* backdrop-filter: blur(4.75px); */
 	max-width: 60%;
 	margin: 0pt auto;
 }
 
 .centered {
-    backdrop-filter: blur(4.75px);
+    /* backdrop-filter: blur(4.75px); */
 	display: flex;
 	align-items: center;
 	flex-direction: column;
