@@ -111,13 +111,24 @@
 			<div class="centered-select" id="area-1">
 				<MSelect options={illnesses} placeholderString={'Conditions'} tag_counts={tag_counts} on:choices={filterIllnesses}/>
 				<MSelect options={medications} placeholderString={'Medications'} tag_counts={tag_counts} on:choices={filterMedications}/>
-				<button type="button" on:click={fetchDataForPostList} class="bg-[#43bbde] text-white hover:bg-[#ffff] hover:text-[#43bbde] font-medium rounded-lg text-sm p-2.5 items-center mr-2">
+				<a href="#_" on:click={fetchDataForPostList} class="relative flex justify-center rounded px-5 py-2.5 overflow-hidden group bg-[#43bbde] relative hover:bg-gradient-to-r hover:from-bg-[#43bbde] hover:to-bg-[#43bbde] text-white hover:ring-2 hover:ring-offset-2 hover:ring-[#43bbde] transition-all ease-out duration-300">
+					<span class="absolute right-0 w-8 h-32 -mt-12 transition-all duration-1000 transform translate-x-12 bg-white opacity-10 rotate-12 group-hover:-translate-x-40 ease"></span>
+					<div class="flex items-center">
+					  {#if isLoading}
+						<Spinner size={6} />
+					  {:else}
+						<SearchOutline size="lg" />
+					  {/if}
+					</div>
+				  </a>
+				  
+				<!-- <button type="button" on:click={fetchDataForPostList} class="bg-[#43bbde] text-white hover:bg-[#ffff] hover:text-[#43bbde] font-medium rounded-lg text-lg p-2.5 items-center mr-2 w-20">
 					{#if isLoading}
 						<Spinner size={6} />
 					{:else}
 						<SearchOutline size="lg"/>
 					{/if}
-				</button>
+				</button> -->
 			</div>
 			<div class="post-area">
 				<PostList fetchDataFunction={fetchDataForPostList} posts={result_list}/>
