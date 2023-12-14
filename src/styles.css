@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
-
 * {
 	box-sizing: border-box;
 	margin: 0;
@@ -10,21 +8,18 @@
 h1 {
     color: white;
 	font-size: 45pt;
-    margin-top: 10pt;
-    margin-bottom: 15pt;
 }
 
 h2 {
     color: white;
 	font-size: 22pt;
-    margin-bottom: 15pt;
 }
 
 h3 {
     color: white;
 	font-size: 12pt;
 	font-weight: normal;
-    margin-bottom: 10pt;
+    /* margin-bottom: 10pt; */
 }
 
 p {
@@ -33,18 +28,14 @@ p {
 }
 
 body {
-    font-family: 'Poppins', sans-serif;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     background-image: url("lib/assets/background.svg");
-    /* background-color: #101C32;
-    opacity: 1;
-    background-image: radial-gradient(#809ac9 2px, #101C32 2px);
-    background-size: 40px 40px;
-    background-color: rgba(255, 255, 255, 0.15); */
     backdrop-filter: blur(5px);
     min-height: 100%;
 }
 
 html {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     min-height: 100%;
     height: 100%;
 }
@@ -93,14 +84,7 @@ div.multiselect > ul.selected > li {
     height: auto; /* Automatically adjust the height to maintain aspect ratio */
 }
 
-.Accordion-container {
-    align-items: center;
-    flex-direction: column;
-    width: 50%;
-    margin-left: 25%;
-}
-
-.text-center {
+.text-center-h3 {
     padding-bottom: 2%;
   }
 
@@ -122,14 +106,14 @@ div.multiselect > ul.selected > li {
         font-size: 25pt;
         max-width: 80%;
         margin: 0 auto;
-        padding-bottom: 5%;
+        /* padding-bottom: 5%; */
     }
     
     h2 {
         font-size: 15pt;
         max-width: 80%;
         margin: 0 auto;
-        padding-bottom: 5%;
+        /* padding-bottom: 5%; */
     }
     
     h3 {
@@ -158,10 +142,6 @@ div.multiselect > ul.selected > li {
     .centered-select {
         flex-direction: column; /* Stack elements vertically */
         align-items: center;
-    }
-
-    .text-center {
-        padding-bottom: 10%;
     }
 
   }

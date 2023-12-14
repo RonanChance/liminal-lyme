@@ -31,7 +31,7 @@
     transition: transform 0.2s;
   }
   .mainlogo:hover{
-    transform: rotate(-4deg);
+    transform: scale(105%);
   }
 
   @media (max-width: 768px) {
