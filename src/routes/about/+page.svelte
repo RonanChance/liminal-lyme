@@ -153,7 +153,7 @@
     .divbg {
         margin-left: 15%;
         margin-right: 15%;
-        background: linear-gradient(135deg, rgba(14, 43, 74, 0.613), rgba(162, 162, 162, 0.5));
+        background: linear-gradient(135deg, rgba(14, 43, 74, 0.613), rgba(162, 162, 162, 0.4));
         backdrop-filter: blur(50px);
         -webkit-backdrop-filter: blur(50px);
         border-radius: 20px;

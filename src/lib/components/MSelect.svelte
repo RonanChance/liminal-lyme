@@ -15,6 +15,6 @@
     }
 </script>
 
-<MultiSelect bind:selected options={options} placeholder={placeholderString} taginputmode='none' let:option>
+<MultiSelect bind:selected options={options} placeholder={placeholderString} let:option>
     <CountSlot {option} {tag_counts} {selected} />
 </MultiSelect>
