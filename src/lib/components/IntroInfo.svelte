@@ -100,7 +100,6 @@
   }
   .highlighted-word {
     margin-right: auto;
-    color: #43bbde;
   }
   @media (max-width: 768px) {
 

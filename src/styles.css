@@ -44,6 +44,10 @@ ul {
 	list-style: none;
 }
 
+.highlighted-word {
+    color: #43bbde;
+}
+
 .container {
     /* backdrop-filter: blur(4.75px); */
 	max-width: 60%;
