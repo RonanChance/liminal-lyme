@@ -1,7 +1,7 @@
 <script>
     import { Popover, Button, Tooltip } from 'flowbite-svelte';
     import { onMount } from 'svelte';
-    import { fade, fly } from 'svelte/transition'
+    import { fly } from 'svelte/transition'
 
     let animate = false;
     onMount(() => animate = true);

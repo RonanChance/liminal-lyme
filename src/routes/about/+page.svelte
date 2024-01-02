@@ -1,20 +1,25 @@
 <script>
-    import { AccordionItem, Accordion } from 'flowbite-svelte';
     import {EnvelopeSolid, GithubSolid, LinkedinSolid} from 'flowbite-svelte-icons'
+    import { onMount } from 'svelte';
     import TopBanner from '../../lib/components/TopBanner.svelte'
+    import { fly } from 'svelte/transition'
+
+    let animate = false;
+    onMount(() => animate = true);
 
     const subreddits = ['AlternativeHealth', 'Anxiety', 'AskDocs', 'askdoctors', 'AskDoctorSmeeee', 'camping', 'CampingandHiking', 'ChronicIllness', 'ChronicPain', 'Connecticut', 'covidlonghaulers', 'Health', 'healthcare', 'IAmA', 'Lyme', 'medicine', 'Outdoors', 'Survival', 'WhatIsThisBug']
 </script>
 
 <TopBanner />
 
-<div class="divbg">
+{#if animate}
+<div class="divbg" in:fly|global={{y: 100, delay: 50, duration: 1000 }}>
     <h2>What is <span class="highlighted-word" style="font-weight:700">OpenRXN</span>?</h2>
     <div class="textbox">
         <p>
             This website makes the reactions people experience during tickborne disease treatment accessible to you.
-            <br/><br/>Medical data often lacks nuanced information that is only discernable through personal narrative. We want to supercharge these narratives to empower your recovery. 
-            The hope is that this data provides a better basis of understanding for your own healthcare, whether you are dealing with an acute or persistent issue.
+            <br/><br/>Medical data often lacks the nuanced information that is discernable through personal narrative, and we provide access to relevant narratives with the push of a button.
+            <br/><br/>We hope that this data provides a better basis of understanding for your own healthcare.
         </p>
     </div>
 
@@ -93,6 +98,7 @@
 </div>
 
 <div class="paddingbottom"></div>
+{/if}
 
 
 <style>
