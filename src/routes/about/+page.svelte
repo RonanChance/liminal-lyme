@@ -77,7 +77,7 @@
     <div class="textbox">
         <p>
             You can support this project by contributing to the <a href="https://github.com/RonanChance/OpenRXN" target="_blank" rel="noreferrer" class="highlighted-word">Github</a>.
-            <br/><br/>And reach out to me if you have any questions, recommendations, or just want to network.
+            <br/><br/>And reach out to me if you have any questions, recommendations, or just want to connect.
             <br/><br/>
             <br/>
         </p>
