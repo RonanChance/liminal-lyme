@@ -67,8 +67,7 @@
     <div class="textbox">
         <p>
             I contracted Rocky Mountain Spotted Fever and Lyme Disease during a trip to North Carolina in January 2022 which led to severe illness. 
-            My recovery took over a year and involved various antibiotics and supplements. Throughout the process, I spent time researching and reading about tickborne disease. 
-            I found, at times, that peoples firsthand experiences were more relatable and insightful than conventional medical literature.
+            My recovery took over a year and involved various antibiotics and supplements. I have spent many hours researching and reading tickborne disease content in my pursuit of health, but I often found people's firsthand experiences to be the most relatable and insightful.
             <br/><br/>I wished I could compile all these stories to see how others managed their symptoms and medications.
             This website is something I wanted during my acute phase of sickness, and I hope it serves you well.
         </p>
