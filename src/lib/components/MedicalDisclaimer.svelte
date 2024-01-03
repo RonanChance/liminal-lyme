@@ -10,10 +10,10 @@ DISCLAIMER: THIS WEBSITE DOES NOT PROVIDE MEDICAL ADVICE
 <style>
     h2 {
         font-size: 18px;
-        color: rgba(255, 255, 255, 0.262);
+        color: rgb(255, 255, 255);
     }
     p {
         font-style: italic;
-        color: rgba(255, 255, 255, 0.241);
+        color: rgb(255, 255, 255);
     }
 </style>
