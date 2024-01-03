@@ -66,7 +66,7 @@
     <h2>What is the <span class="highlighted-word" style="font-weight:700">Inspiration</span> for this site?</h2>
     <div class="textbox">
         <p>
-            I contracted Rocky Mountain Spotted Fever and Lyme Disease during a trip to North Carolina in January 2022 which led to a severe illness. 
+            I contracted Rocky Mountain Spotted Fever and Lyme Disease during a trip to North Carolina in January 2022 which led to severe illness. 
             My recovery took over a year and involved various antibiotics and supplements. Throughout the process, I dedicated a lot of time to researching and reading about tickborne disease. 
             I found, at times, that peoples firsthand experiences were more relatable and insightful than conventional medical literature.
             <br/><br/>I wished I could compile all these stories to see how others managed their symptoms and medications.
