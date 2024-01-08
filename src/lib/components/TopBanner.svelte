@@ -9,12 +9,16 @@
     </NavBrand>
     <!-- <Button href="/about" class="text-white hover:text-[#43bbde] h-2" color="#ffff">About</Button> -->
     <nav class="nav-links">
+      <a href="/login">Register</a>
+      |
       <a href="/about">About</a>
     </nav>
 </div>
 
 <style>
   .nav-links {
+    display: flex;
+    gap: 10px;
     color:white;
   }
   .my-navbar-container {
