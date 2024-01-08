@@ -30,7 +30,7 @@
     {/if}
   </div>
 {:else}
-  <p>Select a <span class="highlighted-word">condition</span> and a <span class="highlighted-word">medication</span> to get started!</p>
+  <p>Select a <a href="/about#what_conditions_are_supported">condition</a> and a <a href="/about#what_medications_are_supported">medication</a> to get started!</p>
 {/if}
 
   <style>
@@ -40,7 +40,7 @@
       
     }
 
-    .highlighted-word {
+    a {
       color: #43bbde;
     }
 

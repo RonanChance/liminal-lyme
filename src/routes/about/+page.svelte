@@ -16,8 +16,8 @@
 
 {#if animate}
 <div class="divbg" in:fly|global={{y: 100, delay: 50, duration: 1000 }}>
-    <h2>What is <span class="highlighted-word" style="font-weight:700">OpenRXN</span>?</h2>
-    <div class="textbox">
+    <div class="textbox" id="what_is_openrxn">
+        <h2>What is <span class="highlighted-word" style="font-weight:700">OpenRXN</span>?</h2>
         <p>
             This website makes the reactions people experience during tickborne disease treatment accessible to you.
             <br/><br/>Medical data often lacks the nuanced information that is discernable through personal narrative, and we provide access to relevant narratives with the push of a button.
@@ -25,16 +25,16 @@
         </p>
     </div>
 
-    <h2>What does <span class="highlighted-word" style="font-weight:700">"OpenRXN"</span> mean?</h2>
-    <div class="textbox">
+    <div class="textbox" id="what_does_openrxn_mean">
+        <h2>What does <span class="highlighted-word" style="font-weight:700">"OpenRXN"</span> mean?</h2>
         <p>
             Good question! The medical abbreviation <a href="https://en.wikipedia.org/wiki/List_of_medical_abbreviations:_R" target="_blank" rel="noreferrer" class="highlighted-word"> RXN </a> is short for "Reaction". 
             <br/><br/>We provide a search tool, open to anyone, for discovering the reactions people experience during treatment. Hence the term "OpenRXN"!
         </p>
     </div>
 
-    <h2>Where is the <span class="highlighted-word" style="font-weight:700">Data</span> from?</h2>
-    <div class="textbox">
+    <div class="textbox" id="where_is_the_data_from">
+        <h2>Where is the <span class="highlighted-word" style="font-weight:700">Data</span> from?</h2>
         <p>
             The current version of the website is using Reddit content between June 2005 to December 2022 from the following subreddits: <br/><br/>
         </p>
@@ -65,8 +65,8 @@
         </div>
     </div>
 
-    <h2>What <span class="highlighted-word" style="font-weight:700">Diseases</span> are supported?</h2>
-    <div class="textbox">
+    <div class="textbox" id="what_conditions_are_supported">
+        <h2>What <span class="highlighted-word" style="font-weight:700">Conditions</span> are supported?</h2>
         <div class="columnscontainer">
             <div class="column">
                 {#each illnesses_sliced.slice(0, Math.ceil(illnesses_sliced.length/3)) as item}
@@ -94,8 +94,8 @@
         </div>
     </div>
 
-    <h2>What <span class="highlighted-word" style="font-weight:700">Medications</span> are supported?</h2>
-    <div class="textbox">
+    <div class="textbox" id="what_medications_are_supported">
+        <h2>What <span class="highlighted-word" style="font-weight:700">Medications</span> are supported?</h2>
         <div class="columnscontainer">
             <div class="column">
                 {#each medications_sliced.slice(0, Math.ceil(medications_sliced.length/3)) as item}
@@ -123,8 +123,8 @@
         </div>
     </div>
 
-    <h2>What is the <span class="highlighted-word" style="font-weight:700">Inspiration</span> for this site?</h2>
-    <div class="textbox">
+    <div class="textbox" id="what_is_the_inspiration_for_this_site">
+        <h2>What is the <span class="highlighted-word" style="font-weight:700">Inspiration</span> for this site?</h2>
         <p>
             I contracted Rocky Mountain Spotted Fever and Lyme Disease during a trip to North Carolina in January 2022 which led to severe illness. 
             My recovery took over a year and involved various antibiotics and supplements. I have spent many hours researching and reading tickborne disease content in my pursuit of health, but I often found people's firsthand experiences to be the most relatable and insightful.
@@ -133,8 +133,8 @@
         </p>
     </div>
 
-    <h2>How can I <span class="highlighted-word" style="font-weight:700">Support</span> this project?</h2>
-    <div class="textbox">
+    <div class="textbox" id="how_can_i_support_this_project">
+        <h2>How can I <span class="highlighted-word" style="font-weight:700">Support</span> this project?</h2>
         <p>
             You can support this project by contributing to the <a href="https://github.com/RonanChance/OpenRXN" target="_blank" rel="noreferrer" class="highlighted-word">Github</a>.
             <br/><br/>And reach out to me if you have any questions, recommendations, or just want to connect.
@@ -161,6 +161,14 @@
 
 
 <style>
+    #what_conditions_are_supported {
+        scroll-margin-top: 75px;
+    }
+
+    #what_medications_are_supported {
+        scroll-margin-top: 75px;
+    }
+
     h2 {
         text-align: center;
         margin-top: 2rem;
