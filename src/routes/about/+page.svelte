@@ -3,11 +3,13 @@
     import { onMount } from 'svelte';
     import TopBanner from '../../lib/components/TopBanner.svelte'
     import { fly } from 'svelte/transition'
+    import { subreddits, illnesses, wikipedia_links_illnesses, wikipedia_links_medications, medications, tag_counts } from '../../lib/components/constants.js'
 
+    const illnesses_sliced = illnesses.slice(1, illnesses.length-1);
+    const medications_sliced = medications.slice(1, medications.length-1);
     let animate = false;
     onMount(() => animate = true);
 
-    const subreddits = ['AlternativeHealth', 'Anxiety', 'AskDocs', 'askdoctors', 'AskDoctorSmeeee', 'camping', 'CampingandHiking', 'ChronicIllness', 'ChronicPain', 'Connecticut', 'covidlonghaulers', 'Health', 'healthcare', 'IAmA', 'Lyme', 'medicine', 'Outdoors', 'Survival', 'WhatIsThisBug']
 </script>
 
 <TopBanner />
@@ -57,6 +59,64 @@
                 {#each subreddits.slice(Math.ceil(subreddits.length*2/3)) as subreddit}
                     <li>
                         <a href="https://www.reddit.com/r/{subreddit}" target="_blank" rel="noreferrer" class="highlighted-word">{subreddit}</a>
+                    </li>
+                {/each}
+            </div>
+        </div>
+    </div>
+
+    <h2>What <span class="highlighted-word" style="font-weight:700">Diseases</span> are supported?</h2>
+    <div class="textbox">
+        <div class="columnscontainer">
+            <div class="column">
+                {#each illnesses_sliced.slice(0, Math.ceil(illnesses_sliced.length/3)) as item}
+                    <li>
+                        <a href={wikipedia_links_illnesses[item]} target="_blank" rel="noreferrer" class="highlighted-word">{item}</a>
+                    </li>
+                {/each}
+            </div>
+
+            <div class="column">
+                {#each illnesses_sliced.slice(Math.ceil(illnesses_sliced.length/3), Math.ceil(illnesses_sliced.length*2/3)) as item}
+                    <li>
+                        <a href={wikipedia_links_illnesses[item]} target="_blank" rel="noreferrer" class="highlighted-word">{item}</a>
+                    </li>
+                {/each}
+            </div>
+
+            <div class="column">
+                {#each illnesses_sliced.slice(Math.ceil(illnesses_sliced.length*2/3)) as item}
+                    <li>
+                        <a href={wikipedia_links_illnesses[item]} target="_blank" rel="noreferrer" class="highlighted-word">{item}</a>
+                    </li>
+                {/each}
+            </div>
+        </div>
+    </div>
+
+    <h2>What <span class="highlighted-word" style="font-weight:700">Medications</span> are supported?</h2>
+    <div class="textbox">
+        <div class="columnscontainer">
+            <div class="column">
+                {#each medications_sliced.slice(0, Math.ceil(medications_sliced.length/3)) as item}
+                    <li>
+                        <a href={wikipedia_links_medications[item]} target="_blank" rel="noreferrer" class="highlighted-word">{item}</a>
+                    </li>
+                {/each}
+            </div>
+
+            <div class="column">
+                {#each medications_sliced.slice(Math.ceil(medications_sliced.length/3), Math.ceil(medications_sliced.length*2/3)) as item}
+                    <li>
+                        <a href={wikipedia_links_medications[item]} target="_blank" rel="noreferrer" class="highlighted-word">{item}</a>
+                    </li>
+                {/each}
+            </div>
+
+            <div class="column">
+                {#each medications_sliced.slice(Math.ceil(medications_sliced.length*2/3)) as item}
+                    <li>
+                        <a href={wikipedia_links_medications[item]} target="_blank" rel="noreferrer" class="highlighted-word">{item}</a>
                     </li>
                 {/each}
             </div>
