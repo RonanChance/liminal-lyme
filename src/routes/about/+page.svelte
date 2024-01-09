@@ -15,7 +15,7 @@
 <TopBanner />
 
 {#if animate}
-<div class="divbg" in:fly|global={{y: 100, delay: 50, duration: 1000 }}>
+<div class="divbg" in:fly|global={{y: 30, delay: 50, duration: 1000 }}>
     <div class="textbox" id="what_is_openrxn">
         <h2>What is <span class="highlighted-word" style="font-weight:700">OpenRXN</span>?</h2>
         <p>
@@ -213,11 +213,11 @@
         justify-content: space-evenly;
     }
 
-    .paddingbottom {
+    /* .paddingbottom {
         padding-bottom: 10rem;
-    }
+    } */
 
-    .divbg {
+    /* .divbg {
         margin-left: 15%;
         margin-right: 15%;
         background: linear-gradient(135deg, rgba(14, 43, 74, 0.613), rgba(162, 162, 162, 0.4));
@@ -226,13 +226,13 @@
         border-radius: 20px;
         border:1px solid rgba(255, 255, 255, 0.18);
         box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-    }
+    } */
 
     @media (max-width: 768px) {
-        .divbg {
+        /* .divbg {
             margin-left: 5%;
             margin-right: 5%;
-        }
+        } */
 
         .columnscontainer {
             flex-wrap: wrap;
