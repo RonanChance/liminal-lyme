@@ -19,7 +19,6 @@ h3 {
     color: white;
 	font-size: 12pt;
 	font-weight: normal;
-    /* margin-bottom: 10pt; */
 }
 
 p {
@@ -49,13 +48,11 @@ ul {
 }
 
 .container {
-    /* backdrop-filter: blur(4.75px); */
 	max-width: 60%;
 	margin: 0pt auto;
 }
 
 .centered {
-    /* backdrop-filter: blur(4.75px); */
 	display: flex;
 	align-items: center;
 	flex-direction: column;
@@ -65,9 +62,7 @@ ul {
 	justify-content: center;
     display: flex;
     gap: 3px;
-    /* padding-top: 50pt; */
     padding-bottom: 20pt;
-	/* margin: 25px; */
 }
 
 div.multiselect {
@@ -85,7 +80,7 @@ div.multiselect > ul.selected > li {
 
 .mainlogo {
     width: 250px;
-    height: auto; /* Automatically adjust the height to maintain aspect ratio */
+    height: auto;
 }
 
 .text-center-h3 {
@@ -122,21 +117,18 @@ div.multiselect > ul.selected > li {
     
     .mainlogo {
         width: 150px;
-        height: auto; /* Automatically adjust the height to maintain aspect ratio */
+        height: auto;
     }
 
     h1 {
         font-size: 25pt;
-        /* max-width: 80%; */
         margin: 0 auto;
-        /* padding-bottom: 5%; */
     }
     
     h2 {
         font-size: 15pt;
         max-width: 80%;
         margin: 0 auto;
-        /* padding-bottom: 5%; */
     }
     
     h3 {
@@ -163,7 +155,7 @@ div.multiselect > ul.selected > li {
     }
 
     .centered-select {
-        flex-direction: column; /* Stack elements vertically */
+        flex-direction: column;
         align-items: center;
     }
 

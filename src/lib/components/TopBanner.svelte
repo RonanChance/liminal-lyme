@@ -1,7 +1,18 @@
 <script>
   import { Navbar, NavBrand, NavLi, NavUl, Button} from 'flowbite-svelte';
   import { onMount } from 'svelte';
+  import { browser } from '$app/environment';
+  import { getCookie } from '../../lib/components/constants';
   import PocketBase from 'pocketbase';
+
+  let username;
+
+  onMount(() => {
+        if (browser) {
+            username = getCookie('username');
+            console.log(username);
+        }
+    });
 
 </script>
 
@@ -10,11 +21,11 @@
       <img src="/logo.png" class="mainlogo" alt="OpenRXN" />
     </NavBrand>
     <nav class="nav-links">
-      <!-- {#if isAuthenticated} -->
-        <!-- <a href="/auth">Logout</a> -->
-      <!-- {:else} -->
+      {#if username}
+        <a href="/auth">Logout</a>
+        |
+      {/if}
         <a href="/chat">Chat</a>
-      <!-- {/if} -->
       |
       <a href="/about">About</a>
     </nav>

@@ -1,13 +1,25 @@
 <script>
     import {EnvelopeSolid, GithubSolid, LinkedinSolid} from 'flowbite-svelte-icons'
     import { onMount } from 'svelte';
+    import { browser } from '$app/environment';
     import TopBanner from '../../lib/components/TopBanner.svelte'
     import PocketBase from 'pocketbase';
     import { fly } from 'svelte/transition'
     import { Button, Checkbox, Label, Input } from 'flowbite-svelte';
     
     let animate = false;
-    onMount(() => {animate = true;});
+    onMount(() => {
+      animate = true;
+
+      if (browser) {
+        try {
+          document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        } catch {
+          console.log("failed to update cookie")
+        }
+      }
+      
+    });
 
     let oauth_selection;
 
