@@ -5,9 +5,9 @@
     import PocketBase from 'pocketbase';
     import { fly } from 'svelte/transition'
     import { Button, Checkbox, Label, Input } from 'flowbite-svelte';
-
+    
     let animate = false;
-    onMount(() => animate = true);
+    onMount(() => {animate = true;});
 
     let oauth_selection;
 
@@ -17,10 +17,13 @@
         console.log(oauth_selection)
           try {
               console.log("Starting login")
-              const { data, error } = await pb.collection('users').authWithOAuth2({ provider: oauth_selection });
+              const data = await pb.collection('users').authWithOAuth2({ provider: oauth_selection });
+
               console.log("Finished login")
               form.elements['token'].value = pb.authStore.token;
+              form.elements['username'].value = data.meta.username;
               form.submit();
+
           } catch (err) {
               console.error(err);
           }
@@ -61,6 +64,7 @@
           Continue with GitHub
         </button>
       </div>
+  <input name="username" type="hidden" />
   </form>
   
   <div class="textbox">

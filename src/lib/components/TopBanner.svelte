@@ -1,14 +1,20 @@
 <script>
   import { Navbar, NavBrand, NavLi, NavUl, Button} from 'flowbite-svelte';
-</script>
+  import { onMount } from 'svelte';
+  import PocketBase from 'pocketbase';
 
+</script>
 
 <div class="my-navbar-container">
     <NavBrand href="/">
       <img src="/logo.png" class="mainlogo" alt="OpenRXN" />
     </NavBrand>
     <nav class="nav-links">
-      <a href="/auth">Login</a>
+      <!-- {#if isAuthenticated} -->
+        <!-- <a href="/auth">Logout</a> -->
+      <!-- {:else} -->
+        <a href="/chat">Chat</a>
+      <!-- {/if} -->
       |
       <a href="/about">About</a>
     </nav>
