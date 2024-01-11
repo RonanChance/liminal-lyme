@@ -54,8 +54,8 @@
         {:else if currentTab === 'connectTab'}
             <Connect {username}/>
         {/if}
+        <div class="paddingbottom"></div>
     </div>
-
 {/if}
 
 

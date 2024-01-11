@@ -24,6 +24,7 @@
   },
   "type": "module",
   "dependencies": {
+    "openai": "^4.24.3",
     "pocketbase": "^0.18.0",
     "snarkdown": "^2.0.0"
   }
