@@ -27,45 +27,63 @@
 
 </script>
 
-<TopBanner />
+<div class="entirepage">
+    <TopBanner />
 
-{#if animate}
-    <div class="divbg" in:fly|global={{y: 30, delay: 50, duration: 1000 }}>
-        <div class="buttongroup">
-            <ButtonGroup>
-                <Button style="color: {currentTab === 'chatTab' ? '#43bbde' : 'gray'}" on:click={() => {currentTab = 'chatTab'}}>
-                <MessagesSolid class="w-5 h-5 me-2" />
-                Chat
-                </Button>
-                <Button style="color: {currentTab === 'insightTab' ? '#43bbde' : 'gray'}" on:click={() => {currentTab = 'insightTab'}}>
-                <PenSolid class="w-5 h-5 me-2" />
-                Insight
-                </Button>
-                <Button style="color: {currentTab === 'connectTab' ? '#43bbde' : 'gray'}" on:click={() => {currentTab = 'connectTab'}}>
-                <UserGroupSolid class="w-5 h-5 me-2" />
-                Connect
-                </Button>
-            </ButtonGroup>
-        </div>
-        {#if currentTab === 'chatTab'}
-            <Chat {username}/>
-        {:else if currentTab === 'insightTab'}
-            <Insight {username}/>
-        {:else if currentTab === 'connectTab'}
-            <Connect {username}/>
-        {/if}
-        <div class="paddingbottom"></div>
+    <div class="buttongroup">
+        <ButtonGroup>
+            <Button style="color: {currentTab === 'chatTab' ? '#43bbde' : 'gray'}" on:click={() => {currentTab = 'chatTab'}}>
+            <MessagesSolid class="w-5 h-5 me-2" />
+            Chat
+            </Button>
+            <Button style="color: {currentTab === 'insightTab' ? '#43bbde' : 'gray'}" on:click={() => {currentTab = 'insightTab'}}>
+            <PenSolid class="w-5 h-5 me-2" />
+            Insight
+            </Button>
+            <Button style="color: {currentTab === 'connectTab' ? '#43bbde' : 'gray'}" on:click={() => {currentTab = 'connectTab'}}>
+            <UserGroupSolid class="w-5 h-5 me-2" />
+            Connect
+            </Button>
+        </ButtonGroup>
     </div>
-{/if}
+
+    <!-- <h1> Hi, <span class="highlighted-word" style="font-weight:700">{username}</span>!</h1>
+    <h2>Let's get you chatting.</h2> -->
+
+    {#if animate}
+        <div class="divbg" in:fly|global={{y: 30, delay: 50, duration: 1000 }}>
+            {#if currentTab === 'chatTab'}
+                <Chat />
+            {:else if currentTab === 'insightTab'}
+                <Insight {username}/>
+            {:else if currentTab === 'connectTab'}
+                <Connect {username}/>
+            {/if}
+            <!-- <div class="paddingbottom"></div> -->
+        </div>
+    {/if}
+</div>
 
 
 <style>
+    .entirepage {
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .divbg {
+        display: flex;
+        flex-direction: column;
+        
+        margin-top: 20px;
+        flex: 1;
+        margin-bottom: 20px;
+    }
 
     .buttongroup {
         display: flex;
         justify-content: center;
-
-        padding-top: 20px;
     }
 
 
