@@ -17,9 +17,11 @@
 </script>
 
 <div class="my-navbar-container">
-    <NavBrand href="/">
-      <img src="/logo.png" class="mainlogo" alt="OpenRXN" />
-    </NavBrand>
+    <div class="navlogo">
+      <NavBrand href="/">
+        <img src="/logo.png" class="mainlogo" alt="OpenRXN" />
+      </NavBrand>
+    </div>
     <nav class="nav-links">
       {#if username}
         <a href="/auth">Logout</a>
@@ -37,19 +39,21 @@
     gap: 10px;
     color:white;
   }
+
   .my-navbar-container {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding-left: 8%;
-      padding-right: 8%;
-      margin: auto;
       padding-top: 2%;
       padding-bottom: 2%;
+      padding-left: 8%;
+      padding-right: 8%;
   }
+
   .mainlogo{
     transition: transform 0.2s;
   }
+
   .mainlogo:hover{
     transform: scale(105%);
   }
@@ -63,14 +67,10 @@
   
   @media (min-width: 1500px) {
     .my-navbar-container {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding-left: 20%;
-      padding-right: 20%;
-      margin: auto;
       padding-top: 2%;
       padding-bottom: 2%;
+      padding-left: 20%;
+      padding-right: 20%;
   }
   }
 </style>
