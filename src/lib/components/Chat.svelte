@@ -1,14 +1,44 @@
 <script>
     import { Input, Spinner, Textarea, Label, Button } from 'flowbite-svelte';
     import { SearchOutline, ArrowUpSolid } from 'flowbite-svelte-icons';
-
+    import { onMount } from 'svelte';
+    
     let dynamic_user_input = 'Say hi to me!';
     let user_search = '';
     let loading_response = false;
 
     let threadId = null;
     let threadMessage = null;
-    let allMessages = null;
+    let allMessages = {
+        "messages": [
+            {
+                "id": "msg_FR8UQHZaaKVupu9LLMYzlv3i",
+                "object": "thread.message",
+                "created_at": 0,
+                "thread_id": "thread_Onh9cuVkXlIr4OuThr2x0kKs",
+                "role": "assistant",
+                "content": [
+                    {
+                        "type": "text",
+                        "text": {
+                            "value": "I have access to 3.5k+ documented tickborne experiences. How can I help you?",
+                            "annotations": []
+                        }
+                    }
+                ],
+                "file_ids": [],
+                "assistant_id": "asst_3cIA9dtY4q7IqFa4OdNN21kd",
+                "run_id": "run_xNKnXAsd7ZX1BC7cnHAxm97C",
+                "metadata": {}
+            },
+        ]
+    };
+
+    onMount(async () => {
+        if (threadId === null) {
+            threadId = await getThread();
+        }
+    });
 
     let scrollToDiv = HTMLDivElement;
 //     let allMessages = {
@@ -353,13 +383,14 @@
         user_search = dynamic_user_input;
         console.log(user_search);
 
-        loading_response = true;
-
         if (threadId === null) {
+            console.log("Still had to get thread after search")
             threadId = await getThread();
         }
 
         threadMessage = await createMessage(threadId);
+        allMessages = await viewThread(threadId);
+        loading_response = true;
 
         runResult = await createRun(threadId);
         console.log('runResult id:', runResult.run.id);
@@ -442,6 +473,12 @@
             loading_response = false;
             scrollToBottom();
         }
+        if (retrievedRunStatus === 'failed' || retrievedRunStatus === 'cancelled' || retrievedRunStatus === 'timed_out' || retrievedRunStatus === 'interrupted') {
+            clearInterval(intervalId); 
+            console.log('Run failed');
+            loading_response = false;
+            scrollToBottom();
+        }
     }
 
     function scrollToBottom() {
@@ -459,19 +496,17 @@
     }
 </script>
 
-<!-- <h1> Hi, <span class="highlighted-word" style="font-weight:700">{username}</span>!</h1>
-<h2>Let's get you chatting.</h2> -->
-
 <div class="chatcontainer">
 {#if allMessages}
     {#each allMessages.messages.reverse() as message}
         {#if message.role === 'user'}
             <div class="message chatright">
+                <p><span class="username">You<br /></span>
                 <p>{message.content[0].text.value}</p>
             </div>
         {:else if message.role === 'assistant'}
             <div class="message chatleft">
-                <p>{message.content[0].text.value}</p>
+                <p><span class="assistantname">ChatRXN <br /></span> {message.content[0].text.value}</p>
             </div>
         {/if}
     {/each}
@@ -486,11 +521,6 @@
 </div>
 
 <div class="searchbarcontainer">
-    <!-- <Input class="inputtextbox" id="inputtextbox" bind:value={dynamic_user_input} on:keydown={handleKeyDown} placeholder="Search" autocomplete="off" data-lpignore="true" size="lg">
-        <Button slot="right" on:click={() => {submitSearch(); dynamic_user_input = '';}} size="sm" type="submit" style="background-color: {dynamic_user_input.length >= 1 ? '#43bbde' : '#c4c4c4'}; padding-left:8px; padding-right:10px;">
-            <ArrowUpSolid />
-        </Button>
-    </Input> -->
     <textarea class="inputtextbox" bind:value={dynamic_user_input} on:keydown={handleKeyDown} placeholder="Search" autocomplete="off" data-lpignore="true" rows="1" style="resize: none;" size="lg"></textarea>
     <Button slot="right" on:click={() => {submitSearch(); dynamic_user_input = '';}} size="sm" type="submit" style="background-color: {dynamic_user_input.length >= 1 ? '#43bbde' : '#c4c4c4'}; padding-left:13px; padding-right:14px;">
         <ArrowUpSolid />
@@ -517,6 +547,18 @@
         font-size: 16px;
     }
 
+    .assistantname {
+        font-size: 16px;
+        color: #43bbde;
+        font-weight: bold;
+    }
+
+    .username {
+        font-size: 16px;
+        color: #0e2743;
+        font-weight: bold;
+    }
+
     .chatleft {
         align-self: flex-start;
         background-color: #0e2743;
@@ -533,16 +575,9 @@
         align-items: flex-start;
         width: 100%;
         margin: 0 auto;
-        padding: 20px;
+        padding: 12px;
         max-height: 70vh; 
         overflow-y: auto;
-        /* display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        width: 100%;
-        margin: 0 auto;
-        padding: 20px; */
-        
         
     }
     

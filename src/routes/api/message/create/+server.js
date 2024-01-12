@@ -4,7 +4,7 @@ import { OPENAI_KEY } from '$env/static/private'
 
 export async function POST({request}) {
     console.log("CREATING A MESSAGE")
-    const { message, threadId } = await request.json();
+    const { message, threadId, roleType } = await request.json();
     console.log("in server:", message, threadId);
 
     if (!threadId || !message) {
