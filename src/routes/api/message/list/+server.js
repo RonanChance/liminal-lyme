@@ -1,9 +1,8 @@
 import OpenAI from 'openai'
 import { OPENAI_KEY } from '$env/static/private'
 
-export async function GET(req) {
-    const searchParams = req.searchParams;
-    const threadId = searchParams.get('threadId');
+export async function GET({url}) {
+    const threadId = url.searchParams.get('threadId');
 
     if (!threadId) {
         return Response.json({ error: 'No thread id provided' }, { status: 400 });

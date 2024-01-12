@@ -4,8 +4,8 @@ import { OPENAI_KEY } from '$env/static/private'
 
 export async function POST({request}) {
     console.log("CREATING A MESSAGE")
-    const {message, threadId } = await request.json();
-    console.log("in server, ", message, threadId);
+    const { message, threadId } = await request.json();
+    console.log("in server:", message, threadId);
 
     if (!threadId || !message) {
         return Response.json({error: 'No thread ID or no Message'}, {status: 400});
@@ -13,14 +13,14 @@ export async function POST({request}) {
 
     const openai = new OpenAI({ apiKey: OPENAI_KEY });
     try {
-        const threadMessage = await openai.beta.threads.messages.create(threadId, {
+        const threadMessages = await openai.beta.threads.messages.create(threadId, {
             role: 'user',
             content: message
-        })
+        });
 
-        console.log(threadMessage);
+        console.log(threadMessages);
 
-        return Response.json(threadMessage);
+        return Response.json(threadMessages);
 
     } catch (error) {
         console.log(error);

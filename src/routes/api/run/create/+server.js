@@ -2,10 +2,9 @@ import OpenAI from 'openai'
 import { OPENAI_KEY } from '$env/static/private'
 import { OPENAI_ID } from '$env/static/private'
 
-export async function GET (req) {
-    const searchParams = req.nextUrl.searchParams;
-    const threadId = searchParams.get('threadId');
-    const assistantId = searchParams.get('assistantId');
+export async function GET ({url}) {
+    const threadId = url.searchParams.get('threadId');
+    const assistantId = OPENAI_ID;
 
     if (!threadId){
         return Response.json({ error: 'No thread id provided' }, { status: 400 });
@@ -17,8 +16,8 @@ export async function GET (req) {
     const openai = new OpenAI({ apiKey: OPENAI_KEY });
 
     try {
-        const run = await openai.beta.threads.run.create(threadId, {
-            assistant_id: assistantId,
+        const run = await openai.beta.threads.runs.create(threadId, {
+            assistant_id: OPENAI_ID
         });
 
         console.log({run: run});
