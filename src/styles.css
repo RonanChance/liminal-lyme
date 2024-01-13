@@ -43,7 +43,7 @@ ul {
 }
 
 .highlighted-word {
-    color: #43bbde;
+    color: #42bade;
 }
 
 .container {
@@ -73,7 +73,7 @@ div.multiselect {
 }
 
 div.multiselect > ul.selected > li {
-    --sms-selected-bg: #43bbde;
+    --sms-selected-bg: #42bade;
     --sms-selected-text-color: white;
 }
 

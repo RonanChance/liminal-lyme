@@ -3,7 +3,7 @@
     import { SearchOutline, ArrowUpSolid } from 'flowbite-svelte-icons';
     import { onMount } from 'svelte';
     
-    let dynamic_user_input = 'Say hi to me!';
+    let dynamic_user_input = '';
     let user_search = '';
     let loading_response = false;
 
@@ -34,9 +34,15 @@
         ];
 
     onMount(async () => {
+        threadId = localStorage.getItem("threadId") || null;
+
         if (threadId === null) {
             threadId = await getThread();
+            localStorage.setItem("threadId", threadId);
             allMessages = [...firstMessage];
+        } else {
+            console.log("THREAD WAS NOT EMPTY")
+            allMessages = [...await viewThread(threadId), ...firstMessage];
         }
     });
 
@@ -193,7 +199,7 @@
 
 <div class="searchbarcontainer">
     <textarea class="inputtextbox" bind:value={dynamic_user_input} on:keydown={handleKeyDown} placeholder="Search" autocomplete="off" data-lpignore="true" rows="1" style="resize: none;" size="lg"></textarea>
-    <Button slot="right" on:click={() => {submitSearch(); dynamic_user_input = '';}} size="sm" type="submit" style="background-color: {dynamic_user_input.length >= 1 ? '#43bbde' : '#c4c4c4'}; padding-left:13px; padding-right:14px;">
+    <Button slot="right" on:click={() => {submitSearch(); dynamic_user_input = '';}} size="sm" type="submit" style="background-color: {dynamic_user_input.length >= 1 ? '#42bade' : '#c4c4c4'}; padding-left:13px; padding-right:14px;">
         <ArrowUpSolid />
     </Button>
 </div>
@@ -220,7 +226,7 @@
 
     .assistantname {
         font-size: 16px;
-        color: #43bbde;
+        color: #42bade;
         font-weight: bold;
     }
 
@@ -237,7 +243,7 @@
 
     .chatright {
         align-self: flex-end;
-        background-color: #43bbde;
+        background-color: #42bade;
     }
 
     .chatcontainer {

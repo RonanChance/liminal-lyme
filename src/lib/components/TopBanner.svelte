@@ -62,6 +62,8 @@
     .my-navbar-container {
         padding-top: 3%;
         padding-bottom: 3%;
+        padding-left: 3%;
+        padding-right: 3%;
     }
   }
   

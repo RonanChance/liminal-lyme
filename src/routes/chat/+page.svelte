@@ -32,17 +32,17 @@
 
     <div class="buttongroup">
         <ButtonGroup>
-            <Button style="color: {currentTab === 'chatTab' ? '#43bbde' : 'gray'}" on:click={() => {currentTab = 'chatTab'}}>
+            <Button class="bg-slate-200" style="color: {currentTab === 'chatTab' ? '#43bbde' : 'gray'}" on:click={() => {currentTab = 'chatTab'}}>
             <MessagesSolid class="w-5 h-5 me-2" />
-            Chat
+            <p>Chat</p>
             </Button>
-            <Button style="color: {currentTab === 'insightTab' ? '#43bbde' : 'gray'}" on:click={() => {currentTab = 'insightTab'}}>
+            <Button class="bg-slate-200" style="color: {currentTab === 'insightTab' ? '#43bbde' : 'gray'}" on:click={() => {currentTab = 'insightTab'}}>
             <PenSolid class="w-5 h-5 me-2" />
-            Insight
+            <p>Insight</p>
             </Button>
-            <Button style="color: {currentTab === 'connectTab' ? '#43bbde' : 'gray'}" on:click={() => {currentTab = 'connectTab'}}>
+            <Button class="bg-slate-200" style="color: {currentTab === 'connectTab' ? '#43bbde' : 'gray'}" on:click={() => {currentTab = 'connectTab'}}>
             <UserGroupSolid class="w-5 h-5 me-2" />
-            Connect
+            <p>Connect</p>
             </Button>
         </ButtonGroup>
     </div>
@@ -66,6 +66,13 @@
 
 
 <style>
+
+    p {
+        color: #202142;
+        font-size: 12pt;
+        font-weight: bold;
+    }
+
     .entirepage {
         height: 100vh;
         display: flex;
@@ -85,6 +92,5 @@
         display: flex;
         justify-content: center;
     }
-
 
 </style>

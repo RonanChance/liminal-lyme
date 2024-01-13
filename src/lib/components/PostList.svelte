@@ -41,7 +41,7 @@
     }
 
     a {
-      color: #43bbde;
+      color: #42bade;
     }
 
     .button-container {
