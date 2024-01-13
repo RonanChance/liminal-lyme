@@ -4,15 +4,22 @@
   import { browser } from '$app/environment';
   import { getCookie } from '../../lib/components/constants';
   import PocketBase from 'pocketbase';
+  import { goto } from '$app/navigation';
 
-  let username;
+  let email;
+  let selected = 'home';
 
   onMount(() => {
         if (browser) {
-            username = getCookie('username');
-            console.log(username);
+          email = getCookie('email');
+          console.log(email);
         }
     });
+
+  function changeSelected(newSelected) {
+      selected = newSelected;
+      goto("/"+newSelected)
+  }
 
 </script>
 
@@ -23,13 +30,13 @@
       </NavBrand>
     </div>
     <nav class="nav-links">
-      {#if username}
-        <a href="/auth">Logout</a>
+      {#if email}
+        <button href="/auth" on:click={() => {changeSelected("auth");}} style="text-decoration: {selected === "logout" ? "underline" : "none"}">Logout</button>
         |
       {/if}
-        <a href="/chat">Chat</a>
+        <button href="/chat" on:click={() => {changeSelected("chat");}} style="text-decoration: {selected === "chat" ? "underline" : "none"}">Chat</button>
       |
-      <a href="/about">About</a>
+      <button href="/about" on:click={() => {changeSelected("about");}} style="text-decoration: {selected === "about" ? "underline" : "none"}">About</button>
     </nav>
 </div>
 

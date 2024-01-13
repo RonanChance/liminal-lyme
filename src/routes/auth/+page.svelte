@@ -13,7 +13,7 @@
 
       if (browser) {
         try {
-          document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+          document.cookie = "email=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
         } catch {
           console.log("failed to update cookie")
         }
@@ -33,7 +33,8 @@
 
               console.log("Finished login")
               form.elements['token'].value = pb.authStore.token;
-              form.elements['username'].value = data.meta.username;
+              console.log(data)
+              form.elements['email'].value = data.meta.email;
               form.submit();
 
           } catch (err) {
@@ -76,7 +77,7 @@
           Continue with GitHub
         </button>
       </div>
-  <input name="username" type="hidden" />
+  <input name="email" type="hidden" />
   </form>
   
   <div class="textbox">

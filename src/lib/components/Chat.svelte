@@ -6,6 +6,7 @@
     let dynamic_user_input = '';
     let user_search = '';
     let loading_response = false;
+    let reload = 0;
 
     let threadId = null;
     let threadMessage = null;
@@ -171,6 +172,13 @@
             dynamic_user_input = '';
         }
     }
+
+    function completeReboot() {
+        localStorage.setItem("threadId", null);
+        threadId = null;
+        allMessages = null;
+    }
+
 </script>
 
 <div class="chatcontainer">
@@ -205,7 +213,10 @@
 </div>
 
 <div class="medicaldisclaimer">
-    <p style="text-align: center; margin-top: 3%; font-style: italic;"> This is a research project, not medical advice.  </p>
+    <p style="text-align: center; margin-top: 3%; font-style: italic;"> This is a research project, not medical advice. Having an issue:</p>
+    <button class="rebootbutton" on:click={() => {completeReboot(); dynamic_user_input = '';}}>
+        <span class="underline">Reboot</span>
+    </button>
 </div>
 
 <style>
@@ -217,7 +228,19 @@
     }
 
     .medicaldisclaimer {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
         margin-bottom: 20px;
+    }
+
+    .rebootbutton {
+        color: white;
+        font-size: 16px;
+        margin: 20px;
+        padding-bottom: 0px;
+        margin-bottom: 0px;
+        line-height: 1;
     }
 
     p {

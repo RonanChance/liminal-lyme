@@ -11,8 +11,8 @@
     import Insight from '../../lib/components/Insight.svelte';
     import Connect from '../../lib/components/Connect.svelte';
 
-    // Declare username outside of the if (browser) block
-    let username;
+    // Declare email outside of the if (browser) block
+    let email;
     let animate = false;
 
     let currentTab = 'chatTab';
@@ -20,8 +20,8 @@
     onMount(() => {
         animate = true;
         if (browser) {
-            username = getCookie('username');
-            console.log(username);
+            email = getCookie('email');
+            console.log(email);
         }
     });
 
@@ -47,7 +47,7 @@
         </ButtonGroup>
     </div>
 
-    <!-- <h1> Hi, <span class="highlighted-word" style="font-weight:700">{username}</span>!</h1>
+    <!-- <h1> Hi, <span class="highlighted-word" style="font-weight:700">{email}</span>!</h1>
     <h2>Let's get you chatting.</h2> -->
 
     {#if animate}
@@ -55,9 +55,9 @@
             {#if currentTab === 'chatTab'}
                 <Chat />
             {:else if currentTab === 'insightTab'}
-                <Insight {username}/>
+                <Insight {email}/>
             {:else if currentTab === 'connectTab'}
-                <Connect {username}/>
+                <Connect {email}/>
             {/if}
             <!-- <div class="paddingbottom"></div> -->
         </div>
