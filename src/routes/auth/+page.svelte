@@ -83,7 +83,7 @@
   <div class="textbox">
     <h3>Registered Users Can:</h3>
     <h2> 
-      <li>Chat with a machine learning model trained on 3.5k+ tickborne disease experiences</li>
+      <li>Chat with an OpenAI model that knows 3.5k+ tickborne disease experiences</li>
       <li>Contribute experiences to the repository</li>
       <li>Find & join relevant support groups</li>
     </h2>
