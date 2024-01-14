@@ -21,28 +21,28 @@ export const handle = async ({ event, resolve }) => {
     if (!event.locals.pb.authStore.isValid) {
         console.log('Session expired');
         event.cookies.set('pb_auth', '', {path: '/'});
-        try {
-            const auth = await event.locals.pb.collection('users').authRefresh();
-            event.locals.id = auth.record.id;
-            event.locals.email = auth.record.email;
-        } catch (_) {
-            throw redirect(303, '/auth');
-        }
+        // try {
+        //     const auth = await event.locals.pb.collection('users').authRefresh();
+        //     event.locals.id = auth.record.id;
+        //     event.locals.email = auth.record.email;
+        // } catch (_) {
+        //     throw redirect(303, '/auth');
+        // }
         
-        throw redirect(303, '/auth');
+        // throw redirect(303, '/auth');
     }
     
-    // try {
-    //     const auth = await event.locals.pb.collection('users').authRefresh();
-    //     event.locals.id = auth.record.id;
-    //     event.locals.email = auth.record.email;
-    // } catch (_) {
-    //     throw redirect(303, '/auth');
-    // }
+    try {
+        const auth = await event.locals.pb.collection('users').authRefresh();
+        event.locals.id = auth.record.id;
+        event.locals.email = auth.record.email;
+    } catch (_) {
+        throw redirect(303, '/auth');
+    }
   
-    // if (!event.locals.id) {
-    //   throw redirect(303, '/auth');
-    // }
+    if (!event.locals.id) {
+      throw redirect(303, '/auth');
+    }
   
     const response = await resolve(event);
     const cookie = event.locals.pb.authStore.exportToCookie({ sameSite: 'lax', secure: false });
