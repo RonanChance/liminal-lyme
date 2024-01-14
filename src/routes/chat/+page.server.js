@@ -1,9 +1,11 @@
-// import { createChatCompletion } from "../../lib/server/openai.js";
+import { redirect } from '@sveltejs/kit';
 
-// export const load = async () => {
-//     const greeting = await createChatCompletion();
-
-//     console.log(greeting);
-
-//     return {greeting};
-// }
+/** @type {import('./$types').PageServerLoad} */
+export const load = async ({ locals }) => {
+    if (!locals.email){
+        console.log("locals email", locals.email)
+        throw redirect(302, "/auth")
+    } else {
+        console.log("locals email", locals.email)
+    }
+};
