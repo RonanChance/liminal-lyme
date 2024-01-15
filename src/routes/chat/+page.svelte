@@ -19,10 +19,11 @@
 
     onMount(() => {
         animate = true;
-        if (browser) {
-            email = getCookie('email');
-            console.log(email);
-        }
+        console.log("I'm being reached!")
+        // if (browser) {
+        //     email = getCookie('email');
+        //     console.log(email);
+        // }
     });
 
 </script>

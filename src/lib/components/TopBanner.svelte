@@ -31,7 +31,7 @@
     </div>
     <nav class="nav-links">
       {#if email}
-        <button href="/auth" on:click={() => {changeSelected("auth");}} style="text-decoration: {selected === "logout" ? "underline" : "none"}">Logout</button>
+        <button href="/logout" on:click={() => {changeSelected("logout");}} style="text-decoration: {selected === "logout" ? "underline" : "none"}">Logout</button>
         |
       {/if}
         <button href="/chat" on:click={() => {changeSelected("chat");}} style="text-decoration: {selected === "chat" ? "underline" : "none"}">Chat</button>
