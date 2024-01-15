@@ -14,9 +14,11 @@
       if (browser) {
         console.log(getCookie('email'))
         // try to grab valid cookie and if so redirect them to the chat page
-        if (getCookie('email').length >= 5) {
-          window.location.href = '/chat';
-        }
+        try {
+          if (getCookie('email').length >= 5) {
+            window.location.href = '/chat';
+          }
+        } catch (error) {}
       }
     });
 
