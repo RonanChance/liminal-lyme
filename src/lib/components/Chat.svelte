@@ -2,6 +2,8 @@
     import { Input, Spinner, Textarea, Label, Button } from 'flowbite-svelte';
     import { SearchOutline, ArrowUpSolid } from 'flowbite-svelte-icons';
     import { onMount } from 'svelte';
+    import { chat_ideas } from '../../lib/components/constants.js'
+
     
     let dynamic_user_input = '';
     let user_search = '';
@@ -71,6 +73,7 @@
         threadMessage = await createMessage(threadId);
         allMessages = [...await viewThread(threadId), ...firstMessage];
         loading_response = true;
+        scrollToBottom()
 
         runResult = await createRun(threadId);
         console.log('runResult id:', runResult.run.id);
@@ -184,44 +187,98 @@
 </script>
 
 <div class="chatcontainer">
-{#if allMessages}
-    {#each allMessages.reverse() as message}
-        {#if message.role === 'user'}
-            <div class="message chatright">
-                <p><span class="username">You<br /></span>
-                <p>{message.content[0].text.value}</p>
-            </div>
-        {:else if message.role === 'assistant'}
-            <div class="message chatleft">
-                <p><span class="assistantname">ChatRXN <br /></span> {message.content[0].text.value}</p>
-            </div>
-        {/if}
-    {/each}
-{/if}
-{#if loading_response}
-    <div class="message chatleft">
-        <p><Spinner color="gray" /></p>
-    </div>
-{/if}
+    {#if allMessages}
+        {#each allMessages.reverse() as message}
+            {#if message.role === 'user'}
+                <div class="message chatright">
+                    <p><span class="username">You<br /></span>
+                    <p>{message.content[0].text.value}</p>
+                </div>
+            {:else if message.role === 'assistant'}
+                <div class="message chatleft">
+                    <p><span class="assistantname">ChatRXN <br /></span> {message.content[0].text.value}</p>
+                </div>
+            {/if}
+        {/each}
+    {/if}
+    {#if loading_response}
+        <div class="message chatleft">
+            <p><Spinner color="gray" /></p>
+        </div>
+    {/if}
 
-<div bind:this={scrollToDiv}></div>
+    <div bind:this={scrollToDiv}></div>
 </div>
+
 
 <div class="searchbarcontainer">
-    <textarea class="inputtextbox" bind:value={dynamic_user_input} on:keydown={handleKeyDown} placeholder="Search" autocomplete="off" data-lpignore="true" rows="1" style="resize: none;" size="lg"></textarea>
-    <Button slot="right" on:click={() => {submitSearch(); dynamic_user_input = '';}} size="sm" type="submit" style="background-color: {dynamic_user_input.length >= 1 ? '#42bade' : '#c4c4c4'}; padding-left:13px; padding-right:14px;">
-        <ArrowUpSolid />
-    </Button>
+    <div class="ideascontainer">
+        {#each chat_ideas as idea}
+            <!-- <button class="ideabutton" on:click={() => {dynamic_user_input = idea; submitSearch(); dynamic_user_input = '';}}>{idea}</button> -->
+            <button class="ideabutton" on:click={() => {dynamic_user_input = 'Tell me about experiences with ' + idea; submitSearch(); dynamic_user_input = '';}}>{idea}</button>
+        {/each}
+    </div>
+    
+    <div class="searchboxsend">
+        <textarea class="inputtextbox" bind:value={dynamic_user_input} on:keydown={handleKeyDown} placeholder="Search" autocomplete="off" data-lpignore="true" rows="1" style="resize: none;" size="lg"></textarea>
+        <Button slot="right" on:click={() => {submitSearch(); dynamic_user_input = '';}} size="sm" type="submit" style="background-color: {dynamic_user_input.length >= 1 ? '#42bade' : '#c4c4c4'}; padding-left:13px; padding-right:14px;">
+            <ArrowUpSolid />
+        </Button>
+    </div>
 </div>
 
+
 <div class="medicaldisclaimer">
-    <p style="text-align: center; margin-top: 3%; font-style: italic;"> This is a research project, not medical advice. Having an issue:</p>
+    <p style="text-align: center; font-style: italic;"> This is a research project, not medical advice. Having an issue:</p>
     <button class="rebootbutton" on:click={() => {completeReboot(); dynamic_user_input = '';}}>
         <span class="underline">Reboot</span>
     </button>
 </div>
 
+
 <style>
+
+    .ideascontainer {
+        padding-top: 10px;
+        padding-bottom: 15px;
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+
+        -webkit-mask: linear-gradient(90deg, transparent 0%, black 10%, black 90%, transparent 100%);
+
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none;  /* Firefox */
+        
+    }
+
+    .ideascontainer::-webkit-scrollbar {
+        display: none;
+    }
+
+    .ideabutton {
+        background-color: #42bade;
+        color: white;
+        font-weight: 500;
+        font-size: 15px;
+        border-radius: 5px;
+
+        padding-top: 3px;
+        padding-bottom: 3px;
+        padding-left: 10px;
+        padding-right: 10px;
+
+        margin-left: 15px;
+        margin-right: 0px;
+
+        text-wrap: nowrap;
+
+    }
+
+    .ideabutton:hover {
+        background-color: #0e2743;
+    }
+
     .message {
         margin-bottom: 10px;
         padding: 10px;
@@ -233,13 +290,16 @@
         display: flex;
         flex-direction: row;
         justify-content: center;
+        margin-top: 15px;
         margin-bottom: 20px;
     }
 
     .rebootbutton {
         color: white;
         font-size: 16px;
-        margin: 20px;
+        /* margin: 20px; */
+        margin-left: 10px;
+        margin-right: 10px;
         padding-bottom: 0px;
         margin-bottom: 0px;
         line-height: 1;
@@ -264,11 +324,13 @@
     .chatleft {
         align-self: flex-start;
         background-color: #0e2743;
+        max-width: 95%;
     }
 
     .chatright {
         align-self: flex-end;
         background-color: #42bade;
+        max-width: 85%;
     }
 
     .chatcontainer {
@@ -278,9 +340,22 @@
         width: 100%;
         margin: 0 auto;
         padding: 12px;
-        max-height: 70vh; 
+        max-height: 60vh; 
         overflow-y: auto;
-        
+    }
+
+    .searchbarcontainer {
+        display: flex;
+        flex-direction: column;
+        margin: auto auto 0 auto;
+        width: 100%;
+    }
+
+    .searchboxsend {
+        display: flex;
+        flex-direction: row;
+        width: 90%;
+        margin: auto auto 0 auto;
     }
     
     /* Webkit (Chrome, Safari) scrollbar styling */
@@ -309,12 +384,5 @@
         font-size: 18px;
         border: 1px solid #c4c4c4;
         resize: none;
-    }
-
-    .searchbarcontainer {
-        display: flex;
-        flex-direction: row;
-        margin: auto auto 0 auto;
-        width: 90%;
     }
 </style>

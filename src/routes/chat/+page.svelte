@@ -94,4 +94,13 @@
         justify-content: center;
     }
 
+    @media (max-width: 768px) {
+        .divbg {
+            margin-left: 0px;
+            margin-right: 0px;
+            margin-bottom: 0px;
+            border-radius: 20px;
+        }
+    }
+
 </style>
