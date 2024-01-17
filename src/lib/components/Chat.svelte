@@ -48,6 +48,7 @@
             console.log("THREAD WAS NOT EMPTY")
             console.log(threadId);
             allMessages = [...await viewThread(threadId), ...firstMessage];
+            scrollToBottom();
         }
     });
 
