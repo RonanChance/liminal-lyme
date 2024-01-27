@@ -8,7 +8,7 @@
     import { ButtonGroup, Button } from 'flowbite-svelte';
     import { MessagesSolid, PenSolid, UserGroupSolid} from 'flowbite-svelte-icons';
     import Chat from '../../lib/components/Chat.svelte'
-    import Insight from '../../lib/components/Insight.svelte';
+    import Anecdote from '../../lib/components/Anecdote.svelte';
     import Connect from '../../lib/components/Connect.svelte';
 
     // Declare email outside of the if (browser) block
@@ -20,10 +20,10 @@
     onMount(() => {
         animate = true;
         console.log("I'm being reached!")
-        // if (browser) {
-        //     email = getCookie('email');
-        //     console.log(email);
-        // }
+        if (browser) {
+            email = getCookie('email');
+            console.log(email);
+        }
     });
 
 </script>
@@ -37,7 +37,7 @@
             <MessagesSolid class="w-5 h-5 me-2" />
             <p>Chat</p>
             </Button>
-            <Button class="bg-slate-200" style="color: {currentTab === 'insightTab' ? '#43bbde' : 'gray'}" on:click={() => {currentTab = 'insightTab'}}>
+            <Button class="bg-slate-200" style="color: {currentTab === 'anecdoteTab' ? '#43bbde' : 'gray'}" on:click={() => {currentTab = 'anecdoteTab'}}>
             <PenSolid class="w-5 h-5 me-2" />
             <p>Insight</p>
             </Button>
@@ -55,8 +55,8 @@
         <div class="divbg" in:fly|global={{y: 30, delay: 50, duration: 1000 }}>
             {#if currentTab === 'chatTab'}
                 <Chat />
-            {:else if currentTab === 'insightTab'}
-                <Insight {email}/>
+            {:else if currentTab === 'anecdoteTab'}
+                <Anecdote {email}/>
             {:else if currentTab === 'connectTab'}
                 <Connect {email}/>
             {/if}

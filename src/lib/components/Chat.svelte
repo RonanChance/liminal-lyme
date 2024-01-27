@@ -2,9 +2,10 @@
     import { Input, Spinner, Textarea, Label, Button } from 'flowbite-svelte';
     import { SearchOutline, ArrowUpSolid } from 'flowbite-svelte-icons';
     import { onMount } from 'svelte';
-    import { chat_ideas } from '../../lib/components/constants.js'
+    import { chat_ideas, shuffleArray } from '../../lib/components/constants.js'
 
-    
+    shuffleArray(chat_ideas);
+
     let dynamic_user_input = '';
     let user_search = '';
     let loading_response = false;
