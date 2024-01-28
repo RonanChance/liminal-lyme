@@ -61,7 +61,7 @@ ul {
 	justify-content: center;
     display: flex;
     gap: 3px;
-    padding-bottom: 20pt;
+    padding-bottom: 2%;
 }
 
 div.multiselect {

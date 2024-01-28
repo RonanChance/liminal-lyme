@@ -10,6 +10,7 @@
     import Chat from '../../lib/components/Chat.svelte'
     import Anecdote from '../../lib/components/Anecdote.svelte';
     import Connect from '../../lib/components/Connect.svelte';
+    import Search from '../../lib/components/Search.svelte';
 
     // Declare email outside of the if (browser) block
     let email;
@@ -33,6 +34,10 @@
 
     <div class="buttongroup">
         <ButtonGroup>
+            <Button class="bg-slate-200" style="color: {currentTab === 'searchTab' ? '#43bbde' : 'gray'}" on:click={() => {currentTab = 'searchTab'}}>
+            <UserGroupSolid class="w-5 h-5 me-2" />
+            <p>Search</p>
+            </Button>
             <Button class="bg-slate-200" style="color: {currentTab === 'chatTab' ? '#43bbde' : 'gray'}" on:click={() => {currentTab = 'chatTab'}}>
             <MessagesSolid class="w-5 h-5 me-2" />
             <p>Chat</p>
@@ -41,10 +46,10 @@
             <PenSolid class="w-5 h-5 me-2" />
             <p>Insight</p>
             </Button>
-            <Button class="bg-slate-200" style="color: {currentTab === 'connectTab' ? '#43bbde' : 'gray'}" on:click={() => {currentTab = 'connectTab'}}>
+            <!-- <Button class="bg-slate-200" style="color: {currentTab === 'connectTab' ? '#43bbde' : 'gray'}" on:click={() => {currentTab = 'connectTab'}}>
             <UserGroupSolid class="w-5 h-5 me-2" />
             <p>Connect</p>
-            </Button>
+            </Button> -->
         </ButtonGroup>
     </div>
 
@@ -59,6 +64,8 @@
                 <Anecdote {email}/>
             {:else if currentTab === 'connectTab'}
                 <Connect {email}/>
+            {:else if currentTab === 'searchTab'}
+                <Search />
             {/if}
             <!-- <div class="paddingbottom"></div> -->
         </div>
