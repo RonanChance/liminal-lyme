@@ -101,7 +101,8 @@
         <ul>
           <li>Chat with an OpenAI model that knows 3.5k+ tickborne disease experiences</li>
           <li>Contribute experiences to the repository</li>
-          <li>Find & join relevant support groups</li>
+          <li>Search the entire database for condition/medication combinations</li>
+          <li>Soon: Connect with other in the tickborne disease community</li>
         </ul>
       </div>
     
