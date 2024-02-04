@@ -41,12 +41,51 @@
         <img width=200px src="/bacteria_images/ehrlichia.png">
     </div>
 
-    <MedicalDisclaimer />
 </div>
+
+<div class="numbersdiv">
+    <hr/>
+    <div class="transparenttext">Scanned Comments</div>
+    <div class="numbertext">19,663,903</div>
+    <hr/>
+    <div class="transparenttext">Cataloged Experiences</div>
+    <div class="numbertext">3,917</div>
+    <hr/>
+    <div class="transparenttext">Medications Supported</div>
+    <div class="numbertext">80</div>
+    <hr/>
+</div>
+
+<MedicalDisclaimer />
 
 {/if}
 
 <style>
+
+    .numbersdiv {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-top: 4%;
+    }
+
+    hr {
+        opacity: 0.5;
+        width: 80%;
+        margin: auto;
+    }
+
+    .transparenttext {
+        padding-top: 2%;
+        color: white;
+        opacity: 0.5;
+    }
+
+    .numbertext {
+        color: white;
+        font-weight: bold;
+        font-size: 50pt;
+    }
 
     .divbg {
         display: flex;
@@ -64,12 +103,18 @@
     }
 
     .buttondiv {
-        padding-top: 5%;
+        padding-top: 3%;
     }
 
     .infonote {
-        padding-top: 10%;
+        padding-top: 5%;
         padding-bottom: 10%;
+    }
+
+    @media (max-width: 768px) {
+        .infonote {
+        padding-top: 10%;
+    }
     }
 
 </style>

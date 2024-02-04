@@ -3,7 +3,6 @@
   import { onMount } from 'svelte';
   import { browser } from '$app/environment';
   import { getCookie } from '../../lib/components/constants';
-  import PocketBase from 'pocketbase';
   import { goto } from '$app/navigation';
 
   let email;
@@ -41,25 +40,27 @@
 </div>
 
 <style>
-  .nav-links {
-    display: flex;
-    gap: 10px;
-    color: var(--offwhite);
-    font-weight: 600;
-  }
+    .nav-links {
+      display: flex;
+      gap: 10px;
+      color: var(--offwhite);
+      font-weight: 600;
+    }
 
   .navbar {
       position: sticky;
       top: 0px;
       z-index: 1;
+      background: rgb(14, 43, 74);
 
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding-top: 2%;
-      padding-bottom: 2%;
       padding-left: 8%;
       padding-right: 8%;
+
+      max-height: 100px;
   }
 
   .mainlogo{

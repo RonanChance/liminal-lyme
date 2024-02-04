@@ -13,6 +13,7 @@
 
 <style>
 	.intro-container {
+		padding-top: 10%;
 		padding-left: 8%;
 		padding-right: 8%;
 	}
