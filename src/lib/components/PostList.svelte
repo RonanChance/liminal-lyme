@@ -39,7 +39,7 @@
     }
 
     a {
-      color: #42bade;
+      color: var(--accent);
     }
 
     .button-container {

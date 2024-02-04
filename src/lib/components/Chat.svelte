@@ -223,7 +223,7 @@
     
     <div class="searchboxsend">
         <textarea class="inputtextbox" bind:value={dynamic_user_input} on:keydown={handleKeyDown} placeholder="Search" autocomplete="off" data-lpignore="true" rows="1" style="resize: none;" size="lg"></textarea>
-        <Button slot="right" on:click={() => {submitSearch(); dynamic_user_input = '';}} size="sm" type="submit" style="background-color: {dynamic_user_input.length >= 1 ? '#42bade' : '#c4c4c4'}; padding-left:13px; padding-right:14px;">
+        <Button slot="right" on:click={() => {submitSearch(); dynamic_user_input = '';}} size="sm" type="submit" style="background-color: {dynamic_user_input.length >= 1 ? 'var(--accent)' : '#c4c4c4'}; padding-left:13px; padding-right:14px;">
             <ArrowUpSolid />
         </Button>
     </div>
@@ -259,7 +259,7 @@
     }
 
     .ideabutton {
-        background-color: #42bade;
+        background-color: var(--accent);
         color: white;
         font-weight: 500;
         font-size: 15px;
@@ -313,7 +313,7 @@
 
     .assistantname {
         font-size: 16px;
-        color: #42bade;
+        color: var(--accent);
         font-weight: bold;
     }
 
@@ -331,7 +331,7 @@
 
     .chatright {
         align-self: flex-end;
-        background-color: #42bade;
+        background-color: var(--accent);
         max-width: 85%;
     }
 

@@ -5,11 +5,11 @@
     let animate = false;
     onMount(() => animate = true);
 
-    const words = [' Health.', ' Medication.', 'Journey.', 'Insight.', 'Health.']
+    const words = [' Health.', ' Medication.', 'Journey.', 'Insight.']
     let currentIndex = 0;
     let currentWord = words[currentIndex];
 
-    const interval = 2000; // Change text every 2 seconds (adjust as needed)
+    const interval = 2000; // Change text every 2 seconds 
 
     const rotateText = () => {
       currentIndex = (currentIndex + 1) % words.length;
@@ -19,12 +19,13 @@
     // Set up an interval to rotate text
     const textInterval = setInterval(rotateText, interval);
 
-    $: {
+    // Add this back if I want to stop the scrolling words
+    // $: {
       // Clear the interval when the component is destroyed
-      if (currentIndex === words.length - 1) {
-        clearInterval(textInterval);
-      }
-    }
+      // if (currentIndex === words.length - 1) {
+      //   clearInterval(textInterval);
+      // }
+    // }
 </script>
 
 <div class="rotating-text">
@@ -40,22 +41,30 @@
 </div>
 
 {#if animate}
-  <div class="text-center emoji-line">
+  <div class="sub-heading text-center">
     <h2 in:fly|global={{y: 100, delay: 50, duration: 1000 }}>
-      <div class="emoji inline">🤒</div> Condition + <div class="emoji inline">💊</div> Medication <span class="second-line">= <div class="emoji inline">🙂</div> Informed Patient</span>
+      <!-- <div class="emoji inline">🤒</div> Condition + <div class="emoji inline">💊</div> Medication <span class="second-line">= <div class="emoji inline">🙂</div> Informed Patient</span> -->
+      <div class="inline"> 
+      Get <span class="bold">insights</span> based on your <span class="bold">conditions & medications</span>
+      </div>
     </h2>
   </div>
 {/if}
 
 <style>
+  .sub-heading {
+    width: 100%;
+    margin-bottom: 15pt;
+  }
+
+  .bold {
+    font-weight: bold;
+  }
+  
   .rotating-text {
     display: flex;
     margin-top: 10pt;
     margin-bottom: 10pt;
-  }
-
-  .emoji-line {
-      margin-bottom: 15pt;
   }
   
   .emoji {

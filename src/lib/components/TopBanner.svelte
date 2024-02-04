@@ -23,8 +23,8 @@
 
 </script>
 
-<div class="my-navbar-container">
-    <div class="navlogo">
+<div class="navbar">
+    <div>
       <NavBrand href="/">
         <img src="/logo.png" class="mainlogo" alt="OpenRXN" />
       </NavBrand>
@@ -44,10 +44,15 @@
   .nav-links {
     display: flex;
     gap: 10px;
-    color:white;
+    color: var(--offwhite);
+    font-weight: 600;
   }
 
-  .my-navbar-container {
+  .navbar {
+      position: sticky;
+      top: 0px;
+      z-index: 1;
+
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -58,15 +63,16 @@
   }
 
   .mainlogo{
+    transform: scale(95%);
     transition: transform 0.2s;
   }
 
   .mainlogo:hover{
-    transform: scale(105%);
+    transform: scale(100%);
   }
 
   @media (max-width: 768px) {
-    .my-navbar-container {
+    .navbar {
         padding-top: 3%;
         padding-bottom: 3%;
         padding-left: 3%;
@@ -75,7 +81,7 @@
   }
   
   @media (min-width: 1500px) {
-    .my-navbar-container {
+    .navbar {
       padding-top: 2%;
       padding-bottom: 2%;
       padding-left: 20%;
