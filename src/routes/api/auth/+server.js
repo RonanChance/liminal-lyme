@@ -1,4 +1,6 @@
 import { redirect } from "@sveltejs/kit";
+import { SECRET_EMAIL, SECRET_PASSWORD } from '$env/static/private';
+import PocketBase from 'pocketbase';
 
 export async function POST({request, cookies }) {
     console.log("Authenticating + Redirecting Soon")
@@ -8,7 +10,24 @@ export async function POST({request, cookies }) {
     if (!email) {
         return Response.json({error: 'No login info'}, {status: 400});
     }
-    
+
+    let pb = new PocketBase('https://openrxndatabase.hop.sh');
+    const authData = await pb.admins.authWithPassword(SECRET_EMAIL, SECRET_PASSWORD);
+
+    try {
+        const filterQuery = 'email=\"' + email + "\"";
+        const record = await pb.collection('user_data').getFirstListItem(filterQuery);
+        if (record) {
+            console.log("Record with the specified email exists");
+        }
+    } catch (error) {
+        const data = {
+            "email": email,
+            "searches_remaining": 100,
+        };
+        const record = await pb.collection('user_data').create(data);
+    }
+
     console.log("SETTING COOKIES")
     console.log("TOKEN:", token)
     cookies.set('pb_auth', JSON.stringify({ token: token }), {path: '/', httpOnly: true, secure: false});

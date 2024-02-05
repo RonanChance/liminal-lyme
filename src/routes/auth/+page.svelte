@@ -34,15 +34,14 @@
         if (!w) return false;
 
         try {
-        data = await pb.collection("users").authWithOAuth2({
-            provider: providerChoice,
-            urlCallback: (url) => {
-            w.location.href = url;
-            }
-        });
+          data = await pb.collection("users").authWithOAuth2({
+              provider: providerChoice,
+              urlCallback: (url) => {
+              w.location.href = url;
+              }
+          });
         } catch (error) {
-        console.error(error);
-            // Handle error appropriately
+          console.error(error); // Handle error appropriately
         }
 
         console.log("Finished login")
