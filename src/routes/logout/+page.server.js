@@ -7,5 +7,5 @@ export const load = async ({ request, locals, cookies }) => {
     cookies.set('pb_auth', JSON.stringify({ token: '' }), {path: '/', httpOnly: true, secure: false});
     cookies.set('email', '', {path: '/', httpOnly: false, secure: false});
     console.log("LOGGING OUT")
-    throw redirect(302, "/")
+    throw redirect(302, "/auth")
 };
