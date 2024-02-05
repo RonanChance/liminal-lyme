@@ -3,6 +3,9 @@
     import { fly } from 'svelte/transition'
     import { Toast } from 'flowbite-svelte';
 	import { ExclamationCircleSolid } from 'flowbite-svelte-icons';
+    import { browser } from '$app/environment';
+    import { getCookie } from '../../lib/components/constants';
+    import { goto } from '$app/navigation';
 
     import PocketBase from 'pocketbase';
     
@@ -18,6 +21,12 @@
     let placeholder_text = '- Be as descriptive as possible\n- Include symptoms, diagnosis, etc\n- Include relevant medications, supplements, and dosages when possible \n- Feel free to submit multiple times, the more data the better!'
 
     onMount(async () => {
+        if (browser) {
+          let email = getCookie('email');
+          if (!email) {
+            goto("/auth")
+          }
+        }
         typeWriter();
     });
 

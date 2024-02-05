@@ -3,6 +3,9 @@
     import { SearchOutline, ArrowUpSolid } from 'flowbite-svelte-icons';
     import { onMount } from 'svelte';
     import { chat_ideas, shuffleArray } from '../../lib/components/constants.js'
+    import { browser } from '$app/environment';
+    import { getCookie } from '../../lib/components/constants';
+    import { goto } from '$app/navigation';
 
     shuffleArray(chat_ideas);
 
@@ -38,6 +41,13 @@
         ];
 
     onMount(async () => {
+        if (browser) {
+          let email = getCookie('email');
+          if (!email) {
+            goto("/auth")
+          }
+        }
+
         threadId = localStorage.getItem("threadId") || null;
 
         // temporary fix using length, TODO: improve this

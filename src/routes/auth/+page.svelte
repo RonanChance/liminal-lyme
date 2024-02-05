@@ -55,7 +55,7 @@
         };
         await fetch(url, requestOptions);
         
-        window.location.href = '/home';
+        window.location.href = '/home?path=chatTab';
         
         return;
   }

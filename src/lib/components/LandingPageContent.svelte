@@ -26,39 +26,39 @@
     </div>
     <Popover class="w-64 text-sm font-light" triggeredBy="#info-button" data-popper-placement="left">This research is currently focused on tickborne disease data from Reddit, but will expand in the future</Popover>
 
-    <div class="divbg" in:fly={{y:50, delay: 1000, duration: 2000}}>
+    <div class="divbg" in:fly={{y:50, delay: 1000, duration: 1500}}>
         <div class="info-row">
-            <div class="imgdiv left" in:blur={{delay: 1000, duration: 2000}}>
+            <div class="imgdiv left" in:blur={{delay: 1000, duration: 1500}}>
                 <img src="/bacteria_images/img1.png" alt="img1">
             </div>
-            <div class="text-info right" in:blur={{delay: 1000, duration: 2000}}>
-                Search our tickborne disease database to see how others recovered
+            <div class="text-info right" in:blur={{delay: 1000, duration: 1500}}>
+                Search our tickborne disease database to learn from others
             </div>
         </div>
         
         <div class="info-row">
-            <div class="text-info left" in:blur={{delay: 1000, duration: 2000}}>
-                Find treatment ideas by chatting with an AI model that knows 3.5k high-quality tickborne disease experiences
+            <div class="text-info left" in:blur={{delay: 1000, duration: 1500}}>
+                Find treatment ideas with an AI model that knows conventional and alternative treatments
             </div>
-            <div class="imgdiv right" in:blur={{delay: 1000, duration: 2000}}>
+            <div class="imgdiv right" in:blur={{delay: 1000, duration: 1500}}>
                 <img src="/bacteria_images/img2.png" alt="img2">
             </div>
         </div>
 
         <div class="info-row">
-            <div class="imgdiv left" in:blur={{delay: 1000, duration: 2000}}>
+            <div class="imgdiv left" in:blur={{delay: 1000, duration: 1500}}>
                 <img src="/bacteria_images/img3.png" alt="img3">
             </div>
-            <div class="text-info right" in:blur={{delay: 1000, duration: 2000}}>
+            <div class="text-info right" in:blur={{delay: 1000, duration: 1500}}>
                 Share your health successes and obstacles with the community
             </div>
         </div>
 
         <div class="info-row">
-            <div class="text-info left" in:blur={{delay: 1000, duration: 2000}}>
+            <div class="text-info left" in:blur={{delay: 1000, duration: 1500}}>
                 Check back often as we add medications, supplements, and treatments
             </div>
-            <div class="imgdiv right" in:blur={{delay: 1000, duration: 2000}}>
+            <div class="imgdiv right" in:blur={{delay: 1000, duration: 1500}}>
                 <img src="/bacteria_images/img4.png" alt="img4">
             </div>
         </div>
