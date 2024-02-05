@@ -12,7 +12,7 @@
 {#if animate}
 <div class="content-container" in:fly={{y:50, delay: 500, duration: 1500}}>
     
-    <div class="centerdiv buttondiv" style="text-align: center;">
+    <div class="buttondiv" style="text-align: center;">
         <a href="/chat" class="whitebutton">Get started—it's free</a>
     </div>
 
@@ -25,42 +25,114 @@
         </button>
     </div>
     <Popover class="w-64 text-sm font-light" triggeredBy="#info-button" data-popper-placement="left">This research is currently focused on tickborne disease data from Reddit, but will expand in the future</Popover>
+
+    <div class="divbg" in:fly={{y:50, delay: 1000, duration: 2000}}>
+        <div class="info-row">
+            <div class="imgdiv left" in:blur={{delay: 1000, duration: 2000}}>
+                <img src="/bacteria_images/img1.png" alt="img1">
+            </div>
+            <div class="text-info right" in:blur={{delay: 1000, duration: 2000}}>
+                Search our tickborne disease database to see how others recovered
+            </div>
+        </div>
+        
+        <div class="info-row">
+            <div class="text-info left" in:blur={{delay: 1000, duration: 2000}}>
+                Find treatment ideas by chatting with an AI model that knows 3.5k high-quality tickborne disease experiences
+            </div>
+            <div class="imgdiv right" in:blur={{delay: 1000, duration: 2000}}>
+                <img src="/bacteria_images/img2.png" alt="img2">
+            </div>
+        </div>
+
+        <div class="info-row">
+            <div class="imgdiv left" in:blur={{delay: 1000, duration: 2000}}>
+                <img src="/bacteria_images/img3.png" alt="img3">
+            </div>
+            <div class="text-info right" in:blur={{delay: 1000, duration: 2000}}>
+                Share your health successes and obstacles with the community
+            </div>
+        </div>
+
+        <div class="info-row">
+            <div class="text-info left" in:blur={{delay: 1000, duration: 2000}}>
+                Check back often as we add medications, supplements, and treatments
+            </div>
+            <div class="imgdiv right" in:blur={{delay: 1000, duration: 2000}}>
+                <img src="/bacteria_images/img4.png" alt="img4">
+            </div>
+        </div>
+    
+    </div>
+    
+    <div class="numbersdiv">
+        <hr/>
+        <div class="transparenttext">Scanned Comments</div>
+        <div class="numbertext">19,663,903</div>
+        <hr/>
+        <div class="transparenttext">Cataloged Experiences</div>
+        <div class="numbertext">3,917</div>
+        <hr/>
+        <div class="transparenttext">Supported Medications</div>
+        <div class="numbertext">80</div>
+        <hr/>
+    </div>
+
+    <div class="buttondiv" style="text-align: center;">
+        <a href="/chat" class="whitebutton">Get started</a>
+    </div>
+    
+    <div class="disclaimer-container">
+        <MedicalDisclaimer />
+    </div>
+
 </div>
-
-<div class="divbg" in:fly={{y:50, delay: 1000, duration: 1500}}>
-    <div class="imgdiv left" in:blur={{delay: 1000, duration: 1500}}>
-        <img width=200px src="/bacteria_images/lyme.png">
-    </div>
-    <div class="imgdiv right" in:blur={{delay: 1000, duration: 1500}}>
-        <img width=200px src="/bacteria_images/rmsf.png">
-    </div>
-    <div class="imgdiv left" in:blur={{delay: 1000, duration: 1500}}>
-        <img width=225px src="/bacteria_images/babesia.png">
-    </div>
-    <div class="imgdiv right" in:blur={{delay: 1000, duration: 1500}}>
-        <img width=200px src="/bacteria_images/ehrlichia.png">
-    </div>
-
-</div>
-
-<div class="numbersdiv">
-    <hr/>
-    <div class="transparenttext">Scanned Comments</div>
-    <div class="numbertext">19,663,903</div>
-    <hr/>
-    <div class="transparenttext">Cataloged Experiences</div>
-    <div class="numbertext">3,917</div>
-    <hr/>
-    <div class="transparenttext">Medications Supported</div>
-    <div class="numbertext">80</div>
-    <hr/>
-</div>
-
-<MedicalDisclaimer />
 
 {/if}
 
 <style>
+
+    .imgdiv {
+        min-width: 50%;
+        max-width: 50%;
+        height: auto;
+        width: auto;
+    }
+
+    .content-container {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .text-info {
+        max-width: 50%;
+        padding-left: 5%;
+        padding-right: 1%;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        color: white;
+        font-size: 12pt;
+    }
+
+    .info-row {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        padding-left: 2%;
+        padding-right: 2%;
+        padding-top: 5%;
+        padding-bottom: 5%;
+    }
+
+    .disclaimer-container {
+        padding-top: 5%;
+        max-width: 90%;
+        margin: auto;
+        padding-bottom: 5%;
+    }
 
     .numbersdiv {
         display: flex;
@@ -88,18 +160,8 @@
     }
 
     .divbg {
-        display: flex;
-        flex-direction: column;
-    }
-    
-    .left {
-        margin-left: 0;
-        margin-right: auto;
-    }
-
-    .right {
-        margin-left: auto;
-        margin-right: 0;
+        max-width: 50%;
+        margin: auto;
     }
 
     .buttondiv {
@@ -107,11 +169,28 @@
     }
 
     .infonote {
+        margin: auto;
+        max-width: 90%;
         padding-top: 5%;
         padding-bottom: 10%;
+        text-align: center;
     }
 
     @media (max-width: 768px) {
+
+        .disclaimer-container {
+            padding-bottom: 10%;
+        }
+        
+        .buttondiv {
+            padding-top: 5%;
+        }
+
+        .divbg {
+            max-width: 95%;
+            margin: auto;
+        }
+
         .infonote {
         padding-top: 10%;
     }

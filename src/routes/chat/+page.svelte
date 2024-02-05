@@ -16,7 +16,7 @@
     let email;
     let animate = false;
 
-    let currentTab = 'chatTab';
+    let currentTab = 'searchTab';
 
     onMount(() => {
         animate = true;

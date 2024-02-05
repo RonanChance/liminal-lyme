@@ -6,8 +6,8 @@
   import { goto } from '$app/navigation';
 
   let email;
-  let selected = 'home';
-
+  let selected = "/";
+  
   onMount(() => {
         if (browser) {
           email = getCookie('email');
@@ -15,9 +15,8 @@
         }
     });
 
-  function changeSelected(newSelected) {
-      selected = newSelected;
-      goto("/"+newSelected)
+  function changeSelected(Destination) {
+      goto(Destination)
   }
 
 </script>
@@ -30,12 +29,12 @@
     </div>
     <nav class="nav-links">
       {#if email}
-        <button href="/logout" on:click={() => {changeSelected("logout");}} style="text-decoration: {selected === "logout" ? "underline" : "none"}">Logout</button>
+        <button href="/logout" on:click={() => {changeSelected("/logout");}} style="text-decoration: {selected === "logout" ? "underline" : "none"}">Logout</button>
         |
       {/if}
-        <button href="/chat" on:click={() => {changeSelected("chat");}} style="text-decoration: {selected === "chat" ? "underline" : "none"}">Chat</button>
+      <button href="/chat" on:click={() => {changeSelected("/chat");}} style="text-decoration: {selected === "chat" ? "underline" : "none"}">Home</button>
       |
-      <button href="/about" on:click={() => {changeSelected("about");}} style="text-decoration: {selected === "about" ? "underline" : "none"}">About</button>
+      <button href="/about" on:click={() => {changeSelected("/about");}} style="text-decoration: {selected === "about" ? "underline" : "none"}">About</button>
     </nav>
 </div>
 
@@ -51,7 +50,7 @@
       position: sticky;
       top: 0px;
       z-index: 1;
-      background: rgb(14, 43, 74);
+      background: rgba(14, 43, 74, 0.888);
 
       display: flex;
       align-items: center;

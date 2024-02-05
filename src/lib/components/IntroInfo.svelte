@@ -66,57 +66,37 @@
     margin-top: 10pt;
     margin-bottom: 10pt;
   }
-  
-  .emoji {
-    display: inline-block;
-    font-size: 35px; /* Set the default size of the emoji */
-    transition: font-size 0.2s; /* Add a transition for a smooth change in size */
-  }
-  .emoji:hover {
-    font-size: 40px; /* Set the larger size when hovered on */
-  }
 
   .half {
     flex-basis: 50%;
     display: flex;
-    /* justify-content: flex-start; */
   }
+
   .fixed-word {
     margin-left: auto;
-    /* justify-self: flex-end; */
   }
+
   .highlighted-word {
     margin-right: auto;
   }
+
   @media (max-width: 768px) {
 
     .rotating-text {
         padding-bottom: 2%;
     }
 
-    .emoji-line {
-        padding-bottom: 2%;
-    }
-
-    .second-line{
-      display: block;
-    }
     h2 {
       font-size: 18px;
     }
-    .emoji {
-      display: inline-block;
-      font-size: 20px; /* Set the default size of the emoji */
-      transition: font-size 0.2s; /* Add a transition for a smooth change in size */
-    }
-    .emoji:hover {
-      font-size: 25px; /* Set the larger size when hovered on */
-    }
+
     .fixed-word {
       margin-right: 0;
     }
+
     .highlighted-word {
       margin-left: 0;
     }
+    
   }
 </style>

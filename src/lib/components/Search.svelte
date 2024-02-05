@@ -133,7 +133,7 @@
 
 <style>
     .infonote{
-        padding-top: 2%;
+        padding-top: 10%;
         padding-bottom: 8%;
     }
 	.post-area {
