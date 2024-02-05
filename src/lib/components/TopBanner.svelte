@@ -32,7 +32,7 @@
         <button href="/logout" on:click={() => {changeSelected("/logout");}} style="text-decoration: {selected === "logout" ? "underline" : "none"}">Logout</button>
         |
       {/if}
-      <button href="/chat" on:click={() => {changeSelected("/chat");}} style="text-decoration: {selected === "chat" ? "underline" : "none"}">Home</button>
+      <button href="/home" on:click={() => {changeSelected("/home");}} style="text-decoration: {selected === "home" ? "underline" : "none"}">Home</button>
       |
       <button href="/about" on:click={() => {changeSelected("/about");}} style="text-decoration: {selected === "about" ? "underline" : "none"}">About</button>
     </nav>

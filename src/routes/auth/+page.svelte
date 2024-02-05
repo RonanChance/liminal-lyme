@@ -16,7 +16,7 @@
         // try to grab valid cookie and if so redirect them to the chat page
         try {
           if (getCookie('email').length >= 5) {
-            window.location.href = '/chat';
+            window.location.href = '/home';
           }
         } catch (error) {}
       }
@@ -55,7 +55,7 @@
         };
         await fetch(url, requestOptions);
         
-        window.location.href = '/chat';
+        window.location.href = '/home';
         
         return;
   }

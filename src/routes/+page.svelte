@@ -1,7 +1,6 @@
 <script>
 	import IntroInfo from '../lib/components/IntroInfo.svelte';
 	import TopBanner from '../lib/components/TopBanner.svelte';
-	import Search from '../lib/components/Search.svelte';
 	import LandingPageContent from '../lib/components/LandingPageContent.svelte';
 </script>
 

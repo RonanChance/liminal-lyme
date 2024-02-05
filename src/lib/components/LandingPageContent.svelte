@@ -1,7 +1,7 @@
 <script>
     import MedicalDisclaimer from "./MedicalDisclaimer.svelte";
     import { onMount } from 'svelte';
-	import { Popover, Toast, Spinner, A } from 'flowbite-svelte';
+	import { Popover, Toast, Spinner } from 'flowbite-svelte';
     import { fly, fade, blur } from 'svelte/transition'
 
 
@@ -13,7 +13,7 @@
 <div class="content-container" in:fly={{y:50, delay: 500, duration: 1500}}>
     
     <div class="buttondiv" style="text-align: center;">
-        <a href="/chat" class="whitebutton">Get started—it's free</a>
+        <a href="/home" class="whitebutton">Get started—it's free</a>
     </div>
 
     <div class="infonote" style="color: white; text-align: center; font-size: 12pt;">We collect open-source tickborne disease data so you can see how people with your <a class="highlight" href="/about#what_conditions_are_supported">conditions</a> react to <a class="highlight" href="/about#what_medications_are_supported">medications</a>
@@ -79,7 +79,7 @@
     </div>
 
     <div class="buttondiv" style="text-align: center;">
-        <a href="/chat" class="whitebutton">Get started</a>
+        <a href="/home" class="whitebutton">Get started</a>
     </div>
     
     <div class="disclaimer-container">
@@ -107,8 +107,8 @@
 
     .text-info {
         max-width: 50%;
-        padding-left: 5%;
-        padding-right: 1%;
+        padding-left: 4%;
+        padding-right: 4%;
 
         display: flex;
         flex-direction: column;

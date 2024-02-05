@@ -14,5 +14,5 @@ export async function POST({request, cookies }) {
     cookies.set('pb_auth', JSON.stringify({ token: token }), {path: '/', httpOnly: true, secure: false});
     cookies.set('email', email, {path: '/', httpOnly: false, secure: false});
 
-    throw redirect(303, '/chat');
+    throw redirect(303, '/home');
 }
