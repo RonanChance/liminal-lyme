@@ -53,6 +53,10 @@
             body: JSON.stringify({ email: data.meta.email, token: data.token })
         };
         await fetch(url, requestOptions);
+
+        // set email so we can retrieve with locals
+        event.locals = {};
+        event.locals.email = data.meta.email;
         
         window.location.href = '/home?path=chatTab';
         

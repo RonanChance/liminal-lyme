@@ -13,6 +13,7 @@
     let user_search = '';
     let loading_response = false;
     let reload = 0;
+    let credits_remaining = 0;
 
     let threadId = null;
     let threadMessage = null;
@@ -28,7 +29,7 @@
                     {
                         "type": "text",
                         "text": {
-                            "value": "I have access to 3.5k+ documented tickborne illness experiences. How can I help you?",
+                            "value": "I have access to 3.5k+ documented tickborne illness experiences. Ask me about them!",
                             "annotations": []
                         }
                     }
@@ -40,27 +41,31 @@
             },
         ];
 
-    onMount(async () => {
+    onMount(async ({ locals }) => {
         if (browser) {
-          let email = getCookie('email');
-          if (!email) {
-            goto("/auth")
-          }
+
+            console.log(locals)
+
+            let email = getCookie('email');
+            if (!email) {
+                goto("/auth")
+            }
+            getCredits();
         }
 
         threadId = localStorage.getItem("threadId") || null;
 
         // temporary fix using length, TODO: improve this
-        if (!threadId || threadId === null || threadId.length <= 4) {
-            threadId = await getThread();
-            localStorage.setItem("threadId", threadId);
-            allMessages = [...firstMessage];
-        } else {
-            console.log("THREAD WAS NOT EMPTY")
-            console.log(threadId);
-            allMessages = [...await viewThread(threadId), ...firstMessage];
-            scrollToBottom();
-        }
+        // if (!threadId || threadId === null || threadId.length <= 4) {
+        //     threadId = await getThread();
+        //     localStorage.setItem("threadId", threadId);
+        //     allMessages = [...firstMessage];
+        // } else {
+        //     // console.log("THREAD WAS NOT EMPTY")
+        //     // console.log(threadId);
+        //     allMessages = [...await viewThread(threadId), ...firstMessage];
+        //     scrollToBottom();
+        // }
     });
 
     let scrollToDiv = HTMLDivElement;
@@ -69,16 +74,30 @@
     let retrievedRunStatus = null;
     let intervalId;
 
+    /** @type {import('./$types').LayoutData} */
+    export let data;
+
+    async function getCredits() {
+        console.log("userdata: ", data.credits_remaining)
+        // const url = 'api/credits/get';
+        // const requestOptions = {
+        //     method: 'GET'
+        // };
+        // const response = await fetch(url, requestOptions);
+        // const data = await response.json();
+        // credits_remaining = data.credits_remaining;
+    }
+
     async function submitSearch() {
         if (dynamic_user_input === '') {
             return;
         }
         
         user_search = dynamic_user_input;
-        console.log(user_search);
+        // console.log(user_search);
 
         if (threadId === null) {
-            console.log("Still had to get thread after search")
+            // console.log("Still had to get thread after search")
             threadId = await getThread();
         }
 
@@ -88,7 +107,7 @@
         scrollToBottom()
 
         runResult = await createRun(threadId);
-        console.log('runResult id:', runResult.run.id);
+        // console.log('runResult id:', runResult.run.id);
         runId = runResult.run.id;
 
         checkAndRetrieveData();
@@ -103,45 +122,45 @@
         };
         const response = await fetch(url, requestOptions);
         const data = await response.json();
-        console.log("threadID:", data.thread.id);
+        // console.log("threadID:", data.thread.id);
         return data.thread.id
     }
 
     async function createMessage(threadId) {
         const url = 'api/message/create';
-        console.log('passing: ', user_search, threadId);
+        // console.log('passing: ', user_search, threadId);
         const requestOptions = {
             method: 'POST',
             body: JSON.stringify({ message: user_search, threadId: threadId })
         };
         const response = await fetch(url, requestOptions);
         const data = await response.json();
-        console.log('Created message:', data.message);
+        // console.log('Created message:', data.message);
         return data
     }
 
     async function createRun(threadId) {
         const url = 'api/run/create?threadId=' + threadId;
-        console.log('passing run: ', threadId);
+        // console.log('passing run: ', threadId);
         const requestOptions = {
             method: 'GET',
         };
         const response = await fetch(url, requestOptions);
         const data = await response.json();
-        console.log('Created run:', data.id);
+        // console.log('Created run:', data.id);
         return data
     }
 
     async function retrieveRun(threadId, runId) {
-        console.log('Retrieving run with Id:', runId);
+        // console.log('Retrieving run with Id:', runId);
         const url = 'api/run/retrieve?threadId=' + threadId + '&runId=' + runId;
-        console.log('checking run: ', runId);
+        // console.log('checking run: ', runId);
         const requestOptions = {
             method: 'GET',
         };
         const response = await fetch(url, requestOptions);
         const data = await response.json();
-        console.log('Retrieved run:', data.run.status);
+        // console.log('Retrieved run:', data.run.status);
         return data.run.status
     }
 
@@ -152,7 +171,7 @@
         };
         const response = await fetch(url, requestOptions);
         const data = await response.json();
-        console.log('Viewing thread:', data);
+        // console.log('Viewing thread:', data);
         return data.messages
     }
     
@@ -161,16 +180,16 @@
         
         if (retrievedRunStatus === 'completed') {
             clearInterval(intervalId); 
-            console.log('Run status is: complete');
+            // console.log('Run status is: complete');
             allMessages = [...await viewThread(threadId), ...firstMessage];
-            console.log('all MESSAGES:', allMessages);
+            // console.log('all MESSAGES:', allMessages);
             
             loading_response = false;
             scrollToBottom();
         }
         if (retrievedRunStatus === 'failed' || retrievedRunStatus === 'cancelled' || retrievedRunStatus === 'timed_out' || retrievedRunStatus === 'interrupted') {
             clearInterval(intervalId); 
-            console.log('Run failed');
+            // console.log('Run failed');
             loading_response = false;
             scrollToBottom();
         }
@@ -241,7 +260,7 @@
 
 
 <div class="medicaldisclaimer">
-    <p style="text-align: center; font-style: italic;"> This is a research project, not medical advice. Having an issue:</p>
+    <p style="text-align: center; font-style: italic;"> This is a research project, not medical advice. Credits remaining: {credits_remaining} | Having an issue:</p>
     <button class="rebootbutton" on:click={() => {completeReboot(); dynamic_user_input = '';}}>
         <span class="underline">Reboot</span>
     </button>
@@ -260,8 +279,7 @@
         -webkit-mask: linear-gradient(90deg, transparent 0%, black 10%, black 90%, transparent 100%);
 
         -ms-overflow-style: none;  /* IE and Edge */
-        scrollbar-width: none;  /* Firefox */
-        
+        scrollbar-width: none;  /* Firefox */ 
     }
 
     .ideascontainer::-webkit-scrollbar {
@@ -284,7 +302,6 @@
         margin-right: 0px;
 
         text-wrap: nowrap;
-
     }
 
     .ideabutton:hover {
