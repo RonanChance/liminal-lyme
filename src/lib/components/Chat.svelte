@@ -9,6 +9,8 @@
 
     shuffleArray(chat_ideas);
 
+    export let data;
+
     let dynamic_user_input = '';
     let user_search = '';
     let loading_response = false;
@@ -41,10 +43,10 @@
             },
         ];
 
-    onMount(async ({ locals }) => {
+    onMount(async () => {
         if (browser) {
 
-            console.log(locals)
+            // console.log(locals)
 
             let email = getCookie('email');
             if (!email) {
@@ -74,11 +76,8 @@
     let retrievedRunStatus = null;
     let intervalId;
 
-    /** @type {import('./$types').LayoutData} */
-    export let data;
-
     async function getCredits() {
-        console.log("userdata: ", data.credits_remaining)
+        console.log("userdata: ", data.credits_remaining);
         // const url = 'api/credits/get';
         // const requestOptions = {
         //     method: 'GET'
@@ -263,6 +262,9 @@
     <p style="text-align: center; font-style: italic;"> This is a research project, not medical advice. Credits remaining: {credits_remaining} | Having an issue:</p>
     <button class="rebootbutton" on:click={() => {completeReboot(); dynamic_user_input = '';}}>
         <span class="underline">Reboot</span>
+    </button>
+    <button class="rebootbutton" on:click={getCredits}>
+        <span>Creditcheck: {data.credits_remaining}</span>
     </button>
 </div>
 

@@ -1,10 +1,10 @@
 import { redirect } from '@sveltejs/kit';
 
 /** @type {import('./$types').PageServerLoad} */
-export const load = async ({ request, locals }) => {
-    console.log(request.headers.get('cookie'))
-    console.log("logging request")
-    console.log(request)
+export async function load({ request, params }) {
+    // console.log(request.headers.get('cookie'))
+    // console.log("logging request")
+    // console.log(request)
     // const pb_auth_cookie = request.headers.get('cookie') ?? null;
     // locals.pb.authStore.loadFromCookie(pb_auth_cookie);
 
@@ -14,4 +14,8 @@ export const load = async ({ request, locals }) => {
     // } else {
     //     console.log("no issues in +page.server.js chat")
     // }
+    console.log(request)
+    return {
+		credits_remaining: 10,
+	};
 };

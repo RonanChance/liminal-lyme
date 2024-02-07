@@ -15,6 +15,9 @@
     import { page } from '$app/stores'
     const path = $page.url.searchParams.get('path')
 
+    /** @type {import('./$types').LayoutData} */
+    export let data;
+
     let currentTab = 'searchTab';
     if (path === 'searchTab') {
         currentTab = 'searchTab';
@@ -68,7 +71,7 @@
     {#if animate}
         <div class="divbg" in:fly|global={{y: 30, delay: 50, duration: 1000 }}>
             {#if currentTab === 'chatTab'}
-                <Chat />
+                <Chat {data} />
             {:else if currentTab === 'anecdoteTab'}
                 <Anecdote {email}/>
             {:else if currentTab === 'connectTab'}
