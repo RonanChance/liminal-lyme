@@ -52,6 +52,10 @@
 {/if}
 
 <style>
+  h1 {
+    font-weight: 600;
+  }
+
   .sub-heading {
     width: 100%;
     margin-bottom: 15pt;
@@ -87,7 +91,7 @@
     }
 
     h2 {
-      font-size: 18px;
+      font-size: 20px;
     }
 
     .fixed-word {

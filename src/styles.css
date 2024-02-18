@@ -23,7 +23,7 @@ h2 {
 
 h3 {
     color: white;
-	font-size: 12pt;
+	font-size: 18pt;
 	font-weight: normal;
 }
 
@@ -33,7 +33,8 @@ p {
 }
 
 body {
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-family: lato, sans-serif;
+    /* font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; */
     background-image: url("lib/assets/background.svg");
     backdrop-filter: blur(5px);
     min-height: 100%;
@@ -112,7 +113,7 @@ div.multiselect > ul.selected > li {
 }
 
 .whitebutton {
-    font-size: 12pt;
+    font-size: 17pt;
     font-weight: bold;
     background-color: var(--offwhite);
     color: var(--blue);
@@ -123,9 +124,25 @@ div.multiselect > ul.selected > li {
     padding-right: 20px;
 
     border-radius: 10px;
+    position: relative;
+
+    transition: 0.5s;
+    transition-property: box-shadow;
+    box-shadow: 0 0 10px var(--accent);
 }
+  
+.whitebutton:hover {
+    box-shadow: 0 0 1px var(--accent),
+                0 0 12px var(--accent),
+                0 0 20px var(--accent),
+                0 0 50px var(--accent);
+  }
 
 @media (max-width: 768px) {
+
+    .whitebutton {
+        font-size: 13pt;
+    }
 
     .divbg {
         margin-left: 2%;
@@ -153,7 +170,7 @@ div.multiselect > ul.selected > li {
     }
     
     h3 {
-        font-size: 10pt;
+        font-size: 13pt;
         margin: 0 auto;
     }
 
