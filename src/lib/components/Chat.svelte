@@ -58,16 +58,16 @@
         threadId = localStorage.getItem("threadId") || null;
 
         // temporary fix using length, TODO: improve this
-        // if (!threadId || threadId === null || threadId.length <= 4) {
-        //     threadId = await getThread();
-        //     localStorage.setItem("threadId", threadId);
-        //     allMessages = [...firstMessage];
-        // } else {
-        //     // console.log("THREAD WAS NOT EMPTY")
-        //     // console.log(threadId);
-        //     allMessages = [...await viewThread(threadId), ...firstMessage];
-        //     scrollToBottom();
-        // }
+        if (!threadId || threadId === null || threadId.length <= 4) {
+            threadId = await getThread();
+            localStorage.setItem("threadId", threadId);
+            allMessages = [...firstMessage];
+        } else {
+            // console.log("THREAD WAS NOT EMPTY")
+            // console.log(threadId);
+            allMessages = [...await viewThread(threadId), ...firstMessage];
+            scrollToBottom();
+        }
     });
 
     let scrollToDiv = HTMLDivElement;
