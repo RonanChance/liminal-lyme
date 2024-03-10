@@ -12,7 +12,7 @@
       animate = true;
       
       if (browser) {
-        console.log(getCookie('email'))
+        // console.log(getCookie('email'))
         // try to grab valid cookie and if so redirect them to the chat page
         try {
           if (getCookie('email').length >= 5) {
@@ -44,8 +44,8 @@
           console.error(error); // Handle error appropriately
         }
 
-        console.log("Finished login")
-        console.log(data)
+        // console.log("Finished login")
+        // console.log(data)
 
         const url = 'api/auth';
         const requestOptions = {

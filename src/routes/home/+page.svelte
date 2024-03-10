@@ -37,8 +37,8 @@
         animate = true;
         if (browser) {
             email = getCookie('email');
-            console.log(email);
-            console.log(path)
+            // console.log(email);
+            // console.log(path)
         }
     });
 

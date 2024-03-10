@@ -46,7 +46,7 @@
     onMount(async () => {
         if (browser) {
 
-            // console.log(locals)
+            // // console.log(locals)
 
             let email = getCookie('email');
             if (!email) {
@@ -63,8 +63,8 @@
             localStorage.setItem("threadId", threadId);
             allMessages = [...firstMessage];
         } else {
-            // console.log("THREAD WAS NOT EMPTY")
-            // console.log(threadId);
+            // // console.log("THREAD WAS NOT EMPTY")
+            // // console.log(threadId);
             allMessages = [...await viewThread(threadId), ...firstMessage];
             scrollToBottom();
         }
@@ -77,7 +77,7 @@
     let intervalId;
 
     async function getCredits() {
-        console.log("userdata: ", data.credits_remaining);
+        // console.log("userdata: ", data.credits_remaining);
         // const url = 'api/credits/get';
         // const requestOptions = {
         //     method: 'GET'
@@ -93,10 +93,10 @@
         }
         
         user_search = dynamic_user_input;
-        // console.log(user_search);
+        // // console.log(user_search);
 
         if (threadId === null) {
-            // console.log("Still had to get thread after search")
+            // // console.log("Still had to get thread after search")
             threadId = await getThread();
         }
 
@@ -106,7 +106,7 @@
         scrollToBottom()
 
         runResult = await createRun(threadId);
-        // console.log('runResult id:', runResult.run.id);
+        // // console.log('runResult id:', runResult.run.id);
         runId = runResult.run.id;
 
         checkAndRetrieveData();
@@ -121,45 +121,45 @@
         };
         const response = await fetch(url, requestOptions);
         const data = await response.json();
-        // console.log("threadID:", data.thread.id);
+        // // console.log("threadID:", data.thread.id);
         return data.thread.id
     }
 
     async function createMessage(threadId) {
         const url = 'api/message/create';
-        // console.log('passing: ', user_search, threadId);
+        // // console.log('passing: ', user_search, threadId);
         const requestOptions = {
             method: 'POST',
             body: JSON.stringify({ message: user_search, threadId: threadId })
         };
         const response = await fetch(url, requestOptions);
         const data = await response.json();
-        // console.log('Created message:', data.message);
+        // // console.log('Created message:', data.message);
         return data
     }
 
     async function createRun(threadId) {
         const url = 'api/run/create?threadId=' + threadId;
-        // console.log('passing run: ', threadId);
+        // // console.log('passing run: ', threadId);
         const requestOptions = {
             method: 'GET',
         };
         const response = await fetch(url, requestOptions);
         const data = await response.json();
-        // console.log('Created run:', data.id);
+        // // console.log('Created run:', data.id);
         return data
     }
 
     async function retrieveRun(threadId, runId) {
-        // console.log('Retrieving run with Id:', runId);
+        // // console.log('Retrieving run with Id:', runId);
         const url = 'api/run/retrieve?threadId=' + threadId + '&runId=' + runId;
-        // console.log('checking run: ', runId);
+        // // console.log('checking run: ', runId);
         const requestOptions = {
             method: 'GET',
         };
         const response = await fetch(url, requestOptions);
         const data = await response.json();
-        // console.log('Retrieved run:', data.run.status);
+        // // console.log('Retrieved run:', data.run.status);
         return data.run.status
     }
 
@@ -170,7 +170,7 @@
         };
         const response = await fetch(url, requestOptions);
         const data = await response.json();
-        // console.log('Viewing thread:', data);
+        // // console.log('Viewing thread:', data);
         return data.messages
     }
     
@@ -179,16 +179,16 @@
         
         if (retrievedRunStatus === 'completed') {
             clearInterval(intervalId); 
-            // console.log('Run status is: complete');
+            // // console.log('Run status is: complete');
             allMessages = [...await viewThread(threadId), ...firstMessage];
-            // console.log('all MESSAGES:', allMessages);
+            // // console.log('all MESSAGES:', allMessages);
             
             loading_response = false;
             scrollToBottom();
         }
         if (retrievedRunStatus === 'failed' || retrievedRunStatus === 'cancelled' || retrievedRunStatus === 'timed_out' || retrievedRunStatus === 'interrupted') {
             clearInterval(intervalId); 
-            // console.log('Run failed');
+            // // console.log('Run failed');
             loading_response = false;
             scrollToBottom();
         }

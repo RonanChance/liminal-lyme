@@ -11,7 +11,7 @@
   onMount(() => {
         if (browser) {
           email = getCookie('email');
-          console.log(email);
+          // // console.log(email);
         }
     });
 

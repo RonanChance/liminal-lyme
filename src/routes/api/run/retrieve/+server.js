@@ -17,11 +17,11 @@ export async function GET ({url}) {
     try {
         const run = await openai.beta.threads.runs.retrieve(threadId, runId);
 
-        console.log(run);
+        // console.log(run);
 
         return Response.json({ run: run });
     } catch (error) {
-        console.log(error);
+        // console.log(error);
         return Response.json({error: error});
     }
 

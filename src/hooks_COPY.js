@@ -16,11 +16,11 @@ export const handle = async ({ event, resolve }) => {
     }
   
     // const pb_auth = event.request.headers.get('cookie') ?? '';
-    console.log(pb_auth)
+    // // console.log(pb_auth)
     let loaded_cookie = event.locals.pb.authStore.loadFromCookie(pb_auth);
   
     if (!event.locals.pb.authStore.isValid) {
-        console.log('Session expired');
+        // // console.log('Session expired');
         event.cookies.set('pb_auth', '', {path: '/'});
     }
     

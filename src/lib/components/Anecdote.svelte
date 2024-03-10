@@ -55,8 +55,8 @@
             showToast();
         }
         catch (error) {
-            console.log(error)
-            console.log("request failed");
+            // // console.log(error)
+            // console.log("request failed");
             submit_status = false;
             showToast();
         }
@@ -158,15 +158,6 @@
 
     .centerbox {
         display: flex;
-    }
-
-    h1 {
-        font-size: 20pt;
-    } 
-
-    h2 {
-        font-size: 12pt;
-        color: white;
     }
 
     .typewriter {

@@ -32,15 +32,6 @@
 {/if}
 
   <style>
-    p {
-      color: white;
-      text-align: center;
-      
-    }
-
-    a {
-      color: var(--accent);
-    }
 
     .button-container {
       display: flex;

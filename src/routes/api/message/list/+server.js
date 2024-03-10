@@ -12,12 +12,12 @@ export async function GET({url}) {
 
     try {
         const response = await openai.beta.threads.messages.list(threadId);
-        console.log(response);
+        // console.log(response);
 
         return Response.json({ messages: response.data });
         
     } catch (e) {
-        console.log(e);
+        // console.log(e);
         return Response.json({ error: e });
     }
 }

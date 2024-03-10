@@ -3,9 +3,9 @@ import OpenAI from 'openai'
 import { OPENAI_KEY } from '$env/static/private'
 
 export async function POST({request}) {
-    console.log("CREATING A MESSAGE")
+    // console.log("CREATING A MESSAGE")
     const { message, threadId, roleType } = await request.json();
-    console.log("in server:", message, threadId);
+    // console.log("in server:", message, threadId);
 
     if (!threadId || !message) {
         return Response.json({error: 'No thread ID or no Message'}, {status: 400});
@@ -18,12 +18,12 @@ export async function POST({request}) {
             content: message
         });
 
-        console.log(threadMessages);
+        // console.log(threadMessages);
 
         return Response.json(threadMessages);
 
     } catch (error) {
-        console.log(error);
+        // console.log(error);
         return Response.json({error: error});
     }
 }

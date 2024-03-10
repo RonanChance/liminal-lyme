@@ -3,7 +3,7 @@ import { OPENAI_KEY } from '$env/static/private'
 
 export async function GET(req) {
     
-    console.log("DELETING A THREAD")
+    // console.log("DELETING A THREAD")
     const searchParams = req.searchParams;
     const threadId = searchParams.get("threadId");
 
@@ -16,11 +16,11 @@ export async function GET(req) {
     try {
         const thread = await openai.beta.threads.del(threadId);
     
-        console.log(thread);
+        // console.log(thread);
     
         return Response.json({ thread: thread });
       } catch (e) {
-        console.log(e);
+        // console.log(e);
         return Response.json({ error: e });
       }
 }

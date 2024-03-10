@@ -20,11 +20,11 @@ export async function GET ({url}) {
             assistant_id: OPENAI_ID
         });
 
-        console.log({run: run});
+        // console.log({run: run});
 
         return Response.json({ run: run });
     } catch (error) {
-        console.log(error);
+        // console.log(error);
         return Response.json({error: error});
     }
 

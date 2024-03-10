@@ -43,7 +43,6 @@
 {#if animate}
   <div class="sub-heading text-center">
     <h2 in:fly|global={{y: 100, delay: 50, duration: 1000 }}>
-      <!-- <div class="emoji inline">🤒</div> Condition + <div class="emoji inline">💊</div> Medication <span class="second-line">= <div class="emoji inline">🙂</div> Informed Patient</span> -->
       <div class="inline"> 
       Get <span class="bold">insights</span> based on your <span class="bold">conditions & medications</span>
       </div>

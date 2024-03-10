@@ -75,7 +75,7 @@
         <div class="numbertext">19,663,903</div>
         <hr/>
         <div class="transparenttext">Cataloged Experiences</div>
-        <div class="numbertext">3,917</div>
+        <div class="numbertext">6,964</div>
         <hr/>
         <div class="transparenttext">Supported Supplements</div>
         <div class="numbertext">130</div>
