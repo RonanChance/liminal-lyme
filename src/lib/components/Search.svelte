@@ -117,26 +117,27 @@
 				{/each}
 			</div>
 
-			<input class="searchbar" type="text" on:focus={() => {toggleDropdown(true)}} on:blur={() => {setTimeout(() => toggleDropdown(false), 50)}} bind:value={searchTerm} placeholder="Search..." on:input={(event) => {filterOptions(event.target.value)}}>
+			<input class="searchbar" type="text" bind:value={searchTerm} on:focus={() => {toggleDropdown(true)}} on:blur={() => {setTimeout(() => toggleDropdown(false), 100)}} placeholder="Search..." on:input={(event) => {filterOptions(event.target.value)}}>
 
-			{#if dropdownOpen}
-					<select class="selector" multiple on:click={(event) => {handleSelection(event.target.value)}}>
-						{#each filtered as option}
-							<option class="spaced-option" value={option}> {option} ({tag_counts[option]})</option>
-						{/each}
-					</select>
-			{/if}
+			<select class="selector" multiple on:click={(event) => {handleSelection(event.target.value)}} style="display: {dropdownOpen ? 'block' : 'none'}">
+				{#each filtered as option}
+					<option class="spaced-option" value={option}> {option} ({tag_counts[option]})</option>
+				{/each}
+			</select>
 
-			<a href="#_" on:click={fetchDataForPostList} class="searchbutton relative flex justify-center rounded px-4 py-2.5 overflow-hidden group bg-[var(--accent)] hover:bg-gradient-to-r hover:from-bg-[var(--accent)] hover:to-bg-[var(--accent)] text-white hover:ring-2 hover:ring-offset-2 hover:ring-[var(--accent)] transition-all ease-out duration-300">
-				<span class="absolute right-0 w-8 h-32 -mt-12 transition-all duration-1000 transform translate-x-12 bg-white opacity-10 rotate-12 group-hover:-translate-x-40 ease"></span>
-				<div class="flex items-center">
-				  {#if isLoading}
-					<Spinner size={6} />
-				  {:else}
-					<SearchOutline size="lg"/>
-				  {/if}
-				</div>
-			</a>
+			<div style="display: flex; justify-content: center;">
+				<a href="#_" on:click={fetchDataForPostList} class="searchbutton relative flex justify-center rounded px-4 py-2.5 overflow-hidden group bg-[var(--accent)] hover:bg-gradient-to-r hover:from-bg-[var(--accent)] hover:to-bg-[var(--accent)] text-white hover:ring-2 hover:ring-offset-2 hover:ring-[var(--accent)] transition-all ease-out duration-300">
+					<span class="absolute right-0 w-8 h-32 -mt-12 transition-all duration-1000 transform translate-x-12 bg-white opacity-10 rotate-12 group-hover:-translate-x-40 ease"></span>
+					<div class="flex items-center" style="gap:8px; font-weight: bold;">
+					Search
+					{#if isLoading}
+						<Spinner size={6} />
+					{:else}
+						<SearchOutline size="lg"/>
+					{/if}
+					</div>
+				</a>
+			</div>
 
 			<div class="post-area">
 				<PostList fetchDataFunction={fetchDataForPostList} posts={result_list}/>
@@ -185,6 +186,8 @@
 
 	.searchbutton {
 		margin-top: 5%;
+		border-radius: 50px;
+		width: 50%;
 	}
 
 	.spaced-option {
