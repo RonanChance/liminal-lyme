@@ -1,8 +1,7 @@
 <script>
-    import { SearchOutline, ExclamationCircleSolid } from 'flowbite-svelte-icons'
+    import { SearchOutline, ExclamationCircleSolid, AngleRightSolid, AngleDownSolid } from 'flowbite-svelte-icons'
 	import { Popover, Toast, Spinner } from 'flowbite-svelte';
 	import { Button } from 'flowbite-svelte';
-
 	import { onMount } from 'svelte';
 	import { fly } from 'svelte/transition'
     import PocketBase from 'pocketbase';
@@ -10,6 +9,8 @@
 	import MSelect from './MSelect.svelte';
     import MedicalDisclaimer from './MedicalDisclaimer.svelte';
 	import { all_tags, tag_counts } from './constants.js'
+
+	const pb = new PocketBase('https://openrxndatabase.hop.sh/');
     
 	let animate = false;
     onMount(() => animate = true);
@@ -25,8 +26,11 @@
 
 	let slicedMedications = all_tags.slice(0, 13);
 	let filtered = all_tags;
-	
-	const pb = new PocketBase('https://openrxndatabase.hop.sh/');
+
+	let dropdownOpen = false;
+	function toggleDropdown(boolean) {
+		dropdownOpen = boolean
+	}
 	
 	async function fetchDataForPostList() {
 		try {
@@ -113,13 +117,15 @@
 				{/each}
 			</div>
 
-			<input class="searchbar" type="text" bind:value={searchTerm} placeholder="Search..." on:input={(event) => {filterOptions(event.target.value)}}>
-			
-			<select class="selector" multiple on:click={(event) => {handleSelection(event.target.value)}}>
-				{#each filtered as option}
-					<option class="spaced-option" value={option}> {option} ({tag_counts[option]})</option>
-				{/each}
-			</select>
+			<input class="searchbar" type="text" on:focus={() => {toggleDropdown(true)}} on:blur={() => {setTimeout(() => toggleDropdown(false), 50)}} bind:value={searchTerm} placeholder="Search..." on:input={(event) => {filterOptions(event.target.value)}}>
+
+			{#if dropdownOpen}
+					<select class="selector" multiple on:click={(event) => {handleSelection(event.target.value)}}>
+						{#each filtered as option}
+							<option class="spaced-option" value={option}> {option} ({tag_counts[option]})</option>
+						{/each}
+					</select>
+			{/if}
 
 			<a href="#_" on:click={fetchDataForPostList} class="searchbutton relative flex justify-center rounded px-4 py-2.5 overflow-hidden group bg-[var(--accent)] hover:bg-gradient-to-r hover:from-bg-[var(--accent)] hover:to-bg-[var(--accent)] text-white hover:ring-2 hover:ring-offset-2 hover:ring-[var(--accent)] transition-all ease-out duration-300">
 				<span class="absolute right-0 w-8 h-32 -mt-12 transition-all duration-1000 transform translate-x-12 bg-white opacity-10 rotate-12 group-hover:-translate-x-40 ease"></span>
@@ -155,16 +161,34 @@
 
 <style>
 
+	.dropdownbutton{
+		background-color: #fff;
+		font-size: 10pt;
+		display: flex;
+		white-space: nowrap;
+		/* padding: 5px 5px 5px 5px; */
+		border-radius: 7px;
+		width: 45px;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.searchbar {
+		border-radius: 7px;
+		width: 100%;
+	}
+
+	.searchbardiv {
+		display: flex;
+		flex-direction: row;
+	}
+
 	.searchbutton {
 		margin-top: 5%;
 	}
 
 	.spaced-option {
 		margin-bottom: 5px;
-	}
-
-	.searchbar {
-		border-radius: 7px;
 	}
 
 	.selector {
