@@ -28,8 +28,8 @@
     <div class="textbox" id="what_does_openrxn_mean">
         <h2>What does <span class="highlighted-word" style="font-weight:700">"OpenRXN"</span> mean?</h2>
         <p>
-            Good question! The medical abbreviation <a href="https://en.wikipedia.org/wiki/List_of_medical_abbreviations:_R" target="_blank" rel="noreferrer" class="highlighted-word"> RXN </a> is short for "Reaction". 
-            <br/><br/>We provide a search tool, open to anyone, for discovering the reactions people experience during treatment. Hence the term "OpenRXN"!
+            Good question! The medical abbreviation <a href="https://en.wikipedia.org/wiki/List_of_medical_abbreviations:_R" target="_blank" rel="noreferrer" class="highlighted-word"> RXN </a> is short for <a href="https://en.wikipedia.org/wiki/List_of_medical_abbreviations:_R" target="_blank" rel="noreferrer" class="highlighted-word"> reaction</a>. 
+            <br/><br/>We provide a search tool, open to anyone, for discovering the reactions people experience during treatment. Hence the term Open<a href="https://en.wikipedia.org/wiki/List_of_medical_abbreviations:_R" target="_blank" rel="noreferrer" class="highlighted-word">RXN</a>.
         </p>
     </div>
 

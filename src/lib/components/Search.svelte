@@ -9,7 +9,7 @@
 	import PostList from './PostList.svelte';
 	import MSelect from './MSelect.svelte';
     import MedicalDisclaimer from './MedicalDisclaimer.svelte';
-	import { illnesses, medications, supplements, tag_counts } from './constants.js'
+	import { all_tags, tag_counts } from './constants.js'
     
 	let animate = false;
     onMount(() => animate = true);
@@ -21,11 +21,10 @@
 	let selectedMedications = []
 	let selectedSupplements = []
 	let selectedIllnesses = []
-	let selectedMode = "Medications";
     let result_list = [];
 
-	let slicedMedications = medications.slice(0, 10);
-	let filteredMedications = medications;
+	let slicedMedications = all_tags.slice(0, 13);
+	let filtered = all_tags;
 	
 	const pb = new PocketBase('https://openrxndatabase.hop.sh/');
 	
@@ -36,10 +35,6 @@
 				toastMessage = "Select at least one medication/supplement";
 				showToast();
 				return;
-			}
-
-			if (selectedIllnesses.includes("ALL CONDITIONS (ANY)")){
-				selectedIllnesses = ["ALL CONDITIONS (ANY)"];
 			}
 
 			if (selectedMedications.includes("ALL MEDICATIONS (ANY)")){
@@ -93,16 +88,16 @@
 		}
 
 		searchTerm = "";
-		filteredMedications = medications;
+		filtered = all_tags;
 		
 		console.log(selectedMedications)
 	}
 
 	function filterOptions(value) {
 		const query = value.toLowerCase();
-		filteredMedications = medications.filter(option => option.toLowerCase().includes(query));
+		filtered = all_tags.filter(option => option.toLowerCase().includes(query));
   	}
-console.log(selectedMedications)
+
 </script>
 
 <div class="intro-container">
@@ -120,13 +115,13 @@ console.log(selectedMedications)
 
 			<input class="searchbar" type="text" bind:value={searchTerm} placeholder="Search..." on:input={(event) => {filterOptions(event.target.value)}}>
 			
-			<select class="selectbar" multiple on:click={(event) => {handleSelection(event.target.value)}}>
-				{#each filteredMedications as option}
-					<option value={option}> {option} ({tag_counts[option]})</option>
+			<select class="selector" multiple on:click={(event) => {handleSelection(event.target.value)}}>
+				{#each filtered as option}
+					<option class="spaced-option" value={option}> {option} ({tag_counts[option]})</option>
 				{/each}
 			</select>
 
-			<a href="#_" on:click={fetchDataForPostList} class="relative flex justify-center rounded px-4 py-2.5 overflow-hidden group bg-[var(--accent)] relative hover:bg-gradient-to-r hover:from-bg-[var(--accent)] hover:to-bg-[var(--accent)] text-white hover:ring-2 hover:ring-offset-2 hover:ring-[var(--accent)] transition-all ease-out duration-300">
+			<a href="#_" on:click={fetchDataForPostList} class="searchbutton relative flex justify-center rounded px-4 py-2.5 overflow-hidden group bg-[var(--accent)] hover:bg-gradient-to-r hover:from-bg-[var(--accent)] hover:to-bg-[var(--accent)] text-white hover:ring-2 hover:ring-offset-2 hover:ring-[var(--accent)] transition-all ease-out duration-300">
 				<span class="absolute right-0 w-8 h-32 -mt-12 transition-all duration-1000 transform translate-x-12 bg-white opacity-10 rotate-12 group-hover:-translate-x-40 ease"></span>
 				<div class="flex items-center">
 				  {#if isLoading}
@@ -160,12 +155,23 @@ console.log(selectedMedications)
 
 <style>
 
+	.searchbutton {
+		margin-top: 5%;
+	}
+
+	.spaced-option {
+		margin-bottom: 5px;
+	}
+
 	.searchbar {
 		border-radius: 7px;
 	}
 
-	.selectbar {
+	.selector {
+		font-size: 12pt;
+		background-color: #fff;
 		border-radius: 7px;
+		min-height: 200px;
 	}
 
 	.container {
@@ -173,11 +179,12 @@ console.log(selectedMedications)
 		flex-direction: column;
 	}
 	
-	.togglebuttongroup{
+	.togglebuttongroup {
 		display: flex;
 		gap: 5px;
 		flex-wrap: wrap;
 		padding-bottom: 5%;
+		/* justify-content: center; */
 	}
 
 	.togglebutton {
@@ -186,13 +193,6 @@ console.log(selectedMedications)
 		flex-direction: row;
 		/* margin: auto; */
 		white-space: nowrap;
-		padding: 5px 5px 5px 5px;
-		border-radius: 7px;
-	}
-
-	.selector {
-		font-size: 10pt;
-		background-color: var(--offwhite);
 		padding: 5px 5px 5px 5px;
 		border-radius: 7px;
 	}
