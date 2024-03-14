@@ -5,7 +5,7 @@ import { building } from '$app/environment';
 export const handle = async ({ event, resolve }) => {
     event.locals.id = '';
     event.locals.email = '';
-    event.locals.pb = new PocketBase('https://openrxndatabase.hop.sh');
+    event.locals.pb = new PocketBase('https://pb.openrxn.com');
   
     const isAuth = event.url.pathname === '/auth';
     // const isHome = event.url.pathname ==="/";

@@ -9,7 +9,7 @@
 
     import PocketBase from 'pocketbase';
     
-    const pb = new PocketBase("https://openrxndatabase.hop.sh/");
+    const pb = new PocketBase("https://pb.openrxn.com/");
 
     export let email;
 

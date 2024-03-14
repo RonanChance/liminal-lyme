@@ -23,7 +23,7 @@
     });
 
     let oauth_selection;
-    const pb = new PocketBase('https://openrxndatabase.hop.sh');
+    const pb = new PocketBase('https://pb.openrxn.com');
 
     async function clickHandler(event) {
         let providerChoice = event.currentTarget.dataset.value;

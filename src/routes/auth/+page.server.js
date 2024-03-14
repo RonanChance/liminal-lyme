@@ -1,7 +1,7 @@
 // import { redirect } from "@sveltejs/kit";
 // import PocketBase from 'pocketbase';
 
-// const pb = new PocketBase("https://openrxndatabase.hop.sh");
+// const pb = new PocketBase("https://pb.openrxn.com");
 
 // export const actions = {
 //     default: async ({ request, cookies }) => {

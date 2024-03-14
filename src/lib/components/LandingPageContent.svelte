@@ -60,7 +60,7 @@
         <div class="info-row">
             <div class="text-info left" in:blur={{delay: 1000, duration: 1500}}>
                 <strong>Stay Updated</strong>
-                Check back often as we add medications, supplements, and treatments
+                Check back often as we add more medications, supplements, and treatments
             </div>
             <div class="imgdiv right" in:blur={{delay: 1000, duration: 1500}}>
                 <img src="/bacteria_images/img4.png" alt="img4">
@@ -77,11 +77,11 @@
         <div class="transparenttext">Cataloged Experiences</div>
         <div class="numbertext">6,964</div>
         <hr/>
-        <div class="transparenttext">Supported Supplements</div>
-        <div class="numbertext">130</div>
-        <hr/>
         <div class="transparenttext">Supported Medications</div>
-        <div class="numbertext">80</div>
+        <div class="numbertext">240</div>
+        <hr/>
+        <div class="transparenttext">Supported Supplements</div>
+        <div class="numbertext">147</div>
         <hr/>
     </div>
 
