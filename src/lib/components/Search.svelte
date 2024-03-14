@@ -119,9 +119,7 @@
   	}
 
 	  function convertToLowercase(value) {
-		return value.toLowerCase().replace(/\b[a-z](?=[a-z]{2})/g, function(letter) {
-			return letter.toLowerCase(); // You need to return the modified letter
-		});
+		return value.toLowerCase();
 	}
 
 </script>
