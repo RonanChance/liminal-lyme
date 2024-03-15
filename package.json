@@ -18,14 +18,12 @@
     "postcss": "^8.4.24",
     "postcss-load-config": "^4.0.1",
     "svelte": "^4.0.5",
-    "svelte-multiselect": "^10.2.0",
     "tailwindcss": "^3.3.2",
     "vite": "^4.4.2"
   },
   "type": "module",
   "dependencies": {
     "openai": "^4.24.3",
-    "pocketbase": "^0.18.0",
-    "snarkdown": "^2.0.0"
+    "pocketbase": "^0.18.0"
   }
 }

@@ -80,19 +80,6 @@ ul {
     padding-bottom: 2%;
 }
 
-div.multiselect {
-    --sms-border: 1pt solid white;
-    --sms-bg: white;
-    --sms-min-height: 40pt;
-    --sms-font-size: 15pt;
-    --sms-text-color: #202142;
-}
-
-div.multiselect > ul.selected > li {
-    --sms-selected-bg: var(--accent);
-    --sms-selected-text-color: white;
-}
-
 .mainlogo {
     width: 250px;
     height: auto;

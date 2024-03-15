@@ -4,7 +4,6 @@
     import Card from './Card.svelte'
     import { Button } from 'flowbite-svelte';
     export let item
-    import snarkdown from 'snarkdown'
 
     function formatDate(dateString) {
         // Remove the time part and the milliseconds and replace ' ' with 'T' for compatibility

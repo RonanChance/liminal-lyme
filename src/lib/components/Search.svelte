@@ -6,7 +6,6 @@
 	import { fly } from 'svelte/transition'
     import PocketBase from 'pocketbase';
 	import PostList from './PostList.svelte';
-	import MSelect from './MSelect.svelte';
     import MedicalDisclaimer from './MedicalDisclaimer.svelte';
 	import { all_tags, illnesses, tag_counts } from './constants.js';
 
