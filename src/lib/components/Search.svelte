@@ -245,6 +245,16 @@
 				</a>
 			</div>
 
+			{#if result_list.length > 1}
+				<div class="searchcount">
+					{#if result_list.length === 30}
+						30+ Results
+					{:else}
+						{result_list.length} Results
+					{/if}
+				</div>
+			{/if}
+
 			<div class="post-area">
 				<PostList fetchDataFunction={fetchDataForPostList} posts={result_list}/>
 			</div>
@@ -267,7 +277,11 @@
 </div>
 
 <style>
-
+	.searchcount {
+		color: white;
+		margin-top: 5%;
+		text-align: center;
+	}
 	.excludenote {
 		color: white;
 		text-decoration: underline;
