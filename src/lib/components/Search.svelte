@@ -22,7 +22,7 @@
 	let selectedItems = [];
 	let selectedMedications = [];
 	let selectedSupplements = [];
-	let excludeConditions = [];
+	let excludedConditions = [];
     let result_list = [];
 
 	let slicedItems = all_tags.slice(0, 9);
@@ -47,12 +47,45 @@
 				return;
 			}
 
-			// let itemsFilter = selectedItems.map(medication => `tags?~'${medication}'`).join(' && ');
-			// let illnessesFilter = selectedIllnesses.map(illness => `tags?~'${illness}'`).join(' && ');
-			// let filterQuery = `(${itemsFilter}) && (${illnessesFilter})`;
-			let filterQuery = `${itemsFilter}`;
+			// CLEAR meds and sups from last search
+			selectedMedications = []
+			selectedSupplements = []
 
-			const fetched_posts = await pb.collection('posts').getList(1, 50, {
+			for (const item of selectedItems) {
+				if (tag_counts[item]["label"] === "MED") {
+					selectedMedications.push(item);
+				}
+				if (tag_counts[item]["label"] === "SUP") {
+					selectedSupplements.push(item);
+				}
+			}
+
+			let filterQuery = '';
+			// let medFilter = selectedMedications.map(medication => `medications?~'${medication}'`).join(' && ');
+			// let supFilter = selectedSupplements.map(supplement => `supplements?~'${supplement}'`).join(' && ')
+			// Include selectedMedications in medications tags
+			if (selectedMedications.length > 0) {
+				const medFilter = selectedMedications.map(medication => `medications?~'${medication}'`).join(' && ');
+				filterQuery += `(${medFilter})`;
+			}
+
+			// Include selectedSupplements in supplements tags
+			if (selectedSupplements.length > 0) {
+				const supFilter = selectedSupplements.map(supplement => `supplements?~'${supplement}'`).join(' && ');
+				filterQuery += (filterQuery ? ' && ' : '') + `(${supFilter})`;
+			}
+
+			// Exclude excludedConditions from conditions tags
+			if (exclusionsOn){
+				if (excludedConditions.length > 0) {
+					const excludeFilter = excludedConditions.map(condition => `NOT conditions?~'${condition}'`).join(' && ');
+					filterQuery += (filterQuery ? ' && ' : '') + `(${excludeFilter})`;
+				}
+			}
+
+			console.log(filterQuery)
+
+			const fetched_posts = await pb.collection('posts').getList(1, 30, {
 				sort: '-score',
 				filter: filterQuery,
 			});
@@ -104,13 +137,13 @@
 	}
 
 	function handleExclusion(value) {
-		if (excludeConditions.includes(value)) {
-			excludeConditions = excludeConditions.filter(item => item !== value);
+		if (excludedConditions.includes(value)) {
+			excludedConditions = excludedConditions.filter(item => item !== value);
 		} else {
-			excludeConditions = [...excludeConditions, value];
+			excludedConditions = [...excludedConditions, value];
 		}
 
-		console.log(excludeConditions);
+		console.log(excludedConditions);
 	}
 
 	function filterOptions(value) {
@@ -135,7 +168,9 @@
             
 			<div class="togglebuttongroup">
 				{#each slicedItems as item}
-					<button class="togglebutton" on:click={handleSelection(item)} style="background-color: {selectedItems.includes(item) ? 'var(--accent)' : 'var(--offwhite)'}; color: {selectedItems.includes(item) ? 'var(--offwhite)' : '#000'}; font-weight: {selectedItems.includes(item) ? 'bold' : 'normal'};"> {convertToLowercase(item)} </button> 
+					<button class="togglebutton" on:click={() => handleSelection(item)} style="background-color: {selectedItems.includes(item) ? (tag_counts[item]['label'] === 'SUP' ? 'var(--supplement)' : 'var(--medication)') : 'var(--offwhite)'}; color: {selectedItems.includes(item) ? 'var(--offwhite)' : '#000'}; font-weight: {selectedItems.includes(item) ? 'bold' : 'normal'};">
+						{convertToLowercase(item)}
+					</button>				
 				{/each}
 			</div>
 
@@ -148,13 +183,13 @@
 			</select>
 			
 			<div style="display: flex; justify-content: right;">
-				<button class="excludenote" on:click={toggleExclusions}>Exclusions: {exclusionsOn ? 'On' : 'Off'}</button>
+				<button class="excludenote" on:click={toggleExclusions}>Exclude Diseases: {exclusionsOn ? 'On' : 'Off'}</button>
 			</div>
 			
 			<div class="exclusionbuttongroup" style="display: {exclusionsOn ? 'block' : 'none'}">
 					<div class="togglebuttongroup">
 						{#each illnesses as illness}
-							<button on:click={() => {handleExclusion(illness)}} style="text-decoration: { excludeConditions.includes(illness) ? 'line-through' : 'none'}; background-color: { excludeConditions.includes(illness) ? 'var(--bluedark)' : 'var(--blue)'};" class="exclusionbutton">{convertToLowercase(illness)}</button>
+							<button on:click={() => {handleExclusion(illness)}} style="text-decoration: { excludedConditions.includes(illness) ? 'line-through' : 'none'}; background-color: { excludedConditions.includes(illness) ? 'var(--blue)' : 'var(--bluegray)'};" class="exclusionbutton">{convertToLowercase(illness)}</button>
 						{/each}
 					</div>	
 			</div>

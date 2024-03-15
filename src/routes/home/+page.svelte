@@ -57,10 +57,10 @@
             <MessagesSolid class="w-5 h-5 me-2" />
             <p>Chat</p>
             </Button>
-            <Button class="bg-slate-200" style="color: {currentTab === 'anecdoteTab' ? '#43bbde' : 'gray'}" on:click={() => {currentTab = 'anecdoteTab'}}>
+            <!-- <Button class="bg-slate-200" style="color: {currentTab === 'anecdoteTab' ? '#43bbde' : 'gray'}" on:click={() => {currentTab = 'anecdoteTab'}}>
             <PenSolid class="w-5 h-5 me-2" />
             <p>Insight</p>
-            </Button>
+            </Button> -->
             <!-- <Button class="bg-slate-200" style="color: {currentTab === 'connectTab' ? '#43bbde' : 'gray'}" on:click={() => {currentTab = 'connectTab'}}>
             <UserGroupSolid class="w-5 h-5 me-2" />
             <p>Connect</p>

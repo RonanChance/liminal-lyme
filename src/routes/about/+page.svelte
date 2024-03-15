@@ -26,8 +26,18 @@
     <div class="textbox" id="what_does_openrxn_mean">
         <h2>What does <span class="highlighted-word" style="font-weight:700">"OpenRXN"</span> mean?</h2>
         <p>
-            Good question! The medical abbreviation <a href="https://en.wikipedia.org/wiki/List_of_medical_abbreviations:_R" target="_blank" rel="noreferrer" class="highlighted-word"> RXN </a> is short for <a href="https://en.wikipedia.org/wiki/List_of_medical_abbreviations:_R" target="_blank" rel="noreferrer" class="highlighted-word"> reaction</a>. 
+            Good question! The medical abbreviation <a href="https://en.wikipedia.org/wiki/List_of_medical_abbreviations:_R" target="_blank" rel="noreferrer" class="highlighted-word"> RXN </a> means <a href="https://en.wikipedia.org/wiki/List_of_medical_abbreviations:_R" target="_blank" rel="noreferrer" class="highlighted-word"> reaction</a>. 
             <br/><br/>We provide a search tool, open to anyone, for discovering the reactions people experience during treatment. Hence the term Open<a href="https://en.wikipedia.org/wiki/List_of_medical_abbreviations:_R" target="_blank" rel="noreferrer" class="highlighted-word">RXN</a>.
+        </p>
+    </div>
+
+    <div class="textbox" id="what_is_the_inspiration_for_this_site">
+        <h2>What is the <span class="highlighted-word" style="font-weight:700">Inspiration</span> for this site?</h2>
+        <p>
+            I contracted Rocky Mountain Spotted Fever and Lyme Disease during a trip to North Carolina in January 2022 which led to severe illness. 
+            My recovery took over two years and involved various antibiotics and supplements. Having spent many hours researching and reading tickborne disease content in my pursuit of health, I often found people's firsthand experiences to be the most relatable and insightful.
+            <br/><br/>I wished I could compile all these stories to see how others managed their symptoms and medications.
+            This website is something I wanted during my acute phase of sickness, and I hope it serves you well.
         </p>
     </div>
 
@@ -150,16 +160,6 @@
         </div>
     </div>
 
-    <div class="textbox" id="what_is_the_inspiration_for_this_site">
-        <h2>What is the <span class="highlighted-word" style="font-weight:700">Inspiration</span> for this site?</h2>
-        <p>
-            I contracted Rocky Mountain Spotted Fever and Lyme Disease during a trip to North Carolina in January 2022 which led to severe illness. 
-            My recovery took over a year and involved various antibiotics and supplements. Having spent many hours researching and reading tickborne disease content in my pursuit of health, I often found people's firsthand experiences to be the most relatable and insightful.
-            <br/><br/>I wished I could compile all these stories to see how others managed their symptoms and medications.
-            This website is something I wanted during my acute phase of sickness, and I hope it serves you well.
-        </p>
-    </div>
-
     <div class="textbox" id="how_can_i_support_this_project">
         <h2>How can I <span class="highlighted-word" style="font-weight:700">Support</span> this project?</h2>
         <p>
@@ -240,26 +240,15 @@
         justify-content: space-evenly;
     }
 
-    /* .paddingbottom {
-        padding-bottom: 10rem;
-    } */
-
-    /* .divbg {
-        margin-left: 15%;
-        margin-right: 15%;
-        background: linear-gradient(135deg, rgba(14, 43, 74, 0.613), rgba(162, 162, 162, 0.4));
-        backdrop-filter: blur(50px);
-        -webkit-backdrop-filter: blur(50px);
-        border-radius: 20px;
-        border:1px solid rgba(255, 255, 255, 0.18);
-        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-    } */
-
     @media (max-width: 768px) {
-        /* .divbg {
-            margin-left: 5%;
-            margin-right: 5%;
-        } */
+
+        p {
+            font-size: 14pt;
+        }
+
+        a {
+            font-size: 14pt;
+        }
 
         .columnscontainer {
             flex-wrap: wrap;

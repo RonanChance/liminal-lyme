@@ -28,10 +28,18 @@
 
 <Card>
     <div class="tags">
-        {#each item.tags as tag, index}
-            {#if tag !== "ALL MEDICATIONS (ANY)" && tag !== "ALL CONDITIONS (ANY)"}
-                <span class="bg-[var(--accent)] text-[#ffff] text-xs font-medium mr-2 px-2.5 py-0.5 rounded" style="display: inline-block;">{tag}</span>
-            {/if}
+        {#each item.conditions as con}
+            <div class="bg-[var(--condition)] text-[#ffff] text-xs font-medium mr-2 px-2.5 py-0.5 rounded" style="display: inline-block;">{con}</div>
+        {/each}
+    </div>
+    <div class="tags">
+        {#each item.medications as med}
+            <div class="bg-[var(--medication)] text-[#ffff] text-xs font-medium mr-2 px-2.5 py-0.5 rounded" style="display: inline-block;">{med}</div>
+        {/each}
+    </div>
+    <div class="tags">
+        {#each item.supplements as sup}
+            <div class="bg-[var(--supplement)] text-[#ffff] text-xs font-medium mr-2 px-2.5 py-0.5 rounded" style="display: inline-block;">{sup}</div>
         {/each}
     </div>
     <div class="str-name-subreddit-date">
