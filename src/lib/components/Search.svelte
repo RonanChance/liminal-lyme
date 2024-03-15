@@ -77,7 +77,7 @@
 			// Exclude excludedConditions from conditions tags
 			if (exclusionsOn){
 				if (excludedConditions.length > 0) {
-					const excludeFilter = excludedConditions.map(condition => `NOT conditions?~'${condition}'`).join(' && ');
+					const excludeFilter = excludedConditions.map(condition => `conditions!~'${condition}'`).join(' && ');
 					filterQuery += (filterQuery ? ' && ' : '') + `(${excludeFilter})`;
 				}
 			}
@@ -175,11 +175,17 @@
 
 			<input class="searchbar" type="text" bind:value={searchTerm} on:focus={() => {toggleDropdown(true)}} on:blur={() => {setTimeout(() => toggleDropdown(false), 100)}} placeholder="Search Medications & Supplements..." on:input={(event) => {filterOptions(event.target.value)}}>
 
-			<select class="selector" multiple on:click={(event) => {handleSelection(event.target.value)}} style="display: {dropdownOpen ? 'block' : 'none'}">
+			<div class="entirelist" style="display: {dropdownOpen ? 'block' : 'none'}">
+				{#each filtered as option}
+					<div class="spaced-option" on:click={() => {handleSelection(option)}} style="color: { tag_counts[option]['label'] === 'MED' ? 'var(--medication)' : 'var(--supplement)'}; font-weight: 500;" value={option}> ({tag_counts[option]['count']}) {convertToLowercase(option)} </div>
+				{/each}
+			</div>
+
+			<!-- <select multiple on:click={(event) => {handleSelection(event.target.value)}} >
 				{#each filtered as option}
 					<option class="spaced-option" style="color: { tag_counts[option]['label'] === 'MED' ? 'var(--medication)' : 'var(--supplement)'}; font-weight: 500;" value={option}> ({tag_counts[option]['count']}) {convertToLowercase(option)} </option>
 				{/each}
-			</select>
+			</select> -->
 			
 			<div style="display: flex; justify-content: right;">
 				<button class="excludenote" on:click={toggleExclusions}>Exclude Diseases: {exclusionsOn ? 'On' : 'Off'}</button>
@@ -279,15 +285,18 @@
 		width: 50%;
 	}
 
-	.spaced-option {
-		margin-bottom: 5px;
-	}
-
-	.selector {
+	.entirelist {
+		max-height: 150px;
+		overflow-y: auto;
 		font-size: 12pt;
 		background-color: #fff;
 		border-radius: 7px;
-		min-height: 200px;
+	}
+
+	.spaced-option {
+		margin-top: 5px;
+		margin-bottom: 5px;
+		padding-left: 3%;
 	}
 
 	.container {
