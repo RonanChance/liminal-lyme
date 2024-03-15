@@ -22,6 +22,7 @@
 	let selectedMedications = [];
 	let selectedSupplements = [];
 	let excludedConditions = [];
+	let requiredConditions = ["LYME DISEASE"];
     let result_list = [];
 
 	let slicedItems = all_tags.slice(0, 9);
@@ -32,9 +33,9 @@
 		dropdownOpen = boolean;
 	}
 
-	let exclusionsOn = false;
-	function toggleExclusions() {
-		exclusionsOn = !exclusionsOn;
+	let advancedOn = false;
+	function toggleAdvanced() {
+		advancedOn = !advancedOn;
 	}
 	
 	async function fetchDataForPostList() {
@@ -75,12 +76,21 @@
 			}
 
 			// Exclude excludedConditions from conditions tags
-			if (exclusionsOn){
+			if (advancedOn){
+				if (requiredConditions.length > 0) {
+					const requiredFilter = requiredConditions.map(condition => `conditions?~'${condition}'`).join(' && ');
+					filterQuery += (filterQuery ? ' && ' : '') + `(${requiredFilter})`;
+				}
 				if (excludedConditions.length > 0) {
 					const excludeFilter = excludedConditions.map(condition => `conditions!~'${condition}'`).join(' && ');
 					filterQuery += (filterQuery ? ' && ' : '') + `(${excludeFilter})`;
 				}
 			}
+
+			// If advanced mode is not on, we're going to require results to have Lyme disease 
+			// since it's applicable to most people using this app
+			const requiredFilter = `conditions?~'LYME DISEASE'`;
+			filterQuery += (filterQuery ? ' && ' : '') + `(${requiredFilter})`;
 
 			console.log(filterQuery)
 
@@ -135,14 +145,32 @@
 		console.log(selectedItems);
 	}
 
-	function handleExclusion(value) {
-		if (excludedConditions.includes(value)) {
-			excludedConditions = excludedConditions.filter(item => item !== value);
-		} else {
+	function handleAdv(value) {
+
+		// check that value is not in exclusions or requirement
+		// Add to requirement 
+		if (!excludedConditions.includes(value) && !requiredConditions.includes(value)) {
+			requiredConditions = [...requiredConditions, value];
+		}
+
+		// IF value is in requirment, we should move to exclusion
+		else if (requiredConditions.includes(value)) {
+			requiredConditions = requiredConditions.filter(item => item !== value);
 			excludedConditions = [...excludedConditions, value];
 		}
 
-		console.log(excludedConditions);
+		// If value is in exclusion we should remove from exclusion
+		else if (excludedConditions.includes(value)) {
+			excludedConditions = excludedConditions.filter(item => item !== value);
+		}
+
+		// if (excludedConditions.includes(value)) {
+		// 	excludedConditions = excludedConditions.filter(item => item !== value);
+		// } else {
+		// 	excludedConditions = [...excludedConditions, value];
+		// }
+		console.log("requirements", requiredConditions);
+		console.log("exclusions", excludedConditions);
 	}
 
 	function filterOptions(value) {
@@ -188,13 +216,17 @@
 			</select> -->
 			
 			<div style="display: flex; justify-content: right;">
-				<button class="excludenote" on:click={toggleExclusions}>Exclude Diseases: {exclusionsOn ? 'On' : 'Off'}</button>
+				<button class="excludenote" on:click={toggleAdvanced}>Advanced Mode: {advancedOn ? 'On' : 'Off'}</button>
 			</div>
 			
-			<div class="exclusionbuttongroup" style="display: {exclusionsOn ? 'block' : 'none'}">
+			<div class="exclusionbuttongroup" style="display: {advancedOn ? 'block' : 'none'}">
+				<div class="exclusiondescription" style="margin-bottom: 10px;">
+					<span style="font-weight: bold;">Bold</span>: Required <br />
+					<span style="text-decoration: line-through;">Strikethrough</span>: Excluded
+				</div>
 					<div class="togglebuttongroup">
 						{#each illnesses as illness}
-							<button on:click={() => {handleExclusion(illness)}} style="text-decoration: { excludedConditions.includes(illness) ? 'line-through' : 'none'}; background-color: { excludedConditions.includes(illness) ? 'var(--blue)' : 'var(--bluegray)'};" class="exclusionbutton">{convertToLowercase(illness)}</button>
+							<button on:click={() => {handleAdv(illness)}} style="text-decoration: { excludedConditions.includes(illness) ? 'line-through' : 'none'}; box-shadow: { requiredConditions.includes(illness) ? '0 0 25px var(--accent)' : 'none'}; font-weight: { requiredConditions.includes(illness) ? 'bold' : 'normal'};background-color: { excludedConditions.includes(illness) ? 'var(--blue)' : 'var(--bluegray)'};" class="exclusionbutton">{convertToLowercase(illness)}</button>
 						{/each}
 					</div>	
 			</div>
@@ -240,7 +272,6 @@
 		color: white;
 		text-decoration: underline;
 		margin-top: 2%;
-		margin-bottom: 4%;
 	}
 
 	.exclusionbuttongroup {
@@ -264,7 +295,6 @@
 		display: flex;
 		gap: 8px;
 		flex-wrap: wrap;
-		padding-bottom: 5%;
 	}
 
 	.togglebutton {
@@ -277,10 +307,12 @@
 	}
 
 	.searchbar {
+		margin-top: 5%;
 		border-radius: 7px;
 		width: 100%;
 	}
 	.searchbutton {
+		margin-top: 5%;
 		border-radius: 50px;
 		width: 50%;
 	}

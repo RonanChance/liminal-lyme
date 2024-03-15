@@ -50,11 +50,13 @@
         <AngleUpSolid size=xs /> 
         {item.score}
     </div>
-    <a class="side-link" href="{item.permalink}" target="_blank">
-        <ChevronRightSolid style="bg-white" size=xs/>
-    </a>
     <div class="str-review">
         {@html decodeHTMLEntities(item.body)}
+    </div>
+    <div class="sitelinkcontainer">
+        <a class="site-link" href="{item.permalink}" target="_blank">
+            Visit Post <ChevronRightSolid class="inline" style="bg-white" size=xs/>
+        </a>
     </div>
 </Card>
 
@@ -78,19 +80,17 @@
         justify-content: center; /* Center vertically */
         align-items: center; /* Center horizontally */
     }
-    .side-link {
-        position: absolute;
-        right: 0px; /* Adjust the position as needed */
-        top: 0;
-        bottom: 0;
-        color: #fff;
-        background: #e14b00; /* Set the same background color as the card */
-        border-radius: 0 10px 10px 0; /* Apply rounded edges on the side link */
 
-        /* Center the chevron icon vertically within the side link */
+    .sitelinkcontainer {
         display: flex;
-        align-items: center;
-        padding: 0 5px; /* Adjust padding for spacing */
+    }
+    .site-link {
+        color: white;
+        background: #e14b00;
+        padding: 5px 10px 5px 10px;
+        border-radius: 10px;
+
+        margin-left: auto;
     }
     .str-review {
         max-width: 105%;
