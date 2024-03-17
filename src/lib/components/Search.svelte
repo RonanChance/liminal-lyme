@@ -219,14 +219,14 @@
 				<button class="excludenote" on:click={toggleAdvanced}>Advanced Mode: {advancedOn ? 'On' : 'Off'}</button>
 			</div>
 			
-			<div class="exclusionbuttongroup" style="display: {advancedOn ? 'block' : 'none'}">
-				<div class="exclusiondescription" style="margin-bottom: 10px;">
+			<div class="advancedbuttongroup" style="display: {advancedOn ? 'block' : 'none'}">
+				<div class="advanceddescription" style="margin-bottom: 10px;">
 					<span style="font-weight: bold;">Bold</span>: Required <br />
 					<span style="text-decoration: line-through;">Strikethrough</span>: Excluded
 				</div>
 					<div class="togglebuttongroup">
 						{#each illnesses as illness}
-							<button on:click={() => {handleAdv(illness)}} style="text-decoration: { excludedConditions.includes(illness) ? 'line-through' : 'none'}; box-shadow: { requiredConditions.includes(illness) ? '0 0 25px var(--accent)' : 'none'}; font-weight: { requiredConditions.includes(illness) ? 'bold' : 'normal'};background-color: { excludedConditions.includes(illness) ? 'var(--blue)' : 'var(--bluegray)'};" class="exclusionbutton">{convertToLowercase(illness)}</button>
+							<button on:click={() => {handleAdv(illness)}} style="text-decoration: { excludedConditions.includes(illness) ? 'line-through' : 'none'}; box-shadow: { requiredConditions.includes(illness) ? 'inset 0 0 10px var(--accent)' : 'none'}; font-weight: { requiredConditions.includes(illness) ? 'bold' : 'normal'};background-color: { excludedConditions.includes(illness) ? 'var(--blue)' : 'var(--bluegray)'};" class="advancedbutton">{convertToLowercase(illness)}</button>
 						{/each}
 					</div>	
 			</div>
@@ -288,13 +288,13 @@
 		margin-top: 2%;
 	}
 
-	.exclusionbuttongroup {
+	.advancedbuttongroup {
 		color: white;
 		display: flex;
 		flex-wrap: wrap;
 	}
 
-	.exclusionbutton {
+	.advancedbutton {
 		color: white;
 		background-color: var(--blue);
 		font-size: 11pt;
