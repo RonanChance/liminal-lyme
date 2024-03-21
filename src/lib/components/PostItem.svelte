@@ -26,6 +26,14 @@
 </script>
 
 <Card>
+    <div class="str-name-subreddit-date">
+        <div class="div">@{item.author}</div>
+        <div class="div">r/{item.subreddit}</div>
+        <div class="div">{formatDate(item.date)}</div>
+        <!-- <span class="bg-[var(--blue)] text-[var(--offwhite)] text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-400" style="white-space: nowrap; display: inline-block;">@{item.author}</span>
+        <span class="bg-[var(--blue)] text-[var(--offwhite)] text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-400" style="white-space: nowrap; display: inline-block;">r/{item.subreddit}</span>
+        <span class="bg-[var(--blue)] text-[var(--offwhite)] text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-400" style="white-space: nowrap; display: inline-block;">{formatDate(item.date)}</span> -->
+    </div>
     <div class="tags">
         {#each item.conditions as con}
             <div class="bg-[var(--condition)] text-[#ffff] text-xs font-medium mr-2 px-2.5 py-0.5 rounded" style="display: inline-block;">{con}</div>
@@ -40,11 +48,6 @@
         {#each item.supplements as sup}
             <div class="bg-[var(--supplement)] text-[#ffff] text-xs font-medium mr-2 px-2.5 py-0.5 rounded" style="display: inline-block;">{sup}</div>
         {/each}
-    </div>
-    <div class="str-name-subreddit-date">
-        <span class="bg-[var(--blue)] text-[var(--offwhite)] text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-400" style="white-space: nowrap; display: inline-block;">@{item.author}</span>
-        <span class="bg-[var(--blue)] text-[var(--offwhite)] text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-400" style="white-space: nowrap; display: inline-block;">r/{item.subreddit}</span>
-        <span class="bg-[var(--blue)] text-[var(--offwhite)] text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-400" style="white-space: nowrap; display: inline-block;">{formatDate(item.date)}</span>
     </div>
     <div class="num-rating">
         <AngleUpSolid size=xs /> 
@@ -62,7 +65,11 @@
 
 <style>
     .str-name-subreddit-date{
-        padding-bottom: 10pt;
+        font-size: 10pt;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        /* padding-bottom: 10pt; */
     }
     .num-rating{
         position: absolute;

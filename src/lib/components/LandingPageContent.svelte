@@ -3,6 +3,7 @@
     import { onMount } from 'svelte';
 	import { Popover, Toast, Spinner } from 'flowbite-svelte';
     import { fly, fade, blur } from 'svelte/transition'
+    import { medications, supplements } from "./constants";
 
 
     let animate = false;
@@ -75,13 +76,13 @@
         <div class="numbertext">19,663,903</div>
         <hr/>
         <div class="transparenttext">Cataloged Experiences</div>
-        <div class="numbertext">6,964</div>
+        <div class="numbertext">8,565</div>
         <hr/>
         <div class="transparenttext">Supported Medications</div>
-        <div class="numbertext">240</div>
+        <div class="numbertext">{medications.length}</div>
         <hr/>
         <div class="transparenttext">Supported Supplements</div>
-        <div class="numbertext">147</div>
+        <div class="numbertext">{supplements.length}</div>
         <hr/>
     </div>
 

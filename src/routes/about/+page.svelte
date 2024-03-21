@@ -104,7 +104,11 @@
 
     <div class="textbox" id="what_medications_are_supported">
         <h2>What <span class="highlighted-word" style="font-weight:700">Medications</span> are supported?</h2>
-        <div class="columnscontainer">
+        <p>
+            There are currently <span class="highlighted-word">{medications.length}</span> prescription medications supported.
+            You can view and contribute to the full list on the <a href={"https://github.com/RonanChance/OpenRXNData/blob/master/txts/medications.txt"} target="_blank" rel="noreferrer" class="highlighted-word">OpenRXN Data: Medications GitHub</a>.
+        </p>
+        <!-- <div class="columnscontainer">
             <div class="column">
                 {#each medications.slice(0, Math.ceil(medications.length/3)) as item}
                     <li>
@@ -128,12 +132,16 @@
                     </li>
                 {/each}
             </div>
-        </div>
+        </div> -->
     </div>
 
     <div class="textbox" id="what_supplements_are_supported">
         <h2>What <span class="highlighted-word" style="font-weight:700">Supplements</span> are supported?</h2>
-        <div class="columnscontainer">
+        <p>
+            There are currently <span class="highlighted-word">{supplements.length}</span> supplements supported.
+            You can view and contribute to the full list on the <a href={"https://github.com/RonanChance/OpenRXNData/blob/master/txts/supplements.txt"} target="_blank" rel="noreferrer" class="highlighted-word">OpenRXN Data: Supplements GitHub</a>.
+        </p>
+        <!-- <div class="columnscontainer">
             <div class="column">
                 {#each supplements.slice(0, Math.ceil(supplements.length/3)) as item}
                     <li>
@@ -157,7 +165,7 @@
                     </li>
                 {/each}
             </div>
-        </div>
+        </div> -->
     </div>
 
     <div class="textbox" id="how_can_i_support_this_project">
