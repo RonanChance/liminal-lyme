@@ -18,7 +18,9 @@
           if (getCookie('email').length >= 5) {
             window.location.href = '/home';
           }
-        } catch (error) {}
+        } catch (error) {
+          console.log("NO COOKIE")
+        }
       }
     });
 
@@ -26,6 +28,7 @@
     const pb = new PocketBase('https://pb.openrxn.com');
 
     async function clickHandler(event) {
+        console.log("STARTNG CLICK HANDLER")
         let providerChoice = event.currentTarget.dataset.value;
 
         event.stopPropagation();
@@ -41,10 +44,11 @@
               }
           });
         } catch (error) {
+          console.log("DID NOT FINISH LOGIN")
           console.error(error); // Handle error appropriately
         }
 
-        // console.log("Finished login")
+        console.log("Finished login")
         // console.log(data)
 
         const url = 'api/auth';

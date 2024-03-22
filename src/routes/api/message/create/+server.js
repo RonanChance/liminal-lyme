@@ -3,7 +3,7 @@ import OpenAI from 'openai'
 import { OPENAI_KEY } from '$env/static/private'
 
 export async function POST({request}) {
-    // console.log("CREATING A MESSAGE")
+    console.log("CREATING A MESSAGE")
     const { message, threadId, roleType } = await request.json();
     // console.log("in server:", message, threadId);
 

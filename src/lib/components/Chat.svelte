@@ -15,7 +15,8 @@
     let user_search = '';
     let loading_response = false;
     let reload = 0;
-    let credits_remaining = 0;
+    let credits_remaining;
+    let email;
 
     let threadId = null;
     let threadMessage = null;
@@ -31,7 +32,7 @@
                     {
                         "type": "text",
                         "text": {
-                            "value": "I have access to 3.5k+ documented tickborne illness experiences. Ask me about them!",
+                            "value": "Hi, I'm a ChatGPT model with access to 8.5k+ tickborne disease experiences. What are you curious about?",
                             "annotations": []
                         }
                     }
@@ -45,10 +46,7 @@
 
     onMount(async () => {
         if (browser) {
-
-            // // console.log(locals)
-
-            let email = getCookie('email');
+            email = getCookie('email');
             if (!email) {
                 goto("/auth")
             }
@@ -63,8 +61,8 @@
             localStorage.setItem("threadId", threadId);
             allMessages = [...firstMessage];
         } else {
-            // // console.log("THREAD WAS NOT EMPTY")
-            // // console.log(threadId);
+            console.log("THREAD WAS NOT EMPTY")
+            console.log(threadId);
             allMessages = [...await viewThread(threadId), ...firstMessage];
             scrollToBottom();
         }
@@ -76,15 +74,16 @@
     let retrievedRunStatus = null;
     let intervalId;
 
-    async function getCredits() {
-        // console.log("userdata: ", data.credits_remaining);
-        // const url = 'api/credits/get';
-        // const requestOptions = {
-        //     method: 'GET'
-        // };
-        // const response = await fetch(url, requestOptions);
-        // const data = await response.json();
-        // credits_remaining = data.credits_remaining;
+    async function getCredits(subtract = false) {
+        const requestOptions = {
+            method: 'POST',
+            body: JSON.stringify({ email: email, subtract: subtract })
+        };
+        const response = await fetch('api/credits', requestOptions);
+        const data = await response.json();
+        console.log(data);
+        credits_remaining = data.credits_remaining;
+        console.log(data.credits_remaining)
     }
 
     async function submitSearch() {
@@ -93,10 +92,10 @@
         }
         
         user_search = dynamic_user_input;
-        // // console.log(user_search);
+        console.log(user_search);
 
         if (threadId === null) {
-            // // console.log("Still had to get thread after search")
+            console.log("Still had to get thread after search")
             threadId = await getThread();
         }
 
@@ -106,7 +105,7 @@
         scrollToBottom()
 
         runResult = await createRun(threadId);
-        // // console.log('runResult id:', runResult.run.id);
+        console.log('runResult id:', runResult.run.id);
         runId = runResult.run.id;
 
         checkAndRetrieveData();
@@ -115,62 +114,57 @@
     }
 
     async function getThread() {
-        const url = 'api/thread/create';
         const requestOptions = {
             method: 'GET'
         };
-        const response = await fetch(url, requestOptions);
+        const response = await fetch('api/thread/create', requestOptions);
         const data = await response.json();
-        // // console.log("threadID:", data.thread.id);
+        console.log("threadID:", data.thread.id);
         return data.thread.id
     }
 
     async function createMessage(threadId) {
-        const url = 'api/message/create';
-        // // console.log('passing: ', user_search, threadId);
         const requestOptions = {
             method: 'POST',
             body: JSON.stringify({ message: user_search, threadId: threadId })
         };
-        const response = await fetch(url, requestOptions);
+        const response = await fetch('api/message/create', requestOptions);
         const data = await response.json();
-        // // console.log('Created message:', data.message);
+        console.log('Created message:', data.message);
         return data
     }
 
     async function createRun(threadId) {
-        const url = 'api/run/create?threadId=' + threadId;
-        // // console.log('passing run: ', threadId);
+        console.log('passing run: ', threadId);
         const requestOptions = {
             method: 'GET',
         };
-        const response = await fetch(url, requestOptions);
+        const response = await fetch('api/run/create?threadId=' + threadId, requestOptions);
         const data = await response.json();
-        // // console.log('Created run:', data.id);
+        console.log('Created run:', data.id);
         return data
     }
 
     async function retrieveRun(threadId, runId) {
-        // // console.log('Retrieving run with Id:', runId);
+        console.log('Retrieving run with Id:', runId);
         const url = 'api/run/retrieve?threadId=' + threadId + '&runId=' + runId;
-        // // console.log('checking run: ', runId);
+        console.log('checking run: ', runId);
         const requestOptions = {
             method: 'GET',
         };
         const response = await fetch(url, requestOptions);
         const data = await response.json();
-        // // console.log('Retrieved run:', data.run.status);
+        console.log('Retrieved run:', data.run.status);
         return data.run.status
     }
 
     async function viewThread(threadId) {
-        const url = 'api/message/list?threadId=' + threadId;
         const requestOptions = {
             method: 'GET',
         };
-        const response = await fetch(url, requestOptions);
+        const response = await fetch('api/message/list?threadId=' + threadId, requestOptions);
         const data = await response.json();
-        // // console.log('Viewing thread:', data);
+        console.log('Viewing thread:', data);
         return data.messages
     }
     
@@ -179,16 +173,16 @@
         
         if (retrievedRunStatus === 'completed') {
             clearInterval(intervalId); 
-            // // console.log('Run status is: complete');
+            console.log('Run status is: complete');
             allMessages = [...await viewThread(threadId), ...firstMessage];
-            // // console.log('all MESSAGES:', allMessages);
+            console.log('all MESSAGES:', allMessages);
             
             loading_response = false;
             scrollToBottom();
         }
         if (retrievedRunStatus === 'failed' || retrievedRunStatus === 'cancelled' || retrievedRunStatus === 'timed_out' || retrievedRunStatus === 'interrupted') {
             clearInterval(intervalId); 
-            // // console.log('Run failed');
+            console.log('Run failed');
             loading_response = false;
             scrollToBottom();
         }
@@ -208,10 +202,14 @@
         }
     }
 
-    function completeReboot() {
+    async function completeReboot() {
         localStorage.setItem("threadId", null);
         threadId = null;
         allMessages = null;
+
+        threadId = await getThread();
+        localStorage.setItem("threadId", threadId);
+        allMessages = [...firstMessage];
     }
 
 </script>
@@ -245,13 +243,13 @@
     <div class="ideascontainer">
         {#each chat_ideas as idea}
             <!-- <button class="ideabutton" on:click={() => {dynamic_user_input = idea; submitSearch(); dynamic_user_input = '';}}>{idea}</button> -->
-            <button class="ideabutton" on:click={() => {dynamic_user_input = 'Tell me about experiences with ' + idea; submitSearch(); dynamic_user_input = '';}}>{idea}</button>
+            <button class="ideabutton" on:click={() => {dynamic_user_input = 'Tell me about experiences with ' + idea; submitSearch(); dynamic_user_input = ''; getCredits(true)}}>{idea}</button>
         {/each}
     </div>
     
     <div class="searchboxsend">
         <textarea class="inputtextbox" bind:value={dynamic_user_input} on:keydown={handleKeyDown} placeholder="Search" autocomplete="off" data-lpignore="true" rows="1" style="resize: none;" size="lg"></textarea>
-        <Button slot="right" on:click={() => {submitSearch(); dynamic_user_input = '';}} size="sm" type="submit" style="background-color: {dynamic_user_input.length >= 1 ? 'var(--accent)' : '#c4c4c4'}; padding-left:13px; padding-right:14px;">
+        <Button slot="right" on:click={() => {submitSearch(); dynamic_user_input = ''; getCredits(true);}} size="sm" type="submit" style="background-color: {dynamic_user_input.length >= 1 ? 'var(--accent)' : '#c4c4c4'}; padding-left:13px; padding-right:14px;">
             <ArrowUpSolid />
         </Button>
     </div>
@@ -259,12 +257,17 @@
 
 
 <div class="medicaldisclaimer">
-    <p style="text-align: center; font-style: italic;"> This is a research project, not medical advice. Credits remaining: {credits_remaining} | Having an issue:</p>
-    <button class="rebootbutton" on:click={() => {completeReboot(); dynamic_user_input = '';}}>
+    <p style="text-align: center; font-style: italic;"> This is a research project, not medical advice.</p>
+    <button class="rebootbutton" on:click={() => {completeReboot(); dynamic_user_input = ''; getCredits();}}>
+        Having an issue?
         <span class="underline">Reboot</span>
     </button>
     <button class="rebootbutton" on:click={getCredits}>
-        <span>Creditcheck: {data.credits_remaining}</span>
+        {#if credits_remaining}
+            <span>Credits: {credits_remaining}</span>
+        {:else}
+            <p>Credits: <Spinner color="blue" size="4"/></p>
+        {/if}
     </button>
 </div>
 

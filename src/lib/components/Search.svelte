@@ -9,7 +9,7 @@
     import MedicalDisclaimer from './MedicalDisclaimer.svelte';
 	import { all_tags, illnesses, tag_counts } from './constants.js';
 
-	const pb = new PocketBase('https://pb.openrxn.com/');
+	const pb = new PocketBase('https://data.openrxn.com/');
     
 	let animate = false;
     onMount(() => animate = true);

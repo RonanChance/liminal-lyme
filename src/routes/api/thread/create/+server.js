@@ -8,11 +8,12 @@ export async function GET() {
     try {
         const thread = await openai.beta.threads.create()
 
-        // console.log(thread);
+        console.log(thread);
 
         return Response.json({ thread: thread });
     } catch (error) {
-        // console.log(error);
+        console.log("ERROR IN CREATE THREAD")
+        console.log(error);
         return Response.json({error: error});
     }
 }
