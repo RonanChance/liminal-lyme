@@ -178,10 +178,6 @@
 		filtered = all_tags.filter(option => option.toLowerCase().includes(query));
   	}
 
-	  function convertToLowercase(value) {
-		return value.toLowerCase();
-	}
-
 </script>
 
 <div class="intro-container">
@@ -196,7 +192,7 @@
 			<div class="togglebuttongroup">
 				{#each slicedItems as item}
 					<button class="togglebutton" on:click={() => handleSelection(item)} style="background-color: {selectedItems.includes(item) ? (tag_counts[item]['label'] === 'SUP' ? 'var(--supplement)' : 'var(--medication)') : 'var(--offwhite)'}; color: {selectedItems.includes(item) ? 'var(--offwhite)' : '#000'}; font-weight: {selectedItems.includes(item) ? 'bold' : 'normal'};">
-						{convertToLowercase(item)}
+						{item}
 					</button>				
 				{/each}
 			</div>
@@ -205,15 +201,9 @@
 
 			<div class="entirelist" style="display: {dropdownOpen ? 'block' : 'none'}">
 				{#each filtered as option}
-					<div class="spaced-option" on:click={() => {handleSelection(option)}} style="color: { tag_counts[option]['label'] === 'MED' ? 'var(--medication)' : 'var(--supplement)'}; font-weight: 500;" value={option}> ({tag_counts[option]['count']}) {convertToLowercase(option)} </div>
+					<div class="spaced-option" on:click={() => {handleSelection(option)}} style="color: { tag_counts[option]['label'] === 'MED' ? 'var(--medication)' : 'var(--supplement)'}; font-weight: 500;" value={option}> ({tag_counts[option]['count']}) {option} </div>
 				{/each}
 			</div>
-
-			<!-- <select multiple on:click={(event) => {handleSelection(event.target.value)}} >
-				{#each filtered as option}
-					<option class="spaced-option" style="color: { tag_counts[option]['label'] === 'MED' ? 'var(--medication)' : 'var(--supplement)'}; font-weight: 500;" value={option}> ({tag_counts[option]['count']}) {convertToLowercase(option)} </option>
-				{/each}
-			</select> -->
 			
 			<div style="display: flex; justify-content: right;">
 				<button class="excludenote" on:click={toggleAdvanced}>Advanced Mode: {advancedOn ? 'On' : 'Off'}</button>
@@ -226,7 +216,7 @@
 				</div>
 					<div class="togglebuttongroup">
 						{#each illnesses as illness}
-							<button on:click={() => {handleAdv(illness)}} style="text-decoration: { excludedConditions.includes(illness) ? 'line-through' : 'none'}; box-shadow: { requiredConditions.includes(illness) ? 'inset 0 0 10px var(--accent)' : 'none'}; font-weight: { requiredConditions.includes(illness) ? 'bold' : 'normal'};background-color: { excludedConditions.includes(illness) ? 'var(--blue)' : 'var(--bluegray)'};" class="advancedbutton">{convertToLowercase(illness)}</button>
+							<button on:click={() => {handleAdv(illness)}} style="text-decoration: { excludedConditions.includes(illness) ? 'line-through' : 'none'}; box-shadow: { requiredConditions.includes(illness) ? 'inset 0 0 10px var(--accent)' : 'none'}; font-weight: { requiredConditions.includes(illness) ? 'bold' : 'normal'}; background-color: { excludedConditions.includes(illness) ? 'var(--blue)' : 'var(--bluegray)'};" class="advancedbutton">{illness}</button>
 						{/each}
 					</div>	
 			</div>
@@ -277,6 +267,19 @@
 </div>
 
 <style>
+
+	.conditionstyle {
+		background-color: var(--condition_highlight);
+	}
+
+	.medicationstyle {
+		background-color: var(--medication_highlight);
+	}
+
+	.supplementstyle {
+		background-color: var(--supplementstyle);
+	}
+
 	.searchcount {
 		color: white;
 		margin-top: 5%;

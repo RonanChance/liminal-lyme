@@ -16,11 +16,12 @@ export async function POST({request}) {
                 let results = await pb.collection('user_data').update(record.id, { credits_remaining: record.credits_remaining - 1 });
                 credits = record.credits_remaining - 1;
             } else {
-                credts = record.credits_remaining;
+                credits = record.credits_remaining;
             }
         }
     } catch (error) {
         // failed to get credits, so just give the user some
+        // this should not happen, but prioritize getting access to the user
         const data = {
             "email": email,
             "credits_remaining": 50,
