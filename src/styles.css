@@ -5,13 +5,13 @@
     --accent_highlight: #42bade5a;
     --bluegray: #436e9edb;
 
-    --condition: #42bade;
-    --medication: #0064bb;
-    --supplement: #008748;
+    --condition: #ffbb00;
+    --medication: #398bd3;
+    --supplement: #4bbd4b;
 
-    --condition_highlight: rgba(71, 205, 246, 0.568);
-    --medication_highlight: #0064bb62;
-    --supplement_highlight: #00ff004f;
+    --condition_highlight: #ffbb0091;
+    --medication_highlight: #57affd91;
+    --supplement_highlight: #47ca4791;
 }
 
 * {

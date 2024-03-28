@@ -36,17 +36,17 @@
     </div>
     <div class="tags">
         {#each item.conditions as con}
-            <div class="bg-[var(--condition)] text-[#ffff] text-xs font-medium mr-2 px-2.5 py-0.5 rounded" style="display: inline-block;">{con}</div>
+            <div class="tagstyle" style="background-color: var(--condition_highlight); display: inline-block;">{con}</div>
         {/each}
     </div>
     <div class="tags">
         {#each item.medications as med}
-            <div class="bg-[var(--medication)] text-[#ffff] text-xs font-medium mr-2 px-2.5 py-0.5 rounded" style="display: inline-block;">{med}</div>
+            <div class="tagstyle" style="background-color: var(--medication_highlight); display: inline-block;">{med}</div>
         {/each}
     </div>
     <div class="tags">
         {#each item.supplements as sup}
-            <div class="bg-[var(--supplement)] text-[#ffff] text-xs font-medium mr-2 px-2.5 py-0.5 rounded" style="display: inline-block;">{sup}</div>
+            <div class="tagstyle" style="background-color: var(--supplement_highlight); display: inline-block;">{sup}</div>
         {/each}
     </div>
     <div class="num-rating">
@@ -64,12 +64,30 @@
 </Card>
 
 <style>
+
+    .tagstyle {
+        color: #000;
+        margin-right: 2px;
+        padding-left: 8px;
+        padding-right: 8px;
+        padding-top: 1px;
+        padding-bottom: 1px;
+        border-radius: 5px;
+        
+        margin-top: 1.5%;
+        /* margin-left: 3px; */
+        margin-right: 5px;
+        font-size: small;
+
+        /* text-xs font-medium mr-2 px-2.5 py-0.5 rounded */
+    }
+
     .str-name-subreddit-date{
         font-size: 10pt;
         display: flex;
         flex-direction: row;
         justify-content: space-between;
-        /* padding-bottom: 10pt; */
+        padding-bottom: 1%;
     }
     .num-rating{
         position: absolute;
@@ -100,6 +118,7 @@
         margin-left: auto;
     }
     .str-review {
+        margin-top: 3%;
         max-width: 105%;
         word-wrap: break-word;
         overflow: hidden;

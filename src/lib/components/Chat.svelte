@@ -81,9 +81,7 @@
         };
         const response = await fetch('api/credits', requestOptions);
         const data = await response.json();
-        console.log(data);
         credits_remaining = data.credits_remaining;
-        console.log(data.credits_remaining)
     }
 
     async function submitSearch() {
@@ -92,10 +90,9 @@
         }
         
         user_search = dynamic_user_input;
-        console.log(user_search);
 
         if (threadId === null) {
-            console.log("Still had to get thread after search")
+            console.log("Got thread after search")
             threadId = await getThread();
         }
 
@@ -105,7 +102,6 @@
         scrollToBottom()
 
         runResult = await createRun(threadId);
-        console.log('runResult id:', runResult.run.id);
         runId = runResult.run.id;
 
         checkAndRetrieveData();

@@ -22,7 +22,7 @@
 	let selectedMedications = [];
 	let selectedSupplements = [];
 	let excludedConditions = [];
-	let requiredConditions = ["LYME DISEASE"];
+	let requiredConditions = ["Lyme Disease"];
     let result_list = [];
 
 	let slicedItems = all_tags.slice(0, 9);
@@ -41,11 +41,6 @@
 	async function fetchDataForPostList() {
 		try {
 			isLoading = true;
-			if (selectedItems.length === 0) {
-				toastMessage = "Select at least one medication/supplement";
-				showToast();
-				return;
-			}
 
 			// CLEAR meds and sups from last search
 			selectedMedications = []
@@ -164,11 +159,6 @@
 			excludedConditions = excludedConditions.filter(item => item !== value);
 		}
 
-		// if (excludedConditions.includes(value)) {
-		// 	excludedConditions = excludedConditions.filter(item => item !== value);
-		// } else {
-		// 	excludedConditions = [...excludedConditions, value];
-		// }
 		console.log("requirements", requiredConditions);
 		console.log("exclusions", excludedConditions);
 	}
@@ -186,7 +176,7 @@
 
 
 			<div class="infonote">Select Medications & Supplements
-				<div class="subscriptnote">Recommend: 1-3 selections</div>
+				<div class="subscriptnote">Recommend: 1-2 selections</div>
 			</div>
             
 			<div class="togglebuttongroup">
@@ -201,7 +191,10 @@
 
 			<div class="entirelist" style="display: {dropdownOpen ? 'block' : 'none'}">
 				{#each filtered as option}
-					<div class="spaced-option" on:click={() => {handleSelection(option)}} style="color: { tag_counts[option]['label'] === 'MED' ? 'var(--medication)' : 'var(--supplement)'}; font-weight: 500;" value={option}> ({tag_counts[option]['count']}) {option} </div>
+					<div class="spaced-option" on:click={() => {handleSelection(option)}} value={option}>
+						<span class="count" style="color: black;">({tag_counts[option]['count']})</span> 
+						<span class="option" style="color: { tag_counts[option]['label'] === 'MED' ? 'var(--medication)' : 'var(--supplement)'}; font-weight: 500;">{option}</span>
+					</div>
 				{/each}
 			</div>
 			
@@ -267,18 +260,6 @@
 </div>
 
 <style>
-
-	.conditionstyle {
-		background-color: var(--condition_highlight);
-	}
-
-	.medicationstyle {
-		background-color: var(--medication_highlight);
-	}
-
-	.supplementstyle {
-		background-color: var(--supplementstyle);
-	}
 
 	.searchcount {
 		color: white;

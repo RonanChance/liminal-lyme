@@ -19,13 +19,6 @@
     // Set up an interval to rotate text
     const textInterval = setInterval(rotateText, interval);
 
-    // Add this back if I want to stop the scrolling words
-    // $: {
-      // Clear the interval when the component is destroyed
-      // if (currentIndex === words.length - 1) {
-      //   clearInterval(textInterval);
-      // }
-    // }
 </script>
 
 <div class="rotating-text">
