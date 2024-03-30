@@ -9,7 +9,7 @@
 
     shuffleArray(chat_ideas);
 
-    export let data;
+    let data;
 
     let dynamic_user_input = '';
     let user_search = '';

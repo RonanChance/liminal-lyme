@@ -50,7 +50,7 @@
       position: sticky;
       top: 0px;
       z-index: 1;
-      background: rgba(14, 43, 74, 0.888);
+      background: #0e2b4ae2;
 
       display: flex;
       align-items: center;

@@ -3,7 +3,7 @@
 	import { Popover, Toast, Spinner } from 'flowbite-svelte';
 	import { Button } from 'flowbite-svelte';
 	import { onMount } from 'svelte';
-	import { fly } from 'svelte/transition'
+	import { fly, fade } from 'svelte/transition'
     import PocketBase from 'pocketbase';
 	import PostList from './PostList.svelte';
     import MedicalDisclaimer from './MedicalDisclaimer.svelte';
@@ -172,7 +172,7 @@
 
 <div class="intro-container">
 	{#if animate}
-		<main class="container" in:fly={{y:50, delay: 500, duration: 1500}}>
+		<main class="container" in:fade={{y:50, delay: 0, duration: 1000}}>
 
 
 			<div class="infonote">Select Medications & Supplements
@@ -239,9 +239,9 @@
 			{/if}
 
 			<div class="post-area">
-				<PostList fetchDataFunction={fetchDataForPostList} posts={result_list}/>
+				<PostList posts={result_list}/>
 			</div>
-			<div class="med-disclaimer">
+			<div class="med-disclaimer" in:fade={{y:50, delay: 1000, duration: 1000}}>
 				<MedicalDisclaimer />
 			</div>
 		</main>
@@ -339,7 +339,7 @@
 		color: white;
         padding-top: 5%;
         padding-bottom: 5%;
-		margin: auto;
+		text-align: center;
     }
 
 	.subscriptnote {

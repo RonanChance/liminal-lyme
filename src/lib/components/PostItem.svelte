@@ -1,8 +1,10 @@
 <script>
     import {createEventDispatcher} from 'svelte'
-    import { AngleUpSolid, LinkSolid, ChevronRightSolid} from 'flowbite-svelte-icons';
+    import { AngleUpSolid, LinkSolid, ChevronRightSolid, ClockSolid} from 'flowbite-svelte-icons';
     import Card from './Card.svelte'
     import { Button } from 'flowbite-svelte';
+    import { chronology_usernames } from '../../lib/components/constants.js'
+
     export let item
 
     function formatDate(dateString) {
@@ -56,7 +58,12 @@
     <div class="str-review">
         {@html decodeHTMLEntities(item.body)}
     </div>
-    <div class="sitelinkcontainer">
+    <div class="actionbuttons">
+        {#if item.author in chronology_usernames}
+            <a class="chronology-link" href="/home?path=chronologyTab&username={item.author}" target="_blank">
+                <ClockSolid class="inline" style="bg-white" size=sm/> History
+            </a>
+        {/if}
         <a class="site-link" href="{item.permalink}" target="_blank">
             Visit Post <ChevronRightSolid class="inline" style="bg-white" size=xs/>
         </a>
@@ -64,6 +71,13 @@
 </Card>
 
 <style>
+
+    .actionbuttons {
+        padding-top: 7%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+    }
 
     .tagstyle {
         color: #000;
@@ -92,7 +106,7 @@
     .num-rating{
         position: absolute;
         top: -20px;
-        left: -20px;
+        left: -15px;
         width: 50px;
         height: 50px;
         background: #e14b00;
@@ -106,16 +120,24 @@
         align-items: center; /* Center horizontally */
     }
 
-    .sitelinkcontainer {
-        display: flex;
-    }
     .site-link {
+        display: flex;
         color: white;
         background: #e14b00;
-        padding: 5px 10px 5px 10px;
+        padding: 8px 8px 8px 8px;
         border-radius: 10px;
+        align-items: center;
+        gap: 6px;
+    }
 
-        margin-left: auto;
+    .chronology-link {
+        display: flex;
+        color: white;
+        background: var(--accent);
+        padding: 8px 8px 8px 8px;
+        border-radius: 10px;
+        align-items: center;
+        gap: 6px;
     }
     .str-review {
         margin-top: 3%;
