@@ -3,7 +3,7 @@
     import { onMount } from 'svelte';
 	import { Popover, Toast, Spinner } from 'flowbite-svelte';
     import { fly, fade, blur } from 'svelte/transition'
-    import { medications, supplements } from "./constants";
+    import { total_scanned, total_cataloged, medications, supplements } from "./constants";
 
 
     let animate = false;
@@ -73,10 +73,10 @@
     <div class="numbersdiv">
         <hr/>
         <div class="transparenttext">Scanned Comments</div>
-        <div class="numbertext">19,663,903</div>
+        <div class="numbertext">{total_scanned}</div>
         <hr/>
         <div class="transparenttext">Cataloged Experiences</div>
-        <div class="numbertext">9,027</div>
+        <div class="numbertext">{total_cataloged}</div>
         <hr/>
         <div class="transparenttext">Supported Medications</div>
         <div class="numbertext">{medications.length}</div>
