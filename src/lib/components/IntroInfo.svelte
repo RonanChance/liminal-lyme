@@ -50,6 +50,7 @@
 
   .sub-heading {
     width: 100%;
+    margin-top: 2%;
     margin-bottom: 15pt;
   }
 
@@ -59,8 +60,6 @@
   
   .rotating-text {
     display: flex;
-    margin-top: 10pt;
-    margin-bottom: 10pt;
   }
 
   .half {

@@ -60,7 +60,7 @@
 
         <div class="info-row">
             <div class="text-info left" in:blur={{delay: 1000, duration: 1500}}>
-                <strong>Stay Updated</strong>
+                <strong>Return</strong>
                 Check back often as we add more medications, supplements, and treatments
             </div>
             <div class="imgdiv right" in:blur={{delay: 1000, duration: 1500}}>
@@ -99,6 +99,10 @@
 {/if}
 
 <style>
+
+    strong {
+        font-size: 20pt;
+    }
 
     .imgdiv {
         min-width: 50%;
@@ -179,8 +183,8 @@
     .infonote {
         margin: auto;
         max-width: 90%;
-        padding-top: 5%;
-        padding-bottom: 10%;
+        padding-top: 3%;
+        padding-bottom: 5%;
         text-align: center;
     }
 
@@ -200,8 +204,8 @@
         }
 
         .infonote {
-        padding-top: 10%;
-    }
+            padding-top: 5%;
+        }
     }
 
 </style>

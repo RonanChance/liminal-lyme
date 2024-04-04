@@ -55,7 +55,8 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding-top: 2%;
+      padding-top: 5%;
+      padding-bottom: 5%;
       padding-left: 8%;
       padding-right: 8%;
 
