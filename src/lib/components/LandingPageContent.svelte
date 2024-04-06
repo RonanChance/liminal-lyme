@@ -41,7 +41,7 @@
         <div class="info-row">
             <div class="text-info left" in:blur={{delay: 1000, duration: 1500}}>
                 <strong>Learn</strong> 
-                Find treatment ideas with an AI model that knows conventional & alternative treatments
+                Find treatment ideas with an AI model that knows conventional and alternative treatments
             </div>
             <div class="imgdiv right" in:blur={{delay: 1000, duration: 1500}}>
                 <img src="/bacteria_images/img2.png" alt="img2">
@@ -53,8 +53,8 @@
                 <img src="/bacteria_images/img3.png" alt="img3">
             </div>
             <div class="text-info right" in:blur={{delay: 1000, duration: 1500}}>
-                <strong>Contribute</strong>
-                Share your health successes and obstacles with the community
+                <strong>Connect</strong>
+                Find users with similar reactions and experiences
             </div>
         </div>
 
