@@ -9,7 +9,7 @@ DISCLAIMER: THIS WEBSITE DOES NOT PROVIDE MEDICAL ADVICE
 
 <style>
     h2 {
-        font-size: 18px;
+        font-size: 16pt;
         color: rgb(255, 255, 255);
     }
     p {

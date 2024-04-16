@@ -114,7 +114,7 @@
     .content-container {
         display: flex;
         flex-direction: column;
-        gap: 20px;
+        gap: 1.5rem;
     }
 
     .text-info {

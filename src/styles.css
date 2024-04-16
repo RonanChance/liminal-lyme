@@ -4,6 +4,8 @@
     --accent: #42bade;
     --accent_highlight: #42bade5a;
     --bluegray: #436e9edb;
+    --darkbackgroundblue: #09141F;
+    --lightbackgroundblue: rgba(66, 140, 222, 0.13);
 
     --condition: #ffbb00;
     --medication: #398bd3;
@@ -74,13 +76,6 @@ ul {
 	flex-direction: column;
 }
 
-.centered-select {
-	justify-content: center;
-    display: flex;
-    gap: 3px;
-    padding-bottom: 2%;
-}
-
 .mainlogo {
     width: 250px;
     height: auto;
@@ -93,10 +88,10 @@ ul {
 .divbg {
     margin-left: 15%;
     margin-right: 15%;
-    background: linear-gradient(135deg, rgba(14, 43, 74, 0.613), rgba(162, 162, 162, 0.4));
+    background: linear-gradient(135deg, rgba(14, 43, 74, 0.613), rgba(17, 21, 34, 0.4));
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
-    border-radius: 20px;
+    border-radius: 0.5rem;
     border:1px solid rgba(255, 255, 255, 0.18);
     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
 }
@@ -115,12 +110,12 @@ ul {
     background-color: var(--offwhite);
     color: var(--blue);
     
-    padding-top: 12px;
-    padding-bottom: 12px;
-    padding-left: 20px;
-    padding-right: 20px;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
 
-    border-radius: 10px;
+    border-radius: 0.5rem;
     position: relative;
 
     transition: 0.5s;
@@ -173,11 +168,6 @@ ul {
 
     .container {
         max-width: 90%;
-    }
-
-    .centered-select {
-        flex-direction: column;
-        align-items: center;
     }
 
   }

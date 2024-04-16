@@ -51,12 +51,11 @@
         console.log("Finished login")
         // console.log(data)
 
-        const url = 'api/auth';
         const requestOptions = {
             method: 'POST',
             body: JSON.stringify({ email: data.meta.email, token: data.token })
         };
-        await fetch(url, requestOptions);
+        await fetch('api/auth', requestOptions);
 
         // set email so we can retrieve with locals
         event.locals = {};

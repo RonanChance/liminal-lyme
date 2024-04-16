@@ -71,7 +71,7 @@
       display: flex;
       flex-direction: row;
       margin: auto;
-      gap: 6px;
+      gap: 0.75rem;
     }
 
     .button-container {
@@ -84,9 +84,9 @@
       background-color: #202142;
       color: #ffff;
       border: 0;
-      border-radius: 8px;
-      width: 100px;
-      height: 40px;
+      border-radius: 0.5rem;
+      width: 6.75rem;
+      height: 2.5rem;
       cursor: pointer;
     }
   

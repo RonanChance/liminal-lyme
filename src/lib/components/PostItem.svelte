@@ -86,7 +86,7 @@
         padding-right: 8px;
         padding-top: 1px;
         padding-bottom: 1px;
-        border-radius: 5px;
+        border-radius: 0.25rem;
         
         margin-top: 1.5%;
         /* margin-left: 3px; */
@@ -125,9 +125,9 @@
         color: white;
         background: #e14b00;
         padding: 8px 8px 8px 8px;
-        border-radius: 10px;
+        border-radius: 0.5rem;
         align-items: center;
-        gap: 6px;
+        gap: 0.5rem;
     }
 
     .chronology-link {
@@ -135,9 +135,9 @@
         color: white;
         background: var(--accent);
         padding: 8px 8px 8px 8px;
-        border-radius: 10px;
+        border-radius: 0.5rem;
         align-items: center;
-        gap: 6px;
+        gap: 0.5rem;
     }
     .str-review {
         margin-top: 3%;

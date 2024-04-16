@@ -49,8 +49,9 @@
             email = getCookie('email');
             if (!email) {
                 goto("/auth")
+            } else {
+                getCredits();
             }
-            getCredits();
         }
 
         threadId = localStorage.getItem("threadId") || null;

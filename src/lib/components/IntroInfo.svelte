@@ -82,7 +82,7 @@
     }
 
     h2 {
-      font-size: 20px;
+      font-size: 15pt;
     }
 
     .fixed-word {

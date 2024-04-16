@@ -176,7 +176,7 @@
 
 
 			<div class="infonote">Select Medications & Supplements
-				<div class="subscriptnote">Recommend: 1-2 selections</div>
+				<div class="subscriptnote">Recommend: 1-3 selections</div>
 			</div>
             
 			<div class="togglebuttongroup">
@@ -286,12 +286,12 @@
 		max-width: 90%;
 
 		padding: 6px 14px 6px 14px;
-		border-radius: 15px;
+		border-radius: 0.25rem;
 	}
 
 	.togglebuttongroup {
 		display: flex;
-		gap: 8px;
+		gap: 0.5rem;
 		flex-wrap: wrap;
 	}
 
@@ -301,17 +301,17 @@
 		flex-direction: row;
 		white-space: nowrap;
 		padding: 6px 14px 6px 14px;
-		border-radius: 15px;
+		border-radius: 0.25rem;
 	}
 
 	.searchbar {
 		margin-top: 5%;
-		border-radius: 7px;
+		border-radius: 0.5rem;
 		width: 100%;
 	}
 	.searchbutton {
 		margin-top: 5%;
-		border-radius: 50px;
+		border-radius: 0.5rem;
 		width: 50%;
 	}
 

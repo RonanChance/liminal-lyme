@@ -30,10 +30,8 @@
     <nav class="nav-links">
       {#if email}
         <button href="/logout" on:click={() => {changeSelected("/logout");}} style="text-decoration: {selected === "logout" ? "underline" : "none"}">Logout</button>
-        |
       {/if}
       <button href="/home" on:click={() => {changeSelected("/home");}} style="text-decoration: {selected === "home" ? "underline" : "none"}">Home</button>
-      |
       <button href="/about" on:click={() => {changeSelected("/about");}} style="text-decoration: {selected === "about" ? "underline" : "none"}">About</button>
     </nav>
 </div>
@@ -41,7 +39,7 @@
 <style>
     .nav-links {
       display: flex;
-      gap: 10px;
+      gap: 1rem;
       color: var(--offwhite);
       font-weight: 600;
     }
@@ -50,7 +48,7 @@
       position: sticky;
       top: 0px;
       z-index: 1;
-      background: #0e2b4ae2;
+      background: var(--darkbackgroundblue);
 
       display: flex;
       align-items: center;

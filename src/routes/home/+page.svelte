@@ -117,22 +117,22 @@
         display: flex;
         flex-direction: column;
         
-        margin-top: 20px;
+        margin-top: 1rem;
         flex: 1;
-        margin-bottom: 20px;
+        margin-bottom: 1rem;
     }
 
     .buttongroup {
+        margin-top: 1rem;
         display: flex;
         justify-content: center;
     }
 
     @media (max-width: 768px) {
         .divbg {
-            margin-left: 0px;
-            margin-right: 0px;
-            margin-bottom: 0px;
-            border-radius: 20px;
+            margin-left: 0rem;
+            margin-right: 0rem;
+            margin-bottom: 0rem;
         }
     }
 
