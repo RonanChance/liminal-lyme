@@ -74,10 +74,10 @@
             <p>Insight</p>
             </Button> -->
 
-            <button class="navbutton" style="color: {currentTab === 'connectTab' ? '#43bbde' : 'var(--gray)'}" on:click={() => {currentTab = 'connectTab'}}>
+            <!-- <button class="navbutton" style="color: {currentTab === 'connectTab' ? '#43bbde' : 'var(--gray)'}" on:click={() => {currentTab = 'connectTab'}}>
                 <UsersGroupOutline class="w-5 h-5 me-2" />
                 <p style="color: {currentTab === 'connectTab' ? '#43bbde' : 'var(--gray)'}">Connect</p>
-            </button>
+            </button> -->
     </div>
 
     {#if animate}

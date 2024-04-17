@@ -220,7 +220,7 @@
 					<div class="flex items-center" style="gap:8px; font-weight: bold;">
 					Search
 					{#if isLoading}
-						<Spinner size={6} />
+						<Spinner size={6} color="gray" />
 					{:else}
 						<SearchOutline size="lg"/>
 					{/if}
