@@ -19,12 +19,31 @@
         return `${year}-${month}-${day}`;
     }
 
-        function decodeHTMLEntities(html) {
-            const textarea = document.createElement('textarea');
-            textarea.innerHTML = html;
+    function decodeHTMLEntities(html) {
+        const textarea = document.createElement('textarea');
+        textarea.innerHTML = html;
         return textarea.value;
     }
 
+    // Function to handle clicks on medication spans
+    function medClick(event) {
+        const target = event.target;
+        if (target.classList.contains('medication')) {
+            const medication = target.textContent.trim();
+            // console.log("Clicked on medication:", medication);
+            console.log(target.classList[0].split('').reverse().join(''));
+        }
+        if (target.classList.contains('supplement')) {
+            const supplement = target.textContent.trim();
+            // console.log("Clicked on supplement:", supplement);
+            console.log(target.classList[0].split('').reverse().join(''));
+        }
+        if (target.classList.contains('condition')) {
+            const condition = target.textContent.trim();
+            // console.log("Clicked on condition:", condition);
+            console.log(target.classList[0].split('').reverse().join(''));
+        }
+    }
 </script>
 
 <Card>
@@ -32,9 +51,6 @@
         <div class="div">@{item.author}</div>
         <div class="div">r/{item.subreddit}</div>
         <div class="div">{formatDate(item.date)}</div>
-        <!-- <span class="bg-[var(--blue)] text-[var(--offwhite)] text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-400" style="white-space: nowrap; display: inline-block;">@{item.author}</span>
-        <span class="bg-[var(--blue)] text-[var(--offwhite)] text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-400" style="white-space: nowrap; display: inline-block;">r/{item.subreddit}</span>
-        <span class="bg-[var(--blue)] text-[var(--offwhite)] text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-400" style="white-space: nowrap; display: inline-block;">{formatDate(item.date)}</span> -->
     </div>
     <div class="tags">
         {#each item.conditions as con}
@@ -55,7 +71,7 @@
         <AngleUpSolid size=xs /> 
         {item.score}
     </div>
-    <div class="str-review">
+    <div class="str-review" on:click|preventDefault="{medClick}">
         {@html decodeHTMLEntities(item.body)}
     </div>
     <div class="actionbuttons">
@@ -89,11 +105,8 @@
         border-radius: 0.25rem;
         
         margin-top: 1.5%;
-        /* margin-left: 3px; */
         margin-right: 5px;
         font-size: small;
-
-        /* text-xs font-medium mr-2 px-2.5 py-0.5 rounded */
     }
 
     .str-name-subreddit-date{
