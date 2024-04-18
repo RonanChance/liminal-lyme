@@ -17,6 +17,10 @@
     --supplement_highlight: #47ca4791;
 }
 
+::selection {
+    background: var(--accent_highlight);
+}
+
 * {
 	box-sizing: border-box;
 	margin: 0;
