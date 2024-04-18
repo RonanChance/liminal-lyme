@@ -128,7 +128,7 @@
         font-weight: bold;
         font-size: 1.5rem;
         text-align: center;
-        color: var(--accent);
+        color: #fff;
     }
 
     .actionbuttons {

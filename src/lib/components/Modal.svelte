@@ -23,7 +23,7 @@
 <style>
 	dialog {
 		background-color: var(--darkbackgroundblue);
-		width: 60%;
+		width: 70%;
 		position: fixed;
 		top: 50%;
 		left: 50%;

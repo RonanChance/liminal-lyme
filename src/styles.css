@@ -18,7 +18,7 @@
 }
 
 ::selection {
-    background: var(--accent_highlight);
+    background: #42badec2;
 }
 
 * {
