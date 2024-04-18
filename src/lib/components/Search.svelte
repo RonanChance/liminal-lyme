@@ -191,7 +191,19 @@
 
 			<div class="entirelist" style="display: {dropdownOpen ? 'block' : 'none'}">
 				{#each filtered as option}
-					<div class="spaced-option" on:click={() => {handleSelection(option)}} value={option}>
+					<div
+						class="spaced-option"
+						on:click={() => handleSelection(option)}
+						on:keydown={(event) => {
+							if (event.key === 'Enter') {
+								handleSelection(option);
+								event.preventDefault();
+							}
+						}}
+						value={option}
+						role="button"
+						tabindex="0"
+					>
 						<span class="count" style="color: #575757;">({tag_counts[option]['count']})</span> 
 						<span class="option" style="color: { tag_counts[option]['label'] === 'MED' ? 'var(--medication)' : 'var(--supplement)'}; font-weight: 500;">{option}</span>
 					</div>

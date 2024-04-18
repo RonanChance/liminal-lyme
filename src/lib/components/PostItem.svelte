@@ -1,6 +1,6 @@
 <script>
     import {createEventDispatcher} from 'svelte'
-    import { AngleUpSolid, LinkSolid, ChevronRightSolid, ClockSolid} from 'flowbite-svelte-icons';
+    import { AngleUpSolid, AngleDownSolid, LinkSolid, ChevronRightSolid, ClockSolid} from 'flowbite-svelte-icons';
     import Card from './Card.svelte'
     import { Button } from 'flowbite-svelte';
     import Modal from './Modal.svelte';
@@ -8,6 +8,7 @@
 
     export let item
     let showModal = false;
+    let showEntirePost = false;
 	let clickedItem = "NA";
 
     function formatDate(dateString) {
@@ -94,9 +95,18 @@
         <AngleUpSolid size=xs /> 
         {item.score}
     </div>
-    <div class="str-review" on:click|preventDefault={handleClick}>
-        {@html decodeHTMLEntities(item.body)}
+    <div class="str-review {showEntirePost ? 'no-mask' : ''}" on:click|preventDefault={handleClick}>
+        {#if showEntirePost}
+            {@html decodeHTMLEntities(item.body)}
+        {:else}
+            {@html decodeHTMLEntities(item.body.slice(0, 500))}
+        {/if}
     </div>
+    {#if !showEntirePost}
+        <div class="readMoreButtondiv">
+            <button class="showEntirePostButton" on:click={() => {showEntirePost = true}}>Read More </button>
+        </div>
+    {/if}
     <div class="actionbuttons">
         {#if item.author in chronology_usernames}
             <a class="chronology-link" href="/home?path=chronologyTab&username={item.author}" target="_blank">
@@ -110,6 +120,11 @@
 </Card>
 
 <style>
+
+    .readMoreButtondiv {
+        display: flex;
+        justify-content: center;
+    }
 
     .whitebutton {
         display: flex;
@@ -132,10 +147,11 @@
     }
 
     .actionbuttons {
-        padding-top: 7%;
+        padding-top: 2rem;
         display: flex;
         flex-direction: row;
-        justify-content: space-around;
+        justify-content: right;
+        gap: 1rem;
     }
 
     .tagstyle {
@@ -161,14 +177,14 @@
     }
     .num-rating{
         position: absolute;
-        top: -20px;
-        left: -15px;
-        width: 50px;
-        height: 50px;
+        top: -10px;
+        left: -10px;
+        width: 40px;
+        height: 40px;
         background: #e14b00;
         color: #fff;
         border: 1px #eee solid;
-        border-radius: 50%;
+        border-radius: 25%;
         font-size: 11px;
         display: flex; /* Use flexbox to center content */
         flex-direction: column; /* Stack the elements vertically */
@@ -180,8 +196,8 @@
         display: flex;
         color: white;
         background: #e14b00;
-        padding: 8px 8px 8px 8px;
-        border-radius: 0.5rem;
+        padding: 4px 8px 4px 8px;
+        border-radius: 0.25rem;
         align-items: center;
         gap: 0.5rem;
     }
@@ -190,8 +206,8 @@
         display: flex;
         color: white;
         background: var(--accent);
-        padding: 8px 8px 8px 8px;
-        border-radius: 0.5rem;
+        padding: 4px 8px 4px 8px;
+        border-radius: 0.25rem;
         align-items: center;
         gap: 0.5rem;
     }
@@ -201,5 +217,19 @@
         word-wrap: break-word;
         overflow: hidden;
         white-space: pre-wrap;
+
+        --mask: linear-gradient(to bottom, 
+        rgba(0,0,0, 1) 0,   
+        rgba(0,0,0, 1) 40%, 
+        rgba(0,0,0, 0) 95%,
+        rgba(0,0,0, 0) 0
+        ) 100% 50% / 100% 100% repeat-x;
+        -webkit-mask: var(--mask); 
+        mask: var(--mask);
+        }
+
+    .str-review.no-mask {
+        -webkit-mask: none;
+        mask: none;
     }
 </style>
