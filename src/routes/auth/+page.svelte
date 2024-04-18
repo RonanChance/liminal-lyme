@@ -6,6 +6,7 @@
     import { fly } from 'svelte/transition'
     import { Button, Checkbox, Label, Input } from 'flowbite-svelte';
     import { getCookie } from '../../lib/components/constants';
+    import NavigationBar from '../../lib/components/NavigationBar.svelte';
     
     let animate = false;
     onMount(() => {
@@ -69,6 +70,7 @@
 </script>
 
 <TopBanner />
+<NavigationBar currentTab="none"/>
 
 
 {#if animate}
@@ -118,6 +120,15 @@
 {/if}
 
 <style>
+
+@media (max-width: 768px) {
+    .divbg {
+        margin-top: 0rem;
+        margin-left: 0rem;
+        margin-right: 0rem;
+        margin-bottom: 0rem;
+    }
+}
 
 ul {
     list-style-type: disc;
