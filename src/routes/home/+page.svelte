@@ -76,9 +76,14 @@
 <style>
 
     .entirepage {
-        height: 100vh;
         display: flex;
         flex-direction: column;
+        height: 100vh;
+    }
+
+    .divbg {
+        flex-grow: 1;
+        overflow-y: auto;
     }
 
     @media (max-width: 768px) {

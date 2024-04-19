@@ -54,6 +54,9 @@
 
         const requestOptions = {
             method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
             body: JSON.stringify({ email: data.meta.email, token: data.token })
         };
         await fetch('api/auth', requestOptions);

@@ -80,6 +80,9 @@
     async function getCredits(subtract = false) {
         const requestOptions = {
             method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
             body: JSON.stringify({ email: email, subtract: subtract })
         };
         const response = await fetch('api/credits', requestOptions);
@@ -114,7 +117,10 @@
 
     async function getThread() {
         const requestOptions = {
-            method: 'GET'
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json'
+            }
         };
         const response = await fetch('api/thread/create', requestOptions);
         const data = await response.json();
@@ -125,6 +131,9 @@
     async function createMessage(threadId) {
         const requestOptions = {
             method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
             body: JSON.stringify({ message: user_search, threadId: threadId })
         };
         const response = await fetch('api/message/create', requestOptions);
@@ -137,6 +146,9 @@
         console.log('passing run: ', threadId);
         const requestOptions = {
             method: 'GET',
+            headers: {
+              'Content-Type': 'application/json'
+            }
         };
         const response = await fetch('api/run/create?threadId=' + threadId, requestOptions);
         const data = await response.json();
@@ -150,6 +162,9 @@
         console.log('checking run: ', runId);
         const requestOptions = {
             method: 'GET',
+            headers: {
+              'Content-Type': 'application/json'
+            }
         };
         const response = await fetch(url, requestOptions);
         const data = await response.json();
@@ -160,6 +175,9 @@
     async function viewThread(threadId) {
         const requestOptions = {
             method: 'GET',
+            headers: {
+              'Content-Type': 'application/json'
+            }
         };
         const response = await fetch('api/message/list?threadId=' + threadId, requestOptions);
         const data = await response.json();
