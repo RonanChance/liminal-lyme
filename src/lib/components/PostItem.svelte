@@ -6,7 +6,7 @@
     import Modal from './Modal.svelte';
     import { chronology_usernames } from '../../lib/components/constants.js'
 
-    export let item
+    export let item;
     let showModal = false;
     let showEntirePost = false;
 	let clickedItem = "NA";
@@ -55,6 +55,14 @@
             showModal = true;
         }
     }
+
+    function scrollToTop(cardId) {
+        const card = document.getElementById(cardId);
+        if (card) {
+            card.scrollIntoView({behavior: 'smooth'});
+        }
+    }
+    console.log(item.id)
 </script>
 
 <Modal bind:showModal>
@@ -72,7 +80,7 @@
 </Modal>
 
 <Card>
-    <div class="str-name-subreddit-date">
+    <div class="str-name-subreddit-date" id={item.id}>
         <div class="div">@{item.author}</div>
         <div class="div">r/{item.subreddit}</div>
         <div class="div">{formatDate(item.date)}</div>
@@ -108,8 +116,8 @@
             <button class="showEntirePostButton" on:click={() => {showEntirePost = true}}>Read More </button>
         </div>
     {:else}
-        <div class="readMoreButtondiv">
-            <button class="showEntirePostButton" on:click={() => {showEntirePost = false}}>Read Less </button>
+        <div class="readLessButtondiv">
+            <button class="showEntirePostButton" on:click={() => {scrollToTop(item.id); setTimeout(() => { showEntirePost = false; }, 1000);}}>Read Less </button>
         </div>
     {/if}
     <div class="actionbuttons">
@@ -127,6 +135,11 @@
 <style>
 
     .readMoreButtondiv {
+        display: flex;
+        justify-content: center;
+    }
+
+    .readLessButtondiv {
         display: flex;
         justify-content: center;
     }
