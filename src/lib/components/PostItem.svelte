@@ -32,25 +32,26 @@
     // Function to handle clicks on medication spans
     function handleClick(event) {
         const target = event.target;
+        
+        // Compute keyword by reversing and replacing tag
         let keyword = target.classList[0].split('').reverse().join('');
         keyword = keyword.replace(/_/g, "");
-        keyword = keyword.replace(/-/g, " ")
-        if (target.classList.contains('medication')) {
-            const medication = target.textContent.trim();
-            console.log(keyword);
-            clickedItem = keyword;
+        keyword = keyword.replace(/-/g, " ");
+        const special_terms_dict = {"Cat s Claw": "Cat's Claw",
+                                    "Lion s Mane": "Lion's Mane",
+                                    "St  John s wort": "St. John's Wort",
+                                    };
+        if (special_terms_dict[keyword]){
+            keyword = special_terms_dict[keyword]
+        }
+        clickedItem = keyword;
+
+        // Only show the modal when it is a clickable word (user won't accidentally popup random words)
+        if (target.classList.contains('medication') || target.classList.contains('supplement') || target.classList.contains('condition')) {
             showModal = true;
         }
-        if (target.classList.contains('supplement')) {
-            const supplement = target.textContent.trim();
-            console.log(keyword);
-            clickedItem = keyword;
-            showModal = true;
-        }
-        if (target.classList.contains('condition')) {
-            const condition = target.textContent.trim();
-            console.log(keyword);
-            clickedItem = keyword;
+        else if (target.classList.contains('tagstyle')) {
+            clickedItem = target.textContent.trim();
             showModal = true;
         }
     }
@@ -78,17 +79,17 @@
     </div>
     <div class="tags">
         {#each item.conditions as con}
-            <div class="tagstyle" style="background-color: var(--condition_highlight); display: inline-block;">{con}</div>
+            <div class="tagstyle" style="background-color: var(--condition_highlight); display: inline-block;" on:click|preventDefault={handleClick}>{con}</div>
         {/each}
     </div>
     <div class="tags">
         {#each item.medications as med}
-            <div class="tagstyle" style="background-color: var(--medication_highlight); display: inline-block;">{med}</div>
+            <div class="tagstyle" style="background-color: var(--medication_highlight); display: inline-block;" on:click|preventDefault={handleClick}>{med}</div>
         {/each}
     </div>
     <div class="tags">
         {#each item.supplements as sup}
-            <div class="tagstyle" style="background-color: var(--supplement_highlight); display: inline-block;">{sup}</div>
+            <div class="tagstyle" style="background-color: var(--supplement_highlight); display: inline-block;" on:click|preventDefault={handleClick}>{sup}</div>
         {/each}
     </div>
     <div class="num-rating">
@@ -105,6 +106,10 @@
     {#if !showEntirePost}
         <div class="readMoreButtondiv">
             <button class="showEntirePostButton" on:click={() => {showEntirePost = true}}>Read More </button>
+        </div>
+    {:else}
+        <div class="readMoreButtondiv">
+            <button class="showEntirePostButton" on:click={() => {showEntirePost = false}}>Read Less </button>
         </div>
     {/if}
     <div class="actionbuttons">
@@ -151,7 +156,7 @@
         display: flex;
         flex-direction: row;
         justify-content: right;
-        gap: 1rem;
+        gap: 0.5rem;
     }
 
     .tagstyle {
@@ -205,7 +210,7 @@
     .chronology-link {
         display: flex;
         color: white;
-        background: var(--accent);
+        background: var(--blue);
         padding: 4px 8px 4px 8px;
         border-radius: 0.25rem;
         align-items: center;
