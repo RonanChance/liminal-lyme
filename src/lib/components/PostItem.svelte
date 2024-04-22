@@ -113,11 +113,11 @@
     </div>
     {#if !showEntirePost}
         <div class="readMoreButtondiv">
-            <button class="showEntirePostButton" on:click={() => {showEntirePost = true}}>Read More </button>
+            <button class="showPostButton" on:click={() => {showEntirePost = true}}>Read More </button>
         </div>
     {:else}
         <div class="readLessButtondiv">
-            <button class="showEntirePostButton" on:click={() => {scrollToTop(item.id); setTimeout(() => { showEntirePost = false; }, 1000);}}>Read Less </button>
+            <button class="showPostButton" on:click={() => {scrollToTop(item.id); setTimeout(() => { showEntirePost = false; }, 1000);}}>Read Less </button>
         </div>
     {/if}
     <div class="actionbuttons">
@@ -142,6 +142,11 @@
     .readLessButtondiv {
         display: flex;
         justify-content: center;
+    }
+
+    .showPostButton {
+        padding-top: 0.5rem;
+        font-style: italic;
     }
 
     .whitebutton {
