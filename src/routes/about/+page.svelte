@@ -79,7 +79,7 @@
             <div class="column">
                 {#each illnesses.slice(0, Math.ceil(illnesses.length/3)) as item}
                     <li>
-                        <a href={wikipedia_links_illnesses[item]} target="_blank" rel="noreferrer" class="highlighted-word">{item}</a>
+                        <a href={wikipedia_links_illnesses[item.toUpperCase()]} target="_blank" rel="noreferrer" class="highlighted-word">{item}</a>
                     </li>
                 {/each}
             </div>
@@ -87,7 +87,7 @@
             <div class="column">
                 {#each illnesses.slice(Math.ceil(illnesses.length/3), Math.ceil(illnesses.length*2/3)) as item}
                     <li>
-                        <a href={wikipedia_links_illnesses[item]} target="_blank" rel="noreferrer" class="highlighted-word">{item}</a>
+                        <a href={wikipedia_links_illnesses[item.toUpperCase()]} target="_blank" rel="noreferrer" class="highlighted-word">{item}</a>
                     </li>
                 {/each}
             </div>
@@ -95,7 +95,7 @@
             <div class="column">
                 {#each illnesses.slice(Math.ceil(illnesses.length*2/3)) as item}
                     <li>
-                        <a href={wikipedia_links_illnesses[item]} target="_blank" rel="noreferrer" class="highlighted-word">{item}</a>
+                        <a href={wikipedia_links_illnesses[item.toUpperCase()]} target="_blank" rel="noreferrer" class="highlighted-word">{item}</a>
                     </li>
                 {/each}
             </div>
@@ -210,6 +210,7 @@
         margin-bottom: 2rem;
         color: white;
         font-style: italic;
+        font-size: 2rem;
 
         text-decoration: underline;
         text-decoration-thickness: 1px;
@@ -219,7 +220,7 @@
     }
 
     p {
-        font-size: medium;
+        font-size: 1.25rem;
         color: white;
     }
 
