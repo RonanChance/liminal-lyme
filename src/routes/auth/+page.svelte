@@ -3,10 +3,11 @@
     import { browser } from '$app/environment';
     import TopBanner from '../../lib/components/TopBanner.svelte'
     import PocketBase from 'pocketbase';
-    import { fly } from 'svelte/transition'
+    import { fly, fade } from 'svelte/transition'
     import { Button, Checkbox, Label, Input } from 'flowbite-svelte';
     import { getCookie } from '../../lib/components/constants';
     import NavigationBar from '../../lib/components/NavigationBar.svelte';
+    import Footer from '../../lib/components/Footer.svelte';
     
     let animate = false;
     onMount(() => {
@@ -110,15 +111,15 @@
   <div class="textbox">
     <h3>Signed In Users Can:</h3>
     <ul>
-      <li>Chat with an OpenAI model that knows 3.5k+ tickborne disease experiences</li>
+      <li>Chat with an OpenAI model that knows 9.5k+ tickborne disease experiences</li>
       <li>Search the entire database for medication/supplement combinations</li>
       <!-- <li>Contribute experiences to the repository</li> -->
       <li>Join the GroupMe & connect with others in the tickborne disease community</li>
     </ul>
   </div>
-    
-  <div class="paddingbottom"></div>
-
+</div>
+<div class="footerDiv" in:fade|global={{delay: 1100, duration: 1000 }}>
+  <Footer/>
 </div>
 {/if}
 
@@ -160,6 +161,7 @@ li {
 .textbox {
       margin-left: 10%;
       margin-right: 10%;
+      padding-bottom: 3rem;
   }
 
 .buttondiv {

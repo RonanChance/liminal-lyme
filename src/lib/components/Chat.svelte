@@ -341,8 +341,6 @@
         display: flex;
         flex-direction: row;
         justify-content: center;
-        margin-top: 15px;
-        margin-bottom: 20px;
     }
 
     .rebootbutton {

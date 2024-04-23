@@ -1,4 +1,5 @@
 <script>
+    import Footer from "../../lib/components/Footer.svelte";
     import {EnvelopeSolid, GithubSolid, LinkedinSolid} from 'flowbite-svelte-icons'
     import { onMount } from 'svelte';
     import TopBanner from '../../lib/components/TopBanner.svelte'
@@ -190,8 +191,7 @@
         <br/><br/>
     </div>
 </div>
-
-<div class="paddingbottom"></div>
+<Footer />
 {/if}
 
 
@@ -224,6 +224,10 @@
         color: white;
     }
 
+    a {
+        font-size: 1.25rem;
+    }
+
     .textbox {
         padding-top: 1rem;
         padding-bottom: 2rem;
@@ -252,11 +256,11 @@
     @media (max-width: 768px) {
 
         p {
-            font-size: 14pt;
+            font-size: 1.25rem;
         }
 
         a {
-            font-size: 14pt;
+            font-size: 1.25rem;
         }
 
         .columnscontainer {

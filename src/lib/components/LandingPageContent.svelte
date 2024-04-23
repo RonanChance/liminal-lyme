@@ -143,7 +143,6 @@
         padding-top: 5%;
         max-width: 90%;
         margin: auto;
-        padding-bottom: 5%;
     }
 
     .numbersdiv {
@@ -189,10 +188,6 @@
     }
 
     @media (max-width: 768px) {
-
-        .disclaimer-container {
-            padding-bottom: 10%;
-        }
         
         .buttondiv {
             padding-top: 5%;
