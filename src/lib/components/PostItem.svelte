@@ -166,7 +166,7 @@
         font-weight: bold;
         font-size: 1.5rem;
         text-align: center;
-        color: #fff;
+        color: #000000;
     }
 
     .actionbuttons {
@@ -228,7 +228,7 @@
     .chronology-link {
         display: flex;
         color: white;
-        background: var(--blue);
+        background: var(--accent);
         padding: 4px 8px 4px 8px;
         border-radius: 0.25rem;
         align-items: center;

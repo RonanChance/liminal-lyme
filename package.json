@@ -1,5 +1,5 @@
 {
-  "name": "OpenRXN",
+  "name": "Liminal lyme",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -23,6 +23,7 @@
   },
   "type": "module",
   "dependencies": {
+    "@fontsource-variable/league-spartan": "^5.0.20",
     "openai": "^4.24.3",
     "pocketbase": "^0.18.0"
   }

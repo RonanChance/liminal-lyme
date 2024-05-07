@@ -24,15 +24,15 @@
 <div class="navbar">
     <div>
       <NavBrand href="/">
-        <img src="/logo.png" class="mainlogo" alt="OpenRXN" />
+        <img src="/logo.svg" class="mainlogo" alt="OpenRXN" />
       </NavBrand>
     </div>
     <nav class="nav-links">
       {#if email}
         <button href="/logout" on:click={() => {changeSelected("/logout");}} style="text-decoration: {selected === "logout" ? "underline" : "none"}">Logout</button>
       {/if}
-      <button href="/home" on:click={() => {changeSelected("/home");}} style="text-decoration: {selected === "home" ? "underline" : "none"}">Home</button>
-      <button href="/about" on:click={() => {changeSelected("/about");}} style="text-decoration: {selected === "about" ? "underline" : "none"}">About</button>
+      <button href="/home" on:click={() => {changeSelected("/home");}} style="text-decoration: {selected === "home" ? "underline" : "none"}">HOME</button>
+      <button href="/about" on:click={() => {changeSelected("/about");}} style="text-decoration: {selected === "about" ? "underline" : "none"}">ABOUT</button>
     </nav>
 </div>
 
@@ -40,7 +40,7 @@
     .nav-links {
       display: flex;
       gap: 1rem;
-      color: var(--offwhite);
+      color: var(--darkbackground);
       font-weight: 600;
     }
 
@@ -48,7 +48,7 @@
       position: sticky;
       top: 0px;
       z-index: 1;
-      background: var(--darkbackgroundblue);
+      background: var(--white);
 
       display: flex;
       align-items: center;

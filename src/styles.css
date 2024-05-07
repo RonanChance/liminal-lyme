@@ -1,12 +1,13 @@
 :root {
-    --blue: #102c4c;
-    --offwhite: #f0f0f0;
-    --accent: #42bade;
-    --accent_highlight: #42bade5a;
-    --bluegray: #436e9edb;
-    --darkbackgroundblue: #09141F;
-    --lightbackgroundblue: rgba(66, 140, 222, 0.13);
+    --accent: #82ffb2;
+    --darkbackground: #132f27;
+    --lightbackground: #2f4840;
     --gray: #82868e;
+
+    --accent_highlight: #42bade5a;
+
+    --black: #000;
+    --white: #ebebeb;
 
     --condition: #ffbb00;
     --medication: #398bd3;
@@ -22,37 +23,45 @@
 }
 
 * {
+    font-family: 'League Spartan Variable', sans-serif;
 	box-sizing: border-box;
 	margin: 0;
 	padding: 0;
 }
 
+.highlighted-word {
+    color: transparent;
+    text-transform: uppercase;
+    -webkit-text-stroke: 2px var(--white);
+}
 
 h1 {
-    color: white;
-	font-size: 60pt;
+    color: var(--white);
+    font-size: 60pt;
+    font-weight: bold;
 }
 
 h2 {
-    color: white;
-	font-size: 22pt;
+    color: var(--white);
+	font-size: 24pt;
+    font-weight: 100;
 }
 
 h3 {
-    color: white;
+    color: var(--white);
 	font-size: 18pt;
-	font-weight: normal;
+	font-weight: 400;
 }
 
 p {
-    color: white;
+    color: var(--white);
     font-size: 10pt;
 }
 
 body {
-    font-family: lato, sans-serif;
+    /* font-family: lato, sans-serif; */
     /* font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; */
-    background-image: url("lib/assets/background.svg");
+    background-color: var(--darkbackground);
     backdrop-filter: blur(5px);
     min-height: 100%;
 }
@@ -64,10 +73,6 @@ html {
 
 ul {
 	list-style: none;
-}
-
-.highlighted-word {
-    color: var(--accent);
 }
 
 .container {
@@ -90,15 +95,20 @@ ul {
     padding-bottom: 2%;
   }
 
+.landing-content {
+    background-color: #000;
+}
+
 .divbg {
-    margin-left: 15%;
-    margin-right: 15%;
-    background: linear-gradient(135deg, rgba(14, 43, 74, 0.613), rgba(17, 21, 34, 0.4));
-    backdrop-filter: blur(50px);
-    -webkit-backdrop-filter: blur(50px);
-    border-radius: 0.5rem;
-    border:1px solid rgba(255, 255, 255, 0.18);
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    background-color: var(--darkbackground);
+    /* margin-left: 15%; */
+    /* margin-right: 15%; */
+    /* background: linear-gradient(135deg, rgba(199, 208, 217, 0.292), rgba(17, 21, 34, 0.4)); */
+    /* backdrop-filter: blur(50px); */
+    /* -webkit-backdrop-filter: blur(50px); */
+    border-radius: 0.25rem;
+    /* border:1px solid rgba(255, 255, 255, 0.18); */
+    /* box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); */
 }
 
 .highlight {
@@ -106,10 +116,10 @@ ul {
 }
 
 .whitebutton {
-    font-size: 17pt;
+    font-size: 18pt;
     font-weight: bold;
-    background-color: var(--offwhite);
-    color: var(--blue);
+    background-color: var(--white);
+    color: var(--black);
     
     padding-top: 0.75rem;
     padding-bottom: 0.75rem;
@@ -118,28 +128,33 @@ ul {
 
     border-radius: 0.5rem;
     position: relative;
+    border: 2px solid black;
 
-    transition: 0.05s;
-    transition-property: box-shadow;
-    box-shadow: 0 0 8px var(--accent);
+    /* transition: 0.05s; */
+    /* transition-property: box-shadow; */
+    /* box-shadow: 0 0 8px var(--black); */
 }
   
 .whitebutton:hover {
-    box-shadow: 0 0 5px var(--accent),
-                0 0 10px var(--accent),
-                0 0 15px var(--accent),
-                0 0 25px var(--accent);
+    box-shadow: 0 0 5px var(--black),
+                0 0 5px var(--black),
+                0 0 10px var(--black),
+                0 0 15px var(--black);
   }
 
 @media (max-width: 768px) {
 
+    .highlighted-word {
+        -webkit-text-stroke: 1px var(--white);
+    }
+
     .whitebutton {
-        font-size: 13pt;
+        font-size: 15pt;
     }
 
     .divbg {
-        margin-left: 2%;
-        margin-right: 2%;
+        /* margin-left: 2%; */
+        /* margin-right: 2%; */
     }
 
     .Accordion-container {
@@ -153,17 +168,17 @@ ul {
     }
 
     h1 {
-        font-size: 32pt;
+        font-size: 26pt;
         margin: 0 auto;
     }
     
     h2 {
-        font-size: 15pt;
+        font-size: 20pt;
         margin: 0 auto;
     }
     
     h3 {
-        font-size: 13pt;
+        font-size: 15pt;
         margin: 0 auto;
     }
 

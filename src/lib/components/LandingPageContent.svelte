@@ -27,44 +27,44 @@
     </h3>
     <Popover class="w-64 text-sm font-light" triggeredBy="#info-button" data-popper-placement="left">This research is currently focused on tickborne disease data from Reddit, but will expand in the future</Popover>
 
-    <div class="divbg" in:fly={{y:50, delay: 1000, duration: 1500}}>
+    <div class="landing-content" in:fly={{y:50, delay: 1000, duration: 1500}}>
         <div class="info-row">
-            <div class="imgdiv left" in:blur={{delay: 1000, duration: 1500}}>
+            <div class="imgdiv" in:blur={{delay: 1000, duration: 1500}}>
                 <img src="/bacteria_images/img1.png" alt="img1">
             </div>
-            <div class="text-info right" in:blur={{delay: 1000, duration: 1500}}>
+            <div class="text-info" in:blur={{delay: 1000, duration: 1500}}>
                 <strong>Search</strong> 
                 Query our database to find tickborne illness experiences
             </div>
         </div>
         
         <div class="info-row">
-            <div class="text-info left" in:blur={{delay: 1000, duration: 1500}}>
-                <strong>Learn</strong> 
-                Find treatment ideas with an AI model that knows conventional and alternative treatments
-            </div>
-            <div class="imgdiv right" in:blur={{delay: 1000, duration: 1500}}>
+            <div class="imgdiv" in:blur={{delay: 1000, duration: 1500}}>
                 <img src="/bacteria_images/img2.png" alt="img2">
+            </div>
+            <div class="text-info" in:blur={{delay: 1000, duration: 1500}}>
+                <strong>Learn</strong> 
+                Find treatment ideas based on the medications and supplements that help others
             </div>
         </div>
 
         <div class="info-row">
-            <div class="imgdiv left" in:blur={{delay: 1000, duration: 1500}}>
+            <div class="imgdiv" in:blur={{delay: 1000, duration: 1500}}>
                 <img src="/bacteria_images/img3.png" alt="img3">
             </div>
-            <div class="text-info right" in:blur={{delay: 1000, duration: 1500}}>
+            <div class="text-info" in:blur={{delay: 1000, duration: 1500}}>
                 <strong>Connect</strong>
                 Find users with similar reactions and experiences
             </div>
         </div>
 
         <div class="info-row">
-            <div class="text-info left" in:blur={{delay: 1000, duration: 1500}}>
-                <strong>Return</strong>
-                Check back often as we add more medications, supplements, and treatments
-            </div>
-            <div class="imgdiv right" in:blur={{delay: 1000, duration: 1500}}>
+            <div class="imgdiv" in:blur={{delay: 1000, duration: 1500}}>
                 <img src="/bacteria_images/img4.png" alt="img4">
+            </div>
+            <div class="text-info" in:blur={{delay: 1000, duration: 1500}}>
+                <strong>Return</strong>
+                Check back often as we add medications, supplements, and treatments
             </div>
         </div>
     
@@ -100,43 +100,46 @@
 
 <style>
 
+    .landing-content {
+        background-color: var(--lightbackground);
+        display: flex;
+        flex-direction: row;
+    }
+
+    .info-row {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-left: 2%;
+        padding-right: 2%;
+        padding-top: 5%;
+        padding-bottom: 5%;
+    }
+
+    .text-info {
+        max-width: 75%;
+        padding-left: 4%;
+        padding-right: 4%;
+
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        color: var(--white);
+        font-size: 14pt;
+    }
+
     strong {
         font-size: 20pt;
     }
 
     .imgdiv {
-        min-width: 50%;
         max-width: 50%;
-        height: auto;
-        width: auto;
     }
 
     .content-container {
         display: flex;
         flex-direction: column;
         gap: 1.5rem;
-    }
-
-    .text-info {
-        max-width: 50%;
-        padding-left: 4%;
-        padding-right: 4%;
-
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        color: white;
-        font-size: 12pt;
-    }
-
-    .info-row {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-around;
-        padding-left: 2%;
-        padding-right: 2%;
-        padding-top: 5%;
-        padding-bottom: 5%;
     }
 
     .disclaimer-container {
@@ -153,26 +156,23 @@
     }
 
     hr {
-        opacity: 0.5;
+        /* opacity: 0.5; */
+        background-color: var(--white);
         width: 80%;
         margin: auto;
     }
 
     .transparenttext {
         padding-top: 2%;
-        color: white;
+        color:var(--accent);
         opacity: 0.5;
+        font-size: 25pt;
     }
 
     .numbertext {
-        color: white;
+        color: var(--white);
         font-weight: bold;
         font-size: 50pt;
-    }
-
-    .divbg {
-        max-width: 50%;
-        margin: auto;
     }
 
     .buttondiv {
@@ -188,6 +188,18 @@
     }
 
     @media (max-width: 768px) {
+
+        .transparenttext {
+            font-weight: 5pt;
+        }
+
+        .landing-content {
+            flex-direction: column;
+        }
+
+        .info-row {
+            flex-direction: row;
+        }
         
         .buttondiv {
             padding-top: 5%;

@@ -22,12 +22,11 @@
 
 <style>
 	dialog {
-		background-color: var(--darkbackgroundblue);
-		width: 70%;
-		position: fixed;
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -50%);
+		background-color: #fff;
+		width: 100%;
+		position: fixed; /* Keep the dialog box fixed at the bottom of the screen */
+		bottom: 0; /* Position the dialog box at the bottom of the screen */
+		left: 0;
 		border-radius: 0.5rem;
 		border: none;
 		padding: 0;

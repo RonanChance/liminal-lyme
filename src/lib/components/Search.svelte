@@ -181,7 +181,7 @@
             
 			<div class="togglebuttongroup">
 				{#each slicedItems as item}
-					<button class="togglebutton" on:click={() => handleSelection(item)} style="background-color: {selectedItems.includes(item) ? (tag_counts[item]['label'] === 'SUP' ? 'var(--supplement)' : 'var(--medication)') : 'var(--offwhite)'}; color: {selectedItems.includes(item) ? 'var(--offwhite)' : '#000'}; font-weight: {selectedItems.includes(item) ? 'bold' : 'normal'};">
+					<button class="togglebutton" on:click={() => handleSelection(item)} style="background-color: {selectedItems.includes(item) ? (tag_counts[item]['label'] === 'SUP' ? 'var(--supplement)' : 'var(--medication)') : 'var(--white)'}; color: {selectedItems.includes(item) ? 'var(--white)' : '#000'}; font-weight: {selectedItems.includes(item) ? 'bold' : 'normal'};">
 						{item}
 					</button>				
 				{/each}
@@ -221,21 +221,20 @@
 				</div>
 					<div class="togglebuttongroup">
 						{#each illnesses as illness}
-							<button on:click={() => {handleAdv(illness)}} style="text-decoration: { excludedConditions.includes(illness) ? 'line-through' : 'none'}; box-shadow: { requiredConditions.includes(illness) ? 'inset 0 0 10px var(--accent)' : 'none'}; font-weight: { requiredConditions.includes(illness) ? 'bold' : 'normal'}; background-color: { excludedConditions.includes(illness) ? 'var(--blue)' : 'var(--bluegray)'};" class="advancedbutton">{illness}</button>
+							<button on:click={() => {handleAdv(illness)}} style="text-decoration: { excludedConditions.includes(illness) ? 'line-through' : 'none'}; box-shadow: { requiredConditions.includes(illness) ? 'inset 0 0 10px var(--accent)' : 'none'}; font-weight: { requiredConditions.includes(illness) ? 'bold' : 'normal'}; background-color: { excludedConditions.includes(illness) ? 'var(--accent)' : 'var(--gray)'};" class="advancedbutton">{illness}</button>
 						{/each}
 					</div>	
 			</div>
 
 			<div style="display: flex; justify-content: center;">
-				<a href="#_" on:click={fetchDataForPostList} class="searchbutton relative flex justify-center rounded px-4 py-2.5 overflow-hidden group bg-[var(--accent)] hover:bg-gradient-to-r hover:from-bg-[var(--accent)] hover:to-bg-[var(--accent)] text-white hover:ring-2 hover:ring-offset-2 hover:ring-[var(--accent)] transition-all ease-out duration-300">
-					<span class="absolute right-0 w-8 h-32 -mt-12 transition-all duration-1000 transform translate-x-12 bg-white opacity-10 rotate-12 group-hover:-translate-x-40 ease"></span>
-					<div class="flex items-center" style="gap:8px; font-weight: bold;">
-					Search
+				<a href="#_" on:click={fetchDataForPostList} class="searchbutton relative flex justify-center rounded px-2 py-2.5 overflow-hidden group bg-[var(--white)] hover:bg-gradient-to-r hover:from-bg-[var(--accent)] hover:to-bg-[var(--accent)] text-[var(--darkbackground)] hover:ring-2 hover:ring-offset-2 hover:ring-[var(--accent)] transition-all ease-out duration-300">
+					<div class="flex items-center" style="gap:8px; font-weight: bold; font-size: 20px;">
 					{#if isLoading}
 						<Spinner size={6} color="gray" />
 					{:else}
 						<SearchOutline size="lg"/>
 					{/if}
+					Search
 					</div>
 				</a>
 			</div>
@@ -285,25 +284,26 @@
 	}
 
 	.searchcount {
-		color: white;
+		color: var(--white);
 		margin-top: 5%;
 		text-align: center;
 	}
+
 	.excludenote {
-		color: white;
+		color: var(--white);
 		text-decoration: underline;
 		margin-top: 2%;
 	}
 
 	.advancedbuttongroup {
-		color: white;
+		color: var(--white);
 		display: flex;
 		flex-wrap: wrap;
 	}
 
 	.advancedbutton {
-		color: white;
-		background-color: var(--blue);
+		color: var(--white);
+		background-color: var(--gray);
 		font-size: 11pt;
 		max-width: fit-content;
 		max-width: 90%;
@@ -342,7 +342,7 @@
 		max-height: 150px;
 		overflow-y: auto;
 		font-size: 12pt;
-		background-color: #fff;
+		background-color: var(--white);
 		border-radius: 7px;
 	}
 
@@ -359,7 +359,7 @@
 
     .infonote{
 		font-size: 17pt;
-		color: white;
+		color: var(--white);
         padding-top: 5%;
         padding-bottom: 5%;
 		text-align: center;
