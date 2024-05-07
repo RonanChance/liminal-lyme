@@ -41,14 +41,15 @@
 
   .sub-heading {
     width: 100%;
-    margin-top: 2%;
-    margin-bottom: 15pt;
+    margin-top: 50px;
   }
 
   .bold {
     font-weight: bold;
   }
+
   .rotating-text {
+    margin-top: 50px;
     text-align: center;
   }
 

@@ -8,10 +8,11 @@
 
 <style>
     .footer {
-        color: var(--white);
+        color: var(--darkbackground);
         font-size: 1.25rem;
-        background-color: var(--darkbackground);
-        padding-top: 3rem;
-        padding-bottom: 3rem;
+        background-color: var(--white);
+        margin-top: 50px;
+        padding-top: 50px;
+        padding-bottom: 50px;
     }
 </style>

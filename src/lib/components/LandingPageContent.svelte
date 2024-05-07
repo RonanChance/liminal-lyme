@@ -27,7 +27,7 @@
     </h3>
     <Popover class="w-64 text-sm font-light" triggeredBy="#info-button" data-popper-placement="left">This research is currently focused on tickborne disease data from Reddit, but will expand in the future</Popover>
 
-    <div class="landing-content" in:fly={{y:50, delay: 1000, duration: 1500}}>
+    <div class="image-content-bar" in:fly={{y:50, delay: 1000, duration: 1500}}>
         <div class="info-row">
             <div class="imgdiv" in:blur={{delay: 1000, duration: 1500}}>
                 <img src="/bacteria_images/img1.png" alt="img1">
@@ -74,16 +74,25 @@
         <hr/>
         <div class="transparenttext">Scanned Comments</div>
         <div class="numbertext">{total_scanned}</div>
+
         <hr/>
         <div class="transparenttext">Cataloged Experiences</div>
         <div class="numbertext">{total_cataloged}</div>
+        
         <hr/>
         <div class="transparenttext">Supported Medications</div>
         <div class="numbertext">{medications.length}</div>
+        
         <hr/>
         <div class="transparenttext">Supported Supplements</div>
         <div class="numbertext">{supplements.length}</div>
-        <hr/>
+    </div>
+
+    <div class="quotediv">
+        The highest form of knowledge is empathy, for it requires us to suspend our egos and live in another's world.
+        <div class="quoteattribution" style="text-align: right; font-style: normal;">
+            - Plato
+        </div>
     </div>
 
     <div class="buttondiv" style="text-align: center;">
@@ -100,20 +109,37 @@
 
 <style>
 
-    .landing-content {
+    .buttondiv {
+        margin-top: 50px;
+    }
+
+    .quotediv {
+        padding-top: 50px;
+        padding-bottom: 50px;
+        font-style: italic;
+        font-size: 40pt;
+        font-weight: 600;
+        background-color: var(--white);
+        color: var(--darkbackground);
+
+        padding-left: 15%;
+        padding-right: 15%;
+    }
+
+    .image-content-bar {
+        margin-top: 50px;
         background-color: var(--lightbackground);
         display: flex;
         flex-direction: row;
     }
 
     .info-row {
+        margin-top: 50px;
         display: flex;
         flex-direction: column;
         align-items: center;
         padding-left: 2%;
         padding-right: 2%;
-        padding-top: 5%;
-        padding-bottom: 5%;
     }
 
     .text-info {
@@ -143,27 +169,30 @@
     }
 
     .disclaimer-container {
-        padding-top: 5%;
+        display: flex;
+        flex-direction: column;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 50px;
         max-width: 90%;
-        margin: auto;
+        /* margin: auto; */
     }
 
     .numbersdiv {
         display: flex;
         flex-direction: column;
         align-items: center;
-        padding-top: 4%;
     }
 
     hr {
-        /* opacity: 0.5; */
+        opacity: 0.5;
+        margin-top: 20px;
         background-color: var(--white);
         width: 80%;
-        margin: auto;
     }
 
     .transparenttext {
-        padding-top: 2%;
+        margin-top: 25px;
         color:var(--accent);
         opacity: 0.5;
         font-size: 25pt;
@@ -175,25 +204,27 @@
         font-size: 50pt;
     }
 
-    .buttondiv {
-        padding-top: 3%;
+    .infonote {
+        margin-top: 50px;
+        max-width: 90%;
+        text-align: center;
     }
 
-    .infonote {
-        margin: auto;
-        max-width: 90%;
-        padding-top: 3%;
-        padding-bottom: 5%;
-        text-align: center;
+    .info-row:last-child {
+        margin-bottom: 50px;
     }
 
     @media (max-width: 768px) {
 
-        .transparenttext {
-            font-weight: 5pt;
+        .quotediv {
+            font-size: 21pt;
         }
 
-        .landing-content {
+        .transparenttext {
+            font-size: 20pt;
+        }
+
+        .image-content-bar {
             flex-direction: column;
         }
 
@@ -201,18 +232,6 @@
             flex-direction: row;
         }
         
-        .buttondiv {
-            padding-top: 5%;
-        }
-
-        .divbg {
-            max-width: 95%;
-            margin: auto;
-        }
-
-        .infonote {
-            padding-top: 5%;
-        }
     }
 
 </style>

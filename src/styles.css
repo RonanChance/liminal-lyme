@@ -119,7 +119,7 @@ ul {
     font-size: 18pt;
     font-weight: bold;
     background-color: var(--white);
-    color: var(--black);
+    color: var(--darkbackground);
     
     padding-top: 0.75rem;
     padding-bottom: 0.75rem;
@@ -128,7 +128,7 @@ ul {
 
     border-radius: 0.5rem;
     position: relative;
-    border: 2px solid black;
+    border: 2px solid var(--lightbackground);
 
     /* transition: 0.05s; */
     /* transition-property: box-shadow; */
@@ -136,10 +136,10 @@ ul {
 }
   
 .whitebutton:hover {
-    box-shadow: 0 0 5px var(--black),
-                0 0 5px var(--black),
-                0 0 10px var(--black),
-                0 0 15px var(--black);
+    box-shadow: 0 0 5px var(--lightbackground),
+                0 0 5px var(--lightbackground),
+                0 0 10px var(--lightbackground),
+                0 0 15px var(--lightbackground);
   }
 
 @media (max-width: 768px) {
