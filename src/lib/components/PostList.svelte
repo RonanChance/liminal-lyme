@@ -36,7 +36,7 @@
         <PostItem item={post}/>
         {#if idx < posts.length-1}
           <div class="timediv">
-            <div class="duration">
+            <div class="duration" style="color: white;">
               <ClockSolid />
               {formatDate(posts[idx].date, posts[idx+1].date)}
               Days

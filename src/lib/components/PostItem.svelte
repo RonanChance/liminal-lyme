@@ -150,7 +150,8 @@
     }
 
     .whitebutton {
-        outline: #000;
+        outline: var(--darkbackground);
+        outline-style: solid;
         outline-width: 2px;
         display: flex;
         

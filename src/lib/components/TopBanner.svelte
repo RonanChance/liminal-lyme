@@ -24,7 +24,7 @@
 <div class="navbar">
     <div>
       <NavBrand href="/">
-        <img src="/logo.svg" class="mainlogo" alt="OpenRXN" />
+        <img src="/logo.svg" class="mainlogo" alt="LiminalLyme" />
       </NavBrand>
     </div>
     <nav class="nav-links">

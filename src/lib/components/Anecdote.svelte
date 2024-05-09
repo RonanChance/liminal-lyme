@@ -93,7 +93,7 @@
         <p style="font-size: 15px;">Submitting as: <span style="color:var(--accent); font-weight: bold;">{email}</span></p>
     </div>
     {:else if submit_status === true}
-    <p style="font-size: 20px;">Thank you for contributing to the OpenRxnDatabase! Your experience has been submitted.</p>
+    <p style="font-size: 20px;">Thank you for contributing to the Liminal Lyme Database! Your experience has been submitted.</p>
     <button type="resubmit" on:click={() => {submit_status=null}} class="sign-in-button text-white bg-slate-800 hover:bg-blue-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-md w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Back</button>
 
     {/if}

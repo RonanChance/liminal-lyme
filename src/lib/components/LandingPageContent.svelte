@@ -117,7 +117,7 @@
         padding-top: 50px;
         padding-bottom: 50px;
         font-style: italic;
-        font-size: 40pt;
+        font-size: 30pt;
         font-weight: 600;
         background-color: var(--white);
         color: var(--darkbackground);

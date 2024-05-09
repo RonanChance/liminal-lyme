@@ -1,8 +1,8 @@
-# OpenRXN
+# Liminal Lyme
 
 ![Website Screnshot](./static/websitedemo.png)
 
-## OpenRXN is crowd-sourcing medication reaction narratives to expedite your recovery.
+## Liminal Lyme is crowd-sourcing medication reaction narratives to expedite your recovery.
 
 ## Visit [LiminalLyme.com](https://LiminalLyme.com) to try it out!
 

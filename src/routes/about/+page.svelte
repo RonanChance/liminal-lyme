@@ -15,17 +15,32 @@
 
 {#if animate}
 <div class="divbg" in:fly|global={{y: 30, delay: 50, duration: 1000 }}>
-    <div class="textbox" id="what_is_openrxn">
+
+    <div class="textbox" id="what_does_liminal_lyme_mean">
+        <h2 style="text-decoration: none; font-style: italic; margin-bottom: 0px;">Lim·​i·nal</h2>
+        <p class="text-center">relating to, or being an intermediate state, phase, or condition</p>
+        <p style="margin-top: 40px;">
+            In anthropology, <span style="font-style: italic;">liminality</span> is the quality of ambiguity or disorientation that occurs in the middle stage of a rite of passage.
+            <br /><br />
+            The chronic symptoms from tickborne infection have left many of us in a state of ambiguity as we continue to be misunderstood by conventional medicine. 
+        </p>
+        <!-- <p style="margin-top: 40px;">
+            This website is intended to support individuals find supplement, medication, and other therapy ideas.  
+        </p> -->
+    </div>
+
+
+    <div class="textbox" id="what_is_liminal_lyme">
         <h2>What is <span class="highlighted-word" style="font-weight:900; font-style:normal">Liminal</span> Lyme?</h2>
         <p>
             This website makes the reactions people experience during tickborne disease treatment accessible to you.
-            <br/><br/>Medical data often lacks the nuanced information that is discernable through personal narrative, and we provide access to relevant narratives with the push of a button.
+            <br/><br/>Medical data and standardized protocols often lack the nuanced information that is discernable through personal narrative. Our goal is to provide you quick access to these narratives.
             <br/><br/>We hope that this data provides a better basis of understanding for your own healthcare.
         </p>
     </div>
 
-    <!-- <div class="textbox" id="what_does_openrxn_mean">
-        <h2>What does <span class="highlighted-word" style="font-weight:700">"OpenRXN"</span> mean?</h2>
+    <!-- <div class="textbox" id="what_does_liminal_lyme_mean">
+        <h2>What does <span class="highlighted-word" style="font-weight:700">"liminal"</span> mean?</h2>
         <p>
             Good question! The medical abbreviation <a href="https://en.wikipedia.org/wiki/List_of_medical_abbreviations:_R" target="_blank" rel="noreferrer" class="highlighted-word"> RXN </a> means <a href="https://en.wikipedia.org/wiki/List_of_medical_abbreviations:_R" target="_blank" rel="noreferrer" class="highlighted-word"> reaction</a>. 
             <br/><br/>We provide a search tool, open to anyone, for discovering the reactions people experience during treatment. Hence the term Open<a href="https://en.wikipedia.org/wiki/List_of_medical_abbreviations:_R" target="_blank" rel="noreferrer" class="highlighted-word">RXN</a>.
@@ -36,7 +51,8 @@
         <h2>What is the <span class="highlighted-word" style="font-weight:900; font-style:normal">Inspiration</span> for this site?</h2>
         <p>
             I contracted Rocky Mountain Spotted Fever and Lyme Disease during a trip to North Carolina in December 2021 which led to severe illness. 
-            My recovery took over two years and involved various antibiotics and supplements. Having spent many hours researching and reading tickborne disease content in my pursuit of health, I often found people's firsthand experiences to be the most relatable and insightful.
+            My recovery has taken over two years and involved various antibiotics, supplements, and therapies. 
+            <br /><br />Having spent many hours researching and reading tickborne disease content in my pursuit of health, I often found people's firsthand experiences to be the most relatable and insightful.
             <br/><br/>I wished I could compile all these stories to see how others managed their symptoms and medications.
             This website is something I wanted during my acute phase of sickness, and I hope it serves you well.
         </p>
@@ -106,23 +122,23 @@
     <div class="textbox" id="what_medications_are_supported">
         <h2>What <span class="highlighted-word" style="font-weight:900; font-style:normal">Medications</span> are supported?</h2>
         <p>
-            There are currently <span class="highlighted-word">{medications.length}</span> prescription medications supported.
-            You can view and contribute to the full list on the <a href={"https://github.com/RonanChance/OpenRXNData/blob/master/txts/medications.txt"} target="_blank" rel="noreferrer" class="highlighted-word">OpenRXN Data: Medications GitHub</a>.
+            There are currently <span style="font-weight:900; font-style:normal">{medications.length}</span> prescription medications supported.
+            You can view and contribute to the full list on the <a href={"https://github.com/RonanChance/liminal-lyme-data/blob/master/txts/medications.txt"} target="_blank" rel="noreferrer" class="link-word">Liminal Lyme Data: Medications GitHub</a>.
         </p>
     </div>
 
     <div class="textbox" id="what_supplements_are_supported">
         <h2>What <span class="highlighted-word" style="font-weight:900">Supplements</span> are supported?</h2>
         <p>
-            There are currently <span class="highlighted-word">{supplements.length}</span> supplements supported.
-            You can view and contribute to the full list on the <a href={"https://github.com/RonanChance/OpenRXNData/blob/master/txts/supplements.txt"} target="_blank" rel="noreferrer" class="highlighted-word">OpenRXN Data: Supplements GitHub</a>.
+            There are currently <span style="font-weight:900; font-style:normal">{supplements.length}</span> supplements supported.
+            You can view and contribute to the full list on the <a href={"https://github.com/RonanChance/liminal-lyme-data/blob/master/txts/supplements.txt"} target="_blank" rel="noreferrer" class="link-word">Liminal Lyme: Supplements GitHub</a>.
         </p>
     </div>
 
     <div class="textbox" id="how_can_i_support_this_project">
         <h2>How can I <span class="highlighted-word" style="font-weight:900">Support</span> this project?</h2>
         <p>
-            You can support this project by contributing to the <a href="https://github.com/RonanChance/OpenRXN" target="_blank" rel="noreferrer" class="highlighted-word">Github</a>.
+            You can support this project by contributing to the <a href="https://github.com/RonanChance/liminal-lyme" target="_blank" rel="noreferrer" class="link-word">Github</a>.
             <br/><br/>And reach out to me if you have any questions, recommendations, or just want to connect.
             <br/><br/>
             <br/>
@@ -131,7 +147,7 @@
             <a href="mailto:Ronan@LiminalLyme.com">
                 <EnvelopeSolid class="w-8 h-8 text-white" role="button"/>
             </a>
-            <a href="https://github.com/RonanChance/OpenRXN">
+            <a href="https://github.com/RonanChance/liminal-lyme">
                 <GithubSolid class="w-8 h-8 text-white" role="button"/>
             </a>
             <a href="https://www.linkedin.com/in/ronancdonovan">
