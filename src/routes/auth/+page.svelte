@@ -27,7 +27,7 @@
     });
 
     let oauth_selection;
-    const pb = new PocketBase('https://pb.openrxn.com');
+    const pb = new PocketBase('https://pb.liminallyme.com');
 
     async function clickHandler(event) {
         console.log("STARTNG CLICK HANDLER")

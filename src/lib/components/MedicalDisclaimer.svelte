@@ -13,6 +13,7 @@ DISCLAIMER: THIS WEBSITE DOES NOT PROVIDE MEDICAL ADVICE
         color: rgb(255, 255, 255);
     }
     p {
+        margin-top: 10px;
         font-style: italic;
         color: rgb(255, 255, 255);
     }

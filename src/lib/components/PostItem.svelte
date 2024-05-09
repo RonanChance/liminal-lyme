@@ -150,7 +150,10 @@
     }
 
     .whitebutton {
+        outline: #000;
+        outline-width: 2px;
         display: flex;
+        
         flex-direction: row;
         align-items: center;
     }
@@ -188,7 +191,7 @@
         
         margin-top: 1.5%;
         margin-right: 5px;
-        font-size: small;
+        font-size: 11pt;
     }
 
     .str-name-subreddit-date{
@@ -228,13 +231,14 @@
     .chronology-link {
         display: flex;
         color: white;
-        background: var(--accent);
+        background: var(--lightbackground);
         padding: 4px 8px 4px 8px;
         border-radius: 0.25rem;
         align-items: center;
         gap: 0.5rem;
     }
     .str-review {
+        font-size: 13pt;
         margin-top: 3%;
         max-width: 105%;
         word-wrap: break-word;

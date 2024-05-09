@@ -9,7 +9,7 @@
 
     import PocketBase from 'pocketbase';
     
-    const pb = new PocketBase("https://pb.openrxn.com/");
+    const pb = new PocketBase("https://pb.liminallyme.com/");
 
     export let email;
 

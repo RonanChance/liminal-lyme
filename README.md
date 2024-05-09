@@ -4,7 +4,7 @@
 
 ## OpenRXN is crowd-sourcing medication reaction narratives to expedite your recovery.
 
-## Visit [OpenRXN.com](https://OpenRXN.com) to try it out!
+## Visit [LiminalLyme.com](https://LiminalLyme.com) to try it out!
 
 <br/><br/>
 

@@ -11,7 +11,7 @@ export async function POST({request, cookies }) {
         return Response.json({error: 'No login info'}, {status: 400});
     }
 
-    let pb = new PocketBase('https://pb.openrxn.com');
+    let pb = new PocketBase('https://pb.liminallyme.com');
     const authData = await pb.admins.authWithPassword(SECRET_EMAIL, SECRET_PASSWORD);
     console.log(authData);
     console.log("GOING TO CHECK CREDITS")

@@ -1,7 +1,7 @@
 :root {
     --accent: #82ffb2;
     --darkbackground: #132f27;
-    --lightbackground: #2f4840;
+    --lightbackground: #2e473f;
     --gray: #82868e;
 
     --accent_highlight: #42bade5a;
@@ -55,7 +55,7 @@ h3 {
 
 p {
     color: var(--white);
-    font-size: 10pt;
+    font-size: 13pt;
 }
 
 body {
@@ -128,7 +128,7 @@ ul {
 
     border-radius: 0.5rem;
     position: relative;
-    border: 2px solid var(--lightbackground);
+    border: 2px solid var(--white);
 
     /* transition: 0.05s; */
     /* transition-property: box-shadow; */

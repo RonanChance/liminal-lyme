@@ -2,7 +2,7 @@ import { SECRET_EMAIL, SECRET_PASSWORD } from '$env/static/private'
 import PocketBase from 'pocketbase';
 
 export async function POST({request}) {
-    let pb = new PocketBase('https://pb.openrxn.com');
+    let pb = new PocketBase('https://pb.liminallyme.com');
     const authData = await pb.admins.authWithPassword(SECRET_EMAIL, SECRET_PASSWORD);
 
     const { email, subtract } = await request.json();

@@ -53,7 +53,7 @@
 
 <div class="entirepage">
     <TopBanner />
-    <NavigationBar bind:currentTab={currentTab}/>
+    <!-- <NavigationBar bind:currentTab={currentTab}/> -->
 
     {#if animate}
         <div class="divbg" in:fly|global={{y: 30, delay: 50, duration: 1000 }}>

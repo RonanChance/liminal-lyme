@@ -51,7 +51,7 @@
             <div class="column">
                 {#each subreddits.slice(0, Math.ceil(subreddits.length/3)) as subreddit}
                     <li>
-                        <a href="https://www.reddit.com/r/{subreddit}" target="_blank" rel="noreferrer" class="highlighted-word">{subreddit}</a>
+                        <a href="https://www.reddit.com/r/{subreddit}" target="_blank" rel="noreferrer" class="link-word">{subreddit}</a>
                     </li>
                 {/each}
             </div>
@@ -59,7 +59,7 @@
             <div class="column">
                 {#each subreddits.slice(Math.ceil(subreddits.length/3), Math.ceil(subreddits.length*2/3)) as subreddit}
                     <li>
-                        <a href="https://www.reddit.com/r/{subreddit}" target="_blank" rel="noreferrer" class="highlighted-word">{subreddit}</a>
+                        <a href="https://www.reddit.com/r/{subreddit}" target="_blank" rel="noreferrer" class="link-word">{subreddit}</a>
                     </li>
                 {/each}
             </div>
@@ -67,7 +67,7 @@
             <div class="column">
                 {#each subreddits.slice(Math.ceil(subreddits.length*2/3)) as subreddit}
                     <li>
-                        <a href="https://www.reddit.com/r/{subreddit}" target="_blank" rel="noreferrer" class="highlighted-word">{subreddit}</a>
+                        <a href="https://www.reddit.com/r/{subreddit}" target="_blank" rel="noreferrer" class="link-word">{subreddit}</a>
                     </li>
                 {/each}
             </div>
@@ -80,7 +80,7 @@
             <div class="column">
                 {#each illnesses.slice(0, Math.ceil(illnesses.length/3)) as item}
                     <li>
-                        <a href={wikipedia_links_illnesses[item.toUpperCase()]} target="_blank" rel="noreferrer" class="highlighted-word">{item}</a>
+                        <a href={wikipedia_links_illnesses[item.toUpperCase()]} target="_blank" rel="noreferrer" class="link-word">{item}</a>
                     </li>
                 {/each}
             </div>
@@ -88,7 +88,7 @@
             <div class="column">
                 {#each illnesses.slice(Math.ceil(illnesses.length/3), Math.ceil(illnesses.length*2/3)) as item}
                     <li>
-                        <a href={wikipedia_links_illnesses[item.toUpperCase()]} target="_blank" rel="noreferrer" class="highlighted-word">{item}</a>
+                        <a href={wikipedia_links_illnesses[item.toUpperCase()]} target="_blank" rel="noreferrer" class="link-word">{item}</a>
                     </li>
                 {/each}
             </div>
@@ -96,7 +96,7 @@
             <div class="column">
                 {#each illnesses.slice(Math.ceil(illnesses.length*2/3)) as item}
                     <li>
-                        <a href={wikipedia_links_illnesses[item.toUpperCase()]} target="_blank" rel="noreferrer" class="highlighted-word">{item}</a>
+                        <a href={wikipedia_links_illnesses[item.toUpperCase()]} target="_blank" rel="noreferrer" class="link-word">{item}</a>
                     </li>
                 {/each}
             </div>
@@ -128,7 +128,7 @@
             <br/>
         </p>
         <div class="githublinkedin">
-            <a href="mailto:Ronan@OpenRXN.com">
+            <a href="mailto:Ronan@LiminalLyme.com">
                 <EnvelopeSolid class="w-8 h-8 text-white" role="button"/>
             </a>
             <a href="https://github.com/RonanChance/OpenRXN">
@@ -146,6 +146,13 @@
 
 
 <style>
+    
+    .link-word {
+        color: var(--white);
+        text-decoration: underline;
+        text-decoration-thickness: 1px;
+    }
+
     #what_conditions_are_supported {
         scroll-margin-top: 75px;
     }

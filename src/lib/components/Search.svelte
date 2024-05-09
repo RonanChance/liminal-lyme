@@ -9,7 +9,7 @@
     import MedicalDisclaimer from './MedicalDisclaimer.svelte';
 	import { all_tags, illnesses, tag_counts } from './constants.js';
 
-	const pb = new PocketBase('https://data.openrxn.com/');
+	const pb = new PocketBase('https://data.liminallyme.com/');
     
 	let animate = false;
     onMount(() => animate = true);
@@ -219,15 +219,15 @@
 					<span style="font-weight: bold;">Bold</span>: Required <br />
 					<span style="text-decoration: line-through;">Strikethrough</span>: Excluded
 				</div>
-					<div class="togglebuttongroup">
-						{#each illnesses as illness}
-							<button on:click={() => {handleAdv(illness)}} style="text-decoration: { excludedConditions.includes(illness) ? 'line-through' : 'none'}; box-shadow: { requiredConditions.includes(illness) ? 'inset 0 0 10px var(--accent)' : 'none'}; font-weight: { requiredConditions.includes(illness) ? 'bold' : 'normal'}; background-color: { excludedConditions.includes(illness) ? 'var(--accent)' : 'var(--gray)'};" class="advancedbutton">{illness}</button>
-						{/each}
-					</div>	
+				<div class="togglebuttongroup">
+					{#each illnesses as illness}
+						<button on:click={() => {handleAdv(illness)}} style="text-decoration: { excludedConditions.includes(illness) ? 'line-through' : 'none'}; background-color: { requiredConditions.includes(illness) ? 'var(--accent)' : 'var(--lightbackground)'}; font-weight: { requiredConditions.includes(illness) ? 'bold' : 'normal'}; color: { requiredConditions.includes(illness) ? 'var(--black)' : 'var(--white)'};" class="advancedbutton">{illness}</button>
+					{/each}
+				</div>	
 			</div>
 
 			<div style="display: flex; justify-content: center;">
-				<a href="#_" on:click={fetchDataForPostList} class="searchbutton relative flex justify-center rounded px-2 py-2.5 overflow-hidden group bg-[var(--white)] hover:bg-gradient-to-r hover:from-bg-[var(--accent)] hover:to-bg-[var(--accent)] text-[var(--darkbackground)] hover:ring-2 hover:ring-offset-2 hover:ring-[var(--accent)] transition-all ease-out duration-300">
+				<a href="#_" on:click={fetchDataForPostList} class="whitebutton">
 					<div class="flex items-center" style="gap:8px; font-weight: bold; font-size: 20px;">
 					{#if isLoading}
 						<Spinner size={6} color="gray" />
@@ -276,6 +276,12 @@
 
 <style>
 
+	.whitebutton {
+		margin-top: 40px;
+		padding-left: 35px;
+		padding-right: 40px;
+	}
+
 	.clickreminder {
 		display: flex;
 		flex-direction: row;
@@ -302,8 +308,7 @@
 	}
 
 	.advancedbutton {
-		color: var(--white);
-		background-color: var(--gray);
+		color: var(--black);
 		font-size: 11pt;
 		max-width: fit-content;
 		max-width: 90%;
@@ -313,6 +318,7 @@
 	}
 
 	.togglebuttongroup {
+		margin-top: 35px;
 		display: flex;
 		gap: 0.5rem;
 		flex-wrap: wrap;
@@ -328,12 +334,12 @@
 	}
 
 	.searchbar {
-		margin-top: 5%;
+		margin-top: 35px;
 		border-radius: 0.5rem;
 		width: 100%;
 	}
 	.searchbutton {
-		margin-top: 5%;
+		margin-top: 35px;
 		border-radius: 0.5rem;
 		width: 50%;
 	}
@@ -357,11 +363,10 @@
 		flex-direction: column;
 	}
 
-    .infonote{
+    .infonote {
+		margin-top: 35px;
 		font-size: 17pt;
 		color: var(--white);
-        padding-top: 5%;
-        padding-bottom: 5%;
 		text-align: center;
     }
 
@@ -375,6 +380,7 @@
 		padding-bottom: 5%;
 	}
 	.med-disclaimer {
+		margin-top: 35px;
 		padding-bottom: 20%;
 	}
 	.toast-container {

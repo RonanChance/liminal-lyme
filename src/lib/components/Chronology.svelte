@@ -9,7 +9,7 @@
     import MedicalDisclaimer from './MedicalDisclaimer.svelte';
 	import { all_tags, illnesses, tag_counts } from './constants.js';
 
-	const pb = new PocketBase('https://data.openrxn.com/');
+	const pb = new PocketBase('https://data.liminallyme.com/');
 
     import { page } from '$app/stores'
     let username = $page.url.searchParams.get('username')
