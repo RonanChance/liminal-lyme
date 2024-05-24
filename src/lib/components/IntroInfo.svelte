@@ -21,23 +21,31 @@
 
 </script>
 
-<div class="rotating-text">
-  {#key currentWord}
-      <h1 in:fade|global={{duration: 750}}>YOUR <span class="highlighted-word">{currentWord}</span></h1>
-  {/key}
+<div class="intro-info">
+  <div class="rotating-text">
+    {#key currentWord}
+        <h1 in:fade|global={{duration: 750}}>YOUR <span class="highlighted-word">{currentWord}</span></h1>
+    {/key}
+  </div>
+
+  {#if animate}
+    <div class="sub-heading text-center">
+      <h2 in:fade|global={{y: 100, delay: 50, duration: 1000 }}>
+        <div class="inline"> 
+        Get <span class="bold">insights</span> from Reddit based on <span class="bold">conditions</span> & <span class="bold">medications</span>
+        </div>
+      </h2>
+    </div>
+  {/if}
 </div>
 
-{#if animate}
-  <div class="sub-heading text-center">
-    <h2 in:fade|global={{y: 100, delay: 50, duration: 1000 }}>
-      <div class="inline"> 
-      Get <span class="bold">insights</span> from Reddit based on <span class="bold">conditions</span> & <span class="bold">medications</span>
-      </div>
-    </h2>
-  </div>
-{/if}
-
 <style>
+
+  .intro-info {
+    padding-top: 4%;
+    padding-left: 8%;
+    padding-right: 8%;
+  }
 
   .sub-heading {
     width: 100%;
@@ -55,14 +63,5 @@
 
   .highlighted-word {
     text-align: center;
-  }
-
-  @media (max-width: 768px) {
-
-    .rotating-text {
-        display: flex;
-        padding-bottom: 2%;
-    }
-    
   }
 </style>

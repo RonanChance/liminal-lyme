@@ -7,7 +7,7 @@
     --accent_highlight: #42bade5a;
 
     --black: #000;
-    --white: #ebebeb;
+    --white: #f8f8f8; /* prev: #ebebeb */
 
     --condition: #ffbb00;
     --medication: #398bd3;
@@ -56,6 +56,7 @@ h3 {
 p {
     color: var(--white);
     font-size: 13pt;
+    font-weight: 400;
 }
 
 body {
@@ -84,11 +85,6 @@ ul {
 	display: flex;
 	align-items: center;
 	flex-direction: column;
-}
-
-.mainlogo {
-    width: 250px;
-    height: auto;
 }
 
 .text-center-h3 {
@@ -160,11 +156,6 @@ ul {
     .Accordion-container {
         width: 100%;
         margin: 0 auto;
-    }
-    
-    .mainlogo {
-        width: 150px;
-        height: auto;
     }
 
     h1 {

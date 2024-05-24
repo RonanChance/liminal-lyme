@@ -7,16 +7,6 @@
 </script>
 
 <TopBanner />
-<div class="intro-container">
-	<IntroInfo />
-</div>
+<IntroInfo />
 <LandingPageContent />
 <Footer />
-
-<style>
-	.intro-container {
-		padding-top: 6%;
-		padding-left: 8%;
-		padding-right: 8%;
-	}
-</style>

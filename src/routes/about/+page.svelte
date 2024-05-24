@@ -18,13 +18,13 @@
 
     <div class="textbox" id="what_does_liminal_lyme_mean">
         <h2 style="text-decoration: none; font-style: italic; margin-bottom: 0px;">Lim·​i·nal</h2>
-        <p class="text-center">relating to, or being an intermediate state, phase, or condition</p>
+        <p class="text-center" style="font-weight: 200;">relating to, or being an intermediate state, phase, or condition</p>
         <p style="margin-top: 40px;">
             In anthropology, <span style="font-style: italic;">liminality</span> is the quality of ambiguity or disorientation that occurs in the middle stage of a rite of passage.
             <br /><br />
             The chronic symptoms from tick-borne infections have left many of us in a frustrating, uncertain, and misunderstood state.
             <br /><br />
-            Given the circumstances, we work together to research and share treatment ideas, supporting one another on our journey to take control of our health and advocate for ourselves as patients.
+            We work together to research and share treatment ideas and support each other on our journey to take control of our health and advocate for ourselves as patients.
         </p>
         <!-- <p style="margin-top: 40px;">
             This website is intended to support individuals find supplement, medication, and other therapy ideas.  

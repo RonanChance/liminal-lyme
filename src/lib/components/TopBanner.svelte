@@ -1,5 +1,4 @@
 <script>
-  import { Navbar, NavBrand, NavLi, NavUl, Button} from 'flowbite-svelte';
   import { onMount } from 'svelte';
   import { browser } from '$app/environment';
   import { getCookie } from '../../lib/components/constants';
@@ -11,7 +10,7 @@
   onMount(() => {
         if (browser) {
           email = getCookie('email');
-          // // console.log(email);
+          // console.log(email);
         }
     });
 
@@ -22,11 +21,9 @@
 </script>
 
 <div class="navbar">
-    <div>
-      <NavBrand href="/">
-        <img src="/logo.svg" class="mainlogo" alt="LiminalLyme" />
-      </NavBrand>
-    </div>
+    <a href="/">
+      <img src="/banner.png" class="mainlogo w-[200px] md:w-[250px] xl:w-[300px]" alt="LiminalLyme" />
+    </a>
     <nav class="nav-links">
       {#if email}
         <button href="/logout" on:click={() => {changeSelected("/logout");}} style="text-decoration: {selected === "logout" ? "underline" : "none"}">Logout</button>
@@ -47,27 +44,26 @@
   .navbar {
       position: sticky;
       top: 0px;
-      z-index: 1;
+      z-index: 2;
       background: var(--white);
 
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding-top: 5%;
-      padding-bottom: 5%;
+      padding-top: 1%;
+      padding-bottom: 1%;
       padding-left: 8%;
       padding-right: 8%;
 
-      max-height: 100px;
+      backface-visibility: hidden;
   }
 
   .mainlogo{
-    transform: scale(95%);
     transition: transform 0.2s;
   }
 
   .mainlogo:hover{
-    transform: scale(100%);
+    transform: scale(105%);
   }
 
   @media (max-width: 768px) {
@@ -78,13 +74,5 @@
         padding-right: 3%;
     }
   }
-  
-  @media (min-width: 1500px) {
-    .navbar {
-      padding-top: 2%;
-      padding-bottom: 2%;
-      padding-left: 20%;
-      padding-right: 20%;
-  }
-  }
+
 </style>

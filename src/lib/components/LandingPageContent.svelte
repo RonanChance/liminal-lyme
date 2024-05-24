@@ -205,6 +205,8 @@
     }
 
     .infonote {
+        margin-left: auto;
+        margin-right: auto;
         margin-top: 50px;
         max-width: 90%;
         text-align: center;
