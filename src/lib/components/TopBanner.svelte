@@ -22,7 +22,7 @@
 
 <div class="navbar">
     <a href="/">
-      <img src="/banner.png" class="mainlogo w-[200px] md:w-[250px] xl:w-[300px]" alt="LiminalLyme" />
+      <img src="/banner.png" class="mainlogo w-[190px] md:w-[250px] xl:w-[250px]" alt="LiminalLyme" />
     </a>
     <nav class="nav-links">
       {#if email}

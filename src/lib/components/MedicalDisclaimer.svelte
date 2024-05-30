@@ -1,4 +1,4 @@
-<h2>Medical Advice Disclaimer</h2>
+<h2 class="text-center">Medical Advice Disclaimer</h2>
 
 <p>
 DISCLAIMER: THIS WEBSITE DOES NOT PROVIDE MEDICAL ADVICE

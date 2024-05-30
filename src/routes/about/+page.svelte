@@ -24,7 +24,7 @@
             <br /><br />
             The chronic symptoms from tick-borne infections have left many of us in a frustrating, uncertain, and misunderstood state.
             <br /><br />
-            We work together to research and share treatment ideas and support each other on our journey to take control of our health and advocate for ourselves as patients.
+            Researching medications, supplements, and treatment ideas is essential to our pursuit of health.
         </p>
         <!-- <p style="margin-top: 40px;">
             This website is intended to support individuals find supplement, medication, and other therapy ideas.  
