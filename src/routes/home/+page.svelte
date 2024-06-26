@@ -13,7 +13,7 @@
     import Connect from '../../lib/components/Connect.svelte';
     import Search from '../../lib/components/Search.svelte';
     import Chronology from '../../lib/components/Chronology.svelte';
-
+    import SharePost from '../../lib/components/SharePost.svelte';
     import { page } from '$app/stores'
     const path = $page.url.searchParams.get('path')
 
@@ -31,8 +31,12 @@
         currentTab = 'anecdoteTab';
     } 
     else if (path === 'chronologyTab') {
-        currentTab = 'chronologyTab'
+        currentTab = 'chronologyTab';
     }
+    else if (path === 'shareTab') {
+        currentTab = 'shareTab';
+    }
+    console.log(currentTab)
 
     // Declare email outside of the if (browser) block
     let email;
@@ -46,8 +50,6 @@
             // console.log(path)
         }
     });
-
-    console.log(currentTab)
 
 </script>
 
@@ -67,6 +69,8 @@
                 <Chronology />
             {:else if currentTab === 'searchTab'}
                 <Search />
+            {:else if currentTab === 'shareTab'}
+                <SharePost />
             {/if}
         </div>
     {/if}
@@ -84,15 +88,6 @@
     .divbg {
         flex-grow: 1;
         overflow-y: auto;
-    }
-
-    @media (max-width: 768px) {
-        .divbg {
-            margin-top: 0rem;
-            margin-left: 0rem;
-            margin-right: 0rem;
-            margin-bottom: 0rem;
-        }
     }
 
 </style>

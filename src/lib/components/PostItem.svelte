@@ -1,8 +1,6 @@
 <script>
-    import {createEventDispatcher} from 'svelte'
-    import { AngleUpSolid, AngleDownSolid, LinkSolid, ChevronRightSolid, ClockSolid} from 'flowbite-svelte-icons';
+    import { AngleUpSolid, ChevronRightSolid, ClockSolid, VolumeUpSolid, ArrowUpFromBracketOutline, CheckSolid} from 'flowbite-svelte-icons';
     import Card from './Card.svelte'
-    import { Button } from 'flowbite-svelte';
     import Modal from './Modal.svelte';
     import { chronology_usernames } from '../../lib/components/constants.js'
 
@@ -62,7 +60,44 @@
             card.scrollIntoView({behavior: 'smooth'});
         }
     }
+
+    let copiedPopupVisible = false;
+    const showCopiedPopup = () => {
+        copiedPopupVisible = true;
+        setTimeout(() => {
+        copiedPopupVisible = false;
+        }, 1500);
+    };
+
+    let speech = new SpeechSynthesisUtterance();
+
+    async function sharePost(url) {
+        try {
+            console.log(url);
+            const textArea = document.createElement("textarea");
+            textArea.value = url;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand("copy");
+            document.body.removeChild(textArea);
+            showCopiedPopup();
+
+            // const htmlString = item.body;
+            // const tempDiv = document.createElement('div');
+            // tempDiv.innerHTML = htmlString;
+            // const plainText = tempDiv.textContent;
+
+            // console.log(plainText.slice(0, 30));
+            
+            // speech.text = plainText.slice(0, 30);
+            // window.speechSynthesis.speak(speech);
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
     console.log(item.id)
+    let placement = 'top';
 </script>
 
 <Modal bind:showModal>
@@ -112,42 +147,39 @@
         {/if}
     </div>
     {#if !showEntirePost}
-        <div class="readMoreButtondiv">
-            <button class="showPostButton" on:click={() => {showEntirePost = true}}>Read More </button>
+        <div class="flex justify-center">
+            <button class="italic pt-4" on:click={() => {showEntirePost = true}}>Read More </button>
         </div>
     {:else}
-        <div class="readLessButtondiv">
-            <button class="showPostButton" on:click={() => {scrollToTop(item.id); setTimeout(() => { showEntirePost = false; }, 1000);}}>Read Less </button>
+        <div class="flex justify-center">
+            <button class="italic pt-4" on:click={() => {scrollToTop(item.id); setTimeout(() => { showEntirePost = false; }, 1000);}}>Read Less </button>
         </div>
     {/if}
-    <div class="actionbuttons">
-        {#if item.author in chronology_usernames}
-            <a class="chronology-link" href="/home?path=chronologyTab&username={item.author}" target="_blank">
-                <ClockSolid class="inline" style="bg-white" size=sm/> History
-            </a>
-        {/if}
-        <a class="site-link" href="{item.permalink}" target="_blank">
-            Visit Post <ChevronRightSolid class="inline" style="bg-white" size=xs/>
+    <div class="flex flex-row pt-7 gap-4 justify-around">
+        <!-- <button on:click={sharePost} class="inline-flex items-center justify-center max-w-[70px] flex-grow flex-1 aspect-square mr-2 transition-colors duration-150  rounded-xl focus:shadow-outline text-gray-400 bg-gray-200 pointer-events-none hover:bg-[var(--extralightbackground)] hover:text-white">
+            <VolumeUpSolid class="w-5 h-5" style="bg-white" />
+        </button> -->
+        <a href="/home?path=chronologyTab&username={item.author}" target="_blank" class="inline-flex items-center justify-center max-w-[55px] flex-grow flex-1 aspect-square mr-2 transition-colors duration-150 rounded-xl focus:shadow-outline hover:bg-[var(--extralightbackground)] hover:text-white {item.author in chronology_usernames ? 'bg-[var(--lightbackground)] text-white' : 'text-gray-400 bg-gray-200 pointer-events-none'}">
+            <ClockSolid class="w-5 h-5" style="bg-white" />
         </a>
+        
+        <button on:click={() => {sharePost("https://LiminalLyme.com/home?path=shareTab&keyid=" + item.keyid)}} class="inline-flex items-center flex-col text-xs justify-center max-w-[55px] flex-grow flex-1 aspect-square mr-2 text-[var(--white)] transition-colors duration-150 bg-[var(--lightbackground)] rounded-xl focus:shadow-outline hover:bg-[var(--extralightbackground)] hover:text-white">
+            {#if !copiedPopupVisible}
+                <ArrowUpFromBracketOutline class="w-5 h-5" style="bg-white" />
+            {:else}
+                <CheckSolid class="w-5 h-5" style="bg-white" />
+                copied
+            {/if}
+        </button>
+
+        <a href="{item.permalink}" target="_blank" class="inline-flex items-center justify-center max-w-[55px] flex-grow flex-1 aspect-square mr-2 text-[var(--white)] transition-colors duration-150 bg-[var(--lightbackground)] rounded-xl focus:shadow-outline hover:bg-[var(--extralightbackground)] hover:text-white">
+            <ChevronRightSolid class="w-5 h-5" style="bg-white" />
+        </a>
+        
     </div>
 </Card>
 
 <style>
-
-    .readMoreButtondiv {
-        display: flex;
-        justify-content: center;
-    }
-
-    .readLessButtondiv {
-        display: flex;
-        justify-content: center;
-    }
-
-    .showPostButton {
-        padding-top: 0.5rem;
-        font-style: italic;
-    }
 
     .whitebutton {
         outline: var(--darkbackground);
@@ -171,14 +203,6 @@
         font-size: 1.5rem;
         text-align: center;
         color: #000000;
-    }
-
-    .actionbuttons {
-        padding-top: 2rem;
-        display: flex;
-        flex-direction: row;
-        justify-content: right;
-        gap: 0.5rem;
     }
 
     .tagstyle {
@@ -217,26 +241,6 @@
         flex-direction: column; /* Stack the elements vertically */
         justify-content: center; /* Center vertically */
         align-items: center; /* Center horizontally */
-    }
-
-    .site-link {
-        display: flex;
-        color: white;
-        background: #e14b00;
-        padding: 4px 8px 4px 8px;
-        border-radius: 0.25rem;
-        align-items: center;
-        gap: 0.5rem;
-    }
-
-    .chronology-link {
-        display: flex;
-        color: white;
-        background: var(--lightbackground);
-        padding: 4px 8px 4px 8px;
-        border-radius: 0.25rem;
-        align-items: center;
-        gap: 0.5rem;
     }
     .str-review {
         font-size: 13pt;

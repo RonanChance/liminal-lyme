@@ -1,7 +1,5 @@
 # Liminal Lyme
 
-![Website Screnshot](./static/websitedemo.png)
-
 ## Liminal Lyme is crowd-sourcing medication reaction narratives to expedite your recovery.
 
 ## Visit [LiminalLyme.com](https://LiminalLyme.com) to try it out!

@@ -78,7 +78,7 @@
 
 
 {#if animate}
-<div class="divbg" in:fly|global={{y: 30, delay: 50, duration: 1000 }}>
+<div class="sm:m-0" in:fly|global={{y: 30, delay: 50, duration: 1000 }}>
   
   <h1>Open<span class="highlighted-word" style="font-weight:600">RXN</span> Login</h1>
 
@@ -124,15 +124,6 @@
 {/if}
 
 <style>
-
-@media (max-width: 768px) {
-    .divbg {
-        margin-top: 0rem;
-        margin-left: 0rem;
-        margin-right: 0rem;
-        margin-bottom: 0rem;
-    }
-}
 
 ul {
     list-style-type: disc;

@@ -7,15 +7,15 @@
 
 	const pb = new PocketBase('https://data.liminallyme.com/');
     import { page } from '$app/stores'
-    let username = $page.url.searchParams.get('username')
+    let keyid = $page.url.searchParams.get('keyid')
 
     let animate = false;
     onMount(() => animate = true);
 
     let result_list;
     async function getPosts(){
-        result_list = await pb.collection('posts').getList(1, 10, {
-            filter: 'author="'+ username + '"',
+        result_list = await pb.collection('posts').getList(1, 2, {
+            filter: 'keyid="'+ keyid + '"',
             sort: '-date'
         }); 
         result_list = result_list.items;
@@ -30,13 +30,8 @@
 		<main class="flex flex-col xl:max-w-[60%] max-w-[90%] m-auto" in:fade={{y:50, delay: 0, duration: 2000}}>
 
 			<div class="text-2xl text-white text-center pt-8 pb-3">
-                View User Posts Over Time
-				<div class="text-base italic text-center">See Progress & Setbacks</div>
+                Shared Post
 			</div>
-
-            <div class="text-xl text-white text-center">
-                User: <span style="color:var(--accent);">{username}</span>
-            </div>
 
             <div class="post-area" in:fly={{y:50, delay: 500, duration: 1500}}>
 				<PostList posts={result_list} chronologyMode=true/>

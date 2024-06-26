@@ -32,7 +32,7 @@
     <div class="sub-heading text-center">
       <h2 in:fade|global={{y: 100, delay: 50, duration: 1000 }}>
         <div class="inline"> 
-        Get <span class="bold">insights</span> from Reddit based on <span class="bold">conditions</span> & <span class="bold">medications</span>
+        Get <span class="bold">insights</span> from Reddit based on <span class="bold">medications</span> & <span class="bold">supplements</span>
         </div>
       </h2>
     </div>
