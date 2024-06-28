@@ -1,10 +1,9 @@
 <script>
     import MedicalDisclaimer from "./MedicalDisclaimer.svelte";
     import { onMount } from 'svelte';
-	import { Popover, Toast, Spinner } from 'flowbite-svelte';
-    import { fly, fade, blur } from 'svelte/transition'
+	import { Popover } from 'flowbite-svelte';
+    import { fly, blur } from 'svelte/transition'
     import { total_scanned, total_cataloged, medications, supplements } from "./constants";
-
 
     let animate = false;
     onMount(() => animate = true);
@@ -207,7 +206,7 @@
     .infonote {
         margin-left: auto;
         margin-right: auto;
-        margin-top: 50px;
+        margin-top: 2rem;
         max-width: 90%;
         text-align: center;
     }

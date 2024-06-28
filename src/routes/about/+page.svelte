@@ -27,7 +27,7 @@
             <a class="text-white underline text-right pt-1" style="font-size: 0.75rem;" href='https://www.netflix.com/title/81098586' target="_blank" rel="noreferrer">Credit</a>
         </div>
         <p style="margin-top: 40px;">
-            In anthropology, <span style="font-style: italic;">liminality</span> is the quality of ambiguity or disorientation that occurs in the middle stage of a rite of passage.
+            In anthropology, <span class="italic">liminality</span> is the quality of ambiguity or disorientation that occurs in the middle stage of a rite of passage.
             <br /><br />
             The chronic symptoms from tick-borne disease have left many of us in a frustrating, uncertain, and misunderstood state.
             <br /><br />
@@ -198,8 +198,6 @@
         text-underline-offset: 8px;
         text-decoration-style: solid;
         text-decoration-skip-ink: none;
-
-        
     }
 
     p {
