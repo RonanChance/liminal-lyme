@@ -24,6 +24,8 @@
   "type": "module",
   "dependencies": {
     "@fontsource-variable/league-spartan": "^5.0.20",
+    "@types/d3": "^7.4.3",
+    "d3": "^7.9.0",
     "openai": "^4.24.3",
     "pocketbase": "^0.18.0"
   }

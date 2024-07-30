@@ -3,9 +3,11 @@
   import { browser } from '$app/environment';
   import { getCookie } from '../../lib/components/constants';
   import { goto } from '$app/navigation';
+  import { page } from '$app/stores';
 
   let email;
-  let selected = "/";
+  let selected = '';
+  console.log($page.url)
   
   onMount(() => {
         if (browser) {
@@ -28,7 +30,8 @@
       {#if email}
         <button href="/logout" on:click={() => {changeSelected("/logout");}} style="text-decoration: {selected === "logout" ? "underline" : "none"}">Logout</button>
       {/if}
-      <button href="/home" on:click={() => {changeSelected("/home");}} style="text-decoration: {selected === "home" ? "underline" : "none"}">HOME</button>
+      <button href="/search" on:click={() => {changeSelected("/search");}} style="text-decoration: {selected === "search" ? "underline" : "none"}">SEARCH</button>
+      <button href="/tree" on:click={() => {changeSelected("/tree");}} style="text-decoration: {selected === "tree" ? "underline" : "none"}">TREE</button>
       <button href="/about" on:click={() => {changeSelected("/about");}} style="text-decoration: {selected === "about" ? "underline" : "none"}">ABOUT</button>
     </nav>
 </div>

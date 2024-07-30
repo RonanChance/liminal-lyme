@@ -159,11 +159,11 @@
         <!-- <button on:click={sharePost} class="inline-flex items-center justify-center max-w-[70px] flex-grow flex-1 aspect-square mr-2 transition-colors duration-150  rounded-xl focus:shadow-outline text-gray-400 bg-gray-200 pointer-events-none hover:bg-[var(--extralightbackground)] hover:text-white">
             <VolumeUpSolid class="w-5 h-5" style="bg-white" />
         </button> -->
-        <a href="/home?path=chronologyTab&username={item.author}" target="_blank" class="inline-flex items-center justify-center max-w-[55px] flex-grow flex-1 aspect-square mr-2 transition-colors duration-150 rounded-xl focus:shadow-outline hover:bg-[var(--extralightbackground)] hover:text-white {item.author in chronology_usernames ? 'bg-[var(--lightbackground)] text-white' : 'text-gray-400 bg-gray-200 pointer-events-none'}">
+        <a href="/search?path=chronologyTab&username={item.author}" target="_blank" class="inline-flex items-center justify-center max-w-[55px] flex-grow flex-1 aspect-square mr-2 transition-colors duration-150 rounded-xl focus:shadow-outline hover:bg-[var(--extralightbackground)] hover:text-white {item.author in chronology_usernames ? 'bg-[var(--lightbackground)] text-white' : 'text-gray-400 bg-gray-200 pointer-events-none'}">
             <ClockSolid class="w-5 h-5" style="bg-white" />
         </a>
         
-        <button on:click={() => {sharePost("https://LiminalLyme.com/home?path=shareTab&keyid=" + item.keyid)}} class="inline-flex items-center flex-col text-xs justify-center max-w-[55px] flex-grow flex-1 aspect-square mr-2 text-[var(--white)] transition-colors duration-150 bg-[var(--lightbackground)] rounded-xl focus:shadow-outline hover:bg-[var(--extralightbackground)] hover:text-white">
+        <button on:click={() => {sharePost("https://LiminalLyme.com/search?path=shareTab&keyid=" + item.keyid)}} class="inline-flex items-center flex-col text-xs justify-center max-w-[55px] flex-grow flex-1 aspect-square mr-2 text-[var(--white)] transition-colors duration-150 bg-[var(--lightbackground)] rounded-xl focus:shadow-outline hover:bg-[var(--extralightbackground)] hover:text-white">
             {#if !copiedPopupVisible}
                 <ArrowUpFromBracketOutline class="w-5 h-5" style="bg-white" />
             {:else}

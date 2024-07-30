@@ -13,7 +13,7 @@
 <div class="content-container" in:fly={{y:50, delay: 500, duration: 1500}}>
     
     <div class="buttondiv" style="text-align: center;">
-        <a href="/home" class="whitebutton">Get started—it's free</a>
+        <a href="/search" class="whitebutton">Get started—it's free</a>
     </div>
 
     <h3 class="infonote">We collect open-source tickborne disease data so you can see how people with your <a class="highlight" href="/about#what_conditions_are_supported">conditions</a> react to <a class="highlight" href="/about#what_supplements_are_supported">supplements</a> & <a class="highlight" href="/about#what_medications_are_supported">medications</a>
@@ -95,7 +95,7 @@
     </div>
 
     <div class="buttondiv" style="text-align: center;">
-        <a href="/home" class="whitebutton">Get started</a>
+        <a href="/search" class="whitebutton">Get started</a>
     </div>
     
     <div class="disclaimer-container">

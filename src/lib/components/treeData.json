@@ -1,0 +1,300 @@
+{
+    "name": "Treatments",
+    "type": "folder",
+    "children": [
+        {
+            "name": "Pharmacological",
+            "type": "folder",
+            "children": [
+                {
+                    "name": "Antibiotics",
+                    "type": "folder",
+                    "children": [
+                        {
+                            "name": "Doxycycline",
+                            "type": "url",
+                            "article": "https://projectlyme.org/resource/treating-lyme-with-antibiotics/",
+                            "purchase": "None"
+                        },
+                        {
+                            "name": "Amoxicillin",
+                            "type": "url",
+                            "article": "https://projectlyme.org/lyme-persists/antibiotic-resistant-round-bodies/",
+                            "purchase": "None"
+                        },
+                        {
+                            "name": "Azithromycin",
+                            "type": "url",
+                            "article": "https://pubmed.ncbi.nlm.nih.gov/8852473/",
+                            "purchase": "None"
+                        },
+                        {
+                            "name": "Minocycline",
+                            "type": "url",
+                            "article": "https://academic.oup.com/cid/article/30/1/237/322583",
+                            "purchase": "None"
+                        },
+                        {
+                            "name": "Cefuroxime",
+                            "type": "url",
+                            "article": "https://www.columbia-lyme.org/treatment-options",
+                            "purchase": "None"
+                        },
+                        {
+                            "name": "Ceftriaxone",
+                            "type": "url",
+                            "article": "https://www.columbia-lyme.org/treatment-options",
+                            "purchase": "None"
+                        },
+                        {
+                            "name": "Clarithromycin",
+                            "type": "url",
+                            "article": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC163136/pdf/400468.pdf",
+                            "purchase": "None"
+                        },
+                        {
+                            "name": "Erythromycin",
+                            "type": "url",
+                            "article": "https://pubmed.ncbi.nlm.nih.gov/3109144/",
+                            "purchase": "None"
+                        },
+                        {
+                            "name": "Penicillin G",
+                            "type": "url",
+                            "article": "https://projectlyme.org/lyme-persists/antibiotic-resistant-round-bodies/",
+                            "purchase": "None"
+                        }
+                    ]
+                },
+                {
+                    "name": "Antiparasitics",
+                    "type": "folder",
+                    "children": [
+                        {
+                            "name": "Ivermectin",
+                            "type": "url",
+                            "article": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6625054/",
+                            "purchase": "None"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Supplements",
+            "type": "folder",
+            "children": [
+                {
+                    "name": "Vitamins",
+                    "type": "folder",
+                    "children": [
+                        {
+                            "name": "Vitamin C",
+                            "type": "url",
+                            "article": "https://esmed.org/MRA/mra/article/view/4941",
+                            "purchase": "None"
+                        },
+                        {
+                            "name": "Vitamin D",
+                            "type": "url",
+                            "article": "https://www.globallymealliance.org/blog/lyme-and-vitamin-d",
+                            "purchase": "None"
+                        },
+                        {
+                            "name": "Vitamin B12 (Cobalamin)",
+                            "type": "url",
+                            "article": "https://www.google.com",
+                            "purchase": "None"
+                        },
+                        {
+                            "name": "Vitamin B1 (Thiamine)",
+                            "type": "url",
+                            "article": "https://www.google.com",
+                            "purchase": "None"
+                        },
+                        {
+                            "name": "Vitamin B2 (Niacin)",
+                            "type": "url",
+                            "article": "https://www.google.com",
+                            "purchase": "None"
+                        },
+                        {
+                            "name": "Vitamin B5 (Pantothenic Acid)",
+                            "type": "url",
+                            "article": "https://www.google.com",
+                            "purchase": "None"
+                        },
+                        {
+                            "name": "Vitamin B6 (Pyridoxine)",
+                            "type": "url",
+                            "article": "https://www.google.com",
+                            "purchase": "None"
+                        },
+                        {
+                            "name": "Vitamin B7 (Biotin)",
+                            "type": "url",
+                            "article": "https://www.google.com",
+                            "purchase": "None"
+                        },
+                        {
+                            "name": "Vitamin B9 (Folate)",
+                            "type": "url",
+                            "article": "https://www.google.com",
+                            "purchase": "None"
+                        },
+                        {
+                            "name": "Vitamin E",
+                            "type": "url",
+                            "article": "https://www.google.com",
+                            "purchase": "None"
+                        },
+                        {
+                            "name": "Vitamin A",
+                            "type": "url",
+                            "article": "https://www.google.com",
+                            "purchase": "None"
+                        },
+                        {
+                            "name": "Vitamin K",
+                            "type": "url",
+                            "article": "https://www.google.com",
+                            "purchase": "None"
+                        }
+                    ]
+                },
+                {
+                    "name": "Probiotics",
+                    "type": "folder",
+                    "children": [
+                        {
+                            "name": "Lactobacillus acidophilus",
+                            "type": "url",
+                            "article": "https://www.google.com",
+                            "purchase": "None"
+                        },
+                        {
+                            "name": "Bifidobacterium bifidum",
+                            "type": "url",
+                            "article": "https://www.google.com",
+                            "purchase": "None"
+                        },
+                        {
+                            "name": "Lactobacillus rhamnosus",
+                            "type": "url",
+                            "article": "https://www.google.com",
+                            "purchase": "None"
+                        },
+                        {
+                            "name": "Saccharomyces boulardii",
+                            "type": "url",
+                            "article": "https://www.google.com",
+                            "purchase": "None"
+                        },
+                        {
+                            "name": "Bifidobacterium longum",
+                            "type": "url",
+                            "article": "https://www.google.com",
+                            "purchase": "None"
+                        },
+                        {
+                            "name": "Lactobacillus plantarum",
+                            "type": "url",
+                            "article": "https://www.google.com",
+                            "purchase": "None"
+                        },
+                        {
+                            "name": "Lactobacillus casei",
+                            "type": "url",
+                            "article": "https://www.google.com",
+                            "purchase": "None"
+                        },
+                        {
+                            "name": "Bifidobacterium lactis",
+                            "type": "url",
+                            "article": "https://www.google.com",
+                            "purchase": "None"
+                        },
+                        {
+                            "name": "Streptococcus thermophilus",
+                            "type": "url",
+                            "article": "https://www.google.com",
+                            "purchase": "None"
+                        }
+                    ]
+                },
+                {
+                    "name": "Binders",
+                    "type": "folder",
+                    "children": [
+                        {
+                            "name": "Activated Charcoal",
+                            "type": "url",
+                            "article": "https://www.google.com",
+                            "purchase": "None"
+                        },
+                        {
+                            "name": "Bentonite Clay",
+                            "type": "url",
+                            "article": "https://www.google.com",
+                            "purchase": "None"
+                        },
+                        {
+                            "name": "MicroChitosan",
+                            "type": "url",
+                            "article": "https://www.google.com",
+                            "purchase": "None"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Frequency Therapy",
+            "type": "folder",
+            "children": [
+                {
+                    "name": "Nikki Device",
+                    "type": "url",
+                    "article": "https://www.google.com",
+                    "purchase": "None"
+                },
+                {
+                    "name": "Red Light Therapy",
+                    "type": "url",
+                    "article": "https://www.google.com",
+                    "purchase": "None"
+                }
+            ]
+        },
+        {
+            "name": "Thermal Therapy",
+            "type": "folder",
+            "children": [
+                {
+                    "name": "Sauna",
+                    "type": "url",
+                    "article": "https://www.google.com",
+                    "purchase": "None"
+                },
+                {
+                    "name": "Infrared Sauna",
+                    "type": "url",
+                    "article": "https://www.google.com",
+                    "purchase": "None"
+                }
+            ]
+        },
+        {
+            "name": "Manual Therapy",
+            "type": "folder",
+            "children": [
+                {
+                    "name": "Accupuncture",
+                    "type": "url",
+                    "article": "https://www.google.com",
+                    "purchase": "None"
+                }
+            ]
+        }
+    ]
+}

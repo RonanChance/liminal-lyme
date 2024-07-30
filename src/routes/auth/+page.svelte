@@ -18,7 +18,7 @@
         // try to grab valid cookie and if so redirect them to the chat page
         try {
           if (getCookie('email').length >= 5) {
-            window.location.href = '/home';
+            window.location.href = '/search';
           }
         } catch (error) {
           console.log("NO COOKIE")
@@ -66,7 +66,7 @@
         event.locals = {};
         event.locals.email = data.meta.email;
         
-        window.location.href = '/home?path=chatTab';
+        window.location.href = '/search?path=chatTab';
         
         return;
   }
