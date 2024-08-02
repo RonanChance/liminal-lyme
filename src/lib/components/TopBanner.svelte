@@ -23,15 +23,15 @@
 
 <div class="navbar">
     <a href="/">
-      <img src="/banner.png" class="mainlogo w-[190px] md:w-[250px] xl:w-[250px]" alt="LiminalLyme" />
+      <img src="/banner.png" class="mainlogo w-[170px] md:w-[250px] xl:w-[250px]" alt="LiminalLyme" />
     </a>
     <nav class="nav-links">
       {#if email}
-        <button href="/logout" on:click={() => {changeSelected("/logout");}} style="text-decoration: {selected === "/logout" ? "underline" : "none"}">Logout</button>
+        <button href="/logout" on:click={() => {changeSelected("/logout");}} style="text-decoration: {selected.includes("logout") ? "underline" : "none"}">Logout</button>
       {/if}
-      <button href="/search" on:click={() => {changeSelected("/search");}} style="text-decoration: {selected === "/search" ? "underline" : "none"}; text-decoration-thickness: 3px; text-underline-offset: 3px;">SEARCH</button>
-      <button href="/tree" on:click={() => {changeSelected("/tree");}} style="text-decoration: {selected === "/tree" ? "underline" : "none"}; text-decoration-thickness: 3px; text-underline-offset: 3px;">TREE</button>
-      <button href="/about" on:click={() => {changeSelected("/about");}} style="text-decoration: {selected === "/about" ? "underline" : "none"}; text-decoration-thickness: 3px; text-underline-offset: 3px;">ABOUT</button>
+      <button href="/search" on:click={() => {changeSelected("/search");}} style="text-decoration: {selected.includes("search") ? "underline" : "none"}; text-decoration-thickness: 3px; text-underline-offset: 3px;">SEARCH</button>
+      <button href="/tree" on:click={() => {changeSelected("/tree");}} style="text-decoration: {selected.includes("tree") ? "underline" : "none"}; text-decoration-thickness: 3px; text-underline-offset: 3px;">TREE</button>
+      <button href="/about" on:click={() => {changeSelected("/about");}} style="text-decoration: {selected.includes("about") ? "underline" : "none"}; text-decoration-thickness: 3px; text-underline-offset: 3px;">ABOUT</button>
     </nav>
 </div>
 
