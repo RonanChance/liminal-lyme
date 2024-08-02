@@ -3,13 +3,14 @@
     import TopBanner from '../../lib/components/TopBanner.svelte'
     import Footer from "../../lib/components/Footer.svelte";
     import * as d3 from 'd3';
+    /** @type {import('./$types').PageData} */
+	export let data;
 
     let svg;
-    let dataUrl = "../../../src/lib/components/treeData.json";
     let root;
 
     onMount(async () => {
-        const margin = { top: 20, right: 120, bottom: 20, left: 140 };
+        const margin = { top: 0, right: 120, bottom: 20, left: 120 };
         const width = 1280 - margin.right - margin.left;
         const height = 800 - margin.top - margin.bottom;
         let i = 0;
@@ -30,9 +31,7 @@
             .attr('transform', `translate(${margin.left},${margin.top})`);
 
         // Load data
-        const json = await d3.json(dataUrl);
-        root = d3.hierarchy(json);
-        console.log(root)
+        root = d3.hierarchy(data.treatments);
         root.x0 = height / 2;
         root.y0 = 0;
 
@@ -191,6 +190,8 @@
 
 <TopBanner />
 
+<div class="text-center text-2xl text-white mt-12">Chronic Illness Treatment Framework</div>
+
 <div id="tree"></div>
 
 <Footer />
@@ -228,7 +229,8 @@
         font-size: 0.8rem;
     }
 
-    /* .article-button:hover, .purchase-button:hover {
-        background-color: #0056b3;
-    } */
+    #tree :global(.article-button:hover), #tree :global(.purchase-button:hover){
+        background-color: var(--supplement_highlight);
+        color: var(--white);
+    }
 </style>
