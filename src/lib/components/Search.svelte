@@ -175,7 +175,7 @@
 		<main class="container" in:fade={{y:50, delay: 0, duration: 1000}}>
 
 
-			<div class="infonote">Select Medications & Supplements
+			<div class="text-center text-2xl text-white mt-12">Search <span class="text-[#e14b00] font-bold">Reddit</span> for <br><span class="font-bold">Medications</span> & <span class="font-bold">Supplements</span>
 				<div class="subscriptnote">Recommend: 1-3 selections</div>
 			</div>
             
@@ -235,6 +235,9 @@
 						<SearchOutline size="lg"/>
 					{/if}
 					Search
+					{#if selectedItems.length >= 1}
+						({selectedItems.length})
+					{/if}
 					</div>
 				</a>
 			</div>
@@ -338,11 +341,6 @@
 		border-radius: 0.5rem;
 		width: 100%;
 	}
-	.searchbutton {
-		margin-top: 35px;
-		border-radius: 0.5rem;
-		width: 50%;
-	}
 
 	.entirelist {
 		max-height: 150px;
@@ -362,14 +360,6 @@
 		display: flex;
 		flex-direction: column;
 	}
-
-    .infonote {
-		margin-top: 35px;
-		font-size: 17pt;
-		color: var(--white);
-		text-align: center;
-    }
-
 	.subscriptnote {
 		font-size: 12pt;
 		font-style: italic;

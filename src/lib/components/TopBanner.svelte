@@ -6,8 +6,7 @@
   import { page } from '$app/stores';
 
   let email;
-  let selected = '';
-  console.log($page.url)
+  let selected = $page.url.pathname;
   
   onMount(() => {
         if (browser) {
@@ -28,11 +27,11 @@
     </a>
     <nav class="nav-links">
       {#if email}
-        <button href="/logout" on:click={() => {changeSelected("/logout");}} style="text-decoration: {selected === "logout" ? "underline" : "none"}">Logout</button>
+        <button href="/logout" on:click={() => {changeSelected("/logout");}} style="text-decoration: {selected === "/logout" ? "underline" : "none"}">Logout</button>
       {/if}
-      <button href="/search" on:click={() => {changeSelected("/search");}} style="text-decoration: {selected === "search" ? "underline" : "none"}">SEARCH</button>
-      <button href="/tree" on:click={() => {changeSelected("/tree");}} style="text-decoration: {selected === "tree" ? "underline" : "none"}">TREE</button>
-      <button href="/about" on:click={() => {changeSelected("/about");}} style="text-decoration: {selected === "about" ? "underline" : "none"}">ABOUT</button>
+      <button href="/search" on:click={() => {changeSelected("/search");}} style="text-decoration: {selected === "/search" ? "underline" : "none"}; text-decoration-thickness: 3px; text-underline-offset: 3px;">SEARCH</button>
+      <button href="/tree" on:click={() => {changeSelected("/tree");}} style="text-decoration: {selected === "/tree" ? "underline" : "none"}; text-decoration-thickness: 3px; text-underline-offset: 3px;">TREE</button>
+      <button href="/about" on:click={() => {changeSelected("/about");}} style="text-decoration: {selected === "/about" ? "underline" : "none"}; text-decoration-thickness: 3px; text-underline-offset: 3px;">ABOUT</button>
     </nav>
 </div>
 
