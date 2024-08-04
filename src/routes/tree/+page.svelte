@@ -176,15 +176,13 @@
     });
 </script>
 
-<div class="navbar-container">
-    <TopBanner />
-</div>
+<TopBanner expand={true} />
 
 <div class="text-center text-2xl text-white mt-12">Chronic Illness Treatment Framework</div>
 
 <div id="tree"></div>
 
-<Footer />
+<Footer expand={true}/>
 
 <style>
     #tree :global(.node) {
