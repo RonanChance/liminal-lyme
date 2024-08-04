@@ -11,7 +11,7 @@
 
     onMount(async () => {
         const margin = { top: 0, right: 120, bottom: 20, left: 120 };
-        const width = 1280 - margin.right - margin.left;
+        const width = 2560 - margin.right - margin.left;
         const height = 800 - margin.top - margin.bottom;
         let i = 0;
         const duration = 750;
@@ -52,7 +52,7 @@
             const links = tree(root).links();
 
             // Normalize for fixed-depth
-            nodes.forEach(d => { d.y = d.depth * 180; });
+            nodes.forEach(d => { d.y = d.depth * 210; d.x = d.x * 0.7 });
 
             // Update nodes
             const node = svg.selectAll('g.node')
@@ -78,46 +78,34 @@
                 .text(d => d.data.name)
                 .style('fill-opacity', 1e-6);
 
-            nodeEnter.append('title')
-                .text(d => d.data.description);
+            nodeEnter.each(function(d) {
+            const currentNode = d3.select(this);
+            const textNode = currentNode.select('text');
+            const textWidth = textNode.node().getBBox().width;
 
-                nodeEnter.each(function(d) {
-                const currentNode = d3.select(this);
-                const textNode = currentNode.select('text');
-                const textWidth = textNode.node().getBBox().width;
+            if (d.data.link) {
+                // temporary canvas to measure text width
+                const canvas = document.createElement('canvas');
+                const context = canvas.getContext('2d');
+                context.font = '18px Arial';
 
-                if (d.data.article) {
-                    currentNode.append('foreignObject')
-                        .attr('x', textWidth + 25) // Adjust position as needed
-                        .attr('y', -13) // Adjust position as needed
-                        .attr('width', 60) // Width of the button
-                        .attr('height', 30) // Height of the button
-                        .append('xhtml:button')
-                        .attr('class', 'article-button')
-                        .text('Article')
-                        .on('click', (event, d) => {
-                            event.stopPropagation();
-                            console.log('Article clicked', d.data.article);
-                            window.open(d.data.article, '_blank');
-                        });
-                }
+                const linkText = ": " + d.data.link;
+                const linkTextWidth = context.measureText(linkText).width;
 
-                if (d.data.purchase) {
-                    currentNode.append('foreignObject')
-                        .attr('x', textWidth + 85) // Adjust position as needed
-                        .attr('y', -13) // Adjust position as needed
-                        .attr('width', 80) // Width of the button
-                        .attr('height', 30) // Height of the button
-                        .append('xhtml:button')
-                        .attr('class', 'purchase-button')
-                        .text('Buy')
-                        .on('click', (event, d) => {
-                            event.stopPropagation();
-                            console.log('Purchase clicked', d.data.purchase);
-                            window.open(d.data.purchase, '_blank');
-                        });
-                }
-            });
+                currentNode.append('foreignObject')
+                    .attr('x', textWidth + 10)
+                    .attr('y', -9)
+                    .attr('width', linkTextWidth + 5)
+                    .attr('height', 30)
+                    .append('xhtml:div')
+                    .html(`<button class="text-white">: <span class="underline">${d.data.link}</span></button>`)
+                    .on('click', (event, d) => {
+                        event.stopPropagation();
+                        console.log('Article clicked', d.data.link);
+                        window.open(d.data.link, '_blank');
+                    });
+            }
+        });
 
             // Transition nodes to their new position
             const nodeUpdate = node.merge(nodeEnter).transition()
@@ -188,7 +176,9 @@
     });
 </script>
 
-<TopBanner />
+<div class="navbar-container">
+    <TopBanner />
+</div>
 
 <div class="text-center text-2xl text-white mt-12">Chronic Illness Treatment Framework</div>
 
@@ -209,7 +199,7 @@
     }
 
     #tree :global(.node text) {
-        font-size: 1rem;
+        font-size: 1.1rem;
         fill: #ccc;
     }
 
@@ -219,17 +209,15 @@
         stroke-width: 1px;
     }
 
-    #tree :global(.article-button), #tree :global(.purchase-button) {
-        background-color: var(--white);
-        color: var(--black);
+    #tree :global(.link-button) {
+        background-color: var(--darkbackground);
+        color: var(--white);
         border: none;
-        padding: 5px 10px;
-        border-radius: 4px;
+        border-radius: 2px;
         cursor: pointer;
-        font-size: 0.8rem;
     }
 
-    #tree :global(.article-button:hover), #tree :global(.purchase-button:hover){
+    #tree :global(.link-button:hover) {
         background-color: var(--supplement_highlight);
         color: var(--white);
     }

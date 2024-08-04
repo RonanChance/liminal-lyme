@@ -46,6 +46,7 @@
   .navbar {
       position: sticky;
       top: 0px;
+      left: 0px;
       z-index: 2;
       background: var(--white);
 
@@ -56,7 +57,6 @@
       padding-bottom: 1%;
       padding-left: 8%;
       padding-right: 8%;
-
       backface-visibility: hidden;
   }
 
