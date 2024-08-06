@@ -95,7 +95,7 @@
         </div>
     </div>
 
-    <div class="buttondiv" style="text-align: center;">
+    <div class="buttondiv pt-12" style="text-align: center;">
         <a href="/search" class="whitebutton">Get started</a>
     </div>
     

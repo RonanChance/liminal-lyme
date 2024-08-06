@@ -3,7 +3,7 @@
     import TopBanner from '../../lib/components/TopBanner.svelte'
     import PocketBase from 'pocketbase';
     import { browser } from '$app/environment';
-    import { fly } from 'svelte/transition'
+    // import { fly } from 'svelte/transition'
     import { getCookie } from '../../lib/components/constants';
     import { ButtonGroup, Button } from 'flowbite-svelte';
     import { MessagesSolid, ClockSolid, UserGroupSolid, MessagesOutline, UsersGroupOutline } from 'flowbite-svelte-icons';
@@ -58,7 +58,7 @@
     <!-- <NavigationBar bind:currentTab={currentTab}/> -->
 
     {#if animate}
-        <div class="divbg" in:fly|global={{y: 30, delay: 50, duration: 1000 }}>
+        <!-- <div class="divbg" in:fly|global={{y: 30, delay: 50, duration: 1000 }}> -->
             {#if currentTab === 'chatTab'}
                 <Chat />
             {:else if currentTab === 'anecdoteTab'}
@@ -72,7 +72,7 @@
             {:else if currentTab === 'shareTab'}
                 <SharePost />
             {/if}
-        </div>
+        <!-- </div> -->
     {/if}
 </div>
 

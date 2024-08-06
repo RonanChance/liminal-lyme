@@ -3,7 +3,7 @@
 	import { Popover, Toast, Spinner } from 'flowbite-svelte';
 	import { Button } from 'flowbite-svelte';
 	import { onMount } from 'svelte';
-	import { fly, fade } from 'svelte/transition'
+	import { fade } from 'svelte/transition'
     import PocketBase from 'pocketbase';
 	import PostList from './PostList.svelte';
     import MedicalDisclaimer from './MedicalDisclaimer.svelte';
@@ -170,14 +170,15 @@
 
 </script>
 
+{#if animate}
+<div class="text-center text-2xl text-white py-6 bg-[var(--lightbackground)]" in:fade={{delay: 0, duration: 500}}>Search <span class="text-[#e14b00] font-bold">Reddit</span> for <br><span class="font-bold">Medications</span> & <span class="font-bold">Supplements</span>
+	<div class="subscriptnote">Recommend: 1-3 selections</div>
+</div>
+{/if}
+
 <div class="intro-container">
 	{#if animate}
-		<main class="container" in:fade={{y:50, delay: 0, duration: 1000}}>
-
-
-			<div class="text-center text-2xl text-white mt-12">Search <span class="text-[#e14b00] font-bold">Reddit</span> for <br><span class="font-bold">Medications</span> & <span class="font-bold">Supplements</span>
-				<div class="subscriptnote">Recommend: 1-3 selections</div>
-			</div>
+		<main class="container" in:fade={{delay: 0, duration: 1200}}>
             
 			<div class="togglebuttongroup">
 				{#each slicedItems as item}
