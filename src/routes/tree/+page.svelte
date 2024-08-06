@@ -1,18 +1,24 @@
 <script>
     import { onMount } from 'svelte';
+    import { fade } from 'svelte/transition'
     import TopBanner from '../../lib/components/TopBanner.svelte'
     import Footer from "../../lib/components/Footer.svelte";
+    import { Label, Input } from 'flowbite-svelte';
+    import { EnvelopeSolid, FileEditSolid, LinkSolid } from 'flowbite-svelte-icons';
+
     import * as d3 from 'd3';
     /** @type {import('./$types').PageData} */
 	export let data;
 
     let svg;
     let root;
+    let animate = false;
 
     onMount(async () => {
+        animate = true
         const margin = { top: 0, right: 120, bottom: 20, left: 120 };
         const width = 2560 - margin.right - margin.left;
-        const height = 800 - margin.top - margin.bottom;
+        const height = 600 - margin.top - margin.bottom;
         let i = 0;
         const duration = 750;
 
@@ -178,9 +184,49 @@
 
 <TopBanner expand={true} />
 
-<div class="text-center text-2xl text-white mt-12">Chronic Illness Treatment Framework</div>
+{#if animate}
+    <div class="text-center text-2xl text-white py-6 mb-8 bg-[var(--lightbackground)]" in:fade={{delay: 0, duration: 500}}>Chronic Illness Treatment Tree</div>
+{/if}
 
 <div id="tree"></div>
+
+{#if animate}
+<div class="w-full flex justify-center bg-[var(--lightbackground)] px-4 py-8 rounded-lg" in:fade={{delay: 1000, duration: 1500}}>
+    <form class="w-[85%] md:w-[50%] xl:w-[30%]">
+        <div class="mb-6">
+            <div class="block mb-2 text-white text-3xl text-center"> Let's Share Ideas!</div>
+        </div>
+
+        <div class="mb-6">
+            <Label for="large-input" class="block mb-2 text-white text-xl">Supplement/Treatment Suggestion</Label>
+            <Input id="treatment" type="text" size="lg" placeholder="Suggestion">
+                <FileEditSolid slot="left" class="w-5 h-5 text-gray-500 dark:text-gray-400" />
+            </Input>
+        </div>
+
+        <div class="mb-6">
+            <Label for="large-input" class="block mb-2 text-white text-xl">Purchase Link <span class="opacity-50">(Optional)</span></Label>
+            <Input id="purchase-link" type="text" size="lg" placeholder="Purchase Link">
+                <LinkSolid slot="left" class="w-5 h-5 text-gray-500 dark:text-gray-400" />
+            </Input>
+        </div>
+
+
+        <div class="mb-6">
+            <Label for="large-input" class="block mb-2 text-white text-xl">Email <span class="opacity-50">(Optional)</span></Label>
+            <Input id="email" type="email" size="lg" placeholder="name@gmail.com">
+                <EnvelopeSolid slot="left" class="w-5 h-5 text-gray-500 dark:text-gray-400" />
+            </Input>
+        </div>
+
+        <div class="text-center">
+            <button type="submit" class="whitebutton">
+                Submit
+            </button>
+        </div>
+    </form>
+</div>
+{/if}
 
 <Footer expand={true}/>
 
