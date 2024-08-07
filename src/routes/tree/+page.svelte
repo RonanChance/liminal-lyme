@@ -9,7 +9,7 @@
     import { EnvelopeSolid, FileEditSolid, LinkSolid, PapperPlaneSolid } from 'flowbite-svelte-icons';
     import MedicalDisclaimer from "../../lib/components/MedicalDisclaimer.svelte";
     import * as d3 from 'd3';
-    
+
     /** @type {import('./$types').PageData} */
 	export let data;
 
@@ -111,8 +111,8 @@
                     toggle(d); 
                     update(d); 
                 });
-
-            nodeEnter.append('circle')
+            
+            nodeEnter.filter(d => d.children || d._children).append('circle')
                 .attr('r', 1e-6)
                 .style('fill', d => d._children ? 'black' : '#fff');
 
@@ -124,33 +124,33 @@
                 .style('fill-opacity', 1e-6);
 
             nodeEnter.each(function(d) {
-            const currentNode = d3.select(this);
-            const textNode = currentNode.select('text');
-            const textWidth = textNode.node().getBBox().width;
+                const currentNode = d3.select(this);
+                const textNode = currentNode.select('text');
+                const textWidth = textNode.node().getBBox().width;
 
-            if (d.data.link) {
-                // temporary canvas to measure text width
-                const canvas = document.createElement('canvas');
-                const context = canvas.getContext('2d');
-                context.font = '18px Arial';
+                if (d.data.link) {
+                    // temporary canvas to measure text width
+                    const canvas = document.createElement('canvas');
+                    const context = canvas.getContext('2d');
+                    context.font = '18px Arial';
 
-                const linkText = ": " + d.data.link;
-                const linkTextWidth = context.measureText(linkText).width;
+                    const linkText = ": " + d.data.link;
+                    const linkTextWidth = context.measureText(linkText).width;
 
-                currentNode.append('foreignObject')
-                    .attr('x', textWidth + 10)
-                    .attr('y', -9)
-                    .attr('width', linkTextWidth + 5)
-                    .attr('height', 30)
-                    .append('xhtml:div')
-                    .html(`<button class="text-white">: <span class="underline">${d.data.link}</span></button>`)
-                    .on('click', (event, d) => {
-                        event.stopPropagation();
-                        console.log('Article clicked', d.data.link);
-                        window.open(d.data.link, '_blank');
-                    });
-            }
-        });
+                    currentNode.append('foreignObject')
+                        .attr('x', textWidth + 10)
+                        .attr('y', -9)
+                        .attr('width', linkTextWidth + 5)
+                        .attr('height', 30)
+                        .append('xhtml:div')
+                        .html(`<button class="text-white opacity-50">: <span class="underline">${d.data.link}</span></button>`)
+                        .on('click', (event, d) => {
+                            event.stopPropagation();
+                            console.log('Article clicked', d.data.link);
+                            window.open(d.data.link, '_blank');
+                        });
+                }
+            });
 
             // Transition nodes to their new position
             const nodeUpdate = node.merge(nodeEnter).transition()
