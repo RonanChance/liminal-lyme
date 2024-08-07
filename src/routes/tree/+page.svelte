@@ -1,10 +1,10 @@
 <script>
     import { onMount } from 'svelte';
-    import { enhance } from '$app/forms';
     import { fade } from 'svelte/transition'
     import { Confetti } from "svelte-confetti"
     import TopBanner from '../../lib/components/TopBanner.svelte'
     import Footer from "../../lib/components/Footer.svelte";
+    import PocketBase from 'pocketbase';
     import { Label, Input } from 'flowbite-svelte';
     import { EnvelopeSolid, FileEditSolid, LinkSolid, PapperPlaneSolid } from 'flowbite-svelte-icons';
     import MedicalDisclaimer from "../../lib/components/MedicalDisclaimer.svelte";
@@ -23,34 +23,36 @@
     let email = "";
     let throw_confetti = false;
 
-    async function onSubmit(event) {
-        event.preventDefault();
+    async function onSubmit() {
 
         if (suggestion.trim() === "") {
             alert("Supplement/Treatment Suggestion is required.");
             return;
         }
+
+        const pb = new PocketBase("https://data.liminallyme.com");
+        const data = {
+            "suggestion": suggestion || '',
+            "article_link": articleLink || '',
+            "purchase_link": purchaseLink || '',
+            "email": email || ''
+        };
+
         throw_confetti = true;
 
-        const form = event.target.closest('form');
-        const formData = new FormData(form);
-        const response = await fetch(form.action, {
-            method: 'POST',
-            body: formData
-        });
-
-        const result = await response.json();
-        console.log(result)
-        if (result.data === '[true]') {
-            suggestion = "";
-            articleLink = "";
-            purchaseLink = "";
-            email = "";
-            throw_confetti = false;
+        try {
+            const record = await pb.collection('suggestions').create(data);
             alert('Thank you for your contribution!');
-        } else {
-            alert('Hmm, something went wrong. Please try again.');
         }
+        catch (error) {
+            alert('Something went wrong. Please try again.');
+        }
+
+        suggestion = "";
+        articleLink = "";
+        purchaseLink = "";
+        email = "";
+        throw_confetti = false;
     }
 
     onMount(async () => {
@@ -231,7 +233,7 @@
 
 {#if animate}
     <div class="w-full flex justify-center bg-[var(--lightbackground)] px-4 py-8 rounded-lg" in:fade={{delay: 1000, duration: 1500}}>
-        <form use:enhance method="POST" on:submit={onSubmit} class="w-[85%] md:w-[50%] xl:w-[30%]">
+        <div class="w-[85%] md:w-[50%] xl:w-[30%]">
             <div class="mb-6">
                 <div class="block mb-2 text-white text-3xl text-center flex flex-row justify-center gap-2"> 
                     <svg class="w-10 h-10" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="-4.92 -4.92 501.36 501.36" xml:space="preserve" fill="#000000" stroke="#000000" stroke-width="0.0049152" transform="rotate(0)"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#CCCCCC" stroke-width="0.9830399999999999"></g><g id="SVGRepo_iconCarrier"> <g> <path style="fill:#FCD462;" d="M229.601,54.04c-64.916,7.178-117.254,59.353-124.614,124.249 c-4.975,43.865,10.104,84.28,37.237,113.288c30.372,32.471,46.127,75.977,46.127,120.438v3.445h114.804v-3.434 c0-45.676,18.125-88.928,48.496-123.046c22.274-25.022,35.809-57.988,35.809-94.127C387.461,111.269,315.095,44.587,229.601,54.04z "></path> <rect x="239.954" style="fill:#FCD462;" width="11.597" height="25.651"></rect> <rect x="414.971" y="189.056" style="fill:#FCD462;" width="25.651" height="11.597"></rect> <rect x="50.898" y="189.056" style="fill:#FCD462;" width="25.651" height="11.597"></rect> <rect x="361.629" y="60.354" transform="matrix(-0.7071 0.7071 -0.7071 -0.7071 686.0109 -151.851)" style="fill:#FCD462;" width="25.651" height="11.597"></rect> <rect x="104.197" y="317.756" transform="matrix(-0.7071 0.7071 -0.7071 -0.7071 428.5645 469.5785)" style="fill:#FCD462;" width="25.651" height="11.597"></rect> <rect x="368.703" y="310.719" transform="matrix(-0.7072 0.707 -0.707 -0.7072 868.0994 287.5853)" style="fill:#FCD462;" width="11.597" height="25.651"></rect> <rect x="111.242" y="53.315" transform="matrix(-0.7071 0.7071 -0.7071 -0.7071 246.5676 30.1458)" style="fill:#FCD462;" width="11.597" height="25.651"></rect> </g> <path style="fill:#64798A;" d="M303.155,415.46H188.351v62.963c0,1.797,1.457,3.254,3.254,3.254h108.297 c1.797,0,3.254-1.457,3.254-3.254V415.46z"></path> <g> <path style="fill:#2F4859;" d="M301.614,415.503l-113.252,12.399c-3.863,0.424-6.652,3.898-6.228,7.76 c0.423,3.862,3.897,6.651,7.759,6.228l113.253-12.401c3.863-0.422,6.651-3.898,6.228-7.76 C308.95,417.868,305.476,415.079,301.614,415.503z"></path> <path style="fill:#2F4859;" d="M301.614,439.819L188.361,452.22c-3.863,0.423-6.652,3.898-6.228,7.76 c0.423,3.862,3.897,6.651,7.759,6.228l113.253-12.4c3.863-0.423,6.651-3.898,6.228-7.76 C308.95,442.184,305.476,439.397,301.614,439.819z"></path> <path style="fill:#2F4859;" d="M301.614,464.136l-113.252,12.4c-3.863,0.423-6.652,3.898-6.228,7.76 c0.423,3.863,3.897,6.651,7.759,6.228l113.253-12.401c3.863-0.422,6.651-3.898,6.228-7.76 C308.95,466.502,305.476,463.713,301.614,464.136z"></path> <path style="fill:#2F4859;" d="M219.654,481.534c0,5.514,11.684,9.986,26.098,9.986c14.415,0,26.1-4.471,26.1-9.986H219.654z"></path> </g> <polygon style="fill:#DC8744;" points="276.281,415.46 267.415,414.369 295.474,185.924 270.609,207.035 245.754,181.518 220.898,207.035 196.035,185.924 224.084,414.369 215.217,415.46 184.375,164.298 220.322,194.817 245.754,168.706 271.185,194.817 307.133,164.298 "></polygon> </g></svg>
@@ -274,7 +276,7 @@
                     {#if throw_confetti} <Confetti x={[-0.7, 0.7]} y={[-0.7, .7]} /> {/if}
                 </button>
             </div>
-        </form>
+        </div>
     </div>
 {/if}
 
