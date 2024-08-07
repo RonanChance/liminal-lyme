@@ -171,7 +171,7 @@
 </script>
 
 {#if animate}
-<div class="text-center text-2xl text-white py-6 bg-[var(--lightbackground)]" in:fade={{delay: 0, duration: 500}}>Search <span class="text-[#e14b00] font-bold">Reddit</span> for <br><span class="font-bold">Medications</span> & <span class="font-bold">Supplements</span>
+<div class="text-center text-2xl text-white py-6 bg-[var(--lightbackground)] rounded-b-lg" in:fade={{delay: 0, duration: 500}}>Search <span class="text-[#e14b00] font-bold">Reddit</span> for <br><span class="font-bold">Medications</span> & <span class="font-bold">Supplements</span>
 	<div class="subscriptnote">Recommend: 1-3 selections</div>
 </div>
 {/if}
