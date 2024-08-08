@@ -57,9 +57,9 @@
 
     onMount(async () => {
         animate = true
-        const margin = { top: 0, right: 120, bottom: 20, left: 120 };
+        const margin = { top: 0, right: 0, bottom: 0, left: 120 };
         const width = 2560 - margin.right - margin.left;
-        const height = 600 - margin.top - margin.bottom;
+        const height = 825 - margin.top - margin.bottom;
         let i = 0;
         const duration = 750;
 
@@ -99,7 +99,7 @@
             const links = tree(root).links();
 
             // Normalize for fixed-depth
-            nodes.forEach(d => { d.y = d.depth * 210; d.x = d.x * 0.7 });
+            nodes.forEach(d => { d.y = d.depth * 250; d.x = d.x * 0.9 });
 
             // Update nodes
             const node = svg.selectAll('g.node')
@@ -120,7 +120,7 @@
 
             nodeEnter.append('text')
                 .attr('x', d => d.children || d._children ? -10 : 10)
-                .attr('dy', '.35em')
+                .attr('dy', '.3em')
                 .attr('text-anchor', d => d.children || d._children ? 'end' : 'start')
                 .text(d => d.data.name)
                 .style('fill-opacity', 1e-6);
