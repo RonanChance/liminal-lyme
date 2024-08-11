@@ -172,7 +172,7 @@
 
 {#if animate}
 <div class="text-center text-2xl text-white py-6 bg-[var(--lightbackground)] rounded-b-lg" in:fade={{delay: 0, duration: 500}}>Search <span class="text-[#e14b00] font-bold">Reddit</span> for <br><span class="font-bold">Medications</span> & <span class="font-bold">Supplements</span>
-	<div class="subscriptnote">Recommend: 1-3 selections</div>
+	<div class="italic text-sm">Recommend: 1-3 selections</div>
 </div>
 {/if}
 
@@ -361,12 +361,6 @@
 		display: flex;
 		flex-direction: column;
 	}
-	.subscriptnote {
-		font-size: 12pt;
-		font-style: italic;
-		text-align: center;
-	}
-
 	.post-area {
 		padding-bottom: 5%;
 	}

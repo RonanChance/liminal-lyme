@@ -59,7 +59,7 @@
         animate = true
         const margin = { top: 0, right: 0, bottom: 0, left: 120 };
         const width = 2560 - margin.right - margin.left;
-        const height = 825 - margin.top - margin.bottom;
+        const height = 700 - margin.top - margin.bottom;
         let i = 0;
         const duration = 750;
 
@@ -141,11 +141,12 @@
 
                     currentNode.append('foreignObject')
                         .attr('x', textWidth + 10)
-                        .attr('y', -9)
+                        .attr('y', -11)
                         .attr('width', linkTextWidth + 5)
                         .attr('height', 30)
+                        .attr('color', '#f8f8f895')
                         .append('xhtml:div')
-                        .html(`<button class="text-white opacity-50">: <span class="underline">${d.data.link}</span></button>`)
+                        .html(`<button>: <span class="underline">${d.data.link}</span></button>`)
                         .on('click', (event, d) => {
                             event.stopPropagation();
                             console.log('Article clicked', d.data.link);
@@ -226,7 +227,7 @@
 <TopBanner expand={true} />
 
 {#if animate}
-    <div class="text-center text-2xl text-white py-6 mb-8 bg-[var(--lightbackground)] rounded-b-lg" in:fade={{delay: 0, duration: 500}}>Chronic Illness Treatment Tree</div>
+<div class="text-center text-2xl text-white py-6 bg-[var(--lightbackground)] rounded-b-lg text-bold" in:fade={{delay: 0, duration: 500}}>Chronic Illness Treatment Tree</div>
 {/if}
 
 <div id="tree"></div>
@@ -301,13 +302,13 @@
     }
 
     #tree :global(.node text) {
-        font-size: 1.1rem;
-        fill: #ccc;
+        font-size: 1rem;
+        fill: var(--white);
     }
 
     #tree :global(path.link) {
         fill: none;
-        stroke: #cccccc20;
+        stroke: #cccccc18;
         stroke-width: 1px;
     }
 
