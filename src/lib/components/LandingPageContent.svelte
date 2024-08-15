@@ -25,44 +25,44 @@
             <span class="sr-only">Show information</span>
         </button>
     </h3>
-    <Popover class="w-64 text-sm font-light" triggeredBy="#info-button" data-popper-placement="left">This research is currently focused on tickborne disease data from Reddit, but will expand in the future</Popover>
+    <Popover class="w-64 text-sm font-light" triggeredBy="#info-button" data-popper-placement="left">This research is focused on tick-borne disease data from Reddit, but might expand in the future</Popover>
 
     <div class="image-content-bar" in:fly={{y:50, delay: 1000, duration: 1500}}>
-        <div class="info-row">
-            <div class="imgdiv" in:blur={{delay: 1000, duration: 1500}}>
+        <div class="info-row" in:blur={{delay: 1000, duration: 1500}}>
+            <div class="imgdiv">
                 <img src="/bacteria_images/img1.png" alt="img1">
             </div>
-            <div class="text-info" in:blur={{delay: 1000, duration: 1500}}>
+            <div class="text-info">
                 <strong>Search</strong> 
                 Query our database to find tickborne illness experiences
             </div>
         </div>
         
-        <div class="info-row">
-            <div class="imgdiv" in:blur={{delay: 1000, duration: 1500}}>
+        <div class="info-row" in:blur={{delay: 1000, duration: 1500}}>
+            <div class="imgdiv">
                 <img src="/bacteria_images/img2.png" alt="img2">
             </div>
-            <div class="text-info" in:blur={{delay: 1000, duration: 1500}}>
+            <div class="text-info">
                 <strong>Learn</strong> 
                 Find treatment ideas based on the medications and supplements that help others
             </div>
         </div>
 
-        <div class="info-row">
-            <div class="imgdiv" in:blur={{delay: 1000, duration: 1500}}>
+        <div class="info-row" in:blur={{delay: 1000, duration: 1500}}>
+            <div class="imgdiv">
                 <img src="/bacteria_images/img3.png" alt="img3">
             </div>
-            <div class="text-info" in:blur={{delay: 1000, duration: 1500}}>
+            <div class="text-info">
                 <strong>Connect</strong>
                 Find users with similar reactions and experiences
             </div>
         </div>
 
-        <div class="info-row">
-            <div class="imgdiv" in:blur={{delay: 1000, duration: 1500}}>
+        <div class="info-row" in:blur={{delay: 1000, duration: 1500}}>
+            <div class="imgdiv">
                 <img src="/bacteria_images/img4.png" alt="img4">
             </div>
-            <div class="text-info" in:blur={{delay: 1000, duration: 1500}}>
+            <div class="text-info">
                 <strong>Return</strong>
                 Check back often as we add medications, supplements, and treatments
             </div>
@@ -70,7 +70,7 @@
     
     </div>
     
-    <div class="numbersdiv">
+    <div class="numbersdiv" in:blur={{delay: 1500, duration: 1500}}>
         <hr/>
         <div class="transparenttext">Scanned Comments</div>
         <div class="numbertext">{total_scanned}</div>

@@ -120,11 +120,8 @@ ul {
 }
   
 .whitebutton:hover {
-    box-shadow: 0 0 5px var(--lightbackground),
-                0 0 5px var(--lightbackground),
-                0 0 10px var(--lightbackground),
-                0 0 15px var(--lightbackground);
-  }
+    box-shadow: 0 0 5px var(--white)
+}
 
 @media (max-width: 768px) {
 
