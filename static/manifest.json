@@ -1,0 +1,27 @@
+{
+    "name": "Liminal Lyme",
+    "short_name": "LiminalLyme",
+    "start_url": "/",
+    "display": "minimal-ui",
+    "background-color": "ffffff",
+    "theme-color": "#ffffff",
+    "description": "Empower tick-borne illness recovery",
+    "categories": ["health", "medical"],
+    "icons": [
+        {
+            "src" : "apple-touch-icon.png",
+            "type": "image/png",
+            "sizes": "180x180"
+        },
+        {
+            "src" : "android-chrome-192x192.png",
+            "type": "image/png",
+            "sizes": "192x192"
+        },
+        {
+            "src" : "android-chrome-512x512.png",
+            "type": "image/png",
+            "sizes": "512x512"
+        }
+    ]
+}
