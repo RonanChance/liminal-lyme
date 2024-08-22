@@ -12,9 +12,9 @@
 {#if animate}
 <div class="content-container">
     
-    <div class="mt-12 text-center" in:blur={{delay: 400, duration: 1000}}>
-        <a href="/search" class="whitebutton mr-1">Search Reddit</a>
-        <a href="/tree" class="whitebutton ml-1">Treatment Tree</a>
+    <div class="mt-12 text-center flex flex-wrap justify-center gap-2" in:blur={{delay: 400, duration: 1000}}>
+        <a href="/search" class="whitebutton">Search Reddit</a>
+        <a href="/tree" class="whitebutton">Treatment Tree</a>
     </div>
 
     <h3 class="infonote" in:blur={{delay: 400, duration: 1000}}>We collect open-source tick-borne disease data so you can see how people with your <a class="highlight" href="/about#what_conditions_are_supported">conditions</a> react to <a class="highlight" href="/about#what_supplements_are_supported">supplements</a> & <a class="highlight" href="/about#what_medications_are_supported">medications</a>

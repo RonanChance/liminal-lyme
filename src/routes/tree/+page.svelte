@@ -6,7 +6,7 @@
     import Footer from "../../lib/components/Footer.svelte";
     import PocketBase from 'pocketbase';
     import { Label, Input } from 'flowbite-svelte';
-    import { EnvelopeSolid, FileEditSolid, LinkSolid, PapperPlaneSolid } from 'flowbite-svelte-icons';
+    import { EnvelopeSolid, FileEditSolid, LinkSolid } from 'flowbite-svelte-icons';
     import MedicalDisclaimer from "../../lib/components/MedicalDisclaimer.svelte";
     import * as d3 from 'd3';
 
@@ -233,10 +233,6 @@
 </div>
 {/if}
 
-<!-- <div class="text-white bg-[var(--darkbackground)] display-flex px-10 text-center text-sm">
-    Note: This tool is intended to support your research and is not medical advice
-</div> -->
-
 <div id="tree"></div>
 
 {#if animate}
@@ -320,7 +316,7 @@
     }
 
     #tree :global(.link-button) {
-        background-color: var(--darkbackground);
+        background-color: var(--white);
         color: var(--white);
         border: none;
         border-radius: 2px;

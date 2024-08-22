@@ -4,24 +4,49 @@
   import { getCookie } from '../../lib/components/constants';
   import { goto } from '$app/navigation';
   import { page } from '$app/stores';
+  import ModalPWA from './ModalPWA.svelte';
 
   let email;
   let selected = $page.url.pathname;
   export let expand = false;
+  let showModal = false;
   
   onMount(() => {
-        if (browser) {
-          email = getCookie('email');
-          // console.log(email);
-        }
-    });
+      if (browser) {
+        email = getCookie('email');
+      }
+  });
 
   function changeSelected(Destination) {
-      goto(Destination)
+    goto(Destination)
+  }
+
+  function showPWAPoppup(){
+    showModal = true;
   }
 
 </script>
 
+<ModalPWA bind:showModal>
+  <div class="flex justify-center">
+    <img src="/tutorial.GIF" alt="tutorial" class="w-[235px]"/>
+  </div>
+</ModalPWA>
+
+<div class="font-semibold bg-[var(--white)] flex flex-row pt-2 px-5 justify-between block md:hidden">
+  <div class="flex flex-row items-center justify-center">
+    <div class="mr-2 ">
+      <img src="/favicon-32x32.png" alt="Logo" class="w-8">
+    </div>
+    <div class="flex flex-col text-left">
+      <div class="text-sm">Liminal Lyme - Open Source Health</div>
+      <div class="text-sm text-black text-opacity-40 font-normal">Add to Home Screen</div>
+    </div>
+  </div>
+  <div>
+    <button type="submit" class="bg-[#007AFF] text-white font-semibold pt-1 pb-0.5 px-3.5 rounded-3xl flex items-center justify-center" on:click={ showPWAPoppup }>ADD</button>
+  </div>
+</div>
 {#if !expand}
   <div class="navbar">
       <a href="/">
