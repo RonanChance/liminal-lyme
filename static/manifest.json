@@ -2,7 +2,7 @@
     "name": "Liminal Lyme",
     "short_name": "LiminalLyme",
     "start_url": "/",
-    "display": "minimal-ui",
+    "display": "standalone",
     "background-color": "ffffff",
     "theme-color": "#ffffff",
     "description": "Empower tick-borne illness recovery",
