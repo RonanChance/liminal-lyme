@@ -17,10 +17,10 @@
         <div class="text-center text-2xl">Add to iPhone</div>
 		<slot class="" />
         <div class="opacity-55 text-sm">
-            [1] Tap the Share button on the bottom of the page <br />
-            [2] Scroll down until you see "Add to Home Screen" <br />
-            [3] Name the shortcut, click "Add" when done. <br />
-            [4] Use the shortcut to access the website.
+            1. Tap the Share button on the bottom<br />
+            2. Scroll down and tap "Add to Home Screen"<br />
+            3. Name the shortcut, tap "Add" when done<br />
+            4. Use the shortcut to visit the website
         </div>
 	</div>
 </dialog>
