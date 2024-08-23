@@ -135,8 +135,9 @@
                     const canvas = document.createElement('canvas');
                     const context = canvas.getContext('2d');
                     context.font = '18px Arial';
-
-                    const linkText = ": " + d.data.link;
+                    
+                    const linkText = d.data.link.split(" ### ")[0];
+                    const linkURL = d.data.link.split(" ### ")[1];
                     const linkTextWidth = context.measureText(linkText).width;
 
                     currentNode.append('foreignObject')
@@ -146,11 +147,11 @@
                         .attr('height', 30)
                         .attr('color', '#f8f8f895')
                         .append('xhtml:div')
-                        .html(`<button>: <span class="underline">${d.data.link}</span></button>`)
+                        .html(`<button>: <span class="underline">${linkText}</span></button>`)
                         .on('click', (event, d) => {
                             event.stopPropagation();
-                            console.log('Article clicked', d.data.link);
-                            window.open(d.data.link, '_blank');
+                            console.log('Article clicked', linkURL);
+                            window.open(linkURL, '_blank');
                         });
                 }
             });
