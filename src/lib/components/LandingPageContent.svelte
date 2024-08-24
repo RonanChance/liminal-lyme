@@ -29,7 +29,7 @@
 
     <div class="image-content-bar" in:fly={{y:50, delay: 1000, duration: 1500}}>
         <div class="info-row" in:blur={{delay: 1000, duration: 1500}}>
-            <div class="imgdiv">
+            <div class="min-w-[50%] max-w-[50%]">
                 <img src="/bacteria_images/img1.png" alt="img1">
             </div>
             <div class="text-info">
@@ -39,7 +39,7 @@
         </div>
         
         <div class="info-row" in:blur={{delay: 1000, duration: 1500}}>
-            <div class="imgdiv">
+            <div class="min-w-[50%] max-w-[50%]">
                 <img src="/bacteria_images/img2.png" alt="img2">
             </div>
             <div class="text-info">
@@ -49,7 +49,7 @@
         </div>
 
         <div class="info-row" in:blur={{delay: 1000, duration: 1500}}>
-            <div class="imgdiv">
+            <div class="min-w-[50%] max-w-[50%]">
                 <img src="/bacteria_images/img3.png" alt="img3">
             </div>
             <div class="text-info">
@@ -59,7 +59,7 @@
         </div>
 
         <div class="info-row" in:blur={{delay: 1000, duration: 1500}}>
-            <div class="imgdiv">
+            <div class="min-w-[50%] max-w-[50%]">
                 <img src="/bacteria_images/img4.png" alt="img4">
             </div>
             <div class="text-info">
@@ -151,10 +151,6 @@
 
     strong {
         font-size: 20pt;
-    }
-
-    .imgdiv {
-        max-width: 50%;
     }
 
     .content-container {
