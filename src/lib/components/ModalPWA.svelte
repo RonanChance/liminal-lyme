@@ -17,9 +17,9 @@
         <div class="text-center text-2xl">Add to iPhone</div>
 		<slot class="" />
         <div class="opacity-55 text-sm">
-            1. Tap the Share button on the bottom<br />
+            1. On Safari, tap the Share button<br />
             2. Scroll down and tap "Add to Home Screen"<br />
-            3. Name the shortcut, tap "Add" when done<br />
+            3. Tap "Add"<br />
             4. Use the shortcut to visit the website
         </div>
 	</div>

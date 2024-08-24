@@ -1,19 +1,18 @@
 <script>
   import { onMount } from 'svelte';
-  import { browser } from '$app/environment';
-  import { getCookie } from '../../lib/components/constants';
+  // import { getCookie } from '../../lib/components/constants';
   import { goto } from '$app/navigation';
   import { page } from '$app/stores';
   import ModalPWA from './ModalPWA.svelte';
 
-  let email;
+  // let email;
   let selected = $page.url.pathname;
   export let expand = false;
   let showModal = false;
   let isStandAlone = false;
   
   onMount(() => {
-    email = getCookie('email');
+    // email = getCookie('email');
     isStandAlone = window.navigator.standalone || false;
   });
 
@@ -30,7 +29,10 @@
 {#if !isStandAlone}
   <ModalPWA bind:showModal>
     <div class="flex justify-center">
-      <img src="/tutorial.GIF" alt="tutorial" class="w-[235px]"/>
+      <video autoplay loop muted playsinline class="w-[85%]">
+        <source src="/tutorial.mp4" type="video/mp4">
+        This browser does not display the video tag.
+      </video>
     </div>
   </ModalPWA>
 
@@ -55,9 +57,9 @@
       <img src="/banner.png" class="mainlogo w-[170px] md:w-[250px] xl:w-[250px]" alt="LiminalLyme" />
     </a>
     <nav class="nav-links">
-      {#if email}
+      <!-- {#if email}
         <button href="/logout" on:click={() => {changeSelected("/logout");}} style="text-decoration: {selected.includes("logout") ? "underline" : "none"}">Logout</button>
-      {/if}
+      {/if} -->
       <button href="/search" on:click={() => {changeSelected("/search");}} style="text-decoration: {selected.includes("search") ? "underline" : "none"}; text-decoration-thickness: 3px; text-underline-offset: 3px;">SEARCH</button>
       <button href="/tree" on:click={() => {changeSelected("/tree");}} style="text-decoration: {selected.includes("tree") ? "underline" : "none"}; text-decoration-thickness: 3px; text-underline-offset: 3px;">TREE</button>
       <button href="/about" on:click={() => {changeSelected("/about");}} style="text-decoration: {selected.includes("about") ? "underline" : "none"}; text-decoration-thickness: 3px; text-underline-offset: 3px;">ABOUT</button>
