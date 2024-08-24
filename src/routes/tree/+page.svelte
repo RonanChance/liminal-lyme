@@ -237,7 +237,7 @@
 <div id="tree"></div>
 
 {#if animate}
-    <div class="w-full flex justify-center bg-[var(--lightbackground)] px-4 py-8 rounded-lg" in:fade={{delay: 1000, duration: 1500}}>
+    <div class="w-full flex justify-center bg-[var(--lightbackground)] px-4 py-8 rounded-lg" in:fade={{delay: 750, duration: 750}}>
         <div class="w-[85%] md:w-[50%] xl:w-[30%]">
             <div class="mb-6">
                 <div class="block mb-2 text-white text-2xl text-center flex flex-row justify-center gap-1"> 
@@ -286,7 +286,7 @@
 {/if}
 
 {#if animate}
-    <div class="flex flex-col xl:max-w-[60%] max-w-[90%] m-auto mt-10" in:fade={{delay: 1500, duration: 1500}}>
+    <div class="flex flex-col xl:max-w-[60%] max-w-[90%] m-auto mt-10" in:fade={{delay: 750, duration: 750}}>
         <MedicalDisclaimer />
     </div>
 {/if}

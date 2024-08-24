@@ -30,7 +30,7 @@
 
   {#if animate}
     <div class="mt-8 text-center">
-      <h2 in:fade|global={{y: 100, delay: 50, duration: 1000 }}>
+      <h2 in:fade|global={{y: 100, delay: 50, duration: 500 }}>
         <div class="inline"> 
         Get <span class="font-bold">insights</span> from Reddit based on <span class="font-bold">medications</span> & <span class="font-bold">supplements</span>
         </div>

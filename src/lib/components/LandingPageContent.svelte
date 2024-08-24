@@ -12,12 +12,12 @@
 {#if animate}
 <div class="content-container">
     
-    <div class="mt-12 text-center flex flex-wrap justify-center gap-2" in:blur={{delay: 400, duration: 1000}}>
+    <div class="mt-12 text-center flex flex-wrap justify-center gap-2" in:blur={{delay: 200, duration: 600}}>
         <a href="/search" class="whitebutton">Search Reddit</a>
         <a href="/tree" class="whitebutton">Treatment Tree</a>
     </div>
 
-    <h3 class="infonote" in:blur={{delay: 400, duration: 1000}}>We collect open-source tick-borne disease data so you can see how people with your <a class="highlight" href="/about#what_conditions_are_supported">conditions</a> react to <a class="highlight" href="/about#what_supplements_are_supported">supplements</a> & <a class="highlight" href="/about#what_medications_are_supported">medications</a>
+    <h3 class="infonote" in:blur={{delay: 400, duration: 750}}>We collect open-source tick-borne disease data so you can see how people with your <a class="highlight" href="/about#what_conditions_are_supported">conditions</a> react to <a class="highlight" href="/about#what_supplements_are_supported">supplements</a> & <a class="highlight" href="/about#what_medications_are_supported">medications</a>
         <button data-popover-target="popover-description" data-popover-placement="bottom-end" type="button" id="info-button">
             <svg class="w-4 h-4 ml-0 text-gray-400 hover:text-gray-500" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"></path>
@@ -27,8 +27,8 @@
     </h3>
     <Popover class="w-64 text-sm font-light" triggeredBy="#info-button" data-popper-placement="left">This research is focused on tick-borne disease data from Reddit, but might expand in the future</Popover>
 
-    <div class="image-content-bar" in:fly={{y:50, delay: 1000, duration: 1500}}>
-        <div class="info-row" in:blur={{delay: 1000, duration: 1500}}>
+    <div class="image-content-bar" in:fly={{y:50, delay: 750, duration: 750}}>
+        <div class="info-row" in:blur={{delay: 750, duration: 1250}}>
             <div class="min-w-[50%] max-w-[50%]">
                 <img src="/bacteria_images/img1.png" alt="img1">
             </div>
@@ -38,7 +38,7 @@
             </div>
         </div>
         
-        <div class="info-row" in:blur={{delay: 1000, duration: 1500}}>
+        <div class="info-row" in:blur={{delay: 750, duration: 1250}}>
             <div class="min-w-[50%] max-w-[50%]">
                 <img src="/bacteria_images/img2.png" alt="img2">
             </div>
@@ -48,7 +48,7 @@
             </div>
         </div>
 
-        <div class="info-row" in:blur={{delay: 1000, duration: 1500}}>
+        <div class="info-row" in:blur={{delay: 750, duration: 1250}}>
             <div class="min-w-[50%] max-w-[50%]">
                 <img src="/bacteria_images/img3.png" alt="img3">
             </div>
@@ -58,7 +58,7 @@
             </div>
         </div>
 
-        <div class="info-row" in:blur={{delay: 1000, duration: 1500}}>
+        <div class="info-row" in:blur={{delay: 750, duration: 1250}}>
             <div class="min-w-[50%] max-w-[50%]">
                 <img src="/bacteria_images/img4.png" alt="img4">
             </div>
@@ -70,7 +70,7 @@
     
     </div>
     
-    <div class="numbersdiv" in:blur={{delay: 1500, duration: 1500}}>
+    <div class="numbersdiv" in:blur={{delay: 1000, duration: 750}}>
         <div class="transparenttext">Scanned Comments</div>
         <div class="numbertext">{total_scanned}</div>
 

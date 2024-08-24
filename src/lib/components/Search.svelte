@@ -178,7 +178,7 @@
 
 <div class="intro-container">
 	{#if animate}
-		<main class="container" in:fade={{delay: 0, duration: 1200}}>
+		<main class="container" in:fade={{delay: 0, duration: 600}}>
             
 			<div class="togglebuttongroup">
 				{#each slicedItems as item}
@@ -260,7 +260,7 @@
 			<div class="post-area">
 				<PostList posts={result_list}/>
 			</div>
-			<div class="med-disclaimer" in:fade={{y:50, delay: 1000, duration: 1000}}>
+			<div class="med-disclaimer" in:fade={{y:50, delay: 750, duration: 750}}>
 				<MedicalDisclaimer />
 			</div>
 		</main>
