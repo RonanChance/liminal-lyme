@@ -13,8 +13,8 @@
 <div class="content-container">
     
     <div class="mt-12 text-center flex flex-wrap justify-center gap-2" in:blur={{delay: 200, duration: 600}}>
-        <a href="/search" class="whitebutton">Search Reddit</a>
-        <a href="/tree" class="whitebutton">Treatment Tree</a>
+        <a href="/search" class="whitebutton" type="button">Search Reddit</a>
+        <a href="/tree" class="whitebutton" type="button">Treatment Tree</a>
     </div>
 
     <h3 class="infonote" in:blur={{delay: 400, duration: 750}}>We collect open-source tick-borne disease data so you can see how people with your <a class="highlight" href="/about#what_conditions_are_supported">conditions</a> react to <a class="highlight" href="/about#what_supplements_are_supported">supplements</a> & <a class="highlight" href="/about#what_medications_are_supported">medications</a>
