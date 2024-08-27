@@ -107,7 +107,6 @@
 {/if}
 
 <style>
-
     .quotediv {
         padding-top: 50px;
         padding-bottom: 50px;
@@ -166,7 +165,6 @@
         margin-right: auto;
         margin-top: 50px;
         max-width: 90%;
-        /* margin: auto; */
     }
 
     .numbersdiv {
@@ -226,5 +224,4 @@
         }
         
     }
-
 </style>

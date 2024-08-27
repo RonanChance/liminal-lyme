@@ -2,8 +2,6 @@
   import { onMount } from 'svelte'
   import PostItem from "./PostItem.svelte";
   import { ClockSolid } from 'flowbite-svelte-icons';
-  import { Button } from 'flowbite-svelte';
-  import PocketBase from 'pocketbase';
 
   export let posts = [];
   export let chronologyMode = false;
@@ -59,40 +57,38 @@
   </div>
 {/if}
 
-  <style>
-
+<style>
     .timediv {
-      display: flex;
-      flex-direction: column;
-      color: var(--offwhite);
+        display: flex;
+        flex-direction: column;
+        color: var(--offwhite);
     }
 
     .duration {
-      display: flex;
-      flex-direction: row;
-      margin: auto;
-      gap: 0.75rem;
+        display: flex;
+        flex-direction: row;
+        margin: auto;
+        gap: 0.75rem;
     }
 
     .button-container {
-      display: flex;
-      justify-content: center;
+        display: flex;
+        justify-content: center;
     }
 
     button {
-      color: #202142;
-      background-color: #202142;
-      color: #ffff;
-      border: 0;
-      border-radius: 0.5rem;
-      width: 6.75rem;
-      height: 2.5rem;
-      cursor: pointer;
+        color: #202142;
+        background-color: #202142;
+        color: #ffff;
+        border: 0;
+        border-radius: 0.5rem;
+        width: 6.75rem;
+        height: 2.5rem;
+        cursor: pointer;
     }
-  
+
     button:hover {
-      transform: scale(0.98);
-      opacity: 0.9;
+        transform: scale(0.98);
+        opacity: 0.9;
     }
-  
-  </style>
+</style>

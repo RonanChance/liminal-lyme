@@ -1,14 +1,3 @@
-<div class="card">
+<div class="bg-white rounded-lg p-7 my-6 shadow-[0px_0px_20px_2px_#0c0c18] relative">
     <slot></slot>
 </div>
-
-<style>
-    .card{
-        background-color: var(--white);
-        border-radius: 0.5rem;
-        padding: 1.75rem 1.75rem;
-        margin: 25px 0;
-        position: relative;
-        box-shadow: 0px 0px 20px 2px #0c0c18;
-    }
-</style>

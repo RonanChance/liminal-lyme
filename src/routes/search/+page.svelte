@@ -1,93 +1,21 @@
 <script>
-    import { onDestroy, onMount } from 'svelte';
     import TopBanner from '../../lib/components/TopBanner.svelte'
-    import PocketBase from 'pocketbase';
-    import { browser } from '$app/environment';
-    // import { fly } from 'svelte/transition'
-    import { getCookie } from '../../lib/components/constants';
-    import { ButtonGroup, Button } from 'flowbite-svelte';
-    import { MessagesSolid, ClockSolid, UserGroupSolid, MessagesOutline, UsersGroupOutline } from 'flowbite-svelte-icons';
-    import NavigationBar from '../../lib/components/NavigationBar.svelte';
-    import Chat from '../../lib/components/Chat.svelte'
-    import Anecdote from '../../lib/components/Anecdote.svelte';
-    import Connect from '../../lib/components/Connect.svelte';
     import Search from '../../lib/components/Search.svelte';
     import Chronology from '../../lib/components/Chronology.svelte';
     import SharePost from '../../lib/components/SharePost.svelte';
     import { page } from '$app/stores'
-    const path = $page.url.searchParams.get('path')
-
-    /** @type {import('./$types').LayoutData} */
-    export let data;
-
-    let currentTab = 'searchTab';
-    if (path === 'searchTab') {
-        currentTab = 'searchTab';
-    }
-    else if (path === 'chatTab') {
-        currentTab = 'chatTab';
-    } 
-    else if (path === 'anecdoteTab') {
-        currentTab = 'anecdoteTab';
-    } 
-    else if (path === 'chronologyTab') {
-        currentTab = 'chronologyTab';
-    }
-    else if (path === 'shareTab') {
-        currentTab = 'shareTab';
-    }
-    console.log(currentTab)
-
-    // Declare email outside of the if (browser) block
-    let email;
-    let animate = false;
-
-    onMount(() => {
-        animate = true;
-        if (browser) {
-            email = getCookie('email');
-            // console.log(email);
-            // console.log(path)
-        }
-    });
-
+    let path = $page.url.searchParams.get('path')
 </script>
 
-<div class="entirepage">
+<div class="flex flex-col h-screen">
     <TopBanner />
-    <!-- <NavigationBar bind:currentTab={currentTab}/> -->
-
-    {#if animate}
-        <!-- <div class="divbg" in:fly|global={{y: 30, delay: 50, duration: 1000 }}> -->
-            {#if currentTab === 'chatTab'}
-                <Chat />
-            {:else if currentTab === 'anecdoteTab'}
-                <Anecdote {email}/>
-            {:else if currentTab === 'connectTab'}
-                <Connect {email}/>
-            {:else if currentTab === 'chronologyTab'}
-                <Chronology />
-            {:else if currentTab === 'searchTab'}
-                <Search />
-            {:else if currentTab === 'shareTab'}
-                <SharePost />
-            {/if}
-        <!-- </div> -->
+    {#if path == null}
+        <Search />
+    {:else if path === 'chronologyTab'}
+        <Chronology />
+    {:else if path === 'shareTab'}
+        <SharePost />
+    {:else}
+        <Search />
     {/if}
 </div>
-
-
-<style>
-
-    .entirepage {
-        display: flex;
-        flex-direction: column;
-        height: 100vh;
-    }
-
-    .divbg {
-        flex-grow: 1;
-        overflow-y: auto;
-    }
-
-</style>

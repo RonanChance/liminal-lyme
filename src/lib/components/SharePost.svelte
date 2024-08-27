@@ -19,10 +19,8 @@
             sort: '-date'
         }); 
         result_list = result_list.items;
-        console.log(result_list)
     }
     getPosts();
-
 </script>
 
 <div class="intro-container">

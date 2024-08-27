@@ -1,8 +1,6 @@
 <script>
 	export let showModal; // boolean
-
 	let dialog; // HTMLDialogElement
-
 	$: if (dialog && showModal) dialog.showModal();
 </script>
 
@@ -26,11 +24,11 @@
 	dialog {
 		background-color: var(--white);
 		width: 70%;
-		position: fixed; /* Keep the dialog box fixed at the bottom of the screen */
+		position: fixed;
 		top: 50%;
 		left: 50%;
 		transform: translate(-50%, -50%);
-		bottom: 0; /* Position the dialog box at the bottom of the screen */
+		bottom: 0;
 		border-radius: 0.5rem;
 		border: none;
 		padding: 0;
@@ -53,9 +51,6 @@
 		padding-top: 2em;
 		padding-bottom: 3em;
 	}
-	/* dialog[open] {
-		animation: zoom 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-	} */
 	@keyframes zoom {
 		from {
 			transform: scale(0.95);

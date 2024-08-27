@@ -3,14 +3,13 @@
     import { onMount } from 'svelte';
     import TopBanner from '../../lib/components/TopBanner.svelte'
     import { fade } from 'svelte/transition'
-    import { subreddits, illnesses, wikipedia_links_illnesses, wikipedia_links_medications, medications, supplements } from '../../lib/components/constants.js'
+    import { subreddits, illnesses, wikipedia_links_illnesses, medications, supplements } from '../../lib/components/constants.js'
     import fallingMedication from '$lib/assets/fallingMedication.webp';
     import TBDMap from '$lib/assets/TBDMap.jpg';
     import coinfections from '$lib/assets/coinfections.jpg';
 
     let animate = false;
     onMount(() => animate = true);
-
 </script>
 
 <TopBanner />
@@ -169,7 +168,6 @@
 
 
 <style>
-    
     .link-word {
         color: var(--white);
         text-decoration: underline;
@@ -189,7 +187,7 @@
         margin-top: 2rem;
         margin-bottom: 2rem;
         color: white;
-        /* font-style: italic; */
+
         font-size: 3rem;
         font-weight: 300;
 

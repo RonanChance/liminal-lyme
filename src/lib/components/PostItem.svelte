@@ -1,5 +1,5 @@
 <script>
-    import { AngleUpSolid, ChevronRightSolid, ClockSolid, VolumeUpSolid, ArrowUpFromBracketOutline, CheckSolid} from 'flowbite-svelte-icons';
+    import { AngleUpSolid, ChevronRightSolid, ClockSolid, ArrowUpFromBracketOutline, CheckSolid} from 'flowbite-svelte-icons';
     import Card from './Card.svelte'
     import Modal from './Modal.svelte';
     import { chronology_usernames } from '../../lib/components/constants.js'
@@ -30,7 +30,7 @@
     // Function to handle clicks on medication spans
     function handleClick(event) {
         const target = event.target;
-        
+
         // Compute keyword by reversing and replacing tag
         let keyword = target.classList[0].split('').reverse().join('');
         keyword = keyword.replace(/_/g, "");
@@ -64,16 +64,11 @@
     let copiedPopupVisible = false;
     const showCopiedPopup = () => {
         copiedPopupVisible = true;
-        setTimeout(() => {
-        copiedPopupVisible = false;
-        }, 1500);
+        setTimeout(() => { copiedPopupVisible = false; }, 1500);
     };
-
-    let speech = new SpeechSynthesisUtterance();
 
     async function sharePost(url) {
         try {
-            console.log(url);
             const textArea = document.createElement("textarea");
             textArea.value = url;
             document.body.appendChild(textArea);
@@ -81,23 +76,10 @@
             document.execCommand("copy");
             document.body.removeChild(textArea);
             showCopiedPopup();
-
-            // const htmlString = item.body;
-            // const tempDiv = document.createElement('div');
-            // tempDiv.innerHTML = htmlString;
-            // const plainText = tempDiv.textContent;
-
-            // console.log(plainText.slice(0, 30));
-            
-            // speech.text = plainText.slice(0, 30);
-            // window.speechSynthesis.speak(speech);
         } catch (err) {
             console.log(err);
         }
     }
-
-    console.log(item.id)
-    let placement = 'top';
 </script>
 
 <Modal bind:showModal>
@@ -156,9 +138,6 @@
         </div>
     {/if}
     <div class="flex flex-row pt-7 gap-4 justify-around">
-        <!-- <button on:click={sharePost} class="inline-flex items-center justify-center max-w-[70px] flex-grow flex-1 aspect-square mr-2 transition-colors duration-150  rounded-xl focus:shadow-outline text-gray-400 bg-gray-200 pointer-events-none hover:bg-[var(--extralightbackground)] hover:text-white">
-            <VolumeUpSolid class="w-5 h-5" style="bg-white" />
-        </button> -->
         <a href="/search?path=chronologyTab&username={item.author}" target="_blank" class="inline-flex items-center justify-center max-w-[55px] flex-grow flex-1 aspect-square mr-2 transition-colors duration-150 rounded-xl focus:shadow-outline hover:bg-[var(--extralightbackground)] hover:text-white {item.author in chronology_usernames ? 'bg-[var(--lightbackground)] text-white' : 'text-gray-400 bg-gray-200 pointer-events-none'}">
             <ClockSolid class="w-5 h-5" style="bg-white" />
         </a>
@@ -175,12 +154,10 @@
         <a href="{item.permalink}" target="_blank" class="inline-flex items-center justify-center max-w-[55px] flex-grow flex-1 aspect-square mr-2 text-[var(--white)] transition-colors duration-150 bg-[var(--lightbackground)] rounded-xl focus:shadow-outline hover:bg-[var(--extralightbackground)] hover:text-white">
             <ChevronRightSolid class="w-5 h-5" style="bg-white" />
         </a>
-        
     </div>
 </Card>
 
 <style>
-
     .whitebutton {
         outline: var(--darkbackground);
         outline-style: solid;

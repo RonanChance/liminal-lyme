@@ -1,7 +1,6 @@
 <script>
-    import { SearchOutline, ExclamationCircleSolid, AngleRightSolid, AngleDownSolid } from 'flowbite-svelte-icons'
-	import { Popover, Toast, Spinner } from 'flowbite-svelte';
-	import { Button } from 'flowbite-svelte';
+    import { SearchOutline, ExclamationCircleSolid } from 'flowbite-svelte-icons'
+	import { Toast, Spinner } from 'flowbite-svelte';
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition'
     import PocketBase from 'pocketbase';
@@ -279,7 +278,6 @@
 </div>
 
 <style>
-
 	.whitebutton {
 		margin-top: 40px;
 		padding-left: 35px;
