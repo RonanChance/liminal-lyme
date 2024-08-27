@@ -13,23 +13,20 @@
     /** @type {import('./$types').PageData} */
 	export let data;
 
-    let svg;
-    let root;
+    let svg, root, tree, diagonal;
     let animate = false;
 
     let suggestion = "";
     let articleLink = "";
     let purchaseLink = "";
     let email = "";
-    let throw_confetti = false;
+    let throwConfetti = false;
 
     async function onSubmit() {
-
         if (suggestion.trim() === "") {
             alert("Supplement/Treatment Suggestion is required.");
             return;
         }
-
         const pb = new PocketBase("https://data.liminallyme.com");
         const data = {
             "suggestion": suggestion || '',
@@ -37,191 +34,183 @@
             "purchase_link": purchaseLink || '',
             "email": email || ''
         };
-
-        throw_confetti = true;
-
+        throwConfetti = true;
         try {
             const record = await pb.collection('suggestions').create(data);
             alert('Thank you for your contribution!');
-        }
-        catch (error) {
+        } catch (error) {
             alert('Something went wrong. Please try again.');
         }
-
-        suggestion = "";
-        articleLink = "";
-        purchaseLink = "";
-        email = "";
-        throw_confetti = false;
+        suggestion = articleLink = purchaseLink = email = "";
+        throwConfetti = false;
     }
 
-    onMount(async () => {
-        animate = true
-        const margin = { top: 0, right: 0, bottom: 0, left: 120 };
-        const width = 2560 - margin.right - margin.left;
-        const height = 700 - margin.top - margin.bottom;
-        let i = 0;
-        const duration = 750;
+    function collapse(d) {
+        if (d.children && d.depth !== 0) {
+            d._children = d.children;
+            d._children.forEach(collapse);
+            d.children = null;
+        }
+    }
+    
+    function toggle(d) {
+        console.log('toggling node', d);
+        if (d.children) {
+            d._children = d.children;
+            d.children = null;
+        } else {
+            d.children = d._children;
+            d._children = null;
+        }
+    }
 
+    function update(source) {
+        const nodes = tree(root).descendants();
+        const links = tree(root).links();
+
+        // Normalize for fixed-depth
+        nodes.forEach(d => { d.y = d.depth * 250; d.x = d.x * 0.9 });
+
+        const node = svg.selectAll('g.node').data(nodes, d => d.id || (d.id = ++i));
+
+        // Enter new nodes at the parent's previous position
+        const nodeEnter = node.enter().append('g')
+            .attr('class', 'node')
+            .attr('transform', d => `translate(${source.y0},${source.x0})`)
+            .on('click', (event, d) => { 
+                toggle(d); 
+                update(d); 
+            });
+        
+        nodeEnter.filter(d => d.children || d._children).append('circle')
+            .attr('r', 1e-6)
+            .style('fill', d => d._children ? 'black' : '#fff');
+
+        nodeEnter.append('text')
+            .attr('x', d => d.children || d._children ? -10 : 10)
+            .attr('dy', '.3em')
+            .attr('text-anchor', d => d.children || d._children ? 'end' : 'start')
+            .text(d => d.data.name)
+            .style('fill-opacity', 1e-6);
+
+        nodeEnter.each(function(d) {
+            const currentNode = d3.select(this);
+            const textNode = currentNode.select('text');
+            const textWidth = textNode.node().getBBox().width;
+
+            if (d.data.link) {
+                // temporary canvas to measure text width
+                const canvas = document.createElement('canvas');
+                const context = canvas.getContext('2d');
+                context.font = '18px Arial';
+                
+                const linkText = d.data.link.split(" ### ")[0];
+                const linkURL = d.data.link.split(" ### ")[1];
+                const linkTextWidth = context.measureText(linkText).width;
+
+                currentNode.append('foreignObject')
+                    .attr('x', textWidth + 10)
+                    .attr('y', -11)
+                    .attr('width', linkTextWidth + 5)
+                    .attr('height', 30)
+                    .attr('color', '#f8f8f895')
+                    .append('xhtml:div')
+                    .html(`<button>: <span class="underline">${linkText}</span></button>`)
+                    .on('click', (event, d) => {
+                        event.stopPropagation();
+                        console.log('Article clicked', linkURL);
+                        window.open(linkURL, '_blank');
+                    });
+            }
+        });
+
+        // Transition nodes to their new position
+        const nodeUpdate = node.merge(nodeEnter).transition()
+            .duration(duration)
+            .attr('transform', d => `translate(${d.y},${d.x})`);
+
+        nodeUpdate.select('circle')
+            .attr('r', 6)
+            .style('fill', d => d._children ? 'var(--lightbackground)' : '#fff');
+
+        nodeUpdate.select('text')
+            .style('fill-opacity', 1);
+
+        // Transition exiting nodes to the parent's new position
+        const nodeExit = node.exit().transition()
+            .duration(duration)
+            .attr('transform', d => `translate(${source.y},${source.x})`)
+            .remove();
+
+        nodeExit.select('circle')
+            .attr('r', 1e-6);
+
+        nodeExit.select('text')
+            .style('fill-opacity', 1e-6);
+
+        // Update links
+        const link = svg.selectAll('path.link')
+            .data(links, d => d.target.id);
+
+        // Enter new links at the parent's previous position
+        link.enter().append('path')
+            .attr('class', 'link')
+            .attr('d', d => {
+                const o = { x: source.x0, y: source.y0 };
+                return diagonal({ source: o, target: o });
+            })
+            .merge(link)
+            .transition()
+            .duration(duration)
+            .attr('d', diagonal);
+
+        // Transition exiting links to the parent's new position
+        link.exit().transition()
+            .duration(duration)
+            .attr('d', d => {
+                const o = { x: source.x, y: source.y };
+                return diagonal({ source: o, target: o });
+            })
+            .remove();
+
+        // Stash old positions
+        nodes.forEach(d => {
+            d.x0 = d.x;
+            d.y0 = d.y;
+        });
+    }
+
+    function initTree() {
         // Initialize the tree layout and diagonal projection
-        const tree = d3.tree().size([height, width]);
-        const diagonal = d3.linkHorizontal()
+        tree = d3.tree().size([height, width]);
+        diagonal = d3.linkHorizontal()
             .x(d => d.y)
             .y(d => d.x);
 
-        // Create SVG container
         svg = d3.select('#tree')
             .append('svg')
-            .attr('width', width + margin.right + margin.left)
-            .attr('height', height + margin.top + margin.bottom)
+            .attr('width', width)
+            .attr('height', height)
             .append('g')
-            .attr('transform', `translate(${margin.left},${margin.top})`);
+            .attr('transform', `translate(120,10)`);
 
         // Load data
         root = d3.hierarchy(data.treatments);
         root.x0 = height / 2;
         root.y0 = 0;
 
-        function collapse(d) {
-            if (d.children && d.depth !== 0) {
-                d._children = d.children;
-                d._children.forEach(collapse);
-                d.children = null;
-            }
-        }
-
         root.children.forEach(collapse);
         update(root);
+    }
 
-        function update(source) {
-            // Compute the new tree layout
-            const nodes = tree(root).descendants();
-            const links = tree(root).links();
+    let width = 2560;
+    let height = 700;
+    let i = 0;
+    const duration = 750;
 
-            // Normalize for fixed-depth
-            nodes.forEach(d => { d.y = d.depth * 250; d.x = d.x * 0.9 });
-
-            // Update nodes
-            const node = svg.selectAll('g.node')
-                .data(nodes, d => d.id || (d.id = ++i));
-
-            // Enter new nodes at the parent's previous position
-            const nodeEnter = node.enter().append('g')
-                .attr('class', 'node')
-                .attr('transform', d => `translate(${source.y0},${source.x0})`)
-                .on('click', (event, d) => { 
-                    toggle(d); 
-                    update(d); 
-                });
-            
-            nodeEnter.filter(d => d.children || d._children).append('circle')
-                .attr('r', 1e-6)
-                .style('fill', d => d._children ? 'black' : '#fff');
-
-            nodeEnter.append('text')
-                .attr('x', d => d.children || d._children ? -10 : 10)
-                .attr('dy', '.3em')
-                .attr('text-anchor', d => d.children || d._children ? 'end' : 'start')
-                .text(d => d.data.name)
-                .style('fill-opacity', 1e-6);
-
-            nodeEnter.each(function(d) {
-                const currentNode = d3.select(this);
-                const textNode = currentNode.select('text');
-                const textWidth = textNode.node().getBBox().width;
-
-                if (d.data.link) {
-                    // temporary canvas to measure text width
-                    const canvas = document.createElement('canvas');
-                    const context = canvas.getContext('2d');
-                    context.font = '18px Arial';
-                    
-                    const linkText = d.data.link.split(" ### ")[0];
-                    const linkURL = d.data.link.split(" ### ")[1];
-                    const linkTextWidth = context.measureText(linkText).width;
-
-                    currentNode.append('foreignObject')
-                        .attr('x', textWidth + 10)
-                        .attr('y', -11)
-                        .attr('width', linkTextWidth + 5)
-                        .attr('height', 30)
-                        .attr('color', '#f8f8f895')
-                        .append('xhtml:div')
-                        .html(`<button>: <span class="underline">${linkText}</span></button>`)
-                        .on('click', (event, d) => {
-                            event.stopPropagation();
-                            console.log('Article clicked', linkURL);
-                            window.open(linkURL, '_blank');
-                        });
-                }
-            });
-
-            // Transition nodes to their new position
-            const nodeUpdate = node.merge(nodeEnter).transition()
-                .duration(duration)
-                .attr('transform', d => `translate(${d.y},${d.x})`);
-
-            nodeUpdate.select('circle')
-                .attr('r', 6)
-                .style('fill', d => d._children ? 'var(--lightbackground)' : '#fff');
-
-            nodeUpdate.select('text')
-                .style('fill-opacity', 1);
-
-            // Transition exiting nodes to the parent's new position
-            const nodeExit = node.exit().transition()
-                .duration(duration)
-                .attr('transform', d => `translate(${source.y},${source.x})`)
-                .remove();
-
-            nodeExit.select('circle')
-                .attr('r', 1e-6);
-
-            nodeExit.select('text')
-                .style('fill-opacity', 1e-6);
-
-            // Update links
-            const link = svg.selectAll('path.link')
-                .data(links, d => d.target.id);
-
-            // Enter new links at the parent's previous position
-            link.enter().append('path')
-                .attr('class', 'link')
-                .attr('d', d => {
-                    const o = { x: source.x0, y: source.y0 };
-                    return diagonal({ source: o, target: o });
-                })
-                .merge(link)
-                .transition()
-                .duration(duration)
-                .attr('d', diagonal);
-
-            // Transition exiting links to the parent's new position
-            link.exit().transition()
-                .duration(duration)
-                .attr('d', d => {
-                    const o = { x: source.x, y: source.y };
-                    return diagonal({ source: o, target: o });
-                })
-                .remove();
-
-            // Stash old positions
-            nodes.forEach(d => {
-                d.x0 = d.x;
-                d.y0 = d.y;
-            });
-        }
-
-        function toggle(d) {
-            console.log('toggling node', d);
-            if (d.children) {
-                d._children = d.children;
-                d.children = null;
-            } else {
-                d.children = d._children;
-                d._children = null;
-            }
-        }
+    onMount(async () => {
+        animate = true
+        initTree();
     });
 </script>
 
@@ -278,7 +267,7 @@
             <div class="text-right pt-3">
                 <button type="submit" class="py-2 px-3 rounded-lg bg-white text-lg" on:click={ onSubmit }>
                     Submit
-                    {#if throw_confetti} <Confetti x={[-0.7, 0.7]} y={[-0.7, .7]} /> {/if}
+                    {#if throwConfetti} <Confetti x={[-0.7, 0.7]} y={[-0.7, .7]} /> {/if}
                 </button>
             </div>
         </div>
