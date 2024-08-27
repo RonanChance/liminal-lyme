@@ -11,7 +11,6 @@
     "@sveltejs/adapter-auto": "^2.0.0",
     "@sveltejs/adapter-cloudflare": "^2.3.3",
     "@sveltejs/kit": "^1.20.4",
-    "autoprefixer": "^10.4.14",
     "flowbite": "^1.8.1",
     "flowbite-svelte": "^0.44.17",
     "flowbite-svelte-icons": "^0.4.4",
@@ -26,8 +25,8 @@
   "dependencies": {
     "@fontsource-variable/league-spartan": "^5.0.20",
     "@types/d3": "^7.4.3",
+    "autoprefixer": "^10.4.20",
     "d3": "^7.9.0",
-    "openai": "^4.24.3",
     "pocketbase": "^0.18.0"
   }
 }
