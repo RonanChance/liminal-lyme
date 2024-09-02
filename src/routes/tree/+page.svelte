@@ -8,6 +8,7 @@
     import { Label, Input } from 'flowbite-svelte';
     import { EnvelopeSolid, FileEditSolid, LinkSolid } from 'flowbite-svelte-icons';
     import MedicalDisclaimer from "../../lib/components/MedicalDisclaimer.svelte";
+    import graphPaper from '$lib/assets/graphPaper.svg';
     import * as d3 from 'd3';
 
     /** @type {import('./$types').PageData} */
@@ -187,7 +188,7 @@
             .x(d => d.y)
             .y(d => d.x);
 
-        svg = d3.select('#tree')
+        svg = d3.select('.tree')
             .append('svg')
             .attr('width', width)
             .attr('height', height)
@@ -214,7 +215,7 @@
     });
 </script>
 
-<TopBanner expand={true} />
+<TopBanner expand={false} />
 
 {#if animate}
 <div class="text-center text-2xl text-white py-6 bg-[var(--lightbackground)] rounded-b-lg text-bold flex flex-col" in:fade={{delay: 0, duration: 500}}>
@@ -222,8 +223,11 @@
     <span class="text-center text-sm">This tool is not medical advice. <a class="highlight" href="/tree#contribute">Contribute suggestions</a>.</span>
 </div>
 {/if}
-
-<div id="tree"></div>
+<!-- style="background-image: url({graphPaper});" -->
+<div class="tree-container overflow-auto w-full h-[80vh] relative">
+    <div class="grid-lines absolute inset-0 pointer-events-none"></div>
+    <div class="tree relative z-1"></div>
+</div>
 
 {#if animate}
     <div class="w-full flex justify-center bg-[var(--lightbackground)] px-4 py-8 rounded-lg" in:fade={{delay: 750, duration: 750}}>
@@ -280,32 +284,55 @@
     </div>
 {/if}
 
-<Footer expand={true}/>
+<Footer expand={false}/>
 
 <style>
-    #tree :global(.node) {
+    .tree-container {
+        position: relative;
+
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+    
+    .tree-container::-webkit-scrollbar {
+        display: none;
+    }
+
+    .grid-lines {
+        background-size: 30px 30px;
+        opacity: 0.07;
+        width: 500%;
+        height: 120%;
+        background-image:
+            linear-gradient(to right, grey 1px, transparent 1px),
+            linear-gradient(to bottom, grey 1px, transparent 1px);
+        background-repeat: repeat;
+        z-index: -1;
+    }
+
+    .tree :global(.node) {
         cursor: pointer;
     }
 
-    #tree :global(.node circle) {
+    .tree :global(.node circle) {
         cursor: pointer;
         fill: #fff;
         stroke: var(--extralightbackground);
         stroke-width: 1.5px;
     }
 
-    #tree :global(.node text) {
+    .tree :global(.node text) {
         font-size: 1rem;
         fill: var(--white);
     }
 
-    #tree :global(path.link) {
+    .tree :global(path.link) {
         fill: none;
-        stroke: #cccccc18;
+        stroke: #cccccc23;
         stroke-width: 1px;
     }
 
-    #tree :global(.link-button) {
+    .tree :global(.link-button) {
         background-color: var(--white);
         color: var(--white);
         border: none;
@@ -313,7 +340,7 @@
         cursor: pointer;
     }
 
-    #tree :global(.link-button:hover) {
+    .tree :global(.link-button:hover) {
         background-color: var(--supplement_highlight);
         color: var(--white);
     }
