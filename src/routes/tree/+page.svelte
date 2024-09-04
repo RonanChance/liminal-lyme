@@ -8,7 +8,6 @@
     import { Label, Input } from 'flowbite-svelte';
     import { EnvelopeSolid, FileEditSolid, LinkSolid } from 'flowbite-svelte-icons';
     import MedicalDisclaimer from "../../lib/components/MedicalDisclaimer.svelte";
-    import graphPaper from '$lib/assets/graphPaper.svg';
     import * as d3 from 'd3';
 
     /** @type {import('./$types').PageData} */
@@ -22,6 +21,37 @@
     let purchaseLink = "";
     let email = "";
     let throwConfetti = false;
+
+    let isDragging = false;
+    let startX, startY;
+
+    function initDragging() {
+        const container = document.querySelector('.tree');
+
+        container.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            startX = e.clientX;
+            startY = e.clientY;
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            const dx = e.clientX - startX;
+            const dy = e.clientY - startY;
+
+            const currentTransform = container.style.transform || 'translate(0, 0)';
+            const matrix = new WebKitCSSMatrix(currentTransform);
+            container.style.transform = `translate(${matrix.m41 + dx}px, ${matrix.m42 + dy}px)`;
+
+            startX = e.clientX;
+            startY = e.clientY;
+        });
+
+        document.addEventListener('mouseup', () => {
+            isDragging = false;
+            container.style.cursor = 'grab';
+        });
+    }
 
     async function onSubmit() {
         if (suggestion.trim() === "") {
@@ -205,26 +235,27 @@
     }
 
     let width = 2560;
-    let height = 700;
+    let height = 800;
     let i = 0;
     const duration = 750;
 
     onMount(async () => {
         animate = true
         initTree();
+        initDragging();
     });
 </script>
 
 <TopBanner expand={false} />
 
 {#if animate}
-<div class="text-center text-2xl text-white py-6 bg-[var(--lightbackground)] rounded-b-lg text-bold flex flex-col" in:fade={{delay: 0, duration: 500}}>
+<div class="text-center text-2xl text-white py-5 bg-[var(--lightbackground)] rounded-b-lg text-bold flex flex-col" in:fade={{delay: 0, duration: 500}}>
     <span>Chronic Illness Research Tree</span>
     <span class="text-center text-sm">This tool is not medical advice. <a class="highlight" href="/tree#contribute">Contribute suggestions</a>.</span>
 </div>
 {/if}
-<!-- style="background-image: url({graphPaper});" -->
-<div class="tree-container overflow-auto w-full h-[80vh] relative">
+
+<div class="tree-container overflow-auto w-[100%] h-[800px] relative bg-[var(--extradarkbackground)]">
     <div class="grid-lines absolute inset-0 pointer-events-none"></div>
     <div class="tree relative z-1"></div>
 </div>
@@ -238,6 +269,17 @@
                     Contribute Your Ideas 
                 </div>
             </div>
+
+            <div class="mb-6">
+                <Label for="large-input" class="block mb-2 text-white text-lg">Requirements</Label>
+                <ul>
+                    <li class="block mb-2 text-white">1. Single active ingredient</li>
+                    <li class="block mb-2 text-white">2. Reputable article/publication</li>
+                    <li class="block mb-2 text-white italic text-center">Note: If it helped you but does not fit these requirements, please still consider sharing it!</li>
+                </ul>
+            </div>
+
+            <hr class="opacity-40 pb-6" />
 
             <div class="mb-6">
                 <Label for="large-input" class="block mb-2 text-white text-lg">Supplement/Treatment Suggestion</Label>
@@ -289,9 +331,9 @@
 <style>
     .tree-container {
         position: relative;
-
         -ms-overflow-style: none;
         scrollbar-width: none;
+        cursor: grab;
     }
     
     .tree-container::-webkit-scrollbar {
@@ -300,14 +342,14 @@
 
     .grid-lines {
         background-size: 30px 30px;
-        opacity: 0.07;
+        opacity: 0.05;
         width: 500%;
         height: 120%;
         background-image:
             linear-gradient(to right, grey 1px, transparent 1px),
             linear-gradient(to bottom, grey 1px, transparent 1px);
         background-repeat: repeat;
-        z-index: -1;
+        z-index: 1;
     }
 
     .tree :global(.node) {
