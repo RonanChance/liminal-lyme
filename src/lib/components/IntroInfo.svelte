@@ -18,8 +18,7 @@
     const textInterval = setInterval(rotateText, interval);
 </script>
 
-
-<div class="intro-info pt-6 px-2 pb-16">    
+<div class="intro-info pt-4 px-2 pb-16">    
     <div class="rotating-text mt-10 text-center">
         {#key currentWord}
             <h1 in:fade|global={{duration: 750}}>YOUR <span class="highlighted-word text-center">{currentWord}</span></h1>
@@ -49,6 +48,3 @@
         <Popover class="w-64 text-sm font-light" triggeredBy="#info-button" data-popper-placement="left">This research is focused on tick-borne disease data from Reddit, but might expand in the future</Popover>
     {/if}
 </div>
-
-<style>
-</style>
