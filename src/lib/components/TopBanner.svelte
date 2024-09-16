@@ -5,7 +5,6 @@
   import ModalPWA from './ModalPWA.svelte';
 
   let selected = $page.url.pathname;
-  export let expand = false;
   let showModal = false;
   let isStandAlone = false;
   
@@ -26,7 +25,7 @@
     </div>
     </ModalPWA>
 
-    <div class={`font-semibold bg-[var(--white)] flex flex-row pt-2 px-5 justify-between block md:hidden ${expand ? 'pwa-prompt-expanded' : ''}`}>
+    <div class="font-semibold bg-[var(--white)] flex flex-row pt-2 px-5 justify-between block md:hidden">
         <div class="flex flex-row items-center justify-center">
             <div class="mr-2 ">
                 <img src="/favicon-32x32.png" alt="Logo" class="w-8">
@@ -42,7 +41,7 @@
     </div>
 {/if}
 
-<div class={`${expand ? 'navbar-expanded' : 'navbar'}`}>
+<div class="navbar">
     <a href="/">
         <img src="/banner.png" class="mainlogo w-[170px] md:w-[250px] xl:w-[250px]" alt="LiminalLyme" />
     </a>
@@ -78,50 +77,6 @@
     backface-visibility: hidden;
   }
 
-  .navbar-expanded {
-    position: sticky;
-    top: 0px;
-    left: 0px;
-    z-index: 2;
-    background: var(--white);
-
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding-top: 1%;
-    padding-bottom: 1%;
-    padding-left: 8%;
-    padding-right: 8%;
-    backface-visibility: hidden;
-  }
-
-  .navbar-expanded::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 99%;
-    width: 600vw;
-    height: 100%;
-    background: var(--white);
-    z-index: -1;
-  }
-
-  .pwa-prompt-expanded {
-    z-index: 2;
-    backface-visibility: hidden;
-  }
-
-  .pwa-prompt-expanded::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 99%;
-    width: 600vw;
-    height: 13%;
-    background: var(--white);
-    z-index: -1;
-  }
-
   .mainlogo{
     transition: transform 0.2s;
   }
@@ -132,13 +87,6 @@
 
   @media (max-width: 768px) {
     .navbar {
-        padding-top: 3%;
-        padding-bottom: 3%;
-        padding-left: 3%;
-        padding-right: 3%;
-    }
-    
-    .navbar-expanded {
         padding-top: 3%;
         padding-bottom: 3%;
         padding-left: 3%;

@@ -246,7 +246,7 @@
     });
 </script>
 
-<TopBanner expand={false} />
+<TopBanner />
 
 {#if animate}
 <div class="text-center text-2xl text-white py-5 bg-[var(--lightbackground)] rounded-b-lg text-bold flex flex-col" in:fade={{delay: 0, duration: 500}}>
@@ -326,7 +326,7 @@
     </div>
 {/if}
 
-<Footer expand={false}/>
+<Footer />
 
 <style>
     .tree-container {
