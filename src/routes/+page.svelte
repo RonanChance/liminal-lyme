@@ -123,8 +123,9 @@
         </div>
     </div>
 
-    <div class="buttondiv pt-12" style="text-align: center;">
-        <a href="/search" class="whitebutton">Get started</a>
+    <div class="mt-12 text-center flex flex-wrap justify-center gap-2" in:blur={{delay: 200, duration: 600}}>
+        <a href="/search" class="whitebutton" type="button">Search Reddit</a>
+        <a href="/tree" class="whitebutton" type="button">Treatment Tree</a>
     </div>
     
     <div class="disclaimer-container">
