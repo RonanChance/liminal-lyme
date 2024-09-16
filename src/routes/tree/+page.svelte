@@ -282,7 +282,7 @@
             <hr class="opacity-40 pb-6" />
 
             <div class="mb-6">
-                <Label for="large-input" class="block mb-2 text-white text-lg">Supplement/Treatment Suggestion</Label>
+                <Label for="large-input" class="block mb-2 text-white text-lg">Supplement/Treatment Suggestion<span class="text-red-700 text-2xl align-middle">*</span></Label>
                 <Input name="suggestion" type="text" size="lg" placeholder="Suggestion" bind:value={suggestion} required>
                     <FileEditSolid slot="left" class="w-5 h-5 text-gray-500 dark:text-gray-400" />
                 </Input>
