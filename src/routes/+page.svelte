@@ -2,13 +2,13 @@
 	import TopBanner from '../lib/components/TopBanner.svelte';
   	import Footer from '../lib/components/Footer.svelte';
     import MedicalDisclaimer from "../lib/components/MedicalDisclaimer.svelte";
+    import EmailSignup from '../lib/components/EmailSignup.svelte';
     import { onMount } from 'svelte';
     import { fade, fly, blur } from 'svelte/transition';
     import { total_scanned, total_cataloged, medications, supplements } from "../lib/components/constants";
     import { Popover } from 'flowbite-svelte';
     
     let animate = false;
-    let email = "";
     onMount(() => animate = true);
     
     const words = ['HEALTH', 'MEDICATION', 'JOURNEY', 'INSIGHT']
@@ -59,41 +59,41 @@
 {#if animate}
 <div class="flex flex-col">
     <div class="flex flex-col md:flex-row bg-[var(--lightbackground)] pb-6" in:fly={{y:50, delay: 750, duration: 750}}>
-        <div class="flex flex-row md:flex-col items-center pt-6 pl-[2%] pr-[2%]" in:blur={{delay: 750, duration: 1250}}>
-            <div class="min-w-[50%] max-w-[50%]">
+        <div class="flex flex-row md:flex-col items-center mt-6 pl-[2%] pr-[2%]" in:blur={{delay: 750, duration: 750}}>
+            <div class="min-w-[50%] max-w-[50%] md:min-w-[70%] md:max-w-[70%] xl:min-w-[60%] xl:max-w-[60%] 2xl:min-w-[40%] 2xl:max-w-[40%]">
                 <img src="/bacteria_images/img1.png" alt="img1">
             </div>
-            <div class="flex flex-col items-center text-center text-[var(--white)] text-lg max-w-[75%] px-[4%] md:pt-5 gap-1">
+            <div class="flex flex-col items-center text-center text-[var(--white)] text-lg max-w-[75%] px-[2%] md:mt-5 gap-1">
                 <strong class="text-2xl">Search</strong> 
                 Query our database to find tickborne illness experiences
             </div>
         </div>
         
-        <div class="flex flex-row md:flex-col items-center pt-6 pl-[2%] pr-[2%]" in:blur={{delay: 750, duration: 1250}}>
-            <div class="min-w-[50%] max-w-[50%]">
+        <div class="flex flex-row md:flex-col items-center mt-6 pl-[2%] pr-[2%]" in:blur={{delay: 750, duration: 750}}>
+            <div class="min-w-[50%] max-w-[50%] md:min-w-[70%] md:max-w-[70%] xl:min-w-[60%] xl:max-w-[60%] 2xl:min-w-[40%] 2xl:max-w-[40%]">
                 <img src="/bacteria_images/img2.png" alt="img2">
             </div>
-            <div class="flex flex-col items-center text-center text-[var(--white)] text-lg max-w-[75%] px-[4%] md:pt-5 gap-1">
+            <div class="flex flex-col items-center text-center text-[var(--white)] text-lg max-w-[75%] px-[2%] md:mt-5 gap-1">
                 <strong class="text-2xl">Learn</strong> 
                 Find treatment ideas based on the medications and supplements that help others
             </div>
         </div>
 
-        <div class="flex flex-row md:flex-col items-center pt-6 pl-[2%] pr-[2%]" in:blur={{delay: 750, duration: 1250}}>
-            <div class="min-w-[50%] max-w-[50%]">
+        <div class="flex flex-row md:flex-col items-center mt-6 pl-[2%] pr-[2%]" in:blur={{delay: 750, duration: 750}}>
+            <div class="min-w-[50%] max-w-[50%] md:min-w-[70%] md:max-w-[70%] xl:min-w-[60%] xl:max-w-[60%] 2xl:min-w-[40%] 2xl:max-w-[40%]">
                 <img src="/bacteria_images/img3.png" alt="img3">
             </div>
-            <div class="flex flex-col items-center text-center text-[var(--white)] text-lg max-w-[75%] px-[4%] md:pt-5 gap-1">
+            <div class="flex flex-col items-center text-center text-[var(--white)] text-lg max-w-[75%] px-[2%] md:mt-5 gap-1">
                 <strong class="text-2xl">Connect</strong>
                 Find users with similar reactions and experiences
             </div>
         </div>
 
-        <div class="flex flex-row md:flex-col items-center pt-6 pb-6 md:mb-0 pl-[2%] pr-[2%]" in:blur={{delay: 750, duration: 1250}}>
-            <div class="min-w-[50%] max-w-[50%]">
+        <div class="flex flex-row md:flex-col items-center mt-6 md:mb-0 pl-[2%] pr-[2%]" in:blur={{delay: 750, duration: 750}}>
+            <div class="min-w-[50%] max-w-[50%] md:min-w-[70%] md:max-w-[70%] xl:min-w-[60%] xl:max-w-[60%] 2xl:min-w-[40%] 2xl:max-w-[40%]">
                 <img src="/bacteria_images/img4.png" alt="img4">
             </div>
-            <div class="flex flex-col items-center text-center text-[var(--white)] text-lg max-w-[75%] px-[4%] md:pt-5 gap-1">
+            <div class="flex flex-col items-center text-center text-[var(--white)] text-lg max-w-[75%] px-[2%] md:mt-5 gap-1">
                 <strong class="text-2xl">Return</strong>
                 Check back often as we add medications, supplements, and treatments
             </div>
@@ -101,8 +101,8 @@
     
     </div>
     
-    <div class="flex flex-col items-center" in:blur={{delay: 1000, duration: 750}}>
-        <div class="mt-5 text-[var(--accent)] opacity-50 text-2xl">Scanned Comments</div>
+    <div class="flex flex-col items-center" in:blur={{delay: 750, duration: 750}}>
+        <div class="pt-10 text-[var(--accent)] opacity-50 text-2xl">Scanned Comments</div>
         <div class="text-[var(--white)] font-bold text-6xl mt-5 mb-5">{total_scanned}</div>
 
         <hr class="opacity-50 mt-2 bg-[var(--white)] w-[80%]" />
@@ -115,29 +115,23 @@
         
         <hr class="opacity-50 mt-2 bg-[var(--white)] w-[80%]" />
         <div class="mt-5 text-[var(--accent)] opacity-50 text-2xl">Supported Supplements</div>
-        <div class="text-[var(--white)] font-bold text-6xl mt-5 mb-5">{supplements.length}</div>
+        <div class="text-[var(--white)] font-bold text-6xl mt-5 pb-10">{supplements.length}</div>
     </div>
 
-    <div class="italic text-2xl sm:text-3xl font-semibold bg-[var(--white)] text-[var(--darkbackground)] px-[10%] pt-10 pb-10">
+    <div class="italic text-2xl sm:text-3xl font-semibold bg-[var(--white)] text-[var(--darkbackground)] px-[10%] pt-10 pb-10" in:fade={{delay: 750, duration: 750}}>
         The highest form of knowledge is empathy, for it requires us to suspend our egos and live in another's world.
         <div class="quoteattribution" style="text-align: right; font-style: normal;">
             - Plato
         </div>
     </div>
 
-    <div class="flex flex-col items-center text-center justify-center bg-[var(--lightbackground)] pt-10 pb-14 gap-4">
-        <h2 class="font-semibold">Join for Special Announcements!</h2>
-        <div class="flex gap-2 justify-center w-[90%] md:w-[65%] lg:w-[50%] xl:w-[30%] px-8">
-            <input class="w-full rounded-lg py-3 px-4 border-2 border-transparent focus:outline-none focus:ring-0 focus:border-[var(--accent)]" type="text" bind:value={email} placeholder="example@gmail.com">
-            <button class="whitebutton py-3 px-6 text-white">Join!</button>
-        </div>
-        <!-- can put link to Lymitless here eventually? -->
+    <div class="flex flex-col items-center text-center justify-center bg-[var(--lightbackground)] pt-10 pb-14 gap-4" in:fade={{delay: 750, duration: 750}}>
+        <EmailSignup />
     </div>
     
-    <div class="flex flex-col ml-auto mr-auto mt-6 max-w-[90%]">
+    <div class="flex flex-col ml-auto mr-auto pt-10 pb-12 max-w-[90%]" in:fade={{delay: 750, duration: 750}}>
         <MedicalDisclaimer />
     </div>
-
 </div>
 {/if}
 
