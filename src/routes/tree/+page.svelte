@@ -58,7 +58,7 @@
             alert("Supplement/Treatment Suggestion is required.");
             return;
         }
-        const pb = new PocketBase("https://data.liminallyme.com");
+        const pb = new PocketBase("https://pb.liminallyme.com");
         const data = {
             "suggestion": suggestion || '',
             "article_link": articleLink || '',
