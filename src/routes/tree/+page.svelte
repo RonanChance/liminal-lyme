@@ -321,7 +321,7 @@
 {/if}
 
 {#if animate}
-    <div class="flex flex-col xl:max-w-[60%] max-w-[90%] m-auto mt-10" in:fade={{delay: 750, duration: 750}}>
+    <div class="flex flex-col ml-auto mr-auto pt-10 pb-12 max-w-[90%]" in:fade={{delay: 750, duration: 750}}>
         <MedicalDisclaimer />
     </div>
 {/if}
