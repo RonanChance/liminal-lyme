@@ -35,8 +35,8 @@
 
 <h2 class="font-semibold">Join for Special Announcements!</h2>
 <div class="flex gap-2 justify-center w-[90%] md:w-[65%] lg:w-[50%] xl:w-[30%] px-8">
-    <input class="w-full rounded-lg py-3 px-4 border-2 border-transparent focus:outline-none focus:ring-0 focus:border-[var(--accent)]" type="text" bind:value={email} placeholder="example@gmail.com">
-    <button class="whitebutton py-3 px-6 text-white" on:click={onSubmit}>
+    <input class="w-full rounded-lg py-3 px-4 border-2 border-transparent focus:outline-none focus:ring-0 focus:border-[var(--accent)]" type="text" bind:value={email} placeholder="example@gmail.com" on:keydown={(event) => { if (event.key === 'Enter') { onSubmit() } }}>
+    <button class="whitebutton py-3 px-6 text-white" on:click={onSubmit} >
         Join!
         {#if throwConfetti} <Confetti x={[-0.7, 0.7]} y={[-0.7, .7]} /> {/if}
     </button>
