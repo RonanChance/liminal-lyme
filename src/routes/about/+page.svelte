@@ -15,7 +15,7 @@
 <TopBanner />
 
 {#if animate}
-<div class="" in:fade|global={{delay: 0, duration: 500 }}>
+<div class="" in:fade|global={{ duration: 500 }}>
 
     <div class="2xl:px-[35%] xl:px-[30%] md:px-[20%] px-[5%] pb-8" id="what_does_liminal_lyme_mean">
         <h2 style="text-decoration: none; margin-bottom: 0px;">Lim·​i·nal</h2>
@@ -52,7 +52,7 @@
         </div>
         <br />
         <p>
-            I contracted Rocky Mountain Spotted Fever and Lyme Disease during a trip to North Carolina in December 2021 which led to severe illness. 
+            I contracted Rocky Mountain Spotted Fever and (possibly) Lyme Disease during a trip to North Carolina in December 2021 which led to severe illness. 
             My recovery has taken over two years and involved various antibiotics, supplements, and therapies. 
             <br /><br />Having spent countless hours researching and reading tickborne disease content in my pursuit of health, I often found people's firsthand experiences to be the most relatable and insightful.
             <br/><br/>I wished I could compile all these stories to see how others managed their symptoms and medications.
@@ -92,7 +92,7 @@
         </div>
     </div>
 
-    <div class="2xl:px-[35%] xl:px-[30%] md:px-[20%] px-[5%] pb-8 pt-1" id="what_conditions_are_supported">
+    <div class="2xl:px-[35%] xl:px-[30%] md:px-[20%] px-[5%] pb-8 pt-1 scroll-m-[-25rem]" id="what_conditions_are_supported">
         <h2>What <span class="highlighted-word" style="font-weight:900; font-style:normal">Conditions</span> are supported?</h2>
         <div class="flex justify-center flex-col">
             <img alt="Coinfection graph" src={coinfections} />
@@ -126,27 +126,27 @@
         </div>
     </div>
 
-    <div class="2xl:px-[35%] xl:px-[30%] md:px-[20%] px-[5%] pb-8 pt-1 bg-[var(--lightbackground)]" id="what_medications_are_supported">
+    <div class="2xl:px-[35%] xl:px-[30%] md:px-[20%] px-[5%] pb-8 pt-1 bg-[var(--lightbackground)] scroll-m-[-40rem]" id="what_medications_are_supported">
         <h2>What <span class="highlighted-word" style="font-weight:900; font-style:normal">Medications</span> are supported?</h2>
         <p>
-            There are currently <span style="font-weight:900; font-style:normal">{medications.length}</span> prescription medications supported.
-            You can view and contribute to the full list on the <a href={"https://github.com/RonanChance/liminal-lyme-data/blob/master/txts/medications.txt"} target="_blank" rel="noreferrer" class="link-word">Medications GitHub</a>.
+            There are currently <span class="font-semibold not-italic">{medications.length}</span> prescription medications supported.
+            You can view and contribute to the full list on the <a href={"https://github.com/RonanChance/liminal-lyme-data/blob/master/txts/medications.txt"} target="_blank" rel="noreferrer" class="text-[var(--accent)] underline decoration-1">Medications GitHub</a>.
         </p>
     </div>
 
-    <div class="2xl:px-[35%] xl:px-[30%] md:px-[20%] px-[5%] pb-8 pt-1" id="what_supplements_are_supported">
+    <div class="2xl:px-[35%] xl:px-[30%] md:px-[20%] px-[5%] pb-8 pt-1 scroll-m-[-40rem]" id="what_supplements_are_supported">
         <h2>What <span class="highlighted-word" style="font-weight:900">Supplements</span> are supported?</h2>
         <p>
-            There are currently <span style="font-weight:900; font-style:normal">{supplements.length}</span> supplements supported.
-            You can view and contribute to the full list on the <a href={"https://github.com/RonanChance/liminal-lyme-data/blob/master/txts/supplements.txt"} target="_blank" rel="noreferrer" class="link-word">Supplements GitHub</a>.
+            There are currently <span class="font-semibold not-italic">{supplements.length}</span> supplements supported.
+            You can view and contribute to the full list on the <a href={"https://github.com/RonanChance/liminal-lyme-data/blob/master/txts/supplements.txt"} target="_blank" rel="noreferrer" class="text-[var(--accent)] underline decoration-1">Supplements GitHub</a>.
         </p>
     </div>
 
     <div class="2xl:px-[35%] xl:px-[30%] md:px-[20%] px-[5%] pb-2 pt-1 bg-[var(--lightbackground)]" id="how_can_i_support_this_project">
         <h2>Can I <span class="highlighted-word" style="font-weight:900">Contribute</span> to this project?</h2>
         <p>
-            You can support this project by contributing to the <a href="https://github.com/RonanChance/liminal-lyme" target="_blank" rel="noreferrer" class="link-word">GitHub</a>.
-            <br/><br/>And reach out to me if you have any questions, recommendations, or just want to connect.
+            You can support this project by contributing to the <a href="https://github.com/RonanChance/liminal-lyme" target="_blank" rel="noreferrer" class="text-[var(--accent)] underline decoration-1">GitHub</a> or by sharing your <a href="tree#contribute" class="text-[var(--accent)] underline decoration-1">medications, supplements, and treatments</a>.
+            <br/><br/>Reach out to me if you have any questions, recommendations, or just want to connect.
             <br/><br/>
         </p>
         <div class="flex flex-row w-full justify-center items-center mt-6 mb-14 gap-4">
@@ -168,18 +168,11 @@
 
 
 <style>
+
     .link-word {
         color: var(--white);
         text-decoration: underline;
         text-decoration-thickness: 1px;
-    }
-
-    #what_conditions_are_supported {
-        scroll-margin-top: 75px;
-    }
-
-    #what_medications_are_supported {
-        scroll-margin-top: 75px;
     }
 
     h2 {
