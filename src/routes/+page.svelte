@@ -125,7 +125,7 @@
         </div>
     </div>
 
-    <div class="flex flex-col items-center text-center justify-center bg-[var(--lightbackground)] pt-10 pb-14 gap-4" in:fade={{delay: 750, duration: 750}}>
+    <div in:fade={{delay: 750, duration: 750}}>
         <EmailSignup />
     </div>
     
