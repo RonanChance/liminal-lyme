@@ -15,7 +15,7 @@
 <TopBanner />
 
 {#if animate}
-<div class="" in:fade|global={{ duration: 500 }}>
+<div class="" in:fade|global={{ duration: 200 }}>
 
     <div class="2xl:px-[35%] xl:px-[30%] md:px-[20%] px-[5%] pb-8" id="what_does_liminal_lyme_mean">
         <h2 style="text-decoration: none; margin-bottom: 0px;">Lim·​i·nal</h2>
@@ -177,8 +177,8 @@
 
     h2 {
         text-align: center;
-        margin-top: 2rem;
-        margin-bottom: 2rem;
+        margin-top: 1.5rem;
+        margin-bottom: 1.5rem;
         color: white;
 
         font-size: 3rem;

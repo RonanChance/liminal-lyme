@@ -100,7 +100,7 @@
          background-color: #FFF;
     }
      .StepProgress-item.is-done::before {
-         border-left: 4px solid green;
+         border-left: 4px solid var(--accent);
     }
     .StepProgress-item.is-done::after {
         content: '';
@@ -110,15 +110,15 @@
         left: -40px;
         width: 25px;
         height: 25px;
-        border: 2px solid green;
-        background-color: green;
+        border: 2px solid var(--accent);
+        background-color: var(--accent);
         border-radius: 50%;
-        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="white"><path d="M20.285 6.261l-11.036 11.035-5.249-5.248 1.414-1.414 3.835 3.835 9.622-9.621z"/></svg>');
+        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="var(--darkbackground)"><path d="M20.285 6.261l-11.036 11.035-5.249-5.248 1.414-1.414 3.835 3.835 9.622-9.621z"/></svg>');
         background-repeat: no-repeat;
         background-position: center;
     }
      .StepProgress-item.current::before {
-         border-left: 4px solid green;
+         border-left: 4px solid var(--darkbackground);
     }
      .StepProgress-item.current::after {
          content: counter(my-counter);
@@ -129,8 +129,15 @@
          left: -43px;
          font-size: 14px;
          text-align: center;
-         color: green;
-         border: 2px solid green;
-         background-color: white;
+         color: var(--accent);
+         border: 2px solid var(--accent);
+         background-color: var(--darkbackground);
+    }
+    .StepProgress-item:last-child.current::before {
+        border-left: 4px solid var(--darkbackground);
+    }
+    .StepProgress-item:last-child.current::after {
+        border: 2px solid var(--darkbackground);
+        background-color: var(--darkbackground);
     }
 </style>

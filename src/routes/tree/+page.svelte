@@ -249,9 +249,9 @@
 <TopBanner />
 
 {#if animate}
-<div class="text-center text-2xl text-white py-5 bg-[var(--lightbackground)] rounded-b-lg text-bold flex flex-col" in:fade={{duration: 500}}>
+<div class="text-center text-2xl text-white py-5 bg-[var(--lightbackground)] rounded-b-lg text-bold flex flex-col">
     <span>Chronic Illness Research Tree</span>
-    <span class="text-center text-sm">This tool is not medical advice. <a class="highlight" href="/tree#contribute">Contribute suggestions</a>.</span>
+    <span class="text-center text-sm">This tool is not medical advice. <a class="text-[var(--accent)]" href="/tree#contribute">Contribute suggestions</a>.</span>
 </div>
 {/if}
 
@@ -261,7 +261,7 @@
 </div>
 
 {#if animate}
-    <div class="w-full flex justify-center bg-[var(--lightbackground)] px-4 py-8 rounded-lg" in:fade={{duration: 750}}>
+    <div class="w-full flex justify-center bg-[var(--lightbackground)] px-4 py-8 rounded-lg" in:fade={{duration: 200}}>
         <div class="w-[85%] md:w-[50%] xl:w-[30%]">
             <div class="mb-6">
                 <div class="block mb-2 text-white text-2xl text-center flex flex-row justify-center gap-1 scroll-m-[4rem]" id="contribute"> 
@@ -321,7 +321,7 @@
 {/if}
 
 {#if animate}
-    <div class="flex flex-col ml-auto mr-auto pt-10 pb-12 max-w-[90%]" in:fade={{delay: 750, duration: 750}}>
+    <div class="flex flex-col ml-auto mr-auto pt-10 pb-12 max-w-[90%]" in:fade={{duration: 300}}>
         <MedicalDisclaimer />
     </div>
 {/if}
