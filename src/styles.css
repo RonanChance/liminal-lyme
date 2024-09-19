@@ -94,10 +94,6 @@ ul {
     background-color: #000;
 }
 
-.highlight {
-    color: var(--accent);
-}
-
 .whitebutton {
     font-size: 18pt;
     font-weight: bold;

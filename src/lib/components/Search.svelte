@@ -170,14 +170,14 @@
 </script>
 
 {#if animate}
-<div class="text-center text-2xl text-white py-5 bg-[var(--lightbackground)] rounded-b-lg" in:fade={{delay: 0, duration: 500}}>Search <span class="text-[#e14b00] font-bold">Reddit</span> for <br><span class="font-bold">Medications</span> & <span class="font-bold">Supplements</span>
+<div class="text-center text-2xl text-white py-5 bg-[var(--lightbackground)] rounded-b-lg">Search <span class="text-[#e14b00] font-bold">Reddit</span> for <br><span class="font-bold">Medications</span> & <span class="font-bold">Supplements</span>
 	<div class="italic text-sm">Recommend: 1-3 selections</div>
 </div>
 {/if}
 
 <div class="intro-container">
 	{#if animate}
-		<main class="container" in:fade={{delay: 0, duration: 600}}>
+		<main class="container" in:fade={{duration: 300}}>
             
 			<div class="togglebuttongroup">
 				{#each slicedItems as item}
@@ -259,7 +259,7 @@
 			<div class="post-area">
 				<PostList posts={result_list}/>
 			</div>
-			<div class="med-disclaimer" in:fade={{y:50, delay: 750, duration: 750}}>
+			<div class="med-disclaimer" in:fade={{duration: 300}}>
 				<MedicalDisclaimer />
 			</div>
 		</main>

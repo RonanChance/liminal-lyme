@@ -25,17 +25,17 @@
 
 <div class="intro-container">
 	{#if animate}
-		<main class="flex flex-col xl:max-w-[60%] max-w-[90%] m-auto" in:fade={{y:50, delay: 0, duration: 2000}}>
+		<main class="flex flex-col xl:max-w-[60%] max-w-[90%] m-auto" in:fade={{duration: 2000}}>
 
 			<div class="text-2xl text-white text-center pt-8 pb-3">
                 Shared Post
 			</div>
 
-            <div class="post-area" in:fly={{y:50, delay: 500, duration: 1500}}>
+            <div class="post-area" in:fly={{y:50, duration: 1500}}>
 				<PostList posts={result_list} chronologyMode=true/>
 			</div>
             
-			<div class="med-disclaimer" in:fade={{y:50, delay: 1000, duration: 1000}}>
+			<div class="med-disclaimer" in:fade={{duration: 1000}}>
 				<MedicalDisclaimer />
 			</div>
 		</main>
