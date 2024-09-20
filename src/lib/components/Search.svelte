@@ -1,8 +1,8 @@
 <script>
-    import { SearchOutline, ExclamationCircleSolid } from 'flowbite-svelte-icons'
+    import { SearchOutline, ExclamationCircleSolid } from 'flowbite-svelte-icons';
 	import { Toast, Spinner } from 'flowbite-svelte';
 	import { onMount } from 'svelte';
-	import { fade } from 'svelte/transition'
+	import { fade } from 'svelte/transition';
     import PocketBase from 'pocketbase';
 	import PostList from './PostList.svelte';
     import MedicalDisclaimer from './MedicalDisclaimer.svelte';
@@ -259,7 +259,7 @@
 			<div class="post-area">
 				<PostList posts={result_list}/>
 			</div>
-			<div class="med-disclaimer" in:fade={{duration: 300}}>
+			<div class="med-disclaimer pt-3" in:fade={{duration: 200}}>
 				<MedicalDisclaimer />
 			</div>
 		</main>

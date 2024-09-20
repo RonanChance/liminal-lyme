@@ -1,5 +1,5 @@
 <script>
-  import { onMount } from 'svelte'
+  import { onMount } from 'svelte';
   import PostItem from "./PostItem.svelte";
   import { ClockSolid } from 'flowbite-svelte-icons';
 

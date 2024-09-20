@@ -1,10 +1,10 @@
 <script>
-    import TopBanner from '../../lib/components/TopBanner.svelte'
+    import TopBanner from '../../lib/components/TopBanner.svelte';
     import Search from '../../lib/components/Search.svelte';
     import Chronology from '../../lib/components/Chronology.svelte';
     import SharePost from '../../lib/components/SharePost.svelte';
-    import { page } from '$app/stores'
-    let path = $page.url.searchParams.get('path')
+    import { page } from '$app/stores';
+    let path = $page.url.searchParams.get('path');
 </script>
 
 <div class="flex flex-col h-screen">
