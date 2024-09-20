@@ -1,8 +1,8 @@
 <script>
     import { onMount } from 'svelte';
-    import { fade } from 'svelte/transition'
-    import { Confetti } from "svelte-confetti"
-    import TopBanner from '../../lib/components/TopBanner.svelte'
+    import { fade } from 'svelte/transition';
+    import { Confetti } from "svelte-confetti";
+    import TopBanner from '../../lib/components/TopBanner.svelte';
     import Footer from "../../lib/components/Footer.svelte";
     import PocketBase from 'pocketbase';
     import { Label, Input } from 'flowbite-svelte';

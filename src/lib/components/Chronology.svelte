@@ -1,6 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
-	import { fly, fade } from 'svelte/transition'
+	import { fly, fade } from 'svelte/transition';
     import PocketBase from 'pocketbase';
 	import PostList from './PostList.svelte';
     import MedicalDisclaimer from './MedicalDisclaimer.svelte';
