@@ -1,6 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
-	import { fly, fade } from 'svelte/transition';
+	import { fade } from 'svelte/transition';
     import PocketBase from 'pocketbase';
 	import PostList from './PostList.svelte';
     import MedicalDisclaimer from './MedicalDisclaimer.svelte';
@@ -31,12 +31,12 @@
 				<div class="text-base italic text-center">See Progress & Setbacks</div>
 			</div>
             <div class="text-xl text-white text-center">
-                User: <span style="color:var(--accent);">{username}</span>
+                User: <span class="text-[var(--accent)]">{username}</span>
             </div>
-            <div class="post-area" in:fly={{duration: 1500}}>
+            <div class="post-area" in:fade={{duration: 300}}>
 				<PostList posts={result_list} chronologyMode=true/>
 			</div>
-			<div class="med-disclaimer" in:fade={{duration: 1000}}>
+			<div class="med-disclaimer" in:fade={{duration: 300}}>
 				<MedicalDisclaimer />
 			</div>
 		</main>
