@@ -3,6 +3,7 @@
     import { browser } from '$app/environment';
     import { getCookie } from '../../lib/components/constants';
     import PocketBase from 'pocketbase';
+    import * as d3 from 'd3';
 
     let animate = false;
     let authorized = false;
@@ -10,6 +11,7 @@
     let username = '';
     let userId = '';
     let curValue = 50;
+    let scores = [];
     const pb = new PocketBase('https://pb.liminallyme.com');
 
     onMount(() => {
@@ -24,6 +26,8 @@
                 userId = storedUserId;
                 authorized = true;
             }
+        
+            
         }
     });
 
@@ -51,6 +55,8 @@
             document.cookie = `email=${email}; path=/;`;
             document.cookie = `userId=${userId}; path=/;`;
 
+            getScores();
+
         } catch (error) {
             console.error(error); // Handle error appropriately
         }
@@ -75,29 +81,38 @@
             return;
         }
 
+        const date = new Date();
+        const formattedDate = date.toISOString();
+
         const data = {
             "user_id": userId,
-            "score": curValue
+            "score": curValue,
+            "timestamp": formattedDate
         };
         await pb.collection('scores').create(data);
         console.log(userId)
         console.log("created");
     }
 
-    async function getValues() {
+    async function getScores() {
         if (!pb.authStore.isValid) {
             console.log("User is not authenticated");
             logout();
             return;
         }
         try {
-            const scores = await pb.collection('scores').getFullList({
+            const storedScores = await pb.collection('scores').getFullList({
                 filter: `user_id = "${userId}"`, // this is not necessary as the permissions do not allow retrieving other users records
                 sort: '-created'
             });
 
-            console.log("User scores:", scores);
-            return scores;
+            scores = storedScores.map(score => ({
+                ...score,
+                timestamp: new Date(score.timestamp).toLocaleString()
+            }));
+            
+            console.log('fetched scores');
+            console.log(scores);
         } catch (error) {
             console.error("Error fetching user scores:", error);
         }
@@ -146,8 +161,12 @@
             <span class="text-white rs-label text-6xl">{curValue}</span>
             <input class="min-w-[50%] mt-4" bind:value={curValue} type="range" min="0" max="100">
             <button class="mt-6 bg-[var(--white)] px-[1rem] py-[0.5rem] rounded-md" on:click={updateValue}>Confirm</button>
-            <button class="mt-6 bg-[var(--white)] px-[1rem] py-[0.5rem] rounded-md" on:click={getValues}>Fetch</button>
+            <button class="mt-6 bg-[var(--white)] px-[1rem] py-[0.5rem] rounded-md" on:click={getScores}>Fetch</button>
         </div>
+
+        {#each scores as score}
+            <div class="text-white">{score.score}, {score.timestamp.toLocaleString()}</div>
+        {/each}
 
         
         <div class="flex flex-row">
