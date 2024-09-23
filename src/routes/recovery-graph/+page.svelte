@@ -256,9 +256,12 @@
                 <div class="mt-8 mb-4 text-white rs-label text-4xl text-center">{curValue}</div>
                 
                 <div class="mx-[15%] sm:mx-[20%] md:mx-[25%] lg:mx-[30%] xl:mx-[35%]">
-                    <input class="mt-2 w-full" style="accent-color: {colorScale(curValue).hex()};" bind:value={curValue} type="range" min="0" max="100">
-                    <button class="mt-4 w-full bg-[var(--white)] px-[1rem] py-[0.5rem] rounded-md disabled:bg-gray-300" on:click={addScore} disabled={updating}>Confirm</button>
-                    <textarea class="mt-4 w-full bg-[var(--extradarkbackground)] rounded outline-0 border-0 text-center" bind:value={comment} maxlength="250" placeholder="Start typing to comment"></textarea>
+                    <textarea class="mt-4 w-full bg-[var(--extradarkbackground)] rounded outline-0 border-0 text-center text-white focus:outline-none focus:outline-1 focus:ring-white" bind:value={comment} maxlength="250" placeholder="Start typing to comment"></textarea>
+                    <input class="mt-2 w-full range-slider" style="accent-color: {colorScale(curValue).hex()};" bind:value={curValue} type="range" min="0" max="100">
+                    <button class="mx-auto mt-4 bg-[var(--white)] px-[1rem] py-[0.5rem] rounded-md disabled:bg-gray-300 flex flex-row align-baseline gap-2" on:click={addScore} disabled={updating}>
+                        <svg fill="#000000" version="1.1" id="Capa_1" width="20px" height="20px" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 31.806 31.806" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <g> <path d="M1.286,12.465c-0.685,0.263-1.171,0.879-1.268,1.606c-0.096,0.728,0.213,1.449,0.806,1.88l6.492,4.724L30.374,2.534 L9.985,22.621l8.875,6.458c0.564,0.41,1.293,0.533,1.964,0.33c0.67-0.204,1.204-0.713,1.444-1.368l9.494-25.986 c0.096-0.264,0.028-0.559-0.172-0.756c-0.199-0.197-0.494-0.259-0.758-0.158L1.286,12.465z"></path> <path d="M5.774,22.246l0.055,0.301l1.26,6.889c0.094,0.512,0.436,0.941,0.912,1.148c0.476,0.206,1.025,0.162,1.461-0.119 c1.755-1.132,4.047-2.634,3.985-2.722L5.774,22.246z"></path> </g> </g> </g></svg>
+                        Confirm
+                    </button>
                 </div>
             </div>
         {/if}
@@ -284,5 +287,14 @@
     .grid-container {
         overflow-y: scroll;   /* Keep scrolling functionality */
         -ms-overflow-style: none;  /* For IE and Edge */
+    }
+    .range-slider {
+        --SliderColor: #fff;
+    }
+    .range-slider::-webkit-slider-thumb {
+        background-color: #fff;
+    }
+    .range-slider::-moz-range-thumb {
+        background-color: #fff;
     }
 </style>
