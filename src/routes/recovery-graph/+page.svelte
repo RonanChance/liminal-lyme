@@ -1,5 +1,5 @@
 <script>
-    import { onMount } from 'svelte';
+    import { onMount, onDestroy } from 'svelte';
     import { browser } from '$app/environment';
     import { getCookie } from '../../lib/components/constants';
     import PocketBase from 'pocketbase';
@@ -15,14 +15,15 @@
     let scores = [];
     let updating = false;
     let initializing = true;
+    let comment = "";
 
     const pb = new PocketBase('https://pb.liminallyme.com');
-    // const colorScale = chroma.scale(['#155724', '#a9c9b1']).domain([1, 100]);
     const colorScale = chroma.scale(['black', '#9de09d']).domain([1, 100]);
 
     onMount(async () => {
         animate = true;
         if (browser) {
+            window.addEventListener('keydown', handleKeydown);
             const storedEmail = getCookie('email');
             const storedUsername = getCookie('username');
             const storedUserId = getCookie('userId');
@@ -38,6 +39,20 @@
             initializing = false;
         }
     });
+
+    function handleKeydown(event) {
+        if (event.key === 'Enter') {
+            if (!updating) {
+                addScore();
+            }
+        }
+        else if (event.key.length === 1) {
+            comment += event.key;
+        }
+        else if (event.key === 'Backspace') {
+            comment = comment.slice(0, -1);
+        }
+    }
 
     async function loginHandler(event) {
         const providerChoice = event.currentTarget.dataset.value;
@@ -86,7 +101,7 @@
         scores = [...scores, ...dataPoints]
     }
 
-    async function updateValue() {
+    async function addScore() {
         if (!pb.authStore.isValid) {
             console.log("User is not authenticated");
             logout();
@@ -98,11 +113,12 @@
         const data = {
             "user_id": userId,
             "score": curValue,
+            "comment": comment,
             "timestamp": formattedDate
         };
         await pb.collection('scores').create(data);
-        console.log("created");
         getScores();
+        comment = "";
         updating = false;
     }
 
@@ -233,7 +249,11 @@
                 <div class="flex flex-col items-center justify-center">
                     <span class="text-white rs-label text-4xl">{curValue}</span>
                     <input class="mt-2 min-w-[70%] sm:min-w-[60%] md:min-w-[50%] lg:min-w-[40%] xl:min-w-[20%]" style="accent-color: {colorScale(curValue).hex()};" bind:value={curValue} type="range" min="0" max="100">
-                    <button class="mt-6 bg-[var(--white)] px-[1rem] py-[0.5rem] rounded-md disabled:bg-gray-300" on:click={updateValue} disabled={updating}>Confirm</button>
+                    <button class="mt-6 bg-[var(--white)] px-[1rem] py-[0.5rem] rounded-md disabled:bg-gray-300" on:click={addScore} disabled={updating}>Confirm</button>
+                </div>
+
+                <div class="flex flex-col items-center justify-center text-white">
+                    <input class="bg-[var(--darkbackground)] min-w-[70%] sm:min-w-[60%] md:min-w-[50%] lg:min-w-[40%] xl:min-w-[20%] text-center" bind:value={comment} placeholder="Start typing to comment">
                 </div>
             </div>
 
