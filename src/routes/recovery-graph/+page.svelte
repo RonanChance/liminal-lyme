@@ -13,8 +13,9 @@
     let userId = '';
     let curValue = 50;
     let scores = [];
-    let blockMode = true;
     let updating = false;
+    let initializing = true;
+
     const pb = new PocketBase('https://pb.liminallyme.com');
     // const colorScale = chroma.scale(['#155724', '#a9c9b1']).domain([1, 100]);
     const colorScale = chroma.scale(['black', '#9de09d']).domain([1, 100]);
@@ -32,14 +33,9 @@
                 authorized = true;
             }
             await getScores();
-            await createTestingData();
-
-            const container = document.getElementById('grid-container');
-            if (container) {
-                console.log("container found")
-                container.scrollTop = container.scrollHeight;
-            }
+            // await createTestingData();
             // createGraph();
+            initializing = false;
         }
     });
 
@@ -120,7 +116,7 @@
         try {
             const storedScores = await pb.collection('scores').getFullList({
                 filter: `user_id = "${userId}"`, // this is not necessary as the permissions do not allow retrieving other users records
-                sort: '-created'
+                sort: 'timestamp'
             });
 
             scores = storedScores.map(score => ({
@@ -131,6 +127,13 @@
             
             console.log('fetched scores');
             console.log(scores);
+
+            try {
+                curValue = scores[scores.length-1].score;
+            } catch (error) {
+                curValue = 50;
+            }
+
         } catch (error) {
             console.error("Error fetching user scores:", error);
         }
@@ -178,7 +181,6 @@
 {#if animate}
     {#if !authorized}
         <div class="flex flex-col items-center justify-center w-full h-screen">
-
             <div class="mb-4">
                 <h2 class="text-center">Recovery Graph <span class="text-sm">v0.0.1</span></h2>
                 <ul class="text-center text-white">
@@ -205,35 +207,41 @@
             </div>
         </div>
     {:else}
-        <div class="flex flex-row">
-            <p class="absolute left-3 top-2">{username}</p>
-            <button class="absolute right-3 top-2 text-white" on:click={logout}>
-                Logout
-            </button>
-        </div>
-
-        <div class="flex flex-col h-screen gap-[3%] justify-center">
-            <div class="mx-[5%] sm:mx-[15%]">
-                <div class="grid-container justify-center max-h-[250px] overflow-y-auto">
-                    {#each scores as score}
-                        <div class="text-white text-sm flex items-center justify-center w-12 h-12 bg-[var(--extradarkbackground)] transition-transform transform hover:scale-110 hover:font-bold" style="background-color: {colorScale(score.score).hex()};">
-                            {score.score}
-                        </div>
-                    {/each}
-                </div>
-            </div>     
-
-            <div class="flex flex-col items-center justify-center">
-                <span class="text-white rs-label text-4xl">{curValue}</span>
-                <input class="mt-2 min-w-[70%] sm:min-w-[60%] md:min-w-[50%] lg:min-w-[40%] xl:min-w-[20%]" bind:value={curValue} type="range" min="0" max="100">
-                <button class="mt-6 bg-[var(--white)] px-[1rem] py-[0.5rem] rounded-md disabled:bg-gray-300" on:click={updateValue} disabled={updating}>Confirm</button>
+        {#if initializing}
+            <div class="flex flex-col h-screen justify-center">
+                <div class="mx-auto text-white text-lg">Loading..</div>
             </div>
-        </div>
+        {:else}
+            <div class="flex flex-row">
+                <p class="absolute left-3 top-2">{username}</p>
+                <button class="absolute right-3 top-2 text-white" on:click={logout}>
+                    Logout
+                </button>
+            </div>
 
-        <div class="flex flex-row">
-            <a href="https://liminallyme.com" class="text-white underline absolute left-3 bottom-2">LiminalLyme</a>
-            <p class="absolute right-3 bottom-1">v0.0.1</p>
-        </div>
+            <div class="flex flex-col h-screen gap-[3%] justify-center">
+                <div class="mx-[5%] sm:mx-[15%]">
+                    <div class="grid-container justify-center max-h-[250px] overflow-y-auto">
+                        {#each scores as score}
+                            <div class="text-white text-sm flex items-center justify-center w-12 h-12 bg-[var(--extradarkbackground)] transition-transform transform hover:scale-110 hover:font-bold" style="background-color: {colorScale(score.score).hex()};">
+                                {score.score}
+                            </div>
+                        {/each}
+                    </div>
+                </div>     
+
+                <div class="flex flex-col items-center justify-center">
+                    <span class="text-white rs-label text-4xl">{curValue}</span>
+                    <input class="mt-2 min-w-[70%] sm:min-w-[60%] md:min-w-[50%] lg:min-w-[40%] xl:min-w-[20%]" style="accent-color: {colorScale(curValue).hex()};" bind:value={curValue} type="range" min="0" max="100">
+                    <button class="mt-6 bg-[var(--white)] px-[1rem] py-[0.5rem] rounded-md disabled:bg-gray-300" on:click={updateValue} disabled={updating}>Confirm</button>
+                </div>
+            </div>
+
+            <div class="flex flex-row">
+                <a href="https://liminallyme.com" class="text-white underline absolute left-3 bottom-2">LiminalLyme</a>
+                <p class="absolute right-3 bottom-1">v0.0.1</p>
+            </div>
+        {/if}
     {/if}
 {/if}
 
