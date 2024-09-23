@@ -56,12 +56,6 @@
                 addScore();
             }
         }
-        else if (event.key.length === 1) {
-            comment += event.key;
-        }
-        else if (event.key === 'Backspace') {
-            comment = comment.slice(0, -1);
-        }
     }
 
     async function loginHandler(event) {
@@ -237,42 +231,35 @@
         </div>
     {:else}
         {#if initializing}
-            <div class="flex flex-col h-screen justify-center">
+            <div class="flex flex-col justify-center">
                 <div class="mx-auto text-white text-lg">Loading..</div>
             </div>
         {:else}
             <div class="flex flex-row">
                 <p class="absolute left-3 top-2">{username}</p>
-                <button class="absolute right-3 top-2 text-white" on:click={logout}>
-                    Logout
-                </button>
+                <button class="absolute right-3 top-2 text-white" on:click={logout}>Logout</button>
+                <a href="https://liminallyme.com" class="text-white underline absolute left-3 bottom-2">LiminalLyme</a>
+                <p class="absolute right-3 bottom-1">v0.0.1</p>
             </div>
 
-            <div class="flex flex-col h-screen gap-[3%] justify-center">
-                <div class="mx-[5%] sm:mx-[15%]">
+            <div class="flex flex-col w-full h-dvh justify-center">
+                <div class="mx-[5%] sm:mx-[15%] lg:mx-[20%]">
                     <div class="grid-container justify-center max-h-[250px] overflow-y-auto" bind:this={scrollContainer}>
                         {#each scores as score}
-                            <div class="text-white text-sm flex items-center justify-center w-12 h-12 bg-[var(--extradarkbackground)] transition-transform transform hover:scale-110 hover:font-bold" style="background-color: {colorScale(score.score).hex()};">
+                            <div class="text-white text-sm flex items-center justify-center w-12 h-12 bg-[var(--extradarkbackground)] transition-transform transform hover:scale-110 hover:font-bold" style="background-color: {colorScale(score.score).hex()}; text-decoration: {score.comment ? "underline" : ""}">
                                 {score.score}
                             </div>
                         {/each}
                     </div>
                 </div>
-
-                <div class="flex flex-col items-center justify-center">
-                    <span class="text-white rs-label text-4xl">{curValue}</span>
-                    <input class="mt-2 min-w-[70%] sm:min-w-[60%] md:min-w-[50%] lg:min-w-[40%] xl:min-w-[20%]" style="accent-color: {colorScale(curValue).hex()};" bind:value={curValue} type="range" min="0" max="100">
-                    <button class="mt-6 bg-[var(--white)] px-[1rem] py-[0.5rem] rounded-md disabled:bg-gray-300" on:click={addScore} disabled={updating}>Confirm</button>
+                
+                <div class="mt-8 mb-4 text-white rs-label text-4xl text-center">{curValue}</div>
+                
+                <div class="mx-[15%] sm:mx-[20%] md:mx-[25%] lg:mx-[30%] xl:mx-[35%]">
+                    <input class="mt-2 w-full" style="accent-color: {colorScale(curValue).hex()};" bind:value={curValue} type="range" min="0" max="100">
+                    <button class="mt-4 w-full bg-[var(--white)] px-[1rem] py-[0.5rem] rounded-md disabled:bg-gray-300" on:click={addScore} disabled={updating}>Confirm</button>
+                    <textarea class="mt-4 w-full bg-[var(--extradarkbackground)] rounded outline-0 border-0 text-center" bind:value={comment} maxlength="250" placeholder="Start typing to comment"></textarea>
                 </div>
-
-                <div class="flex flex-col items-center justify-center text-white">
-                    <textarea class="bg-[var(--darkbackground)] min-w-[70%] sm:min-w-[60%] md:min-w-[50%] lg:min-w-[40%] xl:min-w-[20%] text-center" bind:value={comment} placeholder="Start typing to comment"></textarea>
-                </div>
-            </div>
-
-            <div class="flex flex-row">
-                <a href="https://liminallyme.com" class="text-white underline absolute left-3 bottom-2">LiminalLyme</a>
-                <p class="absolute right-3 bottom-1">v0.0.1</p>
             </div>
         {/if}
     {/if}
