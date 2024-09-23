@@ -1,5 +1,5 @@
 <script>
-    import { onMount, onDestroy } from 'svelte';
+    import { onMount, onDestroy, tick } from 'svelte';
     import { browser } from '$app/environment';
     import { getCookie } from '../../lib/components/constants';
     import PocketBase from 'pocketbase';
@@ -16,6 +16,7 @@
     let updating = false;
     let initializing = true;
     let comment = "";
+    let scrollContainer;
 
     const pb = new PocketBase('https://pb.liminallyme.com');
     const colorScale = chroma.scale(['black', '#9de09d']).domain([1, 100]);
@@ -37,12 +38,21 @@
             // await createTestingData();
             // createGraph();
             initializing = false;
+            await tick();
+            scrollToBottom();
         }
     });
+
+    function scrollToBottom() {
+        if (scrollContainer) {
+            scrollContainer.scrollTop = scrollContainer.scrollHeight;
+        }
+    }
 
     function handleKeydown(event) {
         if (event.key === 'Enter') {
             if (!updating) {
+                updating = true;
                 addScore();
             }
         }
@@ -57,10 +67,13 @@
     async function loginHandler(event) {
         const providerChoice = event.currentTarget.dataset.value;
         event.stopPropagation();
+        const w = window.open();
         try {
             const data = await pb.collection("users").authWithOAuth2({
                 provider: providerChoice,
-                urlCallback: (url) => { window.open(url, '_blank'); }
+                urlCallback: (url) => { 
+                    w.location.href = url;
+                 }
             });
             email = data.meta.email;
             username = data.meta.username;
@@ -237,14 +250,14 @@
 
             <div class="flex flex-col h-screen gap-[3%] justify-center">
                 <div class="mx-[5%] sm:mx-[15%]">
-                    <div class="grid-container justify-center max-h-[250px] overflow-y-auto">
+                    <div class="grid-container justify-center max-h-[250px] overflow-y-auto" bind:this={scrollContainer}>
                         {#each scores as score}
                             <div class="text-white text-sm flex items-center justify-center w-12 h-12 bg-[var(--extradarkbackground)] transition-transform transform hover:scale-110 hover:font-bold" style="background-color: {colorScale(score.score).hex()};">
                                 {score.score}
                             </div>
                         {/each}
                     </div>
-                </div>     
+                </div>
 
                 <div class="flex flex-col items-center justify-center">
                     <span class="text-white rs-label text-4xl">{curValue}</span>
@@ -253,7 +266,7 @@
                 </div>
 
                 <div class="flex flex-col items-center justify-center text-white">
-                    <input class="bg-[var(--darkbackground)] min-w-[70%] sm:min-w-[60%] md:min-w-[50%] lg:min-w-[40%] xl:min-w-[20%] text-center" bind:value={comment} placeholder="Start typing to comment">
+                    <textarea class="bg-[var(--darkbackground)] min-w-[70%] sm:min-w-[60%] md:min-w-[50%] lg:min-w-[40%] xl:min-w-[20%] text-center" bind:value={comment} placeholder="Start typing to comment"></textarea>
                 </div>
             </div>
 
@@ -271,5 +284,18 @@
     .grid-container {
         display: grid;
         grid-template-columns: repeat(auto-fill, 3rem);
+    }
+    /* Hide scrollbar for WebKit browsers (Chrome, Safari) */
+    .grid-container::-webkit-scrollbar {
+        display: none;
+    }
+    /* Hide scrollbar for Firefox */
+    .grid-container {
+        scrollbar-width: none; /* For Firefox */
+    }
+    /* General overflow settings */
+    .grid-container {
+        overflow-y: scroll;   /* Keep scrolling functionality */
+        -ms-overflow-style: none;  /* For IE and Edge */
     }
 </style>
