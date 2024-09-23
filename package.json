@@ -25,6 +25,7 @@
     "@fontsource-variable/league-spartan": "^5.0.20",
     "@types/d3": "^7.4.3",
     "autoprefixer": "^10.4.20",
+    "chroma-js": "^3.1.1",
     "d3": "^7.9.0",
     "pocketbase": "^0.18.0"
   }

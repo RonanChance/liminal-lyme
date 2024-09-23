@@ -3,6 +3,7 @@
     import { browser } from '$app/environment';
     import { getCookie } from '../../lib/components/constants';
     import PocketBase from 'pocketbase';
+    import chroma from 'chroma-js';
     import * as d3 from 'd3';
 
     let animate = false;
@@ -12,9 +13,13 @@
     let userId = '';
     let curValue = 50;
     let scores = [];
+    let blockMode = true;
+    let updating = false;
     const pb = new PocketBase('https://pb.liminallyme.com');
+    // const colorScale = chroma.scale(['#155724', '#a9c9b1']).domain([1, 100]);
+    const colorScale = chroma.scale(['black', '#9de09d']).domain([1, 100]);
 
-    onMount(() => {
+    onMount(async () => {
         animate = true;
         if (browser) {
             const storedEmail = getCookie('email');
@@ -26,39 +31,38 @@
                 userId = storedUserId;
                 authorized = true;
             }
-        
-            
+            await getScores();
+            await createTestingData();
+
+            const container = document.getElementById('grid-container');
+            if (container) {
+                console.log("container found")
+                container.scrollTop = container.scrollHeight;
+            }
+            // createGraph();
         }
     });
 
     async function loginHandler(event) {
         const providerChoice = event.currentTarget.dataset.value;
         event.stopPropagation();
-        
         try {
             const data = await pb.collection("users").authWithOAuth2({
                 provider: providerChoice,
-                urlCallback: (url) => {
-                    window.open(url, '_blank');
-                }
+                urlCallback: (url) => { window.open(url, '_blank'); }
             });
-            
-            // console.log(data.meta)
-            // console.log(data.record)
             email = data.meta.email;
             username = data.meta.username;
             userId = data.record.id;
             authorized = true;
-
             // store email, record in cookies
             document.cookie = `username=${username}; path=/;`;
             document.cookie = `email=${email}; path=/;`;
             document.cookie = `userId=${userId}; path=/;`;
-
+            // get current scores from pb
             getScores();
-
         } catch (error) {
-            console.error(error); // Handle error appropriately
+            console.error(error);
         }
     }
 
@@ -74,27 +78,40 @@
         }
     }
 
+    async function createTestingData() {
+        const dataPoints = []
+        for (let i = 0; i < 101; i++){
+            const dataPoint = {
+                timestamp: new Date().toISOString(),
+                score: i
+            }
+            dataPoints.push(dataPoint);
+        }
+        scores = [...scores, ...dataPoints]
+    }
+
     async function updateValue() {
         if (!pb.authStore.isValid) {
             console.log("User is not authenticated");
             logout();
             return;
         }
-
+        updating = true;
         const date = new Date();
         const formattedDate = date.toISOString();
-
         const data = {
             "user_id": userId,
             "score": curValue,
             "timestamp": formattedDate
         };
         await pb.collection('scores').create(data);
-        console.log(userId)
         console.log("created");
+        getScores();
+        updating = false;
     }
 
     async function getScores() {
+        console.log('getScores() called')
         if (!pb.authStore.isValid) {
             console.log("User is not authenticated");
             logout();
@@ -108,7 +125,8 @@
 
             scores = storedScores.map(score => ({
                 ...score,
-                timestamp: new Date(score.timestamp).toLocaleString()
+                timestamp: new Date(score.timestamp),
+                localTimeString: new Date(score.timestamp).toLocaleString()
             }));
             
             console.log('fetched scores');
@@ -118,6 +136,43 @@
         }
     }
 
+    function createGraph() {
+        const margin = { top: 40, right: 30, bottom: 40, left: 40};
+        const width = window.innerWidth/1.5 - margin.left - margin.right;
+        const height = window.innerHeight/4 - margin.top - margin.bottom;
+
+        const x = d3.scaleTime().range([0, width]);
+        const y = d3.scaleLinear().range([height, 0]);
+
+        const svg = d3.select("#recovery-graph")
+            .append("svg")
+                .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+                .attr("transform", `translate(${margin.left}, ${margin.top})`);
+
+        x.domain(d3.extent(scores, s => s.timestamp));
+        y.domain([0, d3.max(scores, s => s.score)]);
+
+        svg.append("g")
+            .attr("transform", `translate(0, ${height})`)
+            .call(d3.axisBottom(x)
+                .tickValues(scores.map(s => s.timestamp)) // Use the timestamps from your data points
+                .tickFormat(d3.timeFormat(""))); // Format as desired
+
+        svg.append("g").call(d3.axisLeft(y));
+
+        const line = d3.line()
+            .x(d => x(d.timestamp))
+            .y(d => y(d.score))
+
+        svg.append("path")
+            .datum(scores)
+            .attr("fill", "none")
+            .attr("stroke", "white")
+            .attr("stroke-width", 2)
+            .attr("d", line);
+    }
 </script>
 
 {#if animate}
@@ -125,7 +180,7 @@
         <div class="flex flex-col items-center justify-center w-full h-screen">
 
             <div class="mb-4">
-                <h2 class="text-center">Recovery Graph v0.0.1</h2>
+                <h2 class="text-center">Recovery Graph <span class="text-sm">v0.0.1</span></h2>
                 <ul class="text-center text-white">
                     <li>Register to track your health over time</li>
                 </ul>
@@ -157,20 +212,36 @@
             </button>
         </div>
 
-        <div class="flex flex-col items-center h-screen justify-center">
-            <span class="text-white rs-label text-6xl">{curValue}</span>
-            <input class="min-w-[50%] mt-4" bind:value={curValue} type="range" min="0" max="100">
-            <button class="mt-6 bg-[var(--white)] px-[1rem] py-[0.5rem] rounded-md" on:click={updateValue}>Confirm</button>
-            <button class="mt-6 bg-[var(--white)] px-[1rem] py-[0.5rem] rounded-md" on:click={getScores}>Fetch</button>
+        <div class="flex flex-col h-screen gap-[3%] justify-center">
+            <div class="mx-[5%] sm:mx-[15%]">
+                <div class="grid-container justify-center max-h-[250px] overflow-y-auto">
+                    {#each scores as score}
+                        <div class="text-white text-sm flex items-center justify-center w-12 h-12 bg-[var(--extradarkbackground)] transition-transform transform hover:scale-110 hover:font-bold" style="background-color: {colorScale(score.score).hex()};">
+                            {score.score}
+                        </div>
+                    {/each}
+                </div>
+            </div>     
+
+            <div class="flex flex-col items-center justify-center">
+                <span class="text-white rs-label text-4xl">{curValue}</span>
+                <input class="mt-2 min-w-[70%] sm:min-w-[60%] md:min-w-[50%] lg:min-w-[40%] xl:min-w-[20%]" bind:value={curValue} type="range" min="0" max="100">
+                <button class="mt-6 bg-[var(--white)] px-[1rem] py-[0.5rem] rounded-md disabled:bg-gray-300" on:click={updateValue} disabled={updating}>Confirm</button>
+            </div>
         </div>
 
-        {#each scores as score}
-            <div class="text-white">{score.score}, {score.timestamp.toLocaleString()}</div>
-        {/each}
-
-        
         <div class="flex flex-row">
+            <a href="https://liminallyme.com" class="text-white underline absolute left-3 bottom-2">LiminalLyme</a>
             <p class="absolute right-3 bottom-1">v0.0.1</p>
         </div>
     {/if}
 {/if}
+
+<!-- <div class="text-white flex justify-center" id="recovery-graph"></div> -->
+
+<style>
+    .grid-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, 3rem);
+    }
+</style>
