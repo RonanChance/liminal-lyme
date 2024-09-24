@@ -2,6 +2,7 @@
     import { onMount, onDestroy, tick } from 'svelte';
     import { browser } from '$app/environment';
     import { getCookie } from '../../lib/components/constants';
+    import TopBanner from '../../lib/components/TopBanner.svelte';
     import PocketBase from 'pocketbase';
     import chroma from 'chroma-js';
     import * as d3 from 'd3';
@@ -203,7 +204,8 @@
 
 {#if animate}
     {#if !authorized}
-        <div class="flex flex-col items-center justify-center w-full h-screen">
+        <TopBanner />
+        <div class="flex flex-col items-center justify-center w-full mt-[15%]">
             <div class="mb-4">
                 <h2 class="text-center">Recovery Graph <span class="text-sm">v0.0.1</span></h2>
                 <ul class="text-center text-white">
@@ -238,20 +240,26 @@
             <div class="flex flex-row">
                 <p class="absolute left-3 top-2">{username}</p>
                 <button class="absolute right-3 top-2 text-white" on:click={logout}>Logout</button>
-                <a href="https://liminallyme.com" class="text-white underline absolute left-3 bottom-2">LiminalLyme</a>
+                <a href="/" class="text-white underline absolute left-3 bottom-2"><i class="mx-1 mb-[1px] arrow left"></i>LiminalLyme</a>
                 <p class="absolute right-3 bottom-1">v0.0.1</p>
             </div>
 
             <div class="flex flex-col w-full h-dvh justify-center">
-                <div class="mx-[5%] sm:mx-[15%] lg:mx-[20%]">
-                    <div class="grid-container justify-center max-h-[250px] overflow-y-auto" bind:this={scrollContainer}>
-                        {#each scores as score}
-                            <div class="text-white text-sm flex items-center justify-center w-12 h-12 bg-[var(--extradarkbackground)] transition-transform transform hover:scale-110 hover:font-bold" style="background-color: {colorScale(score.score).hex()}; text-decoration: {score.comment ? "underline" : ""}">
-                                {score.score}
-                            </div>
-                        {/each}
+                {#if scores.length > 0}
+                    <div class="mx-[5%] sm:mx-[15%] lg:mx-[20%]">
+                        <div class="grid-container justify-center max-h-[250px] overflow-y-auto" bind:this={scrollContainer}>
+                            {#each scores as score}
+                                <div class="text-white text-sm flex items-center justify-center w-12 h-12 bg-[var(--extradarkbackground)] transition-transform transform hover:scale-110 hover:font-bold" style="background-color: {colorScale(score.score).hex()}; text-decoration: {score.comment ? "underline" : ""}">
+                                    {score.score}
+                                </div>
+                            {/each}
+                        </div>
                     </div>
-                </div>
+                {:else}
+                    <div class="text-center opacity-25">
+                        <p>Your first datapoint will be go here</p>
+                    </div>
+                {/if}
                 
                 <div class="mt-8 mb-4 text-white rs-label text-4xl text-center">{curValue}</div>
                 
@@ -296,5 +304,15 @@
     }
     .range-slider::-moz-range-thumb {
         background-color: #fff;
+    }
+    .arrow {
+        border: solid #fff;
+        border-width: 0 2px 2px 0;
+        display: inline-block;
+        padding: 3px;
+    }
+    .left {
+        transform: rotate(135deg);
+        -webkit-transform: rotate(135deg);
     }
 </style>
