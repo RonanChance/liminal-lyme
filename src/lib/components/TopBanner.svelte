@@ -41,27 +41,29 @@
     </div>
 {/if}
 
-<div class="navbar">
+<div class="navbar flex flex-col gap-4 sm:flex-row sm:gap-0">
     <a href="/">
-        <img src="/banner.png" class="mainlogo w-[170px] md:w-[250px] xl:w-[250px]" alt="LiminalLyme" />
+        {#if selected === "/"}
+            <img src="/banner.png" class="mainlogo w-[200px] sm:w-[250px] xl:w-[250px]" alt="LiminalLyme" />
+        {:else}
+            <img src="/banner.png" class="mainlogo w-[140px] sm:w-[250px] xl:w-[250px]" alt="LiminalLyme" />
+        {/if}
     </a>
-    <nav class="nav-links">
-        <button href="/search" on:click={() => {changeSelected("/search");}} style="text-decoration: {selected.includes("search") ? "underline" : "none"}; text-decoration-thickness: 3px; text-underline-offset: 3px;" type="button">SEARCH</button>
-        <button href="/tree" on:click={() => {changeSelected("/tree");}} style="text-decoration: {selected.includes("tree") ? "underline" : "none"}; text-decoration-thickness: 3px; text-underline-offset: 3px;" type="button">TREE</button>
-        <button href="/about" on:click={() => {changeSelected("/about");}} style="text-decoration: {selected.includes("about") ? "underline" : "none"}; text-decoration-thickness: 3px; text-underline-offset: 3px;" type="button">ABOUT</button>
+    <nav class="bg-[var(--white)] flex flex-row gap-6">
+        <div class="flex flex-row gap-6">
+            <a class="flex justify-center font-semibold" href="/search" on:click={() => {changeSelected("/search");}} style="text-decoration: {selected.includes("search") ? "underline" : "none"}; text-decoration-thickness: 3px; text-underline-offset: 3px;" type="button">SEARCH</a>
+            <a class="flex justify-center font-semibold" href="/tree" on:click={() => {changeSelected("/tree");}} style="text-decoration: {selected.includes("tree") ? "underline" : "none"}; text-decoration-thickness: 3px; text-underline-offset: 3px;" type="button">TREE</a>
+        </div>
+        <div class="flex flex-row gap-6">
+            <a class="flex justify-center font-semibold" href="/recovery-graph" on:click={() => {changeSelected("/recovery-graph");}} style="text-decoration: {selected.includes("about") ? "recovery-graph" : "none"}; text-decoration-thickness: 3px; text-underline-offset: 3px;" type="button">TRACK</a>
+            <a class="flex justify-center font-semibold" href="/about" on:click={() => {changeSelected("/about");}} style="text-decoration: {selected.includes("about") ? "underline" : "none"}; text-decoration-thickness: 3px; text-underline-offset: 3px;" type="button">ABOUT</a>
+        </div>
     </nav>
 </div>
 
 <style>
-  .nav-links {
-    display: flex;
-    gap: 1rem;
-    color: var(--darkbackground);
-    font-weight: 600;
-  }
 
   .navbar {
-    position: sticky;
     top: 0px;
     left: 0px;
     z-index: 2;
