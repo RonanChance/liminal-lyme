@@ -21,7 +21,7 @@
     <ModalPWA bind:showModal>
     <div class="flex justify-center">
         <video autoplay loop muted playsinline class="w-[85%]">
-        <source src="/tutorial.mp4" type="video/mp4"> This browser does not display the video tag. </video>
+        <source src="/videos/tutorial.mp4" type="video/mp4"> This browser does not display the video tag. </video>
     </div>
     </ModalPWA>
 
@@ -49,14 +49,14 @@
             <img src="/banner.png" class="mainlogo w-[140px] sm:w-[250px] xl:w-[250px]" alt="LiminalLyme" />
         {/if}
     </a>
-    <nav class="bg-[var(--white)] flex flex-row gap-6">
-        <div class="flex flex-row gap-6">
-            <a class="flex justify-center font-semibold" href="/search" on:click={() => {changeSelected("/search");}} style="text-decoration: {selected.includes("search") ? "underline" : "none"}; text-decoration-thickness: 3px; text-underline-offset: 3px;" type="button">SEARCH</a>
-            <a class="flex justify-center font-semibold" href="/tree" on:click={() => {changeSelected("/tree");}} style="text-decoration: {selected.includes("tree") ? "underline" : "none"}; text-decoration-thickness: 3px; text-underline-offset: 3px;" type="button">TREE</a>
+    <nav class="bg-[var(--white)] flex flex-row gap-8">
+        <div class="flex flex-row gap-8">
+            <a class="flex justify-center font-semibold text-lg text-[var(--darkbackground)]" href="/search" on:click={() => {changeSelected("/search");}} style="text-decoration: {selected.includes("search") ? "underline" : "none"}; text-decoration-thickness: 3px; text-underline-offset: 3px;" type="button">SEARCH</a>
+            <a class="flex justify-center font-semibold text-lg text-[var(--darkbackground)]" href="/tree" on:click={() => {changeSelected("/tree");}} style="text-decoration: {selected.includes("tree") ? "underline" : "none"}; text-decoration-thickness: 3px; text-underline-offset: 3px;" type="button">TREE</a>
         </div>
-        <div class="flex flex-row gap-6">
-            <a class="flex justify-center font-semibold" href="/recovery-graph" on:click={() => {changeSelected("/recovery-graph");}} style="text-decoration: {selected.includes("about") ? "recovery-graph" : "none"}; text-decoration-thickness: 3px; text-underline-offset: 3px;" type="button">TRACK</a>
-            <a class="flex justify-center font-semibold" href="/about" on:click={() => {changeSelected("/about");}} style="text-decoration: {selected.includes("about") ? "underline" : "none"}; text-decoration-thickness: 3px; text-underline-offset: 3px;" type="button">ABOUT</a>
+        <div class="flex flex-row gap-8">
+            <a class="flex justify-center font-semibold text-lg text-[var(--darkbackground)]" href="/recovery-graph" on:click={() => {changeSelected("/recovery-graph");}} style="text-decoration: {selected.includes("about") ? "recovery-graph" : "none"}; text-decoration-thickness: 3px; text-underline-offset: 3px;" type="button">TRACK</a>
+            <a class="flex justify-center font-semibold text-lg text-[var(--darkbackground)]" href="/about" on:click={() => {changeSelected("/about");}} style="text-decoration: {selected.includes("about") ? "underline" : "none"}; text-decoration-thickness: 3px; text-underline-offset: 3px;" type="button">ABOUT</a>
         </div>
     </nav>
 </div>

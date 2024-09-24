@@ -240,7 +240,7 @@
             <div class="flex flex-row">
                 <p class="absolute left-3 top-2">{username}</p>
                 <button class="absolute right-3 top-2 text-white" on:click={logout}>Logout</button>
-                <a href="/" class="text-white underline absolute left-3 bottom-2"><i class="mx-1 mb-[1px] arrow left"></i>LiminalLyme</a>
+                <a href="https://liminallyme.com" class="text-white underline absolute left-3 bottom-2"><i class="mx-1 mb-[1px] arrow left"></i>LiminalLyme</a>
                 <p class="absolute right-3 bottom-1">v0.0.1</p>
             </div>
 
