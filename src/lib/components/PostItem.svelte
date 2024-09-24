@@ -104,23 +104,25 @@
     </div>
     <div class="tags">
         {#each item.conditions as con}
-            <div class="tagstyle" style="background-color: var(--condition_highlight); display: inline-block;" on:click|preventDefault={handleClick}>{con}</div>
+            <button class="tagstyle" style="background-color: var(--condition_highlight); display: inline-block;" on:click|preventDefault={handleClick}>{con}</button>
         {/each}
     </div>
     <div class="tags">
         {#each item.medications as med}
-            <div class="tagstyle" style="background-color: var(--medication_highlight); display: inline-block;" on:click|preventDefault={handleClick}>{med}</div>
+            <button class="tagstyle" style="background-color: var(--medication_highlight); display: inline-block;" on:click|preventDefault={handleClick}>{med}</button>
         {/each}
     </div>
     <div class="tags">
         {#each item.supplements as sup}
-            <div class="tagstyle" style="background-color: var(--supplement_highlight); display: inline-block;" on:click|preventDefault={handleClick}>{sup}</div>
+            <button class="tagstyle" style="background-color: var(--supplement_highlight); display: inline-block;" on:click|preventDefault={handleClick}>{sup}</button>
         {/each}
     </div>
     <div class="num-rating">
         <AngleUpSolid size=xs /> 
         {item.score}
     </div>
+    <!-- svelte-ignore a11y-click-events-have-key-events -->
+    <!-- svelte-ignore a11y-no-static-element-interactions -->
     <div class="str-review {showEntirePost ? 'no-mask' : ''}" on:click|preventDefault={handleClick}>
         {#if showEntirePost}
             {@html decodeHTMLEntities(item.body)}
