@@ -1,6 +1,6 @@
 # Liminal Lyme
 
-### We support your research into medications, supplements, and more. 
+### Research companion for tick-borne illness.
 
 ## Key Features
 

@@ -23,7 +23,7 @@
         <br />
         <div class="flex justify-center flex-col">
             <img alt="Falling Medication" src={fallingMedication} />
-            <div class="text-[var(--white)] underline text-right pt-1 text-sm" href='https://www.netflix.com/title/81098586' target="_blank" rel="noreferrer">Credit</div>
+            <a class="text-[var(--white)] underline text-right pt-1 text-sm" href='https://www.netflix.com/title/81098586' target="_blank" rel="noreferrer">Credit</a>
         </div>
         <div class="text-[var(--white)] mt-8 font-light text-xl">
             In anthropology, <span class="italic">liminality</span> is the quality of ambiguity or disorientation that occurs in the middle stage of a rite of passage.
@@ -55,7 +55,7 @@
         </div>
         <br />
         <div class="text-[var(--white)] font-light text-xl">
-            I contracted Rocky Mountain Spotted Fever and (possibly) Lyme Disease during a trip to North Carolina in December 2021 which led to severe illness. 
+            I contracted Rocky Mountain Spotted Fever and Lyme Disease during a trip to North Carolina in December 2021 which led to severe illness. 
             My recovery has taken over two years and involved various antibiotics, supplements, and therapies. 
             <br /><br />Having spent countless hours researching and reading tickborne disease content in my pursuit of health, I often found people's firsthand experiences to be the most relatable and insightful.
             <br/><br/>I wished I could compile all these stories to see how others managed their symptoms and medications.

@@ -75,11 +75,6 @@ ul {
 	list-style: none;
 }
 
-.container {
-	max-width: 60%;
-	margin: 0pt auto;
-}
-
 .centered {
 	display: flex;
 	align-items: center;
@@ -142,10 +137,6 @@ ul {
     h3 {
         font-size: 15pt;
         margin: 0 auto;
-    }
-
-    .container {
-        max-width: 90%;
     }
 
   }

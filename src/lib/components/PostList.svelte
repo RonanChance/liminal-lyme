@@ -33,8 +33,8 @@
       {#each visiblePosts as post, idx (post.id)}
         <PostItem item={post}/>
         {#if idx < posts.length-1}
-          <div class="timediv">
-            <div class="duration" style="color: white;">
+          <div class="flex flex-col">
+            <div class="flex flex-row mx-auto gap-2" style="color: white;">
               <ClockSolid />
               {formatDate(posts[idx].date, posts[idx+1].date)}
               Days
@@ -50,45 +50,9 @@
       {/each}
     </ul>
   {/if}
-  <div class="button-container">
+  <div class="flex justify-center">
     {#if visiblePosts.length < posts.length}
-      <button on:click={loadMore}>Load More</button>
+      <button class="whitebutton" on:click={loadMore}>Load More</button>
     {/if}
   </div>
 {/if}
-
-<style>
-    .timediv {
-        display: flex;
-        flex-direction: column;
-        color: var(--offwhite);
-    }
-
-    .duration {
-        display: flex;
-        flex-direction: row;
-        margin: auto;
-        gap: 0.75rem;
-    }
-
-    .button-container {
-        display: flex;
-        justify-content: center;
-    }
-
-    button {
-        color: #202142;
-        background-color: #202142;
-        color: #ffff;
-        border: 0;
-        border-radius: 0.5rem;
-        width: 6.75rem;
-        height: 2.5rem;
-        cursor: pointer;
-    }
-
-    button:hover {
-        transform: scale(0.98);
-        opacity: 0.9;
-    }
-</style>

@@ -205,13 +205,14 @@
 {#if animate}
     {#if !authorized}
         <TopBanner />
+        <div class="text-center text-2xl text-white py-5 bg-[var(--lightbackground)] rounded-b-lg text-bold flex flex-col">
+            <span class="">Recovery Graph <span class="font-thin text-sm">v0.0.1</span></span>
+            <span class="text-center text-sm">Track your health over time</span>
+        </div>
         <div class="flex flex-col items-center justify-center w-full mt-[15%]">
-            <div class="mb-4">
-                <h2 class="text-center">Recovery Graph <span class="text-sm">v0.0.1</span></h2>
-                <ul class="text-center text-white">
-                    <li>Register to track your health over time</li>
-                </ul>
-            </div>
+            <p class="mb-4 text-center text-white max-w-[70%]">
+                This is a work in progress, make an account to try it out!
+            </p>
 
             <div class="flex flex-col justify-center items-center mt-2 gap-4">
                 <button data-value="google" on:click={loginHandler} class="gsi-material-button">
@@ -248,7 +249,7 @@
             <div class="flex flex-row">
                 <p class="absolute left-3 top-2">{username}</p>
                 <button class="absolute right-3 top-2 text-white" on:click={logout}>Logout</button>
-                <a href="https://liminallyme.com" class="text-white underline absolute left-3 bottom-2"><i class="mx-1 mb-[1px] arrow left"></i>LiminalLyme</a>
+                <a href="/" class="text-white underline absolute left-3 bottom-2"><i class="mx-1 mb-[1px] arrow left"></i>LiminalLyme</a>
                 <p class="absolute right-3 bottom-1">v0.0.1</p>
             </div>
 

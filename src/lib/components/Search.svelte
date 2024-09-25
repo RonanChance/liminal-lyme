@@ -169,30 +169,31 @@
 
 </script>
 
-{#if animate}
-<div class="text-center text-2xl text-white py-5 bg-[var(--lightbackground)] rounded-b-lg">Search <span class="text-[#e14b00] font-bold">Reddit</span> for <br><span class="font-bold">Medications</span> & <span class="font-bold">Supplements</span>
-	<div class="italic text-sm">Recommend: 1-3 selections</div>
+<div class="text-center text-2xl text-white py-5 bg-[var(--lightbackground)] rounded-b-lg text-bold flex flex-col">
+    <span>Medication & Supplement Search</span>
+    <span class="text-center text-sm">Search <a class="underline" href="/about#where_is_the_data_from">subreddits</a> with key terms</span>
 </div>
-{/if}
 
 <div class="intro-container">
 	{#if animate}
-		<main class="container" in:fade={{duration: 300}}>
+		<main class="flex flex-col max-w-[90%] sm:max-w-[60%] mx-auto my-0" in:fade={{duration: 300}}>
             
-			<div class="togglebuttongroup">
+			<div class="flex mt-6 gap-2 flex-wrap">
 				{#each slicedItems as item}
-					<button class="togglebutton" on:click={() => handleSelection(item)} style="background-color: {selectedItems.includes(item) ? (tag_counts[item]['label'] === 'SUP' ? 'var(--supplement)' : 'var(--medication)') : 'var(--white)'}; color: {selectedItems.includes(item) ? 'var(--white)' : '#000'}; font-weight: {selectedItems.includes(item) ? 'bold' : 'normal'};">
+					<button class="text-[11pt] flex flex-row whitespace-nowrap px-[14px] py-[6px] rounded" on:click={() => handleSelection(item)} style="background-color: {selectedItems.includes(item) ? (tag_counts[item]['label'] === 'SUP' ? 'var(--supplement)' : 'var(--medication)') : 'var(--white)'}; color: {selectedItems.includes(item) ? 'var(--white)' : '#000'}; font-weight: {selectedItems.includes(item) ? 'bold' : 'normal'};">
 						{item}
 					</button>				
 				{/each}
 			</div>
 
-			<input class="searchbar" type="text" bind:value={searchTerm} on:focus={() => {toggleDropdown(true)}} on:blur={() => {setTimeout(() => toggleDropdown(false), 100)}} placeholder="Search Medications & Supplements..." on:input={(event) => {filterOptions(event.target.value)}}>
+            <div class="text-center text-white italic text-sm mt-4">Recommend: 1-3 selections</div>
 
-			<div class="entirelist" style="display: {dropdownOpen ? 'block' : 'none'}">
+			<input class="mt-4 rounded w-full" type="text" bind:value={searchTerm} on:focus={() => {toggleDropdown(true)}} on:blur={() => {setTimeout(() => toggleDropdown(false), 100)}} placeholder="Search Medications & Supplements..." on:input={(event) => {filterOptions(event.target.value)}}>
+
+			<div class="max-h-[170px] overflow-y-auto text-[12pt] bg-white rounded" style="display: {dropdownOpen ? 'block' : 'none'}">
 				{#each filtered as option}
 					<div
-						class="spaced-option"
+						class="mt-1 mb-1 pl-3"
 						on:click={() => handleSelection(option)}
 						on:keydown={(event) => {
 							if (event.key === 'Enter') {
@@ -211,23 +212,23 @@
 			</div>
 			
 			<div style="display: flex; justify-content: right;">
-				<button class="excludenote" on:click={toggleAdvanced}>Advanced Mode: {advancedOn ? 'On' : 'Off'}</button>
+				<button class="text-[var(--white)] underline mt-3 text-sm" on:click={toggleAdvanced}>Advanced Mode: {advancedOn ? 'On' : 'Off'}</button>
 			</div>
 			
-			<div class="advancedbuttongroup" style="display: {advancedOn ? 'block' : 'none'}">
+			<div class="flex flex-wrap text-[var(--white)]" style="display: {advancedOn ? 'block' : 'none'}">
 				<div class="advanceddescription" style="margin-bottom: 10px;">
 					<span style="font-weight: bold;">Bold</span>: Required <br />
 					<span style="text-decoration: line-through;">Strikethrough</span>: Excluded
 				</div>
-				<div class="togglebuttongroup">
+				<div class="flex mt-6 gap-2 flex-wrap">
 					{#each illnesses as illness}
-						<button on:click={() => {handleAdv(illness)}} style="text-decoration: { excludedConditions.includes(illness) ? 'line-through' : 'none'}; background-color: { requiredConditions.includes(illness) ? 'var(--accent)' : 'var(--lightbackground)'}; font-weight: { requiredConditions.includes(illness) ? 'bold' : 'normal'}; color: { requiredConditions.includes(illness) ? 'var(--black)' : 'var(--white)'};" class="advancedbutton">{illness}</button>
+						<button on:click={() => {handleAdv(illness)}} style="text-decoration: { excludedConditions.includes(illness) ? 'line-through' : 'none'}; background-color: { requiredConditions.includes(illness) ? 'var(--accent)' : 'var(--lightbackground)'}; font-weight: { requiredConditions.includes(illness) ? 'bold' : 'normal'}; color: { requiredConditions.includes(illness) ? 'var(--black)' : 'var(--white)'};" class="text-[11pt] flex flex-row rounded whitespace-nowrap px-[14px] py-[6px]">{illness}</button>
 					{/each}
 				</div>	
 			</div>
 
 			<div style="display: flex; justify-content: center;">
-				<a href="#_" on:click={fetchDataForPostList} class="whitebutton">
+				<a href="#_" on:click={fetchDataForPostList} class="whitebutton mt-6 align-middle">
 					<div class="flex items-center" style="gap:8px; font-weight: bold; font-size: 20px;">
 					{#if isLoading}
 						<Spinner size={6} color="gray" />
@@ -243,29 +244,30 @@
 			</div>
 
 			{#if result_list.length > 1}
-				<div class="searchcount">
+				<div class="text-[var(--white)] mt-6 text-center">
 					{#if result_list.length === 30}
 						30+ Results
 					{:else}
 						{result_list.length} Results
 					{/if}
-					<div class="clickreminder">
+					<div class="flex flex-row items-center justify-center">
 						<svg class="w-8 h-8 me-1" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M9 3.5V2M5.06066 5.06066L4 4M5.06066 13L4 14.0607M13 5.06066L14.0607 4M3.5 9H2M15.8645 16.1896L13.3727 20.817C13.0881 21.3457 12.9457 21.61 12.7745 21.6769C12.6259 21.7349 12.4585 21.7185 12.324 21.6328C12.1689 21.534 12.0806 21.2471 11.9038 20.6733L8.44519 9.44525C8.3008 8.97651 8.2286 8.74213 8.28669 8.58383C8.33729 8.44595 8.44595 8.33729 8.58383 8.2867C8.74213 8.22861 8.9765 8.3008 9.44525 8.44519L20.6732 11.9038C21.247 12.0806 21.5339 12.169 21.6327 12.324C21.7185 12.4586 21.7348 12.6259 21.6768 12.7745C21.61 12.9458 21.3456 13.0881 20.817 13.3728L16.1896 15.8645C16.111 15.9068 16.0717 15.9279 16.0374 15.9551C16.0068 15.9792 15.9792 16.0068 15.9551 16.0374C15.9279 16.0717 15.9068 16.111 15.8645 16.1896Z" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
 						Click the highlighted terms!
 					</div>
 				</div>
 			{/if}
 
-			<div class="post-area">
+			<div class="pb-2">
 				<PostList posts={result_list}/>
 			</div>
-			<div class="med-disclaimer pt-3" in:fade={{duration: 200}}>
+			<div class="med-disclaimer mt-12 mb-12" in:fade={{duration: 200}}>
 				<MedicalDisclaimer />
 			</div>
 		</main>
 	{/if}
 </div>
-<div class="toast-container">
+
+<div class="fixed left-1/2 top-[110pt] transform -translate-x-1/2 -translate-y-1/2 z-10">
 	{#if isToastVisible}
 	<Toast color="orange">
 		<svelte:fragment slot="icon">
@@ -276,100 +278,3 @@
 	  </Toast>
 	{/if}
 </div>
-
-<style>
-	.whitebutton {
-		margin-top: 40px;
-		padding-left: 35px;
-		padding-right: 40px;
-	}
-
-	.clickreminder {
-		display: flex;
-		flex-direction: row;
-		align-items: center;
-		justify-content: center;
-	}
-
-	.searchcount {
-		color: var(--white);
-		margin-top: 5%;
-		text-align: center;
-	}
-
-	.excludenote {
-		color: var(--white);
-		text-decoration: underline;
-		margin-top: 2%;
-	}
-
-	.advancedbuttongroup {
-		color: var(--white);
-		display: flex;
-		flex-wrap: wrap;
-	}
-
-	.advancedbutton {
-		color: var(--black);
-		font-size: 11pt;
-		max-width: fit-content;
-		max-width: 90%;
-
-		padding: 6px 14px 6px 14px;
-		border-radius: 0.25rem;
-	}
-
-	.togglebuttongroup {
-		margin-top: 35px;
-		display: flex;
-		gap: 0.5rem;
-		flex-wrap: wrap;
-	}
-
-	.togglebutton {
-		font-size: 11pt;
-		display: flex;
-		flex-direction: row;
-		white-space: nowrap;
-		padding: 6px 14px 6px 14px;
-		border-radius: 0.25rem;
-	}
-
-	.searchbar {
-		margin-top: 35px;
-		border-radius: 0.5rem;
-		width: 100%;
-	}
-
-	.entirelist {
-		max-height: 150px;
-		overflow-y: auto;
-		font-size: 12pt;
-		background-color: var(--white);
-		border-radius: 7px;
-	}
-
-	.spaced-option {
-		margin-top: 5px;
-		margin-bottom: 5px;
-		padding-left: 3%;
-	}
-
-	.container {
-		display: flex;
-		flex-direction: column;
-	}
-	.post-area {
-		padding-bottom: 5%;
-	}
-	.med-disclaimer {
-		margin-top: 35px;
-		padding-bottom: 20%;
-	}
-	.toast-container {
-		position: fixed;
-		left: 50%;
-		top: 110pt;
-		transform: translate(-50%, -50%);
-  	}
-</style>
