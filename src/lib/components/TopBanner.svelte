@@ -17,6 +17,8 @@
   }
 </script>
 
+<meta charset="utf-8" name="theme-color" content="#f8f8f8"/>
+
 {#if !isStandAlone}
     <ModalPWA bind:showModal>
     <div class="flex justify-center">
