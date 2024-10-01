@@ -3,6 +3,9 @@
     import { browser } from '$app/environment';
     import { getCookie } from '../../lib/components/constants';
     import TopBanner from '../../lib/components/TopBanner.svelte';
+    import { Popover, Button } from 'flowbite-svelte';
+    import { TrashBinOutline } from 'flowbite-svelte-icons';
+
     import PocketBase from 'pocketbase';
     import chroma from 'chroma-js';
     import * as d3 from 'd3';
@@ -18,6 +21,8 @@
     let initializing = true;
     let comment = "";
     let scrollContainer;
+    let showData = {};
+    let triggerElement = null;
 
     const pb = new PocketBase('https://pb.liminallyme.com');
     const colorScale = chroma.scale(['black', '#9de09d']).domain([1, 100]);
@@ -38,6 +43,7 @@
             await getScores();
             // await createTestingData();
             // createGraph();
+            // createTestingData();
             initializing = false;
             await tick();
             scrollToBottom();
@@ -99,9 +105,12 @@
 
     async function createTestingData() {
         const dataPoints = []
-        for (let i = 0; i < 101; i++){
+        for (let i = 0; i < 201; i++){
             const dataPoint = {
+                id: 1,
                 timestamp: new Date().toISOString(),
+                comment: "this is a super long comment to test what happens if there is a string this long in the textbox so that it has to rollover to the next line and maybe messes up everything that i planned for the app visually, and i imagine people will probably type a lot sometimes so i want to see how that looks.",
+                localTimeString: new Date().toLocaleString(),
                 score: i
             }
             dataPoints.push(dataPoint);
@@ -200,7 +209,25 @@
             .attr("stroke-width", 2)
             .attr("d", line);
     }
+
+    function select(scoreDict, element) {
+        triggerElement = element;
+        showData = scoreDict;
+    }
+
+    async function deleteData(scoreDict) {
+        console.log("deleting: ", scoreDict.id);
+        try {
+            await pb.collection('scores').delete(scoreDict.id);
+            scores = scores.filter(dict => dict.id !== scoreDict.id);
+            showData = {};
+        } catch (e) {
+            console.log(e);
+        }
+    }
 </script>
+
+<meta charset="utf-8" name="theme-color" content="{colorScale(curValue).hex()}"/>
 
 {#if animate}
     {#if !authorized}
@@ -253,16 +280,30 @@
                 <p class="absolute right-3 bottom-1">v0.0.1</p>
             </div>
 
-            <div class="flex flex-col w-full h-dvh justify-center">
+            <div class="flex flex-col w-full h-dvh justify-center" style="background-color: {colorScale(curValue).hex()}">
                 {#if scores.length > 0}
                     <div class="mx-[5%] sm:mx-[15%] lg:mx-[20%]">
-                        <div class="grid-container justify-center max-h-[250px] overflow-y-auto" bind:this={scrollContainer}>
-                            {#each scores as score}
-                                <div class="text-white text-sm flex items-center justify-center w-12 h-12 bg-[var(--extradarkbackground)] transition-transform transform hover:scale-110 hover:font-bold" style="background-color: {colorScale(score.score).hex()}; text-decoration: {score.comment ? "underline" : ""}">
-                                    {score.score}
+                        <div class="grid-container justify-center max-h-[258px] overflow-y-auto py-1" bind:this={scrollContainer}>
+                            {#each scores as scoreDict}
+                                <div on:click={(e) => select(scoreDict, e.currentTarget)} class="text-white outline outline-1 outline-black text-sm flex items-center justify-center w-12 h-12 bg-[var(--extradarkbackground)] rounded-lg" style="background-color: {colorScale(scoreDict.score).hex()}; text-decoration: {scoreDict.comment ? "underline" : ""}">
+                                    {scoreDict.score}
                                 </div>
                             {/each}
                         </div>
+                        {#if showData}
+                            <Popover arrow={false} class="w-64 text-sm font-light bg-[var(--white)] z-50" title="{showData.localTimeString}" triggeredBy={triggerElement} trigger="click">
+                                <div class="flex flex-col">
+                                    {#if showData.comment}
+                                        {showData.comment}
+                                    {:else}
+                                        n/a
+                                    {/if}
+                                    <div class="flex justify-end">
+                                        <Button outline color="red" size="xs" on:click={() => { deleteData(showData) }} ><TrashBinOutline size="xs" /></Button>
+                                    </div>
+                                </div>
+                            </Popover>
+                        {/if}
                     </div>
                 {:else}
                     <div class="text-center opacity-25">
@@ -270,15 +311,15 @@
                     </div>
                 {/if}
                 
-                <div class="mt-8 mb-4 text-white rs-label text-4xl text-center">{curValue}</div>
-                
-                <div class="mx-[15%] sm:mx-[20%] md:mx-[25%] lg:mx-[30%] xl:mx-[35%]">
+                <div class="mx-[10%] sm:mx-[15%] md:mx-[25%] lg:mx-[30%] xl:mx-[35%] mt-10">
+                    <div class="text-white rs-label text-6xl text-center">{curValue}</div>
+                    <div class="px-[5px] flex flex-row gap-2 items-center">
+                        <input class="w-full range-slider" style="accent-color: {colorScale(curValue).hex()};" bind:value={curValue} type="range" min="0" max="100">
+                        <button class="mx-auto bg-[var(--white)] px-[1rem] py-[0.5rem] rounded-md disabled:bg-gray-300 flex flex-row align-baseline gap-2" on:click={addScore} disabled={updating}>
+                            <svg fill="#000000" version="1.1" id="Capa_1" width="20px" height="20px" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 31.806 31.806" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <g> <path d="M1.286,12.465c-0.685,0.263-1.171,0.879-1.268,1.606c-0.096,0.728,0.213,1.449,0.806,1.88l6.492,4.724L30.374,2.534 L9.985,22.621l8.875,6.458c0.564,0.41,1.293,0.533,1.964,0.33c0.67-0.204,1.204-0.713,1.444-1.368l9.494-25.986 c0.096-0.264,0.028-0.559-0.172-0.756c-0.199-0.197-0.494-0.259-0.758-0.158L1.286,12.465z"></path> <path d="M5.774,22.246l0.055,0.301l1.26,6.889c0.094,0.512,0.436,0.941,0.912,1.148c0.476,0.206,1.025,0.162,1.461-0.119 c1.755-1.132,4.047-2.634,3.985-2.722L5.774,22.246z"></path> </g> </g> </g></svg>
+                        </button>
+                    </div>
                     <textarea class="mt-4 w-full bg-[var(--extradarkbackground)] rounded outline-0 border-0 text-center text-white focus:outline-none focus:outline-1 focus:ring-white" bind:value={comment} maxlength="250" placeholder="Start typing to comment"></textarea>
-                    <input class="mt-2 w-full range-slider" style="accent-color: {colorScale(curValue).hex()};" bind:value={curValue} type="range" min="0" max="100">
-                    <button class="mx-auto mt-4 bg-[var(--white)] px-[1rem] py-[0.5rem] rounded-md disabled:bg-gray-300 flex flex-row align-baseline gap-2" on:click={addScore} disabled={updating}>
-                        <svg fill="#000000" version="1.1" id="Capa_1" width="20px" height="20px" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 31.806 31.806" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <g> <path d="M1.286,12.465c-0.685,0.263-1.171,0.879-1.268,1.606c-0.096,0.728,0.213,1.449,0.806,1.88l6.492,4.724L30.374,2.534 L9.985,22.621l8.875,6.458c0.564,0.41,1.293,0.533,1.964,0.33c0.67-0.204,1.204-0.713,1.444-1.368l9.494-25.986 c0.096-0.264,0.028-0.559-0.172-0.756c-0.199-0.197-0.494-0.259-0.758-0.158L1.286,12.465z"></path> <path d="M5.774,22.246l0.055,0.301l1.26,6.889c0.094,0.512,0.436,0.941,0.912,1.148c0.476,0.206,1.025,0.162,1.461-0.119 c1.755-1.132,4.047-2.634,3.985-2.722L5.774,22.246z"></path> </g> </g> </g></svg>
-                        Confirm
-                    </button>
                 </div>
             </div>
         {/if}
@@ -291,6 +332,7 @@
     .grid-container {
         display: grid;
         grid-template-columns: repeat(auto-fill, 3rem);
+        gap: 0.2rem;
     }
     /* Hide scrollbar for WebKit browsers (Chrome, Safari) */
     .grid-container::-webkit-scrollbar {
