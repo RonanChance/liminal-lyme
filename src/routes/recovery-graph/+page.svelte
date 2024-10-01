@@ -4,7 +4,7 @@
     import { getCookie } from '../../lib/components/constants';
     import TopBanner from '../../lib/components/TopBanner.svelte';
     import { Popover, Button } from 'flowbite-svelte';
-    import { TrashBinOutline } from 'flowbite-svelte-icons';
+    import { GearSolid, TrashBinSolid, ArrowUpRightFromSquareOutline, ArrowRightFromBracketSolid, ArrowUpSolid } from 'flowbite-svelte-icons';
 
     import PocketBase from 'pocketbase';
     import chroma from 'chroma-js';
@@ -25,7 +25,7 @@
     let triggerElement = null;
 
     const pb = new PocketBase('https://pb.liminallyme.com');
-    const colorScale = chroma.scale(['black', '#9de09d']).domain([1, 100]);
+    const colorScale = chroma.scale(['black', '#9bdec1']).domain([1, 100]);
 
     onMount(async () => {
         animate = true;
@@ -85,7 +85,7 @@
             document.cookie = `email=${email}; path=/;`;
             document.cookie = `userId=${userId}; path=/;`;
             // get current scores from pb
-            getScores();
+            await getScores();
         } catch (error) {
             console.error(error);
         }
@@ -134,7 +134,7 @@
             "timestamp": formattedDate
         };
         await pb.collection('scores').create(data);
-        getScores();
+        await getScores();
         comment = "";
         updating = false;
     }
@@ -158,7 +158,6 @@
                 localTimeString: new Date(score.timestamp).toLocaleString()
             }));
             
-            console.log('fetched scores');
             console.log(scores);
 
             try {
@@ -225,9 +224,23 @@
             console.log(e);
         }
     }
-</script>
 
-<meta charset="utf-8" name="theme-color" content="{colorScale(curValue).hex()}"/>
+    async function exportData() {
+        const newWindow = window.open('', '_blank');
+        const htmlContent = `
+            <html>
+                <head>
+                    <title>Export Data</title>
+                </head>
+                <body>
+                    <pre>${scores.map(score => JSON.stringify(score, null, 2)).join(',\n')}</pre>
+                </body>
+            </html>
+        `;
+        newWindow.document.write(htmlContent);
+        newWindow.document.close();
+    }
+</script>
 
 {#if animate}
     {#if !authorized}
@@ -268,16 +281,29 @@
             </div>
         </div>
     {:else}
+        <meta charset="utf-8" name="theme-color" content="{colorScale(curValue).hex()}"/>
         {#if initializing}
             <div class="flex flex-col justify-center">
                 <div class="mx-auto text-white text-lg">Loading..</div>
             </div>
         {:else}
             <div class="flex flex-row">
-                <p class="absolute left-3 top-2">{username}</p>
-                <button class="absolute right-3 top-2 text-white" on:click={logout}>Logout</button>
-                <a href="/" class="text-white underline absolute left-3 bottom-2"><i class="mx-1 mb-[1px] arrow left"></i>LiminalLyme</a>
-                <p class="absolute right-3 bottom-1">v0.0.1</p>
+                <a href="/" class="text-white underline absolute left-4 bottom-4">Homepage</a>
+                <button class="absolute right-5 bottom-5 text-white"><GearSolid size="lg" /></button>
+                <Popover arrow={false} class="w-[10rem] text-sm font-light bg-[var(--white)] z-50" trigger="click">
+                    <div class="flex flex-col">
+                        <div class="flex flex-col gap-2">
+                            <div class="flex flex-row justify-between items-center">
+                                Export Data
+                                <Button color="green" size="xs" on:click={exportData}><ArrowUpRightFromSquareOutline size="xs" /></Button>
+                            </div>
+                            <div class="flex flex-row justify-between items-center">
+                                Logout
+                                <Button color="green" size="xs" on:click={logout}><ArrowRightFromBracketSolid size="xs" /></Button>
+                            </div>
+                        </div>
+                    </div>
+                </Popover>
             </div>
 
             <div class="flex flex-col w-full h-dvh justify-center" style="background-color: {colorScale(curValue).hex()}">
@@ -299,7 +325,7 @@
                                         n/a
                                     {/if}
                                     <div class="flex justify-end">
-                                        <Button outline color="red" size="xs" on:click={() => { deleteData(showData) }} ><TrashBinOutline size="xs" /></Button>
+                                        <Button outline color="red" size="xs" on:click={() => { deleteData(showData) }} ><TrashBinSolid size="xs" /></Button>
                                     </div>
                                 </div>
                             </Popover>
@@ -315,8 +341,8 @@
                     <div class="text-white rs-label text-6xl text-center">{curValue}</div>
                     <div class="px-[5px] flex flex-row gap-2 items-center">
                         <input class="w-full range-slider" style="accent-color: {colorScale(curValue).hex()};" bind:value={curValue} type="range" min="0" max="100">
-                        <button class="mx-auto bg-[var(--white)] px-[1rem] py-[0.5rem] rounded-md disabled:bg-gray-300 flex flex-row align-baseline gap-2" on:click={addScore} disabled={updating}>
-                            <svg fill="#000000" version="1.1" id="Capa_1" width="20px" height="20px" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 31.806 31.806" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <g> <path d="M1.286,12.465c-0.685,0.263-1.171,0.879-1.268,1.606c-0.096,0.728,0.213,1.449,0.806,1.88l6.492,4.724L30.374,2.534 L9.985,22.621l8.875,6.458c0.564,0.41,1.293,0.533,1.964,0.33c0.67-0.204,1.204-0.713,1.444-1.368l9.494-25.986 c0.096-0.264,0.028-0.559-0.172-0.756c-0.199-0.197-0.494-0.259-0.758-0.158L1.286,12.465z"></path> <path d="M5.774,22.246l0.055,0.301l1.26,6.889c0.094,0.512,0.436,0.941,0.912,1.148c0.476,0.206,1.025,0.162,1.461-0.119 c1.755-1.132,4.047-2.634,3.985-2.722L5.774,22.246z"></path> </g> </g> </g></svg>
+                        <button class="bg-[var(--white)] w-12 py-2 rounded-2xl disabled:bg-gray-300 flex items-center justify-center" on:click={addScore} disabled={updating}>
+                            <ArrowUpSolid />
                         </button>
                     </div>
                     <textarea class="mt-4 w-full bg-[var(--extradarkbackground)] rounded outline-0 border-0 text-center text-white focus:outline-none focus:outline-1 focus:ring-white" bind:value={comment} maxlength="250" placeholder="Start typing to comment"></textarea>
