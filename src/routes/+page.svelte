@@ -69,7 +69,7 @@
             <div class="flex flex-col flex-grow items-center text-center text-[var(--white)] text-lg max-w-[75%] px-[2%] md:mt-5 gap-1">
                 <strong class="text-2xl">Search</strong>
                 Query our database to find tick-borne illness experiences
-                <a href="https://liminallyme.com/search" class="px-4 py-1 bg-[--darkbackground] rounded text-[var(--white)] mt-3">Search <ArrowRightSolid class="text-[var(--white)] inline" /></a>
+                <a href="/search" class="px-4 py-1 bg-[--darkbackground] rounded text-[var(--white)] mt-3">Search <ArrowRightSolid class="text-[var(--white)] inline" /></a>
             </div>
         </div>
         
@@ -80,7 +80,7 @@
             <div class="flex flex-col items-center text-center text-[var(--white)] text-lg max-w-[75%] px-[2%] md:mt-5 gap-1">
                 <strong class="text-2xl">Explore</strong>
                 Find treatment ideas based on scientific research articles
-                <a href="https://liminallyme.com/tree" class="px-4 py-1 bg-[--darkbackground] rounded text-[var(--white)] mt-3">Explore <ArrowRightSolid class="text-[var(--white)] inline" /></a>
+                <a href="/tree" class="px-4 py-1 bg-[--darkbackground] rounded text-[var(--white)] mt-3">Explore <ArrowRightSolid class="text-[var(--white)] inline" /></a>
             </div>
         </div>
 
@@ -91,7 +91,7 @@
             <div class="flex flex-col items-center text-center text-[var(--white)] text-lg max-w-[75%] px-[2%] md:mt-5 gap-1">
                 <strong class="text-2xl">Track</strong>
                 Log your experiences and track changes in your health
-                <a href="https://liminallyme.com/recovery-graph" class="px-4 py-1 bg-[--darkbackground] rounded text-[var(--white)] mt-3">Track <ArrowRightSolid class="text-[var(--white)] inline" /></a>
+                <a href="/recovery-graph" class="px-4 py-1 bg-[--darkbackground] rounded text-[var(--white)] mt-3">Track <ArrowRightSolid class="text-[var(--white)] inline" /></a>
             </div>
         </div>
     </div>
