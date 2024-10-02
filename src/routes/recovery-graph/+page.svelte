@@ -1,5 +1,5 @@
 <script>
-    import { onMount, onDestroy, tick } from 'svelte';
+    import { onMount, tick } from 'svelte';
     import { browser } from '$app/environment';
     import { getCookie } from '../../lib/components/constants';
     import TopBanner from '../../lib/components/TopBanner.svelte';
@@ -39,16 +39,19 @@
                 username = storedUsername;
                 userId = storedUserId;
                 authorized = true;
+                await loadAllData();
             }
-            await getScores();
-            // await createTestingData();
-            // createGraph();
-            // createTestingData();
-            initializing = false;
-            await tick();
-            scrollToBottom();
         }
     });
+
+    async function loadAllData() {
+        await getScores();
+        // await createTestingData();
+        initializing = false;
+        await tick();
+        await createGraph();
+        scrollToBottom();
+    }
 
     function scrollToBottom() {
         if (scrollContainer) {
@@ -80,12 +83,12 @@
             username = data.meta?.username || data.meta?.name;
             userId = data.record.id;
             authorized = true;
-            // store email, record in cookies
+
             document.cookie = `username=${username}; path=/;`;
             document.cookie = `email=${email}; path=/;`;
             document.cookie = `userId=${userId}; path=/;`;
-            // get current scores from pb
-            await getScores();
+
+            await loadAllData();
         } catch (error) {
             console.error(error);
         }
@@ -134,13 +137,12 @@
             "timestamp": formattedDate
         };
         await pb.collection('scores').create(data);
-        await getScores();
+        await loadAllData();
         comment = "";
         updating = false;
     }
 
     async function getScores() {
-        console.log('getScores() called')
         if (!pb.authStore.isValid) {
             console.log("User is not authenticated");
             logout();
@@ -171,20 +173,27 @@
         }
     }
 
-    function createGraph() {
-        const margin = { top: 40, right: 30, bottom: 40, left: 40};
-        const width = window.innerWidth/1.5 - margin.left - margin.right;
-        const height = window.innerHeight/4 - margin.top - margin.bottom;
+    async function createGraph() {
+        const margin = { top: 10, right: 30, bottom: 40, left: 40};
+        let container = document.getElementById('recovery-graph-container');
+        let svg = d3.select("#recovery-graph svg");
+
+        const width = container.offsetWidth - margin.left - margin.right;
+        const height = container.offsetHeight - margin.top - margin.bottom;
 
         const x = d3.scaleTime().range([0, width]);
         const y = d3.scaleLinear().range([height, 0]);
 
-        const svg = d3.select("#recovery-graph")
+        if (!svg.empty()) {
+            svg.remove();
+        }
+
+        svg = d3.select("#recovery-graph")
             .append("svg")
-                .attr("width", width + margin.left + margin.right)
-                .attr("height", height + margin.top + margin.bottom)
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
             .append("g")
-                .attr("transform", `translate(${margin.left}, ${margin.top})`);
+            .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
         x.domain(d3.extent(scores, s => s.timestamp));
         y.domain([0, d3.max(scores, s => s.score)]);
@@ -192,14 +201,15 @@
         svg.append("g")
             .attr("transform", `translate(0, ${height})`)
             .call(d3.axisBottom(x)
-                .tickValues(scores.map(s => s.timestamp)) // Use the timestamps from your data points
-                .tickFormat(d3.timeFormat(""))); // Format as desired
+                .tickValues(scores.map(s => s.timestamp))
+                .tickFormat(d3.timeFormat("")));
 
         svg.append("g").call(d3.axisLeft(y));
 
         const line = d3.line()
             .x(d => x(d.timestamp))
             .y(d => y(d.score))
+            .curve(d3.curveMonotoneX)
 
         svg.append("path")
             .datum(scores)
@@ -209,7 +219,7 @@
             .attr("d", line);
     }
 
-    function select(scoreDict, element) {
+    function selectDataPoint(scoreDict, element) {
         triggerElement = element;
         showData = scoreDict;
     }
@@ -219,6 +229,8 @@
         try {
             await pb.collection('scores').delete(scoreDict.id);
             scores = scores.filter(dict => dict.id !== scoreDict.id);
+            await loadAllData();
+            triggerElement = null;
             showData = {};
         } catch (e) {
             console.log(e);
@@ -240,6 +252,7 @@
         newWindow.document.write(htmlContent);
         newWindow.document.close();
     }
+
 </script>
 
 {#if animate}
@@ -308,28 +321,32 @@
 
             <div class="flex flex-col w-full h-dvh justify-center" style="background-color: {colorScale(curValue).hex()}">
                 {#if scores.length > 0}
-                    <div class="mx-[5%] sm:mx-[15%] lg:mx-[20%]">
-                        <div class="grid-container justify-center max-h-[258px] overflow-y-auto py-1" bind:this={scrollContainer}>
+                    <div class="mx-[5%] sm:mx-[15%] lg:mx-[30%] xl:mx-[35%]">
+                        <!-- <div class="text-white flex justify-center" id="recovery-graph"></div> -->
+                        <div class="text-white flex justify-center h-[25vh] w-full" id="recovery-graph-container">
+                            <div class="text-white flex justify-center h-full w-full" id="recovery-graph"></div>
+                        </div>
+                        <div class="grid-container justify-center max-h-[206px] overflow-y-auto py-1" bind:this={scrollContainer}>
                             {#each scores as scoreDict}
-                                <div on:click={(e) => select(scoreDict, e.currentTarget)} class="text-white outline outline-1 outline-black text-sm flex items-center justify-center w-12 h-12 bg-[var(--extradarkbackground)] rounded-lg" style="background-color: {colorScale(scoreDict.score).hex()}; text-decoration: {scoreDict.comment ? "underline" : ""}">
+                                <div on:click={(e) => selectDataPoint(scoreDict, e.currentTarget)} 
+                                    class="text-white outline outline-1 outline-black text-sm flex items-center justify-center w-12 h-12 bg-[var(--extradarkbackground)] rounded-lg" 
+                                    style="background-color: {colorScale(scoreDict.score).hex()}; text-decoration: {scoreDict.comment ? "underline" : ""}">
                                     {scoreDict.score}
                                 </div>
                             {/each}
                         </div>
-                        {#if showData}
-                            <Popover arrow={false} class="w-64 text-sm font-light bg-[var(--white)] z-50" title="{showData.localTimeString}" triggeredBy={triggerElement} trigger="click">
-                                <div class="flex flex-col">
-                                    {#if showData.comment}
-                                        {showData.comment}
-                                    {:else}
-                                        n/a
-                                    {/if}
-                                    <div class="flex justify-end">
-                                        <Button outline color="red" size="xs" on:click={() => { deleteData(showData) }} ><TrashBinSolid size="xs" /></Button>
-                                    </div>
+                        <Popover arrow={false} class="w-64 text-sm font-light bg-[var(--white)] z-50" title="Score: {showData.score}" triggeredBy={triggerElement} trigger="click">
+                            <div class="flex flex-col">
+                                {showData.localTimeString}
+                                <br />
+                                {#if showData.comment}
+                                    {showData.comment}
+                                {/if}
+                                <div class="flex justify-end">
+                                    <Button outline color="red" size="xs" on:click={() => { deleteData(showData) }} ><TrashBinSolid size="xs" /></Button>
                                 </div>
-                            </Popover>
-                        {/if}
+                            </div>
+                        </Popover>
                     </div>
                 {:else}
                     <div class="text-center opacity-25">
@@ -337,11 +354,11 @@
                     </div>
                 {/if}
                 
-                <div class="mx-[10%] sm:mx-[15%] md:mx-[25%] lg:mx-[30%] xl:mx-[35%] mt-10">
+                <div class="mx-[10%] sm:mx-[15%] md:mx-[25%] lg:mx-[30%] xl:mx-[35%] mt-[5%]">
                     <div class="text-white rs-label text-6xl text-center">{curValue}</div>
                     <div class="px-[5px] flex flex-row gap-2 items-center">
                         <input class="w-full range-slider" style="accent-color: {colorScale(curValue).hex()};" bind:value={curValue} type="range" min="0" max="100">
-                        <button class="bg-[var(--white)] w-12 py-2 rounded-2xl disabled:bg-gray-300 flex items-center justify-center" on:click={addScore} disabled={updating}>
+                        <button class="bg-[var(--white)] text-[var(--darkbackground)] w-12 py-2 rounded-2xl disabled:bg-gray-300 flex items-center justify-center" on:click={addScore} disabled={updating}>
                             <ArrowUpSolid />
                         </button>
                     </div>
@@ -352,7 +369,7 @@
     {/if}
 {/if}
 
-<!-- <div class="text-white flex justify-center" id="recovery-graph"></div> -->
+<!-- <div class="text-white flex justify-center h-[200px] w-[100%]" id="recovery-graph"></div> -->
 
 <style>
     .grid-container {
