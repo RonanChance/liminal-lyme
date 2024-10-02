@@ -4,8 +4,8 @@
     import { getCookie } from '../../lib/components/constants';
     import TopBanner from '../../lib/components/TopBanner.svelte';
     import { Popover, Button } from 'flowbite-svelte';
+    import { themeColorLeft, themeColorRight } from "../stores";
     import { GearSolid, TrashBinSolid, ArrowUpRightFromSquareOutline, ArrowRightFromBracketSolid, ArrowUpSolid } from 'flowbite-svelte-icons';
-
     import PocketBase from 'pocketbase';
     import chroma from 'chroma-js';
     import * as d3 from 'd3';
@@ -25,7 +25,7 @@
     let triggerElement = null;
 
     const pb = new PocketBase('https://pb.liminallyme.com');
-    const colorScale = chroma.scale(['black', '#9bdec1']).domain([1, 100]);
+    $: colorScale = chroma.scale([$themeColorLeft, $themeColorRight]).domain([1, 100]);
 
     onMount(async () => {
         animate = true;
@@ -112,7 +112,7 @@
             const dataPoint = {
                 id: 1,
                 timestamp: new Date().toISOString(),
-                comment: "this is a super long comment to test what happens if there is a string this long in the textbox so that it has to rollover to the next line and maybe messes up everything that i planned for the app visually, and i imagine people will probably type a lot sometimes so i want to see how that looks.",
+                comment: "this is an example comment",
                 localTimeString: new Date().toLocaleString(),
                 score: i
             }
@@ -174,7 +174,7 @@
     }
 
     async function createGraph() {
-        const margin = { top: 10, right: 30, bottom: 40, left: 40};
+        const margin = { top: 10, right: 15, bottom: 40, left: 30};
         let container = document.getElementById('recovery-graph-container');
         let svg = d3.select("#recovery-graph svg");
 
@@ -217,6 +217,15 @@
             .attr("stroke", "white")
             .attr("stroke-width", 2)
             .attr("d", line);
+
+        svg.selectAll("circle")
+            .data(scores)
+            .enter()
+            .append("circle")
+            .attr("cx", d => x(d.timestamp))
+            .attr("cy", d => y(d.score))
+            .attr("r", 3)
+            .attr("fill", "white");
     }
 
     function selectDataPoint(scoreDict, element) {
@@ -251,6 +260,11 @@
         `;
         newWindow.document.write(htmlContent);
         newWindow.document.close();
+    }
+
+    function changeColorScheme(leftColor, rightColor) {
+        themeColorLeft.set(leftColor);
+        themeColorRight.set(rightColor);
     }
 
 </script>
@@ -303,16 +317,24 @@
             <div class="flex flex-row">
                 <a href="/" class="text-white underline absolute left-4 bottom-4">Homepage</a>
                 <button class="absolute right-5 bottom-5 text-white"><GearSolid size="lg" /></button>
-                <Popover arrow={false} class="w-[10rem] text-sm font-light bg-[var(--white)] z-50" trigger="click">
+                <Popover arrow={false} class="text-sm font-light bg-[var(--white)] z-50" trigger="click">
                     <div class="flex flex-col">
-                        <div class="flex flex-col gap-2">
-                            <div class="flex flex-row justify-between items-center">
-                                Export Data
-                                <Button color="green" size="xs" on:click={exportData}><ArrowUpRightFromSquareOutline size="xs" /></Button>
+                        <div class="flex flex-col gap-4">
+                            <div class="flex flex-col gap-2">
+                                <div>Color Scheme</div>
+                                <button class="px-2 py-1 bg-gradient-to-r from-[#0a0a0a] to-[#86efac] rounded text-white" on:click={() => {changeColorScheme("#0a0a0a", "#467465")}}>{$themeColorRight === "#467465" ? "Selected" : "Select"}</button>
+                                <button class="px-2 py-1 bg-gradient-to-r from-[#0a0a0a] to-[#a5f3fc] rounded text-white" on:click={() => {changeColorScheme("#0a0a0a", "#0369a1")}}>{$themeColorRight === "#0369a1" ? "Selected" : "Select"}</button>
+                                <button class="px-2 py-1 bg-gradient-to-r from-[#0a0a0a] to-[#fda4af] rounded text-white" on:click={() => {changeColorScheme("#0a0a0a", "#fda4af")}}>{$themeColorRight === "#fda4af" ? "Selected" : "Select"}</button>
+                                <button class="px-2 py-1 bg-gradient-to-r from-[#0a0a0a] to-[#fcd34d] rounded text-white" on:click={() => {changeColorScheme("#0a0a0a", "#7c2d12")}}>{$themeColorRight === "#7c2d12" ? "Selected" : "Select"}</button>
+                                <button class="px-2 py-1 bg-gradient-to-r from-[#0a0a0a] to-[#71827d] rounded text-white" on:click={() => {changeColorScheme("#0a0a0a", "#6b7280")}}>{$themeColorRight === "#6b7280" ? "Selected" : "Select"}</button>
                             </div>
-                            <div class="flex flex-row justify-between items-center">
-                                Logout
-                                <Button color="green" size="xs" on:click={logout}><ArrowRightFromBracketSolid size="xs" /></Button>
+                            <div class="flex flex-row justify-end items-center gap-2">
+                                <div>Export Data</div>
+                                <button class="px-4 py-2 bg-[var(--lightbackground)] rounded text-white" on:click={exportData}><ArrowUpRightFromSquareOutline size="xs" /></button>
+                            </div>
+                            <div class="flex flex-row justify-end items-center gap-2">
+                                <div>Logout</div>
+                                <button class="px-4 py-2 bg-red-700 rounded text-white" on:click={logout}><ArrowRightFromBracketSolid size="xs" /></button>
                             </div>
                         </div>
                     </div>
@@ -322,11 +344,10 @@
             <div class="flex flex-col w-full h-dvh justify-center" style="background-color: {colorScale(curValue).hex()}">
                 {#if scores.length > 0}
                     <div class="mx-[5%] sm:mx-[15%] lg:mx-[30%] xl:mx-[35%]">
-                        <!-- <div class="text-white flex justify-center" id="recovery-graph"></div> -->
                         <div class="text-white flex justify-center h-[25vh] w-full" id="recovery-graph-container">
                             <div class="text-white flex justify-center h-full w-full" id="recovery-graph"></div>
                         </div>
-                        <div class="grid-container justify-center max-h-[206px] overflow-y-auto py-1" bind:this={scrollContainer}>
+                        <div class="grid-container justify-center max-h-[207px] w-full overflow-y-auto py-1" bind:this={scrollContainer}>
                             {#each scores as scoreDict}
                                 <div on:click={(e) => selectDataPoint(scoreDict, e.currentTarget)} 
                                     class="text-white outline outline-1 outline-black text-sm flex items-center justify-center w-12 h-12 bg-[var(--extradarkbackground)] rounded-lg" 
@@ -357,19 +378,17 @@
                 <div class="mx-[10%] sm:mx-[15%] md:mx-[25%] lg:mx-[30%] xl:mx-[35%] mt-[5%]">
                     <div class="text-white rs-label text-6xl text-center">{curValue}</div>
                     <div class="px-[5px] flex flex-row gap-2 items-center">
-                        <input class="w-full range-slider" style="accent-color: {colorScale(curValue).hex()};" bind:value={curValue} type="range" min="0" max="100">
-                        <button class="bg-[var(--white)] text-[var(--darkbackground)] w-12 py-2 rounded-2xl disabled:bg-gray-300 flex items-center justify-center" on:click={addScore} disabled={updating}>
-                            <ArrowUpSolid />
+                        <input class="w-full range-slider" style="accent-color: #fff" bind:value={curValue} type="range" min="0" max="100">
+                        <button class="bg-[var(--white)] text-[var(--darkbackground)] w-12 py-2 rounded-2xl disabled:bg-gray-300 flex items-center justify-center outline-none" on:click={addScore} disabled={updating}>
+                            <ArrowUpSolid class="outline-none" />
                         </button>
                     </div>
-                    <textarea class="mt-4 w-full bg-[var(--extradarkbackground)] rounded outline-0 border-0 text-center text-white focus:outline-none focus:outline-1 focus:ring-white" bind:value={comment} maxlength="250" placeholder="Start typing to comment"></textarea>
+                    <textarea class="mt-4 w-full bg-[var(--white)] rounded-2xl outline-0 border-0 text-center text-[var(--darkbackground)] focus:outline-none focus:outline-1 focus:ring-white" bind:value={comment} maxlength="250" placeholder="Start typing to comment"></textarea>
                 </div>
             </div>
         {/if}
     {/if}
 {/if}
-
-<!-- <div class="text-white flex justify-center h-[200px] w-[100%]" id="recovery-graph"></div> -->
 
 <style>
     .grid-container {
