@@ -10,7 +10,6 @@
     import chroma from 'chroma-js';
     import * as d3 from 'd3';
 
-    let animate = false;
     let authorized = false;
     let email = '';
     let username = '';
@@ -28,7 +27,6 @@
     $: colorScale = chroma.scale([$themeColorLeft, $themeColorRight]).domain([1, 100]);
 
     onMount(async () => {
-        animate = true;
         if (browser) {
             window.addEventListener('keydown', handleKeydown);
             const storedEmail = getCookie('email');
@@ -211,12 +209,21 @@
             .y(d => y(d.score))
             .curve(d3.curveMonotoneX)
 
-        svg.append("path")
+        const path = svg.append("path")
             .datum(scores)
             .attr("fill", "none")
             .attr("stroke", "white")
             .attr("stroke-width", 2)
             .attr("d", line);
+
+        const totalLength = path.node().getTotalLength();
+
+        path.attr("stroke-dasharray", totalLength)
+            .attr("stroke-dashoffset", totalLength)
+            .transition()
+            .duration(1300)
+            .ease(d3.easeLinear)
+            .attr("stroke-dashoffset", 0);
 
         svg.selectAll("circle")
             .data(scores)
@@ -225,7 +232,11 @@
             .attr("cx", d => x(d.timestamp))
             .attr("cy", d => y(d.score))
             .attr("r", 3)
-            .attr("fill", "white");
+            .attr("fill", "white")
+            .attr("opacity", 0)
+            .transition()
+            .duration(1000)
+            .attr("opacity", 1);
     }
 
     function selectDataPoint(scoreDict, element) {
@@ -269,124 +280,122 @@
 
 </script>
 
-{#if animate}
-    {#if !authorized}
-        <TopBanner />
-        <div class="text-center text-2xl text-white py-5 bg-[var(--lightbackground)] rounded-b-lg text-bold flex flex-col">
-            <span class="">Recovery Graph <span class="font-thin text-sm">v0.0.1</span></span>
-            <span class="text-center text-sm">Track your health over time</span>
-        </div>
-        <div class="flex flex-col items-center justify-center w-full mt-[15%]">
-            <p class="mb-4 text-center text-white max-w-[70%]">
-                This is a work in progress, make an account to try it out!
-            </p>
+{#if !authorized}
+    <TopBanner />
+    <div class="text-center text-2xl text-white py-5 bg-[var(--lightbackground)] rounded-b-lg text-bold flex flex-col">
+        <span class="">Recovery Graph <span class="font-thin text-sm">v0.0.1</span></span>
+        <span class="text-center text-sm">Track your health over time</span>
+    </div>
+    <div class="flex flex-col items-center justify-center w-full mt-[15%]">
+        <p class="mb-4 text-center text-white max-w-[70%]">
+            This is a work in progress, make an account to try it out!
+        </p>
 
-            <div class="flex flex-col justify-center items-center mt-2 gap-4">
-                <button data-value="google" on:click={loginHandler} class="gsi-material-button">
-                    <div class="gsi-material-button-state"></div>
-                    <div class="gsi-material-button-content-wrapper">
-                      <div class="gsi-material-button-icon">
-                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" xmlns:xlink="http://www.w3.org/1999/xlink" style="display: block;">
-                          <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"></path>
-                          <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"></path>
-                          <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"></path>
-                          <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"></path>
-                          <path fill="none" d="M0 0h48v48H0z"></path>
-                        </svg>
-                      </div>
-                      <span class="gsi-material-button-contents" style="font-weight: bold;">Continue with Google</span>
-                      <span style="display: none;">Continue with Google</span>
-                    </div>
-                </button>
-
-                <button on:click={loginHandler} data-value="github" class="py-2 px-4 flex justify-center items-center bg-gray-700 hover:bg-gray-600 text-white transition ease-in duration-100 text-center text-base font-semibold shadow-md focus:outline-none rounded">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="mr-2 mb-1" viewBox="0 0 1792 1792">
-                        <path d="M896 128q209 0 385.5 103t279.5 279.5 103 385.5q0 251-146.5 451.5t-378.5 277.5q-27 5-40-7t-13-30q0-3 .5-76.5t.5-134.5q0-97-52-142 57-6 102.5-18t94-39 81-66.5 53-105 20.5-150.5q0-119-79-206 37-91-8-204-28-9-81 11t-92 44l-38 24q-93-26-192-26t-192 26q-16-11-42.5-27t-83.5-38.5-85-13.5q-45 113-8 204-79 87-79 206 0 85 20.5 150t52.5 105 80.5 67 94 39 102.5 18q-39 36-49 103-21 10-45 15t-57 5-65.5-21.5-55.5-62.5q-19-32-48.5-52t-49.5-24l-20-3q-21 0-29 4.5t-5 11.5 9 14 13 12l7 5q22 10 43.5 38t31.5 51l10 23q13 38 44 61.5t67 30 69.5 7 55.5-3.5l23-4q0 38 .5 88.5t.5 54.5q0 18-13 30t-40 7q-232-77-378.5-277.5t-146.5-451.5q0-209 103-385.5t279.5-279.5 385.5-103zm-477 1103q3-7-7-12-10-3-13 2-3 7 7 12 9 6 13-2zm31 34q7-5-2-16-10-9-16-3-7 5 2 16 10 10 16 3zm30 45q9-7 0-19-8-13-17-6-9 5 0 18t17 7zm42 42q8-8-4-19-12-12-20-3-9 8 4 19 12 12 20 3zm57 25q3-11-13-16-15-4-19 7t13 15q15 6 19-6zm63 5q0-13-17-11-16 0-16 11 0 13 17 11 16 0 16-11zm58-10q-2-11-18-9-16 3-14 15t18 8 14-14z"></path>
+        <div class="flex flex-col justify-center items-center mt-2 gap-4">
+            <button data-value="google" on:click={loginHandler} class="gsi-material-button">
+                <div class="gsi-material-button-state"></div>
+                <div class="gsi-material-button-content-wrapper">
+                    <div class="gsi-material-button-icon">
+                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" xmlns:xlink="http://www.w3.org/1999/xlink" style="display: block;">
+                        <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"></path>
+                        <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"></path>
+                        <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"></path>
+                        <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"></path>
+                        <path fill="none" d="M0 0h48v48H0z"></path>
                     </svg>
-                    <span class="text-center items-center">Continue with GitHub</span>
-                </button>
-            </div>
+                    </div>
+                    <span class="gsi-material-button-contents" style="font-weight: bold;">Continue with Google</span>
+                    <span style="display: none;">Continue with Google</span>
+                </div>
+            </button>
+
+            <button on:click={loginHandler} data-value="github" class="py-2 px-4 flex justify-center items-center bg-gray-700 hover:bg-gray-600 text-white transition ease-in duration-100 text-center text-base font-semibold shadow-md focus:outline-none rounded">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="mr-2 mb-1" viewBox="0 0 1792 1792">
+                    <path d="M896 128q209 0 385.5 103t279.5 279.5 103 385.5q0 251-146.5 451.5t-378.5 277.5q-27 5-40-7t-13-30q0-3 .5-76.5t.5-134.5q0-97-52-142 57-6 102.5-18t94-39 81-66.5 53-105 20.5-150.5q0-119-79-206 37-91-8-204-28-9-81 11t-92 44l-38 24q-93-26-192-26t-192 26q-16-11-42.5-27t-83.5-38.5-85-13.5q-45 113-8 204-79 87-79 206 0 85 20.5 150t52.5 105 80.5 67 94 39 102.5 18q-39 36-49 103-21 10-45 15t-57 5-65.5-21.5-55.5-62.5q-19-32-48.5-52t-49.5-24l-20-3q-21 0-29 4.5t-5 11.5 9 14 13 12l7 5q22 10 43.5 38t31.5 51l10 23q13 38 44 61.5t67 30 69.5 7 55.5-3.5l23-4q0 38 .5 88.5t.5 54.5q0 18-13 30t-40 7q-232-77-378.5-277.5t-146.5-451.5q0-209 103-385.5t279.5-279.5 385.5-103zm-477 1103q3-7-7-12-10-3-13 2-3 7 7 12 9 6 13-2zm31 34q7-5-2-16-10-9-16-3-7 5 2 16 10 10 16 3zm30 45q9-7 0-19-8-13-17-6-9 5 0 18t17 7zm42 42q8-8-4-19-12-12-20-3-9 8 4 19 12 12 20 3zm57 25q3-11-13-16-15-4-19 7t13 15q15 6 19-6zm63 5q0-13-17-11-16 0-16 11 0 13 17 11 16 0 16-11zm58-10q-2-11-18-9-16 3-14 15t18 8 14-14z"></path>
+                </svg>
+                <span class="text-center items-center">Continue with GitHub</span>
+            </button>
+        </div>
+    </div>
+{:else}
+    <meta charset="utf-8" name="theme-color" content="{colorScale(curValue).hex()}"/>
+    {#if initializing}
+        <div class="flex flex-col justify-center">
+            <div class="mx-auto text-white text-lg">Loading..</div>
         </div>
     {:else}
-        <meta charset="utf-8" name="theme-color" content="{colorScale(curValue).hex()}"/>
-        {#if initializing}
-            <div class="flex flex-col justify-center">
-                <div class="mx-auto text-white text-lg">Loading..</div>
-            </div>
-        {:else}
-            <div class="flex flex-row">
-                <a href="/" class="text-white underline absolute left-4 bottom-4">Homepage</a>
-                <button class="absolute right-5 bottom-5 text-white"><GearSolid size="lg" /></button>
-                <Popover arrow={false} class="text-sm font-light bg-[var(--white)] z-50" trigger="click">
-                    <div class="flex flex-col">
-                        <div class="flex flex-col gap-4">
-                            <div class="flex flex-col gap-2">
-                                <div>Color Scheme</div>
-                                <button class="px-2 py-1 bg-gradient-to-r from-[#0a0a0a] to-[#86efac] rounded text-white" on:click={() => {changeColorScheme("#0a0a0a", "#467465")}}>{$themeColorRight === "#467465" ? "Selected" : "Select"}</button>
-                                <button class="px-2 py-1 bg-gradient-to-r from-[#0a0a0a] to-[#a5f3fc] rounded text-white" on:click={() => {changeColorScheme("#0a0a0a", "#0369a1")}}>{$themeColorRight === "#0369a1" ? "Selected" : "Select"}</button>
-                                <button class="px-2 py-1 bg-gradient-to-r from-[#0a0a0a] to-[#fda4af] rounded text-white" on:click={() => {changeColorScheme("#0a0a0a", "#fda4af")}}>{$themeColorRight === "#fda4af" ? "Selected" : "Select"}</button>
-                                <button class="px-2 py-1 bg-gradient-to-r from-[#0a0a0a] to-[#fcd34d] rounded text-white" on:click={() => {changeColorScheme("#0a0a0a", "#7c2d12")}}>{$themeColorRight === "#7c2d12" ? "Selected" : "Select"}</button>
-                                <button class="px-2 py-1 bg-gradient-to-r from-[#0a0a0a] to-[#71827d] rounded text-white" on:click={() => {changeColorScheme("#0a0a0a", "#6b7280")}}>{$themeColorRight === "#6b7280" ? "Selected" : "Select"}</button>
-                            </div>
-                            <div class="flex flex-row justify-end items-center gap-2">
-                                <div>Export Data</div>
-                                <button class="px-4 py-2 bg-[var(--lightbackground)] rounded text-white" on:click={exportData}><ArrowUpRightFromSquareOutline size="xs" /></button>
-                            </div>
-                            <div class="flex flex-row justify-end items-center gap-2">
-                                <div>Logout</div>
-                                <button class="px-4 py-2 bg-red-700 rounded text-white" on:click={logout}><ArrowRightFromBracketSolid size="xs" /></button>
-                            </div>
+        <div class="flex flex-row">
+            <a href="/" class="text-white underline absolute left-4 bottom-4">Home</a>
+            <button class="absolute right-5 bottom-5 text-white"><GearSolid size="lg" /></button>
+            <Popover arrow={false} class="text-sm font-light bg-[var(--white)] z-50" trigger="click">
+                <div class="flex flex-col">
+                    <div class="flex flex-col gap-4">
+                        <div class="flex flex-col gap-2">
+                            <div>Color Scheme</div>
+                            <button class="px-2 py-1 bg-gradient-to-r from-[#0a0a0a] to-[#467465] rounded text-white" on:click={() => {changeColorScheme("#0a0a0a", "#467465")}}>{$themeColorRight === "#467465" ? "Selected" : "Select"}</button>
+                            <button class="px-2 py-1 bg-gradient-to-r from-[#0a0a0a] to-[#0369a1] rounded text-white" on:click={() => {changeColorScheme("#0a0a0a", "#0369a1")}}>{$themeColorRight === "#0369a1" ? "Selected" : "Select"}</button>
+                            <button class="px-2 py-1 bg-gradient-to-r from-[#0a0a0a] to-[#fda4af] rounded text-white" on:click={() => {changeColorScheme("#0a0a0a", "#fda4af")}}>{$themeColorRight === "#fda4af" ? "Selected" : "Select"}</button>
+                            <button class="px-2 py-1 bg-gradient-to-r from-[#0a0a0a] to-[#7c2d12] rounded text-white" on:click={() => {changeColorScheme("#0a0a0a", "#7c2d12")}}>{$themeColorRight === "#7c2d12" ? "Selected" : "Select"}</button>
+                            <button class="px-2 py-1 bg-gradient-to-r from-[#0a0a0a] to-[#6b7280] rounded text-white" on:click={() => {changeColorScheme("#0a0a0a", "#6b7280")}}>{$themeColorRight === "#6b7280" ? "Selected" : "Select"}</button>
+                        </div>
+                        <div class="flex flex-row justify-end items-center gap-2">
+                            <div>Export Data</div>
+                            <button class="px-4 py-2 bg-[var(--lightbackground)] rounded text-white" on:click={exportData}><ArrowUpRightFromSquareOutline size="xs" /></button>
+                        </div>
+                        <div class="flex flex-row justify-end items-center gap-2">
+                            <div>Logout</div>
+                            <button class="px-4 py-2 bg-red-700 rounded text-white" on:click={logout}><ArrowRightFromBracketSolid size="xs" /></button>
                         </div>
                     </div>
-                </Popover>
-            </div>
-
-            <div class="flex flex-col w-full h-dvh justify-center" style="background-color: {colorScale(curValue).hex()}">
-                {#if scores.length > 0}
-                    <div class="mx-[5%] sm:mx-[15%] lg:mx-[30%] xl:mx-[35%]">
-                        <div class="text-white flex justify-center h-[25vh] w-full" id="recovery-graph-container">
-                            <div class="text-white flex justify-center h-full w-full" id="recovery-graph"></div>
-                        </div>
-                        <div class="grid-container justify-center max-h-[207px] w-full overflow-y-auto py-1" bind:this={scrollContainer}>
-                            {#each scores as scoreDict}
-                                <div on:click={(e) => selectDataPoint(scoreDict, e.currentTarget)} 
-                                    class="text-white outline outline-1 outline-black text-sm flex items-center justify-center w-12 h-12 bg-[var(--extradarkbackground)] rounded-lg" 
-                                    style="background-color: {colorScale(scoreDict.score).hex()}; text-decoration: {scoreDict.comment ? "underline" : ""}">
-                                    {scoreDict.score}
-                                </div>
-                            {/each}
-                        </div>
-                        <Popover arrow={false} class="w-64 text-sm font-light bg-[var(--white)] z-50" title="Score: {showData.score}" triggeredBy={triggerElement} trigger="click">
-                            <div class="flex flex-col">
-                                {showData.localTimeString}
-                                <br />
-                                {#if showData.comment}
-                                    {showData.comment}
-                                {/if}
-                                <div class="flex justify-end">
-                                    <Button outline color="red" size="xs" on:click={() => { deleteData(showData) }} ><TrashBinSolid size="xs" /></Button>
-                                </div>
-                            </div>
-                        </Popover>
-                    </div>
-                {:else}
-                    <div class="text-center opacity-25">
-                        <p>Your first datapoint will be go here</p>
-                    </div>
-                {/if}
-                
-                <div class="mx-[10%] sm:mx-[15%] md:mx-[25%] lg:mx-[30%] xl:mx-[35%] mt-[5%]">
-                    <div class="text-white rs-label text-6xl text-center">{curValue}</div>
-                    <div class="px-[5px] flex flex-row gap-2 items-center">
-                        <input class="w-full range-slider" style="accent-color: #fff" bind:value={curValue} type="range" min="0" max="100">
-                        <button class="bg-[var(--white)] text-[var(--darkbackground)] w-12 py-2 rounded-2xl disabled:bg-gray-300 flex items-center justify-center outline-none" on:click={addScore} disabled={updating}>
-                            <ArrowUpSolid class="outline-none" />
-                        </button>
-                    </div>
-                    <textarea class="mt-4 w-full bg-[var(--white)] rounded-2xl outline-0 border-0 text-center text-[var(--darkbackground)] focus:outline-none focus:outline-1 focus:ring-white" bind:value={comment} maxlength="250" placeholder="Start typing to comment"></textarea>
                 </div>
+            </Popover>
+        </div>
+
+        <div class="flex flex-col w-full h-dvh justify-center" style="background-color: {colorScale(curValue).hex()}">
+            {#if scores.length > 0}
+                <div class="mx-[5%] sm:mx-[15%] lg:mx-[30%] xl:mx-[35%]">
+                    <div class="text-white flex justify-center h-[25vh] w-full" id="recovery-graph-container">
+                        <div class="text-white flex justify-center h-full w-full" id="recovery-graph"></div>
+                    </div>
+                    <div class="grid-container justify-center max-h-[207px] w-full overflow-y-auto py-1" bind:this={scrollContainer}>
+                        {#each scores as scoreDict}
+                            <button on:click={(e) => selectDataPoint(scoreDict, e.currentTarget)} 
+                                class="text-white outline outline-1 outline-black text-sm flex items-center justify-center w-12 h-12 bg-[var(--extradarkbackground)] rounded-lg" 
+                                style="background-color: {colorScale(scoreDict.score).hex()}; text-decoration: {scoreDict.comment ? "underline" : ""}">
+                                {scoreDict.score}
+                            </button>
+                        {/each}
+                    </div>
+                    <Popover arrow={false} class="w-64 text-sm font-light bg-[var(--white)] z-50" title="Score: {showData.score}" triggeredBy={triggerElement} trigger="click">
+                        <div class="flex flex-col">
+                            {showData.localTimeString}
+                            <br />
+                            {#if showData.comment}
+                                {showData.comment}
+                            {/if}
+                            <div class="flex justify-end">
+                                <Button outline color="red" size="xs" on:click={() => { deleteData(showData) }} ><TrashBinSolid size="xs" /></Button>
+                            </div>
+                        </div>
+                    </Popover>
+                </div>
+            {:else}
+                <div class="text-center opacity-25">
+                    <p>Your first datapoint will be go here</p>
+                </div>
+            {/if}
+            
+            <div class="mx-[10%] sm:mx-[15%] md:mx-[25%] lg:mx-[30%] xl:mx-[35%] mt-[5%]">
+                <div class="text-white rs-label text-6xl text-center">{curValue}</div>
+                <div class="px-[5px] flex flex-row gap-2 items-center">
+                    <input class="w-full range-slider" style="accent-color: #fff" bind:value={curValue} type="range" min="0" max="100">
+                    <button class="bg-[var(--white)] text-[var(--darkbackground)] w-12 py-2 rounded-2xl disabled:bg-gray-300 flex items-center justify-center outline-none" on:click={addScore} disabled={updating}>
+                        <ArrowUpSolid class="outline-none" />
+                    </button>
+                </div>
+                <textarea class="mt-4 w-full bg-[var(--white)] rounded-2xl outline-0 border-0 text-center text-[var(--darkbackground)] focus:outline-none focus:outline-1 focus:ring-white" bind:value={comment} maxlength="250" placeholder="Start typing to comment"></textarea>
             </div>
-        {/if}
+        </div>
     {/if}
 {/if}
 
@@ -417,16 +426,6 @@
     }
     .range-slider::-moz-range-thumb {
         background-color: #fff;
-    }
-    .arrow {
-        border: solid #fff;
-        border-width: 0 2px 2px 0;
-        display: inline-block;
-        padding: 3px;
-    }
-    .left {
-        transform: rotate(135deg);
-        -webkit-transform: rotate(135deg);
     }
     .gsi-material-button {
         -moz-user-select: none;
