@@ -99,8 +99,15 @@
         const nodes = tree(root).descendants();
         const links = tree(root).links();
 
-        // Normalize for fixed-depth
-        nodes.forEach(d => { d.y = d.depth * 250; d.x = d.x * 0.9 });
+        // Reduce distance for leaf nodes
+        nodes.forEach(d => {
+            if (!d.children && !d._children) {
+                d.y = d.depth * 210;
+            } else {
+                d.y = d.depth * 250;
+            }
+            d.x = d.x * 0.9;
+        });
 
         const node = svg.selectAll('g.node').data(nodes, d => d.id || (d.id = ++i));
 
