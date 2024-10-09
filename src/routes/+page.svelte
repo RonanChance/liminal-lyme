@@ -17,9 +17,42 @@
             document.getElementById('scrollDown').addEventListener('click', function() {
                 window.scrollBy({ top: 350, behavior: 'smooth' });
             });
-        }
+
+            let scrollContainers = document.querySelectorAll('.scroll-container');
+            scrollContainers.forEach((container, index) => {
+                let direction = index % 2 === 0 ? 'right' : 'left';
+                autoScroll(container, direction);
+            });
+            }
     });
-    
+
+    function handleScroll(event) {
+        const container = event.currentTarget;
+        if (container.scrollLeft >= container.scrollWidth) {
+            container.scrollLeft = 0;
+        }
+        if (container.scrollLeft === 0) {
+            container.scrollLeft = container.scrollWidth - container.clientWidth;
+        }
+    }
+
+    function autoScroll(container, direction) {
+    setInterval(() => {
+        if (direction === 'right') {
+            if (container.scrollLeft < container.scrollWidth - container.clientWidth) {
+                container.scrollLeft += 1;
+            } else {
+                container.scrollLeft = 0;
+            }
+        } else {
+            if (container.scrollLeft > 0) {
+                container.scrollLeft -= 1;
+            } else {
+                container.scrollLeft = container.scrollWidth - container.clientWidth;
+            }
+        }
+    }, 60);
+}
 </script>
 
 <TopBanner class="relative z-10" />
@@ -64,12 +97,14 @@
         </a>
     </div>
     
-    <div class="pt-12 flex flex-col gap-2">
+    <div class="pt-12 pb-3 flex flex-col gap-2">
         {#each Array(5) as _, index}
             <div class="flex gap-2 overflow-x-hidden">
-                {#each supplements.slice(index * Math.ceil(supplements.length / 5), (index + 1) * Math.ceil(supplements.length / 5)) as supplement}
-                    <a href="/search" class="px-4 py-1 whitespace-nowrap rounded opacity-35 text-[var(--white)] bg-[var(--darkbackground)] text-md">{supplement}</a>
-                {/each}
+                <div on:scroll={handleScroll} class="scroll-container flex gap-2 overflow-x-auto whitespace-nowrap" style="flex: 1; min-width: 0;">
+                    {#each supplements.slice(index * Math.ceil(supplements.length / 5), (index + 1) * Math.ceil(supplements.length / 5)) as supplement}
+                        <a href="/search" class="px-4 py-1 whitespace-nowrap rounded opacity-35 text-[var(--white)] bg-[var(--darkbackground)] text-md">{supplement}</a>
+                    {/each}
+                </div>
             </div>
         {/each}
     </div>
@@ -148,3 +183,14 @@
 {/if}
 
 <Footer />
+
+<style>
+    ::-webkit-scrollbar {
+        display: none; /* Chrome, Safari */
+    }
+    .scroll-container {
+        -ms-overflow-style: none; /* for Internet Explorer, Edge */
+        scrollbar-width: none; /* for Firefox */
+        overflow-x: auto;
+    }
+</style>
