@@ -97,8 +97,11 @@
             await pb.authStore.clear();
             email = '';
             username = '';
-            authorized = false;
+            userId = '';
+            document.cookie = `username=${username}; path=/;`;
             document.cookie = `email=${email}; path=/;`;
+            document.cookie = `userId=${userId}; path=/;`;
+            authorized = false;
         } catch (error) {
             console.error('Logout failed:', error);
         }
@@ -381,7 +384,7 @@
                 </div>
             {:else}
                 <div class="text-center opacity-25">
-                    <p>Your first datapoint will be go here</p>
+                    <p>Your first data point will be go here</p>
                 </div>
             {/if}
             

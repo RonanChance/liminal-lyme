@@ -1,6 +1,7 @@
 <script>
     import { Confetti } from "svelte-confetti";
     import PocketBase from 'pocketbase';
+    import { PapperPlaneSolid } from 'flowbite-svelte-icons';
 
     let email = "";
     let throwConfetti = false;
@@ -53,9 +54,9 @@
     </h2>
 
     <div class="flex gap-1 justify-center w-[90%] md:w-[65%] lg:w-[50%] xl:w-[30%] px-8 pt-4">
-        <input class="w-full rounded-lg px-4 border-transparent focus:outline-none focus:ring-0 focus:border-[var(--accent)]" type="text" bind:value={email} placeholder="example@gmail.com" on:keydown={(event) => { if (event.key === 'Enter') { onSubmit() } }}>
+        <input class="w-full rounded-lg px-4 border-transparent focus:outline-none focus:ring-0 focus:border-[var(--accent)]" type="text" bind:value={email} placeholder="name@gmail.com" on:keydown={(event) => { if (event.key === 'Enter') { onSubmit() } }}>
         <button class="whitebutton px-6 text-white" on:click={onSubmit} >
-            Send
+            <svg fill="var(--darkbackground)" class="w-5 h-5" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" stroke="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M476 3.2L12.5 270.6c-18.1 10.4-15.8 35.6 2.2 43.2L121 358.4l287.3-253.2c5.5-4.9 13.3 2.6 8.6 8.3L176 407v80.5c0 23.6 28.5 32.9 42.5 15.8L282 426l124.6 52.2c14.2 6 30.4-2.9 33-18.2l72-432C515 7.8 493.3-6.8 476 3.2z"></path></g></svg>
             {#if throwConfetti} <Confetti x={[-0.7, 0.7]} y={[-0.7, .7]} /> {/if}
         </button>
     </div>

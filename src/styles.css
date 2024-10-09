@@ -39,20 +39,20 @@
 
 h1 {
     color: var(--white);
-    font-size: 60pt;
-    font-weight: bold;
+    font-size: 50pt;
+    font-weight: 500;
 }
 
 h2 {
     color: var(--white);
-	font-size: 24pt;
-    font-weight: 100;
+	font-size: 32pt;
+    font-weight: 400;
 }
 
 h3 {
     color: var(--white);
 	font-size: 18pt;
-	font-weight: 400;
+	font-weight: 300;
 }
 
 p {
@@ -90,7 +90,7 @@ ul {
 }
 
 .whitebutton {
-    font-size: 18pt;
+    font-size: 14pt;
     font-weight: bold;
     background-color: var(--white);
     color: var(--darkbackground);
@@ -101,7 +101,6 @@ ul {
     padding-right: 1rem;
 
     border-radius: 0.5rem;
-    position: relative;
     border: 2px solid var(--white);
 }
   
@@ -115,10 +114,6 @@ ul {
         -webkit-text-stroke: 1px var(--white);
     }
 
-    .whitebutton {
-        font-size: 15pt;
-    }
-
     .Accordion-container {
         width: 100%;
         margin: 0 auto;
@@ -126,11 +121,10 @@ ul {
 
     h1 {
         font-size: 26pt;
-        margin: 0 auto;
     }
     
     h2 {
-        font-size: 18pt;
+        font-size: 24pt;
         margin: 0 auto;
     }
     

@@ -60,7 +60,7 @@
   .navbar {
     top: 0px;
     left: 0px;
-    z-index: 2;
+    z-index: 10;
     background: var(--white);
 
     display: flex;
