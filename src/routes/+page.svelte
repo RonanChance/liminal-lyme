@@ -3,17 +3,13 @@
   	import Footer from '../lib/components/Footer.svelte';
     import MedicalDisclaimer from "../lib/components/MedicalDisclaimer.svelte";
     import EmailSignup from '../lib/components/EmailSignup.svelte';
-    import * as d3 from 'd3';
     import { onMount } from 'svelte';
     import { browser } from '$app/environment';
     import { fade, blur } from 'svelte/transition';
     import { total_scanned, total_cataloged, medications, supplements } from "../lib/components/constants";
+    import radialClusterSVG from '../lib/assets/radialCluster.svg?raw';
     import { Popover } from 'flowbite-svelte';
     import { ArrowRightSolid, SearchOutline, ArrowDownSolid } from 'flowbite-svelte-icons';
-
-    /** @type {import('./$types').PageData} */
-    export let data;
-    let cleanedData;
     
     let animate = false;
     onMount(() => {
@@ -28,98 +24,8 @@
                 let direction = index % 2 === 0 ? 'right' : 'left';
                 autoScroll(container, direction);
             });
-
-            cleanedData = removeUrlNodes(data.treatments);
-            generateRadialCluster()
         }
     });
-
-    function generateRadialCluster() {
-        // Specify the chart’s dimensions.
-        const width = 500;
-        const height = 500;
-        const cx = width * 0.5; // Center x
-        const cy = height * 0.54; // Center y
-        const radius = Math.min(width, height) / 2 - 80;
-
-        // Create a radial cluster layout.
-        const tree = d3.cluster()
-            .size([2 * Math.PI, radius])
-            .separation((a, b) => (a.parent === b.parent ? 1 : 2) / a.depth);
-
-        // Sort the tree and apply the layout.
-        const root = tree(d3.hierarchy(cleanedData)
-            .sort((a, b) => d3.ascending(a.data.name, b.data.name)));
-
-        // Create the SVG container.
-        const svg = d3.create("svg")
-            .attr("width", width)
-            .attr("height", height)
-            .attr("viewBox", [-cx, -cy, width, height])
-            .attr("style", "width: 100%; height: auto; font: 10px sans-serif;")
-            .attr("class", "spin");
-
-        // Append links.
-        svg.append("g")
-            .attr("fill", "none")
-            .attr("stroke", "#555")
-            .attr("stroke-opacity", 0.5)
-            .attr("stroke-width", 0.5)
-            .selectAll()
-            .data(root.links())
-            .join("path")
-            .attr("d", d3.linkRadial()
-                .angle(d => d.x)
-                .radius(d => d.y));
-
-        // Append nodes.
-        svg.append("g")
-            .selectAll()
-            .data(root.descendants())
-            .join("circle")
-            .attr("transform", d => `rotate(${d.x * 180 / Math.PI - 90}) translate(${d.y},0)`)
-            .attr("fill", d => d.children ? "#555" : "#999")
-            .attr("r", 0.5);
-
-        // Append labels.
-        svg.append("g")
-            .attr("stroke-linejoin", "round")
-            .attr("stroke-width", 3)
-            .selectAll()
-            .data(root.descendants())
-            .join("text")
-            .attr("transform", d => `rotate(${d.x * 180 / Math.PI - 90}) translate(${d.y - 1},0) rotate(${d.x >= Math.PI ? 180 : 0})`)
-            .attr("dy", "0.31em")
-            .attr("x", d => d.x < Math.PI === !d.children ? 6 : -6)
-            .attr("text-anchor", d => d.x < Math.PI === !d.children ? "start" : "end")
-            .attr("paint-order", "stroke")
-            .attr("fill", "white")
-            .attr("font-size", "5px")
-            .text(d => d.data.name);
-
-        // Append the SVG to the DOM
-        const container = document.getElementById("d3-container");
-        container.appendChild(svg.node());
-    }
-
-    function removeUrlNodes(data) {
-        // Check if the data is an array
-        if (Array.isArray(data)) {
-            // Filter the array, recursively removing url nodes from children
-            return data
-                .map(removeUrlNodes) // Apply the function to each child
-                .filter(node => !(node.type === "url")); // Remove nodes of type "url"
-        } else if (typeof data === 'object' && data !== null) {
-            // If it's an object, we need to process its children if they exist
-            const { children, ...rest } = data; // Destructure to separate children
-            const filteredChildren = children ? removeUrlNodes(children) : []; // Process children if they exist
-            
-            // Return the new object, excluding url nodes
-            return { ...rest, children: filteredChildren };
-        }
-        // Return the data as is if it's neither an array nor an object
-        return data;
-    }
 
     function handleScroll(event) {
         const container = event.currentTarget;
@@ -165,19 +71,23 @@
         </div>
         <div class="flex justify-center items-center">
             <div id="d3-container" class="absolute max-w-[1000px] inset-0 z-0 opacity-60
-            translate-x-[60%] 
-            translate-y-[-10%] 
-            sm:translate-x-[50%]
-            sm:translate-y-[-30%] 
-            md:translate-x-[60%] 
-            md:translate-y-[-35%] 
-            lg:translate-x-[60%] 
-            lg:translate-y-[-50%] 
-            xl:translate-x-[70%] 
-            xl:translate-y-[-50%]
-            2xl:translate-x-[90%]
-            2xl:translate-y-[-50%] 
-            "></div>
+                translate-x-[60%] 
+                translate-y-[-10%] 
+                sm:translate-x-[50%]
+                sm:translate-y-[-30%] 
+                md:translate-x-[60%] 
+                md:translate-y-[-35%] 
+                lg:translate-x-[60%] 
+                lg:translate-y-[-50%] 
+                xl:translate-x-[70%] 
+                xl:translate-y-[-50%]
+                2xl:translate-x-[90%]
+                2xl:translate-y-[-50%]
+                ">
+                <div class="spin">
+                    {@html radialClusterSVG}
+                </div>
+            </div>
         </div>
     </div>
 
@@ -314,8 +224,9 @@
         scrollbar-width: none; /* for Firefox */
         overflow-x: auto;
     }
-    :global(svg.spin) {
+    .spin {
         animation: spin 200s linear infinite;
+        transform-origin: center;
     }
 
     @keyframes spin {
@@ -326,4 +237,5 @@
             transform: rotate(180deg);
         }
     }
+
 </style>
