@@ -39,7 +39,7 @@
 
 h1 {
     color: var(--white);
-    font-size: 50pt;
+    font-size: 36pt;
     font-weight: 500;
 }
 
@@ -125,12 +125,10 @@ ul {
     
     h2 {
         font-size: 24pt;
-        margin: 0 auto;
     }
     
     h3 {
         font-size: 15pt;
-        margin: 0 auto;
     }
 
   }
