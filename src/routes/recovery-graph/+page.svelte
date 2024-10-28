@@ -285,7 +285,7 @@
 
 {#if !authorized}
     <TopBanner />
-    <div class="text-center text-2xl text-white py-5 bg-[var(--lightbackground)] rounded-b-lg text-bold flex flex-col">
+    <div class="text-center text-xl sm:text-2xl text-[var(--darkbackground)] pb-4 bg-[var(--white)] rounded-b-lg text-bold flex flex-col">
         <span class="">Recovery Graph <span class="font-thin text-sm">v0.0.1</span></span>
         <span class="text-center text-sm">Track your health over time</span>
     </div>

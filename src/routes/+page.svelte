@@ -15,7 +15,10 @@
     onMount(() => {
         animate = true;
         if (browser) {
-            document.getElementById('scrollDown').addEventListener('click', function() {
+            document.getElementById('scrollDown1').addEventListener('click', function() {
+                window.scrollBy({ top: 350, behavior: 'smooth' });
+            });
+            document.getElementById('scrollDown2').addEventListener('click', function() {
                 window.scrollBy({ top: 350, behavior: 'smooth' });
             });
 
@@ -64,26 +67,30 @@
 
 <div class="pt-12 ml-4 rotating-text relative flex flex-col overflow-hidden">
     
-    <div class="flex flex-row">
-        <div class="w-auto z-10 sm:ml-[10%] md:ml-[15%] lg:ml-[20%] xl:ml-[25%]">
-            <h1 class="leading-tight tracking-wide">Optimize<br class="" /> Tick-Borne Illness <br class="" />Recovery</h1>
-            <h3 class="pt-6 pb-6 text-left">Medications and supplements should <br /> improve your health, not set you back.</h3>
+    <div class="flex flex-row sm:max-w-[80%] sm:mx-auto">
+        <div class="z-10">
+            <h1 class="leading-tight tracking-wide text-left sm:text-center">Optimize<br class="sm:hidden" /> <span class="text-[var(--accent)]">Tick-Borne</span> <br class="hidden" />Illness <br class="sm:hidden" />Recovery</h1>
+            <h3 class="pt-6 pb-6 text-left sm:text-center">Medications and supplements should <br class="sm:hidden" /> improve your health, not set you back.</h3>
+            <!-- show on non-mobile -->
+            <div class="flex">
+                <button id="scrollDown1" class="hidden sm:inline-flex flex flex-row whitebutton mt-4 gap-2 h-[50px] justify-center items-center mx-auto" type="button">
+                    <ArrowDownSolid class="w-7 h-7 pb-[3px]"/> 
+                    Get Started
+                </button>
+            </div>
         </div>
         <div class="flex justify-center items-center">
             <div id="d3-container" class="absolute max-w-[1000px] inset-0 z-0 opacity-60
                 translate-x-[60%] 
                 translate-y-[-10%] 
-                sm:translate-x-[50%]
-                sm:translate-y-[-30%] 
-                md:translate-x-[60%] 
-                md:translate-y-[-35%] 
-                lg:translate-x-[60%] 
-                lg:translate-y-[-50%] 
-                xl:translate-x-[70%] 
-                xl:translate-y-[-50%]
-                2xl:translate-x-[90%]
-                2xl:translate-y-[-50%]
-                ">
+                sm:top-0
+                sm:right-0
+                sm:translate-x-[70%]
+                md:translate-x-[75%]
+                lg:translate-x-[85%]
+                xl:translate-x-[100%]
+                2xl:translate-x-[130%]
+                sm:translate-y-[-10%]">
                 <div class="spin">
                     {@html radialClusterSVG}
                 </div>
@@ -91,22 +98,23 @@
         </div>
     </div>
 
-    <div class="pt-4 mr-4 z-10 flex sm:ml-[10%] md:ml-[15%] lg:ml-[20%] xl:ml-[25%]">
-        <button id="scrollDown" class="whitebutton flex flex-row gap-2 h-[50px] justify-center items-center w-full sm:w-auto sm:justify-start" type="button">
+    <!-- show on mobile -->
+    <div class="pt-4 mr-4 z-10 flex sm:hidden">
+        <button id="scrollDown2" class="whitebutton flex flex-row gap-2 h-[50px] justify-center items-center w-full" type="button">
             <ArrowDownSolid class="w-7 h-7 pb-[3px]"/> 
             Get Started
         </button>
     </div>
 
-    <div class="mt-12 pt-6 mb-9 mr-4 relative rounded-lg bg-[var(--lightbackground)] md:max-w-[80%] md:mx-auto">
+    <div class="mt-12 pt-6 mb-9 mr-4 relative rounded-lg bg-[var(--lightbackground)] sm:max-w-[80%] sm:mx-auto">
         <div class="px-6 text-center bg-[var(--lightbackground)]">
             <h2 class="inline" in:fade={{duration: 200}}>
-                Health Insights from Reddit
+                Open-Source Health Insights
             </h2>
         </div>
     
         
-        <h3 class="mt-4 mb-4 max-w-[80%] mx-auto text-center" in:blur={{duration: 400}}>Use open-source tick-borne disease data to see how people with your <a class="text-[var(--accent)]" href="/about#what_conditions_are_supported">conditions</a> react to <a class="text-[var(--accent)]" href="/about#what_supplements_are_supported">supplements</a> & <a class="text-[var(--accent)]" href="/about#what_medications_are_supported">medications</a>
+        <h3 class="mt-4 mb-4 max-w-[80%] mx-auto text-center" in:blur={{duration: 400}}>Use Reddit & crowd-sourced tick-borne disease data to see how people with your <a class="text-[var(--accent)]" href="/about#what_conditions_are_supported">conditions</a> react to <a class="text-[var(--accent)]" href="/about#what_supplements_are_supported">supplements</a> & <a class="text-[var(--accent)]" href="/about#what_medications_are_supported">medications</a>
             <button data-popover-target="popover-description" data-popover-placement="bottom-end" type="button" id="info-button">
                 <svg class="w-4 h-4 ml-0 text-gray-400 hover:text-gray-500" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                     <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"></path>

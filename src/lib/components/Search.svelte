@@ -169,11 +169,6 @@
 
 </script>
 
-<div class="text-center text-2xl text-white py-5 bg-[var(--lightbackground)] rounded-b-lg text-bold flex flex-col">
-    <span>Medication & Supplement Search</span>
-    <span class="text-center text-sm">Search <a class="underline" href="/about#where_is_the_data_from">subreddits</a> with key terms</span>
-</div>
-
 <div class="intro-container">
 	{#if animate}
 		<main class="flex flex-col max-w-[90%] sm:max-w-[60%] mx-auto my-0" in:fade={{duration: 300}}>

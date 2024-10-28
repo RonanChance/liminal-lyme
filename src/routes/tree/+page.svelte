@@ -85,13 +85,16 @@
     }
     
     function toggle(d) {
-        console.log('toggling node', d);
-        if (d.children) {
-            d._children = d.children;
-            d.children = null;
+        if (d.data.isDummy){
+            console.log(d);
         } else {
-            d.children = d._children;
-            d._children = null;
+            if (d.children) {
+                d._children = d.children;
+                d.children = null;
+            } else {
+                d.children = d._children;
+                d._children = null;
+            }
         }
     }
 
@@ -116,8 +119,8 @@
             .attr('class', 'node')
             .attr('transform', d => `translate(${source.y0},${source.x0})`)
             .on('click', (event, d) => { 
-                toggle(d); 
-                update(d); 
+                toggle(d);
+                update(d);
             });
         
         nodeEnter.filter(d => d.children || d._children).append('circle')
@@ -128,7 +131,7 @@
             .attr('x', d => d.children || d._children ? -10 : 10)
             .attr('dy', '.3em')
             .attr('text-anchor', d => d.children || d._children ? 'end' : 'start')
-            .text(d => d.data.name)
+            .html(d => d.data.name)
             .style('fill-opacity', 1e-6);
 
         nodeEnter.each(function(d) {
@@ -142,8 +145,7 @@
                 const context = canvas.getContext('2d');
                 context.font = '18px Arial';
                 
-                const linkText = d.data.link.split(" ### ")[0];
-                const linkURL = d.data.link.split(" ### ")[1];
+                const linkText = d.data.link_text || d.data.link;
                 const linkTextWidth = context.measureText(linkText).width;
 
                 currentNode.append('foreignObject')
@@ -156,8 +158,7 @@
                     .html(`<button>: <span class="underline">${linkText}</span></button>`)
                     .on('click', (event, d) => {
                         event.stopPropagation();
-                        console.log('Article clicked', linkURL);
-                        window.open(linkURL, '_blank');
+                        window.open(d.data.link, '_blank');
                     });
             }
         });
@@ -200,7 +201,8 @@
             .merge(link)
             .transition()
             .duration(duration)
-            .attr('d', diagonal);
+            .attr('d', diagonal)
+            .style('stroke-dasharray', d => d.target.data.isDummy ? '4,2' : 'none');
 
         // Transition exiting links to the parent's new position
         link.exit().transition()
@@ -233,7 +235,7 @@
             .attr('transform', `translate(120,10)`);
 
         // Load data
-        root = d3.hierarchy(data.treatments);
+        root = d3.hierarchy(recordsTree);
         root.x0 = height / 2;
         root.y0 = 0;
 
@@ -241,13 +243,56 @@
         update(root);
     }
 
+    function buildNestedRecords(records) {
+        // Map each node by its ID for easy access
+        const nodeMap = {};
+        records.forEach(record => {
+            nodeMap[record.id] = { ...record, children: [] };
+        });
+
+        let root = null;
+
+        // Build the tree structure by linking children to parents
+        records.forEach(record => {
+            // Check if `relation` is empty, single, or an array
+            if (!record.relation || record.relation.length === 0) {
+                // Set as root node if it has no parent relations
+                root = nodeMap[record.id];
+            } else if (Array.isArray(record.relation)) {
+                // If multiple parents, add this node to each parent’s children
+                record.relation.forEach(parentId => {
+                    const parent = nodeMap[parentId];
+                    if (parent) {
+                        parent.children.push(nodeMap[record.id]);
+                    }
+                });
+            } else {
+                // If single relation
+                const parent = nodeMap[record.relation];
+                if (parent) {
+                    parent.children.push(nodeMap[record.id]);
+                }
+            }
+        });
+
+        Object.values(nodeMap).forEach(node => {
+            if (node !== root && node.children.length >= 0 && !node.children.some(child => child.isDummy) && !node.link) {
+                node.children.push({ name: '<tspan class="opacity-50">Add <tspan style="font-size: 1.2em;">⊕</tspan></tspan>', isDummy: true, parent: node });
+            }
+        });
+        
+        return root;
+    }
+
     let width = 2560;
     let height = 800;
     let i = 0;
     const duration = 750;
+    let recordsTree = null;
 
     onMount(async () => {
         animate = true
+        recordsTree = buildNestedRecords(data.records)
         initTree();
         initDragging();
     });
@@ -255,17 +300,12 @@
 
 <TopBanner />
 
-<div class="text-center text-2xl text-white py-5 bg-[var(--lightbackground)] rounded-b-lg text-bold flex flex-col">
-    <span>Chronic Illness Research Tree</span>
-    <span class="text-center text-sm">This tool is not medical advice - <a class="text-[var(--accent)]" href="/tree#contribute">contribute suggestions</a></span>
-</div>
-
 <div class="tree-container overflow-auto w-[100%] h-[800px] relative bg-[var(--extradarkbackground)]">
     <div class="grid-lines absolute inset-0 pointer-events-none"></div>
     <div class="tree relative z-1"></div>
 </div>
 
-{#if animate}
+<!-- {#if animate}
     <div class="w-full flex justify-center bg-[var(--lightbackground)] px-4 py-8 rounded-lg" in:fade={{duration: 200}}>
         <div class="w-[85%] sm:w-[65%] md:w-[55%] lg:w-[45%] xl:w-[35%]">
             <div class="mb-6">
@@ -323,7 +363,7 @@
             </div>
         </div>
     </div>
-{/if}
+{/if} -->
 
 {#if animate}
     <div class="flex flex-col ml-auto mr-auto pt-10 pb-12 max-w-[90%]" in:fade={{duration: 300}}>
