@@ -5,8 +5,8 @@
     import TopBanner from '../../lib/components/TopBanner.svelte';
     import Footer from "../../lib/components/Footer.svelte";
     import PocketBase from 'pocketbase';
-    import { Label, Input, Select, Popover } from 'flowbite-svelte';
-    import { EnvelopeSolid, FileEditSolid, LinkSolid, CloseOutline, UserCircleSolid, InfoCircleSolid } from 'flowbite-svelte-icons';
+    import { Input, Select, Popover } from 'flowbite-svelte';
+    import { FileEditSolid, LinkSolid, CloseOutline, UserCircleSolid, InfoCircleSolid } from 'flowbite-svelte-icons';
     import MedicalDisclaimer from "../../lib/components/MedicalDisclaimer.svelte";
     import * as d3 from 'd3';
 
@@ -22,6 +22,20 @@
 
     let isDragging = false;
     let startX, startY;
+
+    let contributeType = 'treatment';
+    let suggestion = "";
+
+    let category = "";
+    let link_text = "";
+    let link_url = "";
+    let username = "";
+
+    const category_options = [
+        { value: 'Amazon Link', name: 'Amazon Link' },
+        { value: 'Article Link', name: 'Article Link' },
+        { value: 'Purchase Link', name: 'Purchase Link' }
+    ];
 
     function initDragging() {
         const container = document.querySelector('.tree');
@@ -66,17 +80,18 @@
 
         const pb = new PocketBase("https://pb.liminallyme.com");
 
-
         const data = {
             "relation": [selectedNode.parent.data.id],
             "name": contributeType === "link" ? category : suggestion.trim(),
             "link_text": contributeType === "link" ? link_text.trim() : null,
             "link": contributeType === "link" ? link_url.trim() : null,
             "community_contribution": true,
-            "contributor_name": username.trim() || null
+            "contributor_username": username.trim() || null,
+            "verified": false
         };
 
         throwConfetti = true;
+
         try {
             const record = await pb.collection('tree').create(data);
             alert('Thank you for your contribution!');
@@ -98,13 +113,6 @@
         }
     }
 
-    function addToTree(d) {
-        selectedNode = d;
-        contributeType = '';
-        contributeMode = true;
-        console.log(d);
-    }
-
     function collapse(d) {
         if (d.children && d.depth !== 0) {
             d._children = d.children;
@@ -115,7 +123,10 @@
     
     function toggle(d) {
         if (d.data.isDummy){
-            addToTree(d);
+            selectedNode = d;
+            contributeType = '';
+            contributeMode = true;
+            console.log(d);
         } else {
             if (d.children) {
                 d._children = d.children;
@@ -161,7 +172,8 @@
             .attr('dy', '.3em')
             .attr('text-anchor', d => d.children || d._children ? 'end' : 'start')
             .html(d => d.data.name)
-            .style('fill-opacity', 1e-6);
+            .style('fill-opacity', 1e-6)
+            .attr('height', 30);;
 
         nodeEnter.each(function(d) {
             const currentNode = d3.select(this);
@@ -172,7 +184,7 @@
                 // temporary canvas to measure text width
                 const canvas = document.createElement('canvas');
                 const context = canvas.getContext('2d');
-                context.font = '18px Arial';
+                context.font = '16px Arial';
                 
                 const linkText = d.data.link_text || d.data.link;
                 const linkTextWidth = context.measureText(linkText).width;
@@ -183,12 +195,12 @@
                     .attr('width', linkTextWidth + 5)
                     .attr('height', 30)
                     .attr('color', '#f8f8f895')
-                    .append('xhtml:div')
-                    .html(`<button>: <span class="underline">${linkText}</span></button>`)
-                    .on('click', (event, d) => {
-                        event.stopPropagation();
-                        window.open(d.data.link, '_blank');
-                    });
+                    .append('xhtml:span')
+                    .html(`:
+                        <a href="${d.data.link.startsWith('http') ? d.data.link : `https://${d.data.link}`}" target="_blank" class="pl-1 underline" style="text-decoration: underline;">
+                            ${linkText}
+                        </a>
+                    `);
             }
         });
 
@@ -325,20 +337,6 @@
         initTree();
         initDragging();
     });
-
-    let contributeType = 'treatment';
-    let suggestion = "";
-
-    let category = "";
-    let link_text = "";
-    let link_url = "";
-    let username = "";
-
-    const category_options = [
-        { value: 'Amazon Link', name: 'Amazon Link' },
-        { value: 'Article Link', name: 'Article Link' },
-        { value: 'Purchase Link', name: 'Purchase Link' }
-    ];
 </script>
 
 <TopBanner />
@@ -346,7 +344,7 @@
 
 {#if contributeMode}
     <div class="w-full flex justify-center bg-[var(--white)] px-4 py-4 rounded-lg my-5 max-w-[90%] sm:max-w-[60%] 2xl:max-w-[50%] mx-auto relative" in:fade={{duration: 200}}>
-        <div class="absolute top-2 right-2"> <!-- Adjust top/right for positioning -->
+        <div class="absolute top-2 right-2">
             <button class="px-2 py-2 tems-center justify-center rounded-lg opacity-50" on:click={() => {contributeMode = false}}><CloseOutline size="xs" /></button>
         </div>
         <div class="w-[85%] sm:w-[65%] md:w-[55%] lg:w-[45%] xl:w-[35%] flex flex-col gap-4 pt-3">
@@ -393,7 +391,7 @@
                     <div class="flex flex-col items-center w-[35%]">
                         <div class="flex flex-col justify-end items-center">
                             <div class="w-4 h-4 border-2 bg-[var(--lightbackground)] border-gray-500 rounded-full"></div>
-                            <a class="text-xs sm:text-sm mt-1 text-white text-center overflow-hidden text-ellipsis whitespace-nowrap max-w-[150px] {link_url ? 'underline' : ''}" href={link_url} target="_blank">
+                            <a class="text-xs sm:text-sm mt-1 text-white text-center overflow-hidden text-ellipsis whitespace-nowrap max-w-[150px] {link_url ? 'underline' : ''}" href={link_url.startsWith('http') ? link_url : `https://${link_url}`} target="_blank" rel="noopener noreferrer">
                                 {#if contributeType === 'treatment'}
                                     {suggestion || "Your Suggestion"}
                                 {:else if contributeType === 'link'}
