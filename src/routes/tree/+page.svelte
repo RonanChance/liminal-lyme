@@ -5,8 +5,8 @@
     import TopBanner from '../../lib/components/TopBanner.svelte';
     import Footer from "../../lib/components/Footer.svelte";
     import PocketBase from 'pocketbase';
-    import { Label, Input } from 'flowbite-svelte';
-    import { EnvelopeSolid, FileEditSolid, LinkSolid } from 'flowbite-svelte-icons';
+    import { Label, Input, Select, Popover } from 'flowbite-svelte';
+    import { EnvelopeSolid, FileEditSolid, LinkSolid, CloseOutline, UserCircleSolid, InfoCircleSolid } from 'flowbite-svelte-icons';
     import MedicalDisclaimer from "../../lib/components/MedicalDisclaimer.svelte";
     import * as d3 from 'd3';
 
@@ -16,11 +16,9 @@
     let svg, root, tree, diagonal;
     let animate = false;
 
-    let suggestion = "";
-    let articleLink = "";
-    let purchaseLink = "";
-    let email = "";
     let throwConfetti = false;
+    let contributeMode = false;
+    let selectedNode;
 
     let isDragging = false;
     let startX, startY;
@@ -54,26 +52,57 @@
     }
 
     async function onSubmit() {
-        if (suggestion.trim() === "") {
+
+        if (contributeType === "treatment" && suggestion.trim() === "") {
             alert("Supplement/Treatment Suggestion is required.");
             return;
+        } else if (contributeType === "link" && (link_text.trim() === "" || link_url.trim() === "" || category === "")) {
+            alert("Category, Description, and URL are required.");
+            return;
+        } else if (!isValidUrl(link_url.trim())) {
+            alert("URL is invalid.");
+            return;
         }
+
         const pb = new PocketBase("https://pb.liminallyme.com");
+
+
         const data = {
-            "suggestion": suggestion || '',
-            "article_link": articleLink || '',
-            "purchase_link": purchaseLink || '',
-            "email": email || ''
+            "relation": [selectedNode.parent.data.id],
+            "name": contributeType === "link" ? category : suggestion.trim(),
+            "link_text": contributeType === "link" ? link_text.trim() : null,
+            "link": contributeType === "link" ? link_url.trim() : null,
+            "community_contribution": true,
+            "contributor_name": username.trim() || null
         };
+
         throwConfetti = true;
         try {
-            const record = await pb.collection('suggestions').create(data);
+            const record = await pb.collection('tree').create(data);
             alert('Thank you for your contribution!');
         } catch (error) {
+            console.log(data);
             alert('Something went wrong. Please try again.');
         }
-        suggestion = articleLink = purchaseLink = email = "";
+        
+        suggestion = category = link_text = link_url = username = "";
         throwConfetti = false;
+    }
+
+    function isValidUrl(str) {
+        try {
+            const url = new URL(str.includes("://") ? str : `https://${str}`); // This will throw if `str` is not a valid URL
+            return true;
+        } catch (_) {
+            return false;
+        }
+    }
+
+    function addToTree(d) {
+        selectedNode = d;
+        contributeType = '';
+        contributeMode = true;
+        console.log(d);
     }
 
     function collapse(d) {
@@ -86,7 +115,7 @@
     
     function toggle(d) {
         if (d.data.isDummy){
-            console.log(d);
+            addToTree(d);
         } else {
             if (d.children) {
                 d._children = d.children;
@@ -296,74 +325,159 @@
         initTree();
         initDragging();
     });
+
+    let contributeType = 'treatment';
+    let suggestion = "";
+
+    let category = "";
+    let link_text = "";
+    let link_url = "";
+    let username = "";
+
+    const category_options = [
+        { value: 'Amazon Link', name: 'Amazon Link' },
+        { value: 'Article Link', name: 'Article Link' },
+        { value: 'Purchase Link', name: 'Purchase Link' }
+    ];
 </script>
 
 <TopBanner />
+
+
+{#if contributeMode}
+    <div class="w-full flex justify-center bg-[var(--white)] px-4 py-4 rounded-lg my-5 max-w-[90%] sm:max-w-[60%] 2xl:max-w-[50%] mx-auto relative" in:fade={{duration: 200}}>
+        <div class="absolute top-2 right-2"> <!-- Adjust top/right for positioning -->
+            <button class="px-2 py-2 tems-center justify-center rounded-lg opacity-50" on:click={() => {contributeMode = false}}><CloseOutline size="xs" /></button>
+        </div>
+        <div class="w-[85%] sm:w-[65%] md:w-[55%] lg:w-[45%] xl:w-[35%] flex flex-col gap-4 pt-3">
+            <div class="w-full flex flex-row justify-center gap-3">
+                <button class="text-[var(--darkbackground)] px-4 py-1 rounded-lg outline outline-1 {contributeType === 'treatment' ? 'bg-[var(--darkbackground)] text-white' : ' bg-[var(--white)] text-[var(--darkbackground)]'}" style="outline-color: rgba(0, 0, 0, 0.2);" on:click={()=> {contributeType = 'treatment'}}>
+                    <span class="flex flex-col">
+                        <span>
+                            Treatment
+                        </span>
+                        <span class="text-xs italic opacity-60">
+                            Category
+                        </span>
+                    </span>
+                </button>
+                <div class="flex justify-center items-center h-full">
+                    or
+                </div>
+                <button class="text-[var(--darkbackground)] px-4 py-1 rounded-lg outline outline-1 {contributeType === 'link' ? 'bg-[var(--darkbackground)] text-white' : ' bg-[var(--white)] text-[var(--darkbackground)]'}" style="outline-color: rgba(0, 0, 0, 0.2);" on:click={()=> {contributeType =  'link'}}>
+                    <span class="flex flex-col">
+                        <span>
+                            Link
+                        </span>
+                        <span class="text-xs italic opacity-60">
+                            URL
+                        </span>
+                    </span>
+                </button>
+            </div>
+
+            <!-- TREE PREVIEW -->
+            {#if contributeType}
+                <hr class="border-t-2 border-gray-400" />
+                <div class="flex flex-row justify-center bg-[var(--extradarkbackground)] rounded-lg px-2 py-4">
+                    <!-- First Node -->
+                    <div class="flex flex-col items-center w-[35%]">
+                        <div class="flex flex-col justify-end items-center">
+                            <div class="w-4 h-4 border-2 bg-white border-[var(--extralightbackground)] rounded-full"></div>
+                            <span class="text-xs sm:text-sm mt-1 text-white text-center">{selectedNode.parent.data.name}</span>
+                        </div>
+                    </div>
+                    <!-- Dashed Line -->
+                    <div class="dashed-line justify-end opacity-50 w-[30%] mt-2"></div>
+                    <!-- Second Node -->
+                    <div class="flex flex-col items-center w-[35%]">
+                        <div class="flex flex-col justify-end items-center">
+                            <div class="w-4 h-4 border-2 bg-[var(--lightbackground)] border-gray-500 rounded-full"></div>
+                            <a class="text-xs sm:text-sm mt-1 text-white text-center overflow-hidden text-ellipsis whitespace-nowrap max-w-[150px] {link_url ? 'underline' : ''}" href={link_url} target="_blank">
+                                {#if contributeType === 'treatment'}
+                                    {suggestion || "Your Suggestion"}
+                                {:else if contributeType === 'link'}
+                                    {link_text || "Link Text"}
+                                {/if}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {/if}
+
+            {#if contributeType === 'treatment'}
+                <!-- TREATMENT FORM -->
+                <div class="flex flex-row justify-center">
+                    <div class="text-[var(--darkbackground)] w-full text-lg text-center items-center flex flex-row gap-2 scroll-m-[4rem]" id="contribute"> 
+                        <!-- {selectedNode.parent.data.name} -->
+                        <Input name="name" type="text" size="lg" class="focus:outline-none focus:ring-transparent" style="border-color: var(--darkbackground);" placeholder="Treatment" bind:value={suggestion} required maxlength="75">
+                                <FileEditSolid slot="left" class="w-5 h-5 text-gray-500 dark:text-gray-400" />
+                                <span class="text-red-600 text-2xl align-middle" slot="right">*</span>
+                        </Input>
+                    </div>
+                </div>
+            {:else if contributeType === 'link'}
+                <!-- LINK FORM -->
+                <div class="flex flex-col leading-tight gap-2">
+                    <div class="italic">Preferred Format:</div>
+                    <div class="opacity-60 text-center">Ingredient - Dosage - Brand</div>
+                    <div class="italic">Example:</div>
+                    <div class="opacity-60 text-center">Ubiquinol - 50mg - HTN</div>
+                </div>
+                
+                <div class="flex flex-col justify-center gap-4">
+                <!-- CATEGORY -->
+                    <div class="text-[var(--darkbackground)] w-full text-lg text-center items-center flex flex-row gap-2 scroll-m-[4rem]" id="category"> 
+                        <!-- {selectedNode.parent.data.name} -->
+                        <Select name="category" items={category_options} type="text" size="lg" class="focus:outline-none focus:ring-transparent" style="border-color: var(--darkbackground);" placeholder="Category" bind:value={category} required maxlength="75">
+                                <FileEditSolid slot="left" class="w-5 h-5 text-gray-500 dark:text-gray-400" />
+                                <span class="text-red-600 text-2xl align-middle">*</span>
+                        </Select>
+                    </div>
+
+                <!-- LINK TEXT -->
+                    <div class="text-[var(--darkbackground)] w-full text-lg text-center items-center flex flex-row gap-2 scroll-m-[4rem]" id="link_text"> 
+                        <!-- {selectedNode.parent.data.name} -->
+                        <Input name="link_text" type="text" size="lg" class="focus:outline-none focus:ring-transparent" style="border-color: var(--darkbackground);" placeholder="Link Description" bind:value={link_text} required maxlength="75">
+                                <FileEditSolid slot="left" class="w-5 h-5 text-gray-500 dark:text-gray-400" />
+                                <span class="text-red-600 text-2xl align-middle" slot="right">*</span>
+                        </Input>
+                    </div>
+
+                <!-- LINK URL -->
+                    <div class="text-[var(--darkbackground)] w-full text-lg text-center items-center flex flex-row gap-2 scroll-m-[4rem]" id="link_url"> 
+                        <!-- {selectedNode.parent.data.name} -->
+                        <Input name="link_url" type="text" size="lg" class="focus:outline-none focus:ring-transparent" style="border-color: var(--darkbackground);" placeholder="Link (URL)" bind:value={link_url} required maxlength="75">
+                                <LinkSolid slot="left" class="w-5 h-5 text-gray-500 dark:text-gray-400" />
+                                <span class="text-red-600 text-2xl align-middle" slot="right">*</span>
+                        </Input>
+                    </div>
+                </div>
+            {/if}
+
+            {#if contributeType}
+                <div class="text-[var(--darkbackground)] w-full text-lg text-center items-center flex flex-row gap-2 scroll-m-[4rem]" id="username"> 
+                    <Input name="link_url" type="text" size="lg" class="focus:outline-none focus:ring-transparent" style="border-color: var(--darkbackground);" placeholder="Username" bind:value={username} maxlength="35">
+                            <UserCircleSolid slot="left" class="w-5 h-5 text-gray-500 dark:text-gray-400" />
+                            <span class="align-middle opacity-50" slot="right" id="usernameinfo"><InfoCircleSolid size="sm" /></span>
+                    </Input>
+                    <Popover class="w-64 text-sm font-light" triggeredBy="#usernameinfo" data-popper-placement="left">(optional) username will be used to credit you</Popover>
+                </div>
+                <div class="text-right">
+                    <button type="submit" class="py-2 px-3 rounded-lg bg-white outline outline-1 text-base" style="outline-color: rgba(0, 0, 0, 0.15);" on:click={ onSubmit }>
+                        Submit
+                        {#if throwConfetti} <Confetti x={[-0.7, 0.7]} y={[-0.7, .7]} /> {/if}
+                    </button>
+                </div>
+            {/if}
+        </div>
+    </div>
+{/if}
 
 <div class="tree-container overflow-auto w-[100%] h-[800px] relative bg-[var(--extradarkbackground)]">
     <div class="grid-lines absolute inset-0 pointer-events-none"></div>
     <div class="tree relative z-1"></div>
 </div>
-
-<!-- {#if animate}
-    <div class="w-full flex justify-center bg-[var(--lightbackground)] px-4 py-8 rounded-lg" in:fade={{duration: 200}}>
-        <div class="w-[85%] sm:w-[65%] md:w-[55%] lg:w-[45%] xl:w-[35%]">
-            <div class="mb-6">
-                <div class="block mb-2 text-white text-2xl text-center flex flex-row justify-center gap-1 scroll-m-[4rem]" id="contribute"> 
-                    <svg class="w-10 h-10" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="-4.92 -4.92 501.36 501.36" xml:space="preserve" fill="#000000" stroke="#000000" stroke-width="0.0049152" transform="rotate(0)"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#CCCCCC" stroke-width="0.9830399999999999"></g><g id="SVGRepo_iconCarrier"> <g> <path style="fill:#FCD462;" d="M229.601,54.04c-64.916,7.178-117.254,59.353-124.614,124.249 c-4.975,43.865,10.104,84.28,37.237,113.288c30.372,32.471,46.127,75.977,46.127,120.438v3.445h114.804v-3.434 c0-45.676,18.125-88.928,48.496-123.046c22.274-25.022,35.809-57.988,35.809-94.127C387.461,111.269,315.095,44.587,229.601,54.04z "></path> <rect x="239.954" style="fill:#FCD462;" width="11.597" height="25.651"></rect> <rect x="414.971" y="189.056" style="fill:#FCD462;" width="25.651" height="11.597"></rect> <rect x="50.898" y="189.056" style="fill:#FCD462;" width="25.651" height="11.597"></rect> <rect x="361.629" y="60.354" transform="matrix(-0.7071 0.7071 -0.7071 -0.7071 686.0109 -151.851)" style="fill:#FCD462;" width="25.651" height="11.597"></rect> <rect x="104.197" y="317.756" transform="matrix(-0.7071 0.7071 -0.7071 -0.7071 428.5645 469.5785)" style="fill:#FCD462;" width="25.651" height="11.597"></rect> <rect x="368.703" y="310.719" transform="matrix(-0.7072 0.707 -0.707 -0.7072 868.0994 287.5853)" style="fill:#FCD462;" width="11.597" height="25.651"></rect> <rect x="111.242" y="53.315" transform="matrix(-0.7071 0.7071 -0.7071 -0.7071 246.5676 30.1458)" style="fill:#FCD462;" width="11.597" height="25.651"></rect> </g> <path style="fill:#64798A;" d="M303.155,415.46H188.351v62.963c0,1.797,1.457,3.254,3.254,3.254h108.297 c1.797,0,3.254-1.457,3.254-3.254V415.46z"></path> <g> <path style="fill:#2F4859;" d="M301.614,415.503l-113.252,12.399c-3.863,0.424-6.652,3.898-6.228,7.76 c0.423,3.862,3.897,6.651,7.759,6.228l113.253-12.401c3.863-0.422,6.651-3.898,6.228-7.76 C308.95,417.868,305.476,415.079,301.614,415.503z"></path> <path style="fill:#2F4859;" d="M301.614,439.819L188.361,452.22c-3.863,0.423-6.652,3.898-6.228,7.76 c0.423,3.862,3.897,6.651,7.759,6.228l113.253-12.4c3.863-0.423,6.651-3.898,6.228-7.76 C308.95,442.184,305.476,439.397,301.614,439.819z"></path> <path style="fill:#2F4859;" d="M301.614,464.136l-113.252,12.4c-3.863,0.423-6.652,3.898-6.228,7.76 c0.423,3.863,3.897,6.651,7.759,6.228l113.253-12.401c3.863-0.422,6.651-3.898,6.228-7.76 C308.95,466.502,305.476,463.713,301.614,464.136z"></path> <path style="fill:#2F4859;" d="M219.654,481.534c0,5.514,11.684,9.986,26.098,9.986c14.415,0,26.1-4.471,26.1-9.986H219.654z"></path> </g> <polygon style="fill:#DC8744;" points="276.281,415.46 267.415,414.369 295.474,185.924 270.609,207.035 245.754,181.518 220.898,207.035 196.035,185.924 224.084,414.369 215.217,415.46 184.375,164.298 220.322,194.817 245.754,168.706 271.185,194.817 307.133,164.298 "></polygon> </g></svg>
-                    Contribute Your Ideas 
-                </div>
-            </div>
-
-            <div class="mb-6">
-                <Label for="large-input" class="block mb-2 text-white text-lg">Requirements</Label>
-                <ul>
-                    <li class="block mb-2 text-white">1. Single active ingredient</li>
-                    <li class="block mb-2 text-white">2. Reputable article/publication</li>
-                    <li class="block mb-2 text-white italic text-center">Note: If it helped you but does not fit these requirements, please still consider sharing it!</li>
-                </ul>
-            </div>
-
-            <hr class="opacity-40 pb-6" />
-
-            <div class="mb-6">
-                <Label for="large-input" class="block mb-2 text-white text-lg">Supplement/Treatment Suggestion<span class="text-red-700 text-2xl align-middle">*</span></Label>
-                <Input name="suggestion" type="text" size="lg" placeholder="Suggestion" bind:value={suggestion} required>
-                    <FileEditSolid slot="left" class="w-5 h-5 text-gray-500 dark:text-gray-400" />
-                </Input>
-            </div>
-
-            <div class="mb-6">
-                <Label for="large-input" class="block mb-2 text-white text-lg flex justify-between">Article Link <span class="opacity-50">(Optional)</span></Label>
-                <Input name="article-link" type="text" size="lg" placeholder="Article Link" bind:value={articleLink}>
-                    <LinkSolid slot="left" class="w-5 h-5 text-gray-500 dark:text-gray-400" />
-                </Input>
-            </div>
-
-            <div class="mb-6">
-                <Label for="large-input" class="block mb-2 text-white text-lg flex justify-between">Purchase Link <span class="opacity-50">(Optional)</span></Label>
-                <Input name="purchase-link" type="text" size="lg" placeholder="Purchase Link" bind:value={purchaseLink}>
-                    <LinkSolid slot="left" class="w-5 h-5 text-gray-500 dark:text-gray-400" />
-                </Input>
-            </div>
-
-
-            <div class="mb-6">
-                <Label for="large-input" class="block mb-2 text-white text-lg flex justify-between">Your Email <span class="opacity-50">(Optional)</span></Label>
-                <Input name="email" type="email" size="lg" placeholder="name@gmail.com" bind:value={email}>
-                    <EnvelopeSolid slot="left" class="w-5 h-5 text-gray-500 dark:text-gray-400" />
-                </Input>
-            </div>
-
-            <div class="text-right pt-3">
-                <button type="submit" class="py-2 px-3 rounded-lg bg-white text-lg" on:click={ onSubmit }>
-                    Submit
-                    {#if throwConfetti} <Confetti x={[-0.7, 0.7]} y={[-0.7, .7]} /> {/if}
-                </button>
-            </div>
-        </div>
-    </div>
-{/if} -->
 
 {#if animate}
     <div class="flex flex-col ml-auto mr-auto pt-10 pb-12 max-w-[90%]" in:fade={{duration: 300}}>
@@ -431,4 +545,20 @@
         background-color: var(--supplement_highlight);
         color: var(--white);
     }
+
+    .dashed-line {
+        max-height: 2px;
+        background-image: linear-gradient(to right, transparent 50%, gray 50%);
+        background-size: 20px 100%;
+        animation: scroll 2s linear infinite; /* Adjust timing for speed */
+    }
+
+@keyframes scroll {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: 20px 0; /* This should match the background size */
+    }
+}
 </style>
