@@ -5,7 +5,7 @@
     import TopBanner from '../../lib/components/TopBanner.svelte';
     import Footer from "../../lib/components/Footer.svelte";
     import PocketBase from 'pocketbase';
-    import { Input, Select, Popover } from 'flowbite-svelte';
+    import { Label, Input, Select, Popover } from 'flowbite-svelte';
     import { FileEditSolid, LinkSolid, CloseOutline, UserCircleSolid, InfoCircleSolid } from 'flowbite-svelte-icons';
     import MedicalDisclaimer from "../../lib/components/MedicalDisclaimer.svelte";
     import * as d3 from 'd3';
@@ -36,6 +36,54 @@
         { value: 'Article Link', name: 'Article Link' },
         { value: 'Purchase Link', name: 'Purchase Link' }
     ];
+
+    let scale = 1; // Scale factor for zoom
+    const minScale = 0.5; // Minimum zoom level
+    const maxScale = 3; // Maximum zoom level
+    let initialDistance = null; // Distance between touch points
+
+    function initTouchEvents() {
+        const container = document.querySelector('.tree');
+
+        container.addEventListener('touchstart', (e) => {
+            if (e.touches.length === 2) {
+                // Calculate initial distance between touches
+                initialDistance = getDistance(e.touches[0], e.touches[1]);
+            }
+        });
+
+        container.addEventListener('touchmove', (e) => {
+            if (e.touches.length === 2) {
+                e.preventDefault(); // Prevent default behavior to avoid scrolling
+                const newDistance = getDistance(e.touches[0], e.touches[1]);
+                const scaleChange = newDistance / initialDistance;
+
+                scale = Math.min(maxScale, Math.max(minScale, scale * scaleChange));
+                container.style.transform = `scale(${scale})`;
+                initialDistance = newDistance; // Update initial distance for next move
+            }
+        });
+
+        container.addEventListener('touchend', () => {
+            initialDistance = null; // Reset distance on touch end
+        });
+    }
+
+    // Calculate the distance between two touch points
+    function getDistance(touch1, touch2) {
+        const dx = touch1.clientX - touch2.clientX;
+        const dy = touch1.clientY - touch2.clientY;
+        return Math.sqrt(dx * dx + dy * dy);
+    }
+
+    function isValidUrl(str) {
+        try {
+            const url = new URL(str.includes("://") ? str : `https://${str}`); // This will throw if `str` is not a valid URL
+            return true;
+        } catch (_) {
+            return false;
+        }
+    }
 
     function initDragging() {
         const container = document.querySelector('.tree');
@@ -73,14 +121,14 @@
         } else if (contributeType === "link" && (link_text.trim() === "" || link_url.trim() === "" || category === "")) {
             alert("Category, Description, and URL are required.");
             return;
-        } else if (!isValidUrl(link_url.trim())) {
+        } else if (contributeType === "link" && !isValidUrl(link_url.trim())) {
             alert("URL is invalid.");
             return;
         }
 
         const pb = new PocketBase("https://pb.liminallyme.com");
 
-        const data = {
+        const createRecord = {
             "relation": [selectedNode.parent.data.id],
             "name": contributeType === "link" ? category : suggestion.trim(),
             "link_text": contributeType === "link" ? link_text.trim() : null,
@@ -91,26 +139,71 @@
         };
 
         throwConfetti = true;
-
+        
+        let record;
         try {
-            const record = await pb.collection('tree').create(data);
-            alert('Thank you for your contribution!');
+            record = await pb.collection('tree').create(createRecord);
+            // alert('Thank you for contributing! The tree will now refresh.');
         } catch (error) {
-            console.log(data);
+            console.log(newRecord);
             alert('Something went wrong. Please try again.');
+        }
+
+        console.log("record", record);
+        if (record) {
+            data.records.push(record);
+            addNode(selectedNode.parent, record);
         }
         
         suggestion = category = link_text = link_url = username = "";
-        throwConfetti = false;
+        throwConfetti = contributeMode = false;
     }
 
-    function isValidUrl(str) {
-        try {
-            const url = new URL(str.includes("://") ? str : `https://${str}`); // This will throw if `str` is not a valid URL
-            return true;
-        } catch (_) {
-            return false;
+    function addNode(parentNode, newNodeData) {
+        // Locate the existing node in the hierarchy
+        const parent = findNodeById(root, parentNode.data.id);
+
+        // Create a new node with D3 hierarchy structure, use parent x,y 
+        // which will be adjusted in the update function
+        const newNode = d3.hierarchy(newNodeData);
+        newNode.depth = parent.depth + 1;
+        newNode.height = 0;
+        newNode.parent = parent;
+        newNode.x = parent.x;
+        newNode.x0 = parent.x;
+        newNode.y = parent.y;
+        newNode.y0 = parent.y;
+        newNode.data = newNodeData;
+
+        newNode._children = [{
+            data: { 
+                name: '<tspan class="opacity-50">Add <tspan style="font-size: 1.2em;">⊕</tspan></tspan>', 
+                isDummy: true, 
+                verified: true
+            },
+            parent: newNode,
+            depth: parent.depth +2,
+            x: parent.x,
+            x0: parent.x,
+            y: parent.y,
+            y0: parent.y,
+            children: null,
+            _children: null
+        }];
+
+        parent.children.push(newNode);
+        update(root);
+    }
+
+    function findNodeById(node, id) {
+        if (node.data.id === id) return node;
+        if (node.children) {
+            for (let child of node.children) {
+                const result = findNodeById(child, id);
+                if (result) return result;
+            }
         }
+        return null;
     }
 
     function collapse(d) {
@@ -120,8 +213,16 @@
             d.children = null;
         }
     }
-    
+
+    function expand(d) {
+        if (d._children) {
+            d.children = d._children;
+            d._children = null;
+        }
+    }
+
     function toggle(d) {
+        console.log(d);
         if (d.data.isDummy){
             selectedNode = d;
             contributeType = '';
@@ -139,6 +240,7 @@
     }
 
     function update(source) {
+        
         const nodes = tree(root).descendants();
         const links = tree(root).links();
 
@@ -167,13 +269,26 @@
             .attr('r', 1e-6)
             .style('fill', d => d._children ? 'black' : '#fff');
 
+        // Append primary name text
         nodeEnter.append('text')
             .attr('x', d => d.children || d._children ? -10 : 10)
             .attr('dy', '.3em')
             .attr('text-anchor', d => d.children || d._children ? 'end' : 'start')
             .html(d => d.data.name)
-            .style('fill-opacity', 1e-6)
-            .attr('height', 30);;
+            .attr('class', 'name-text') // Add a unique class
+            .style('fill-opacity', 1) // Set opacity to 1 to ensure visibility
+            .attr('height', 30);
+
+        // Append username text if available
+        nodeEnter.append('text')
+            .attr('x', d => d.children || d._children ? -10 : 10)
+            .attr('dy', '1.9em') // Position the username below the name
+            .attr('text-anchor', d => d.children || d._children ? 'end' : 'start')
+            .html(d => { return d.data.contributor_username ? `\u{1F464} ${d.data.contributor_username}` : ''; })
+            .attr('class', 'username-text') // Add a different class
+            .style('fill', 'gray') // Optional styling for differentiation
+            .style('font-size', '9pt')
+            .style('fill-opacity', 0.4); // Set opacity to 1 to ensure visibility
 
         nodeEnter.each(function(d) {
             const currentNode = d3.select(this);
@@ -192,7 +307,7 @@
                 currentNode.append('foreignObject')
                     .attr('x', textWidth + 10)
                     .attr('y', -11)
-                    .attr('width', linkTextWidth + 5)
+                    .attr('width', linkTextWidth + 10)
                     .attr('height', 30)
                     .attr('color', '#f8f8f895')
                     .append('xhtml:span')
@@ -259,6 +374,7 @@
             d.x0 = d.x;
             d.y0 = d.y;
         });
+
     }
 
     function initTree() {
@@ -318,7 +434,7 @@
 
         Object.values(nodeMap).forEach(node => {
             if (node !== root && node.children.length >= 0 && !node.children.some(child => child.isDummy) && !node.link) {
-                node.children.push({ name: '<tspan class="opacity-50">Add <tspan style="font-size: 1.2em;">⊕</tspan></tspan>', isDummy: true, parent: node });
+                node.children.push({ name: '<tspan class="opacity-50">Add <tspan style="font-size: 1.2em;">⊕</tspan></tspan>', isDummy: true, verified: true, parent: node });
             }
         });
         
@@ -336,18 +452,20 @@
         recordsTree = buildNestedRecords(data.records)
         initTree();
         initDragging();
+        initTouchEvents(); // pinch-to-zoom
     });
 </script>
 
 <TopBanner />
-
 
 {#if contributeMode}
     <div class="w-full flex justify-center bg-[var(--white)] px-4 py-4 rounded-lg my-5 max-w-[90%] sm:max-w-[60%] 2xl:max-w-[50%] mx-auto relative" in:fade={{duration: 200}}>
         <div class="absolute top-2 right-2">
             <button class="px-2 py-2 tems-center justify-center rounded-lg opacity-50" on:click={() => {contributeMode = false}}><CloseOutline size="xs" /></button>
         </div>
+
         <div class="w-[85%] sm:w-[65%] md:w-[55%] lg:w-[45%] xl:w-[35%] flex flex-col gap-4 pt-3">
+            <div class="text-center">Add to: <span class="opacity-60">{selectedNode.parent.data.name}</span></div>
             <div class="w-full flex flex-row justify-center gap-3">
                 <button class="text-[var(--darkbackground)] px-4 py-1 rounded-lg outline outline-1 {contributeType === 'treatment' ? 'bg-[var(--darkbackground)] text-white' : ' bg-[var(--white)] text-[var(--darkbackground)]'}" style="outline-color: rgba(0, 0, 0, 0.2);" on:click={()=> {contributeType = 'treatment'}}>
                     <span class="flex flex-col">
@@ -455,7 +573,7 @@
 
             {#if contributeType}
                 <div class="text-[var(--darkbackground)] w-full text-lg text-center items-center flex flex-row gap-2 scroll-m-[4rem]" id="username"> 
-                    <Input name="link_url" type="text" size="lg" class="focus:outline-none focus:ring-transparent" style="border-color: var(--darkbackground);" placeholder="Username" bind:value={username} maxlength="35">
+                    <Input name="link_url" type="text" size="lg" class="focus:outline-none focus:ring-transparent" style="border-color: var(--darkbackground);" placeholder="Username" bind:value={username} maxlength="18">
                             <UserCircleSolid slot="left" class="w-5 h-5 text-gray-500 dark:text-gray-400" />
                             <span class="align-middle opacity-50" slot="right" id="usernameinfo"><InfoCircleSolid size="sm" /></span>
                     </Input>
