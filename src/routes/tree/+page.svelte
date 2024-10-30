@@ -32,9 +32,9 @@
     let username = "";
 
     const category_options = [
-        { value: 'Amazon Link', name: 'Amazon Link' },
-        { value: 'Article Link', name: 'Article Link' },
-        { value: 'Purchase Link', name: 'Purchase Link' }
+        { value: 'Amazon', name: 'Amazon Link' },
+        { value: 'Article', name: 'Article Link' },
+        { value: 'Purchase', name: 'Purchase Link' }
     ];
 
     let scale = 1; // Scale factor for zoom
@@ -143,7 +143,7 @@
         let record;
         try {
             record = await pb.collection('tree').create(createRecord);
-            // alert('Thank you for contributing! The tree will now refresh.');
+            // alert('Thank you for contributing \u{1F389}\n\nCheck the tree to see your addition!\n\nNew additions can be edited by the community until verified by an admin.');
         } catch (error) {
             console.log(newRecord);
             alert('Something went wrong. Please try again.');
@@ -175,21 +175,25 @@
         newNode.y0 = parent.y;
         newNode.data = newNodeData;
 
-        newNode._children = [{
-            data: { 
-                name: '<tspan class="opacity-50">Add <tspan style="font-size: 1.2em;">⊕</tspan></tspan>', 
-                isDummy: true, 
-                verified: true
-            },
-            parent: newNode,
-            depth: parent.depth +2,
-            x: parent.x,
-            x0: parent.x,
-            y: parent.y,
-            y0: parent.y,
-            children: null,
-            _children: null
-        }];
+        if (contributeType === 'treatment') {
+            newNode._children = [{
+                data: { 
+                    name: '<tspan class="opacity-50">Add <tspan style="font-size: 1.2em;">⊕</tspan></tspan>', 
+                    isDummy: true, 
+                    verified: true
+                },
+                parent: newNode,
+                depth: parent.depth +2,
+                x: parent.x,
+                x0: parent.x,
+                y: parent.y,
+                y0: parent.y,
+                children: null,
+                _children: null
+            }];
+        } else {
+            newNode._children = null;
+        }
 
         parent.children.push(newNode);
         update(root);
@@ -288,7 +292,7 @@
             .attr('class', 'username-text') // Add a different class
             .style('fill', 'gray') // Optional styling for differentiation
             .style('font-size', '9pt')
-            .style('fill-opacity', 0.4); // Set opacity to 1 to ensure visibility
+            .style('fill-opacity', 0.5); // Set opacity to 1 to ensure visibility
 
         nodeEnter.each(function(d) {
             const currentNode = d3.select(this);
@@ -307,7 +311,7 @@
                 currentNode.append('foreignObject')
                     .attr('x', textWidth + 10)
                     .attr('y', -11)
-                    .attr('width', linkTextWidth + 10)
+                    .attr('width', linkTextWidth + 25)
                     .attr('height', 30)
                     .attr('color', '#f8f8f895')
                     .append('xhtml:span')
@@ -459,21 +463,22 @@
 <TopBanner />
 
 {#if contributeMode}
+<div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
     <div class="w-full flex justify-center bg-[var(--white)] px-4 py-4 rounded-lg my-5 max-w-[90%] sm:max-w-[60%] 2xl:max-w-[50%] mx-auto relative" in:fade={{duration: 200}}>
         <div class="absolute top-2 right-2">
             <button class="px-2 py-2 tems-center justify-center rounded-lg opacity-50" on:click={() => {contributeMode = false}}><CloseOutline size="xs" /></button>
         </div>
 
-        <div class="w-[85%] sm:w-[65%] md:w-[55%] lg:w-[45%] xl:w-[35%] flex flex-col gap-4 pt-3">
+        <div class="w-[85%] sm:w-[65%] md:w-[55%] lg:w-[45%] xl:w-[35%] flex flex-col gap-4">
             <div class="text-center">Add to: <span class="opacity-60">{selectedNode.parent.data.name}</span></div>
             <div class="w-full flex flex-row justify-center gap-3">
                 <button class="text-[var(--darkbackground)] px-4 py-1 rounded-lg outline outline-1 {contributeType === 'treatment' ? 'bg-[var(--darkbackground)] text-white' : ' bg-[var(--white)] text-[var(--darkbackground)]'}" style="outline-color: rgba(0, 0, 0, 0.2);" on:click={()=> {contributeType = 'treatment'}}>
                     <span class="flex flex-col">
                         <span>
-                            Treatment
+                            Node
                         </span>
                         <span class="text-xs italic opacity-60">
-                            Category
+                            Category/Treatment
                         </span>
                     </span>
                 </button>
@@ -483,10 +488,10 @@
                 <button class="text-[var(--darkbackground)] px-4 py-1 rounded-lg outline outline-1 {contributeType === 'link' ? 'bg-[var(--darkbackground)] text-white' : ' bg-[var(--white)] text-[var(--darkbackground)]'}" style="outline-color: rgba(0, 0, 0, 0.2);" on:click={()=> {contributeType =  'link'}}>
                     <span class="flex flex-col">
                         <span>
-                            Link
+                            URL
                         </span>
                         <span class="text-xs italic opacity-60">
-                            URL
+                            Website Link
                         </span>
                     </span>
                 </button>
@@ -513,7 +518,7 @@
                                 {#if contributeType === 'treatment'}
                                     {suggestion || "Your Suggestion"}
                                 {:else if contributeType === 'link'}
-                                    {link_text || "Link Text"}
+                                    {link_text || "URL Text"}
                                 {/if}
                             </a>
                         </div>
@@ -526,7 +531,7 @@
                 <div class="flex flex-row justify-center">
                     <div class="text-[var(--darkbackground)] w-full text-lg text-center items-center flex flex-row gap-2 scroll-m-[4rem]" id="contribute"> 
                         <!-- {selectedNode.parent.data.name} -->
-                        <Input name="name" type="text" size="lg" class="focus:outline-none focus:ring-transparent" style="border-color: var(--darkbackground);" placeholder="Treatment" bind:value={suggestion} required maxlength="75">
+                        <Input name="name" type="text" class="focus:outline-none focus:ring-transparent text-base" style="border-color: var(--darkbackground);" placeholder="Treatment/Category" bind:value={suggestion} required maxlength="75">
                                 <FileEditSolid slot="left" class="w-5 h-5 text-gray-500 dark:text-gray-400" />
                                 <span class="text-red-600 text-2xl align-middle" slot="right">*</span>
                         </Input>
@@ -534,46 +539,52 @@
                 </div>
             {:else if contributeType === 'link'}
                 <!-- LINK FORM -->
-                <div class="flex flex-col leading-tight gap-2">
-                    <div class="italic">Preferred Format:</div>
-                    <div class="opacity-60 text-center">Ingredient - Dosage - Brand</div>
-                    <div class="italic">Example:</div>
-                    <div class="opacity-60 text-center">Ubiquinol - 50mg - HTN</div>
-                </div>
                 
                 <div class="flex flex-col justify-center gap-4">
-                <!-- CATEGORY -->
-                    <div class="text-[var(--darkbackground)] w-full text-lg text-center items-center flex flex-row gap-2 scroll-m-[4rem]" id="category"> 
-                        <!-- {selectedNode.parent.data.name} -->
-                        <Select name="category" items={category_options} type="text" size="lg" class="focus:outline-none focus:ring-transparent" style="border-color: var(--darkbackground);" placeholder="Category" bind:value={category} required maxlength="75">
-                                <FileEditSolid slot="left" class="w-5 h-5 text-gray-500 dark:text-gray-400" />
-                                <span class="text-red-600 text-2xl align-middle">*</span>
-                        </Select>
-                    </div>
+
+                <!-- LINK URL -->
+                <div class="text-[var(--darkbackground)] w-full text-lg text-center items-center flex flex-row gap-2 scroll-m-[4rem]" id="link_url"> 
+                    <!-- {selectedNode.parent.data.name} -->
+                    <Input name="link_url" type="text" class="focus:outline-none focus:ring-transparent text-base" style="border-color: var(--darkbackground);" placeholder="Link (URL)" bind:value={link_url} required maxlength="175">
+                            <LinkSolid slot="left" class="w-5 h-5 text-gray-500 dark:text-gray-400" />
+                            <span class="text-red-600 text-2xl align-middle" slot="right">*</span>
+                    </Input>
+                </div>
 
                 <!-- LINK TEXT -->
                     <div class="text-[var(--darkbackground)] w-full text-lg text-center items-center flex flex-row gap-2 scroll-m-[4rem]" id="link_text"> 
                         <!-- {selectedNode.parent.data.name} -->
-                        <Input name="link_text" type="text" size="lg" class="focus:outline-none focus:ring-transparent" style="border-color: var(--darkbackground);" placeholder="Link Description" bind:value={link_text} required maxlength="75">
+                        <Input name="link_text" type="text" class="focus:outline-none focus:ring-transparent text-base" style="border-color: var(--darkbackground);" placeholder="Link Description" bind:value={link_text} required maxlength="175">
                                 <FileEditSolid slot="left" class="w-5 h-5 text-gray-500 dark:text-gray-400" />
                                 <span class="text-red-600 text-2xl align-middle" slot="right">*</span>
                         </Input>
                     </div>
 
-                <!-- LINK URL -->
-                    <div class="text-[var(--darkbackground)] w-full text-lg text-center items-center flex flex-row gap-2 scroll-m-[4rem]" id="link_url"> 
-                        <!-- {selectedNode.parent.data.name} -->
-                        <Input name="link_url" type="text" size="lg" class="focus:outline-none focus:ring-transparent" style="border-color: var(--darkbackground);" placeholder="Link (URL)" bind:value={link_url} required maxlength="75">
-                                <LinkSolid slot="left" class="w-5 h-5 text-gray-500 dark:text-gray-400" />
-                                <span class="text-red-600 text-2xl align-middle" slot="right">*</span>
-                        </Input>
+                    <div class="flex flex-col leading-tight gap-1">
+                        <div class="italic opacity-80">Preferred Link Description Format:</div>
+                        <div class="opacity-60 flex flex-row justify-center gap-2">
+                            Ingredient - Dosage - Brand
+                            <span class="align-middle opacity-50" id="formatinfo"><InfoCircleSolid size="sm" /></span>
+                        </div>
+                        <span>
+                            <Popover class="w-64 text-sm font-light" triggeredBy="#formatinfo" data-popper-placement="left">Use your best judgement here. Try to be concise, informative, and specific.</Popover>
+                        </span>
                     </div>
+
+                <!-- CATEGORY -->
+                <div class="text-[var(--darkbackground)] w-full text-lg text-center items-center flex flex-row gap-2 scroll-m-[4rem]" id="category"> 
+                    <!-- {selectedNode.parent.data.name} -->
+                    <Select name="category" items={category_options} type="text" class="focus:outline-none focus:ring-transparent text-center text-opacity-60 text-base" style="border-color: var(--darkbackground);" placeholder="Select Type" bind:value={category} required maxlength="75">
+                            <FileEditSolid slot="left" class="w-5 h-5 text-gray-500 dark:text-gray-400" />
+                            <span class="text-red-600 text-2xl align-middle">*</span>
+                    </Select>
+                </div>
                 </div>
             {/if}
 
             {#if contributeType}
                 <div class="text-[var(--darkbackground)] w-full text-lg text-center items-center flex flex-row gap-2 scroll-m-[4rem]" id="username"> 
-                    <Input name="link_url" type="text" size="lg" class="focus:outline-none focus:ring-transparent" style="border-color: var(--darkbackground);" placeholder="Username" bind:value={username} maxlength="18">
+                    <Input name="link_url" type="text" class="focus:outline-none focus:ring-transparent text-base" style="border-color: var(--darkbackground);" placeholder="Username" bind:value={username} maxlength="18">
                             <UserCircleSolid slot="left" class="w-5 h-5 text-gray-500 dark:text-gray-400" />
                             <span class="align-middle opacity-50" slot="right" id="usernameinfo"><InfoCircleSolid size="sm" /></span>
                     </Input>
@@ -588,6 +599,7 @@
             {/if}
         </div>
     </div>
+</div>
 {/if}
 
 <div class="tree-container overflow-auto w-[100%] h-[800px] relative bg-[var(--extradarkbackground)]">
