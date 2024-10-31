@@ -10,7 +10,7 @@ export async function load() {
 
     // Fetch pages in a loop until no more records are returned
     do {
-        records = await pb.collection('tree').getList(page, perPage, { skipTotal: true });
+        records = await pb.collection('tree').getList(page, perPage, { skipTotal: true, sort: 'name' });
         allRecords = allRecords.concat(records.items);
         page++;
     } while (records.items.length === perPage);
