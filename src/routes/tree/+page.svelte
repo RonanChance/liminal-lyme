@@ -5,7 +5,7 @@
     import TopBanner from '../../lib/components/TopBanner.svelte';
     import Footer from "../../lib/components/Footer.svelte";
     import PocketBase from 'pocketbase';
-    import { Label, Input, Select, Popover } from 'flowbite-svelte';
+    import { Input, Select, Popover } from 'flowbite-svelte';
     import { FileEditSolid, LinkSolid, CloseOutline, UserCircleSolid, InfoCircleSolid } from 'flowbite-svelte-icons';
     import MedicalDisclaimer from "../../lib/components/MedicalDisclaimer.svelte";
     import * as d3 from 'd3';
@@ -18,6 +18,7 @@
 
     let throwConfetti = false;
     let contributeMode = false;
+    let deleteMode = false;
     let selectedNode;
 
     let isDragging = false;
@@ -134,18 +135,18 @@
             "link_text": contributeType === "link" ? link_text.trim() : null,
             "link": contributeType === "link" ? link_url.trim() : null,
             "community_contribution": true,
-            "contributor_username": username.trim() || null,
+            "username": username.trim() || null,
             "verified": false
         };
-
-        throwConfetti = true;
         
         let record;
+        throwConfetti = true;
         try {
             record = await pb.collection('tree').create(createRecord);
-            // alert('Thank you for contributing \u{1F389}\n\nCheck the tree to see your addition!\n\nNew additions can be edited by the community until verified by an admin.');
+            alert('Thank you for contributing \u{1F389}\n\nCheck the tree to see your addition!\n\nNew additions can be removed by you or the community until verified by an admin.');
+            contributeMode = false;
+            suggestion = category = link_text = link_url = username = "";
         } catch (error) {
-            console.log(newRecord);
             alert('Something went wrong. Please try again.');
         }
 
@@ -155,8 +156,7 @@
             addNode(selectedNode.parent, record);
         }
         
-        suggestion = category = link_text = link_url = username = "";
-        throwConfetti = contributeMode = false;
+        throwConfetti = false;
     }
 
     function addNode(parentNode, newNodeData) {
@@ -183,7 +183,7 @@
                     verified: true
                 },
                 parent: newNode,
-                depth: parent.depth +2,
+                depth: parent.depth + 2,
                 x: parent.x,
                 x0: parent.x,
                 y: parent.y,
@@ -243,6 +243,15 @@
         }
     }
 
+    function handleRemove(node) {
+        try {
+            console.log(node.data.id)
+        } catch (e) {
+            deleteMode = false;
+            alert("Something went wrong when attempting to delete the node, please refresh your browser.")
+        }
+    }
+
     function update(source) {
         
         const nodes = tree(root).descendants();
@@ -250,12 +259,7 @@
 
         // Reduce distance for leaf nodes
         nodes.forEach(d => {
-            if (!d.children && !d._children) {
-                d.y = d.depth * 210;
-            } else {
-                d.y = d.depth * 250;
-            }
-            d.x = d.x * 0.9;
+            d.y = d.depth * (d.children || d._children ? 250 : 210);
         });
 
         const node = svg.selectAll('g.node').data(nodes, d => d.id || (d.id = ++i));
@@ -283,12 +287,35 @@
             .style('fill-opacity', 1) // Set opacity to 1 to ensure visibility
             .attr('height', 30);
 
+        // Conditionally add the "X" button if not verified
+        nodeEnter.filter(d => !d.data.verified)
+            .append('text')
+            .attr('class', 'remove-button')
+            .attr('dy', '.38em')
+            .style('cursor', 'pointer')
+            .style('fill', 'red')
+            .text('✖')
+            .on('click', (event, d) => {
+                event.stopPropagation();
+                selectedNode = d;
+                deleteMode = true;
+            })
+            .each(function(d) {
+                // Calculate the width of the name text
+                const nameWidth = this.previousSibling.getBBox().width;
+
+                // Adjust position of the "X" based on name text width
+                d3.select(this)
+                    .attr('x', d.children || d._children ? -(nameWidth + 15) : -9 )
+                    .attr('text-anchor', d.children || d._children ? 'end' : 'start');
+            });
+            
         // Append username text if available
         nodeEnter.append('text')
             .attr('x', d => d.children || d._children ? -10 : 10)
             .attr('dy', '1.9em') // Position the username below the name
             .attr('text-anchor', d => d.children || d._children ? 'end' : 'start')
-            .html(d => { return d.data.contributor_username ? `\u{1F464} ${d.data.contributor_username}` : ''; })
+            .html(d => { return d.data.username ? `\u{1F464} ${d.data.username}` : ''; })
             .attr('class', 'username-text') // Add a different class
             .style('fill', 'gray') // Optional styling for differentiation
             .style('font-size', '9pt')
@@ -397,7 +424,7 @@
 
         // Load data
         root = d3.hierarchy(recordsTree);
-        root.x0 = height / 2;
+        root.x0 = height;
         root.y0 = 0;
 
         root.children.forEach(collapse);
@@ -448,7 +475,7 @@
     let width = 2560;
     let height = 800;
     let i = 0;
-    const duration = 750;
+    const duration = 600;
     let recordsTree = null;
 
     onMount(async () => {
@@ -533,7 +560,7 @@
                         <!-- {selectedNode.parent.data.name} -->
                         <Input name="name" type="text" class="focus:outline-none focus:ring-transparent text-base" style="border-color: var(--darkbackground);" placeholder="Treatment/Category" bind:value={suggestion} required maxlength="75">
                                 <FileEditSolid slot="left" class="w-5 h-5 text-gray-500 dark:text-gray-400" />
-                                <span class="text-red-600 text-2xl align-middle" slot="right">*</span>
+                                <span class="text-red-600 text-2xl align-middle {suggestion ? "hidden" : ""}" slot="right">*</span>
                         </Input>
                     </div>
                 </div>
@@ -542,12 +569,28 @@
                 
                 <div class="flex flex-col justify-center gap-4">
 
+                <!-- CATEGORY -->
+                <div class="relative inline-flex items-center w-full">
+                    <Select
+                        name="category"
+                        items={category_options}
+                        type="text"
+                        class="focus:outline-none focus:ring-transparent text-opacity-60 text-base w-full"
+                        style="border-color: var(--darkbackground);"
+                        placeholder="Select Type"
+                        bind:value={category}
+                        required
+                    >
+                    </Select>
+                    <span class="absolute top-1 right-3 text-red-600 text-2xl align-middle {category ? "hidden" : ""}">*</span>
+                </div>
+
                 <!-- LINK URL -->
                 <div class="text-[var(--darkbackground)] w-full text-lg text-center items-center flex flex-row gap-2 scroll-m-[4rem]" id="link_url"> 
                     <!-- {selectedNode.parent.data.name} -->
                     <Input name="link_url" type="text" class="focus:outline-none focus:ring-transparent text-base" style="border-color: var(--darkbackground);" placeholder="Link (URL)" bind:value={link_url} required maxlength="175">
                             <LinkSolid slot="left" class="w-5 h-5 text-gray-500 dark:text-gray-400" />
-                            <span class="text-red-600 text-2xl align-middle" slot="right">*</span>
+                            <span class="text-red-600 text-2xl align-middle {link_url ? "hidden" : ""}" slot="right">*</span>
                     </Input>
                 </div>
 
@@ -556,7 +599,7 @@
                         <!-- {selectedNode.parent.data.name} -->
                         <Input name="link_text" type="text" class="focus:outline-none focus:ring-transparent text-base" style="border-color: var(--darkbackground);" placeholder="Link Description" bind:value={link_text} required maxlength="175">
                                 <FileEditSolid slot="left" class="w-5 h-5 text-gray-500 dark:text-gray-400" />
-                                <span class="text-red-600 text-2xl align-middle" slot="right">*</span>
+                                <span class="text-red-600 text-2xl align-middle {link_text ? "hidden" : ""}" slot="right">*</span>
                         </Input>
                     </div>
 
@@ -570,25 +613,16 @@
                             <Popover class="w-64 text-sm font-light" triggeredBy="#formatinfo" data-popper-placement="left">Use your best judgement here. Try to be concise, informative, and specific.</Popover>
                         </span>
                     </div>
-
-                <!-- CATEGORY -->
-                <div class="text-[var(--darkbackground)] w-full text-lg text-center items-center flex flex-row gap-2 scroll-m-[4rem]" id="category"> 
-                    <!-- {selectedNode.parent.data.name} -->
-                    <Select name="category" items={category_options} type="text" class="focus:outline-none focus:ring-transparent text-center text-opacity-60 text-base" style="border-color: var(--darkbackground);" placeholder="Select Type" bind:value={category} required maxlength="75">
-                            <FileEditSolid slot="left" class="w-5 h-5 text-gray-500 dark:text-gray-400" />
-                            <span class="text-red-600 text-2xl align-middle">*</span>
-                    </Select>
-                </div>
                 </div>
             {/if}
 
             {#if contributeType}
                 <div class="text-[var(--darkbackground)] w-full text-lg text-center items-center flex flex-row gap-2 scroll-m-[4rem]" id="username"> 
-                    <Input name="link_url" type="text" class="focus:outline-none focus:ring-transparent text-base" style="border-color: var(--darkbackground);" placeholder="Username" bind:value={username} maxlength="18">
+                    <Input name="link_url" type="text" class="focus:outline-none focus:ring-transparent text-base" style="border-color: var(--darkbackground);" placeholder="Username" bind:value={username} maxlength="10">
                             <UserCircleSolid slot="left" class="w-5 h-5 text-gray-500 dark:text-gray-400" />
                             <span class="align-middle opacity-50" slot="right" id="usernameinfo"><InfoCircleSolid size="sm" /></span>
                     </Input>
-                    <Popover class="w-64 text-sm font-light" triggeredBy="#usernameinfo" data-popper-placement="left">(optional) username will be used to credit you</Popover>
+                    <Popover class="w-64 text-sm font-light" triggeredBy="#usernameinfo" data-popper-placement="left">(optional) username will appear next to your contribution</Popover>
                 </div>
                 <div class="text-right">
                     <button type="submit" class="py-2 px-3 rounded-lg bg-white outline outline-1 text-base" style="outline-color: rgba(0, 0, 0, 0.15);" on:click={ onSubmit }>
@@ -602,9 +636,35 @@
 </div>
 {/if}
 
+{#if deleteMode}
+<div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+    <div class="w-fit flex flex-col justify-center bg-[var(--white)] px-8 pt-8 pb-6 rounded-lg my-5 max-w-[90%] mx-auto relative gap-2" in:fade={{duration: 200}}>
+        <div class="absolute top-2 right-2">
+            <button class="px-2 py-2 flex items-center justify-center rounded-lg opacity-50" on:click={() => {deleteMode = false}}>
+                <CloseOutline size="xs" />
+            </button>
+        </div>
+        <div class="text-center">Delete <span class="opacity-50">{selectedNode.data.name}</span></div>
+        {#if selectedNode.data.link_text}
+            <div class="text-center mx-auto max-w-fit text-xs">
+                <span class="opacity-50">"{selectedNode.data.link_text}"</span>
+            </div>
+        {/if}
+        <div class="flex flex-row justify-center gap-2">
+            <button class="py-2 px-3 rounded-lg bg-white outline outline-1 text-base" style="outline-color: rgba(0, 0, 0, 0.15);" on:click={() => { deleteMode = false }}>
+                Cancel
+            </button>
+            <button class="py-2 px-3 rounded-lg bg-white outline outline-1 text-base" style="outline-color: rgba(0, 0, 0, 0.15);" on:click={handleRemove}>
+                Delete
+            </button>
+        </div>
+    </div>
+</div>
+{/if}
+
 <div class="tree-container overflow-auto w-[100%] h-[800px] relative bg-[var(--extradarkbackground)]">
     <div class="grid-lines absolute inset-0 pointer-events-none"></div>
-    <div class="tree relative z-1"></div>
+    <div class="tree relative z-1 ml-[2%] sm:ml-[5%] lg:ml-[10%] xl:ml-[15%]"></div>
 </div>
 
 {#if animate}
