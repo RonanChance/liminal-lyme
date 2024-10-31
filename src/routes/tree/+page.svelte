@@ -5,7 +5,7 @@
     import TopBanner from '../../lib/components/TopBanner.svelte';
     import Footer from "../../lib/components/Footer.svelte";
     import PocketBase from 'pocketbase';
-    import { Input, Select, Popover } from 'flowbite-svelte';
+    import { Input, Select, Popover, Spinner } from 'flowbite-svelte';
     import { FileEditSolid, LinkSolid, CloseOutline, UserCircleSolid, InfoCircleSolid } from 'flowbite-svelte-icons';
     import MedicalDisclaimer from "../../lib/components/MedicalDisclaimer.svelte";
     import * as d3 from 'd3';
@@ -19,6 +19,7 @@
     let throwConfetti = false;
     let contributeMode = false;
     let deleteMode = false;
+    let isDeleting = false;
     let selectedNode;
 
     let isDragging = false;
@@ -150,13 +151,23 @@
             alert('Something went wrong. Please try again.');
         }
 
-        console.log("record", record);
         if (record) {
             data.records.push(record);
             addNode(selectedNode.parent, record);
         }
         
         throwConfetti = false;
+    }
+
+    function findNodeById(node, id) {
+        if (node.data.id === id) return node;
+        if (node.children) {
+            for (let child of node.children) {
+                const result = findNodeById(child, id);
+                if (result) return result;
+            }
+        }
+        return null;
     }
 
     function addNode(parentNode, newNodeData) {
@@ -199,15 +210,44 @@
         update(root);
     }
 
-    function findNodeById(node, id) {
-        if (node.data.id === id) return node;
-        if (node.children) {
-            for (let child of node.children) {
-                const result = findNodeById(child, id);
-                if (result) return result;
-            }
+    function removeNode(nodeToRemove) {
+        // Locate the existing node in the hierarchy
+        const parent = nodeToRemove.parent;
+        if (!parent) {
+            isDeleting = deleteMode = false;
+            alert("Node has no parent, cannot remove.");
         }
-        return null;
+
+        // Remove the node from the parent's children array
+        const index = parent.children.indexOf(nodeToRemove);
+        if (index > -1) {
+            parent.children.splice(index, 1);
+        } else {
+            isDeleting = deleteMode = false;
+            alert("Error finding node, refresh and try again.")
+        }
+
+        update(root);
+    }
+
+    async function handleDelete() {
+        isDeleting = true;
+        const response = await fetch('/tree/deleteNode', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({"nodeId": selectedNode.data.id})
+            });
+
+        const result = await response.json();
+        if (result.success) {
+            removeNode(selectedNode);
+        } else {
+            isDeleting = deleteMode = false;
+            alert("Error deleting, plese refresh and try again.");
+        }
+        isDeleting = deleteMode = false;
     }
 
     function collapse(d) {
@@ -226,12 +266,11 @@
     }
 
     function toggle(d) {
-        console.log(d);
+        // console.log(d);
         if (d.data.isDummy){
             selectedNode = d;
             contributeType = '';
             contributeMode = true;
-            console.log(d);
         } else {
             if (d.children) {
                 d._children = d.children;
@@ -240,15 +279,6 @@
                 d.children = d._children;
                 d._children = null;
             }
-        }
-    }
-
-    function handleRemove(node) {
-        try {
-            console.log(node.data.id)
-        } catch (e) {
-            deleteMode = false;
-            alert("Something went wrong when attempting to delete the node, please refresh your browser.")
         }
     }
 
@@ -318,7 +348,7 @@
             .html(d => { return d.data.username ? `\u{1F464} ${d.data.username}` : ''; })
             .attr('class', 'username-text') // Add a different class
             .style('fill', 'gray') // Optional styling for differentiation
-            .style('font-size', '9pt')
+            .style('font-size', '6pt')
             .style('fill-opacity', 0.5); // Set opacity to 1 to ensure visibility
 
         nodeEnter.each(function(d) {
@@ -654,9 +684,13 @@
             <button class="py-2 px-3 rounded-lg bg-white outline outline-1 text-base" style="outline-color: rgba(0, 0, 0, 0.15);" on:click={() => { deleteMode = false }}>
                 Cancel
             </button>
-            <button class="py-2 px-3 rounded-lg bg-white outline outline-1 text-base" style="outline-color: rgba(0, 0, 0, 0.15);" on:click={handleRemove}>
-                Delete
-            </button>
+            {#if !isDeleting}
+                <button class="py-2 px-3 rounded-lg bg-white outline outline-1 text-base" style="outline-color: rgba(0, 0, 0, 0.15);" on:click={handleDelete}>
+                    Delete
+                </button>
+            {:else}
+                <Spinner color="green" />
+            {/if}
         </div>
     </div>
 </div>
