@@ -33,6 +33,7 @@ https://github.com/user-attachments/assets/e29782f7-e702-432a-bee2-912879760e5e
 - **Backend**: [Node.js](https://nodejs.org/)
 - **Database**: [PocketBase (SQLite)](https://pocketbase.io)
 - **Hosting**: [DigitalOcean Droplet](https://digitalocean.com)
+- **Alerts**: [Telegram Bot](https://telegram.org)
 
 ### How to Host Locally
 

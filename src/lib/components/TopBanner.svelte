@@ -11,7 +11,7 @@
   
   onMount(() => {
     isStandAlone = window.navigator.standalone || false;
-    console.log(selected);
+    // console.log(selected);
   });
 
   function changeSelected(Destination) {
