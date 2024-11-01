@@ -4,7 +4,6 @@
     import { Confetti } from "svelte-confetti";
     import TopBanner from '../../lib/components/TopBanner.svelte';
     import Footer from "../../lib/components/Footer.svelte";
-    import PocketBase from 'pocketbase';
     import { Input, Select, Popover, Spinner } from 'flowbite-svelte';
     import { FileEditSolid, LinkSolid, CloseOutline, UserCircleSolid, InfoCircleSolid } from 'flowbite-svelte-icons';
     import MedicalDisclaimer from "../../lib/components/MedicalDisclaimer.svelte";
@@ -128,8 +127,6 @@
             return;
         }
 
-        const pb = new PocketBase("https://pb.liminallyme.com");
-
         const createRecord = {
             "relation": [selectedNode.parent.data.id],
             "name": contributeType === "link" ? category : suggestion.trim(),
@@ -139,24 +136,32 @@
             "username": username.trim() || null,
             "verified": false
         };
-        
-        let record;
+
         throwConfetti = true;
-        try {
-            record = await pb.collection('tree').create(createRecord);
+
+        const response = await fetch('/tree/addNode', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({"record": createRecord})
+            });
+
+        const result = await response.json();
+        console.log(result);
+
+        if (result.success) {
             alert('Thank you for contributing \u{1F389}\n\nCheck the tree to see your addition!\n\nNew additions can be removed by you or the community until verified by an admin.');
-            contributeMode = false;
+            data.records.push(result.record);
+            addNode(selectedNode.parent, result.record);
             suggestion = category = link_text = link_url = username = "";
-        } catch (error) {
-            alert('Something went wrong. Please try again.');
+        } else {
+            alert('Something went wrong. Please refresh and try again.');
         }
 
-        if (record) {
-            data.records.push(record);
-            addNode(selectedNode.parent, record);
-        }
-        
+        contributeMode = false;
         throwConfetti = false;
+        
     }
 
     function findNodeById(node, id) {
@@ -702,7 +707,7 @@
 </div>
 
 {#if animate}
-    <div class="flex flex-col ml-auto mr-auto pt-10 pb-12 max-w-[90%]" in:fade={{duration: 300}}>
+    <div class="flex flex-col ml-auto mr-auto pt-6 pb-6 max-w-[90%]" in:fade={{duration: 300}}>
         <MedicalDisclaimer />
     </div>
 {/if}
