@@ -4,8 +4,8 @@
     import { Confetti } from "svelte-confetti";
     import TopBanner from '../../lib/components/TopBanner.svelte';
     import Footer from "../../lib/components/Footer.svelte";
-    import { Input, Select, Popover, Spinner } from 'flowbite-svelte';
-    import { FileEditSolid, LinkSolid, CloseOutline, UserCircleSolid, InfoCircleSolid } from 'flowbite-svelte-icons';
+    import { Input, Select, Popover, Spinner, AccordionItem, Accordion} from 'flowbite-svelte';
+    import { FileEditSolid, LinkSolid, CloseOutline, UserCircleSolid, InfoCircleSolid, ChevronDownOutline, ChevronUpOutline } from 'flowbite-svelte-icons';
     import MedicalDisclaimer from "../../lib/components/MedicalDisclaimer.svelte";
     import * as d3 from 'd3';
 
@@ -139,27 +139,33 @@
 
         throwConfetti = true;
 
+        // get path to the contribution
+        let tempNode = selectedNode.parent;
+        let pathString = "";
+        while (tempNode != null) {
+            pathString = tempNode.data.name + ">" + pathString;
+            tempNode = tempNode.parent;
+        }
+
         const response = await fetch('/tree/addNode', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({"record": createRecord})
+                body: JSON.stringify({"record": createRecord, "path": pathString})
             });
 
         const result = await response.json();
-        console.log(result);
 
         if (result.success) {
             alert('Thank you for contributing \u{1F389}\n\nCheck the tree to see your addition!\n\nNew additions can be removed by you or the community until verified by an admin.');
             data.records.push(result.record);
             addNode(selectedNode.parent, result.record);
             suggestion = category = link_text = link_url = username = "";
+            contributeMode = false;
         } else {
             alert('Something went wrong. Please refresh and try again.');
         }
-
-        contributeMode = false;
         throwConfetti = false;
         
     }
@@ -317,7 +323,18 @@
             .attr('x', d => d.children || d._children ? -10 : 10)
             .attr('dy', '.3em')
             .attr('text-anchor', d => d.children || d._children ? 'end' : 'start')
-            .html(d => d.data.name)
+            .html(d => {
+                // Display different icons based on the node name
+                if (d.data.name === "Article") {
+                    return `<tspan class="icon-article">📃</tspan>`;
+                } else if (d.data.name === "Amazon") {
+                    return `<tspan class="icon-amazon">🛒</tspan>`;
+                } else if (d.data.name === "Purchase") {
+                    return `<tspan class="icon-purchase">💰</tspan>`;
+                } else {
+                    return d.data.name;
+                }
+            })
             .attr('class', 'name-text') // Add a unique class
             .style('fill-opacity', 1) // Set opacity to 1 to ensure visibility
             .attr('height', 30);
@@ -347,8 +364,8 @@
             
         // Append username text if available
         nodeEnter.append('text')
-            .attr('x', d => d.children || d._children ? -10 : 10)
-            .attr('dy', '1.9em') // Position the username below the name
+            .attr('x', d => d.children || d._children ? -10 : 33)
+            .attr('dy', '2em') // Position the username below the name
             .attr('text-anchor', d => d.children || d._children ? 'end' : 'start')
             .html(d => { return d.data.username ? `\u{1F464} ${d.data.username}` : ''; })
             .attr('class', 'username-text') // Add a different class
@@ -377,10 +394,8 @@
                     .attr('height', 30)
                     .attr('color', '#f8f8f895')
                     .append('xhtml:span')
-                    .html(`:
-                        <a href="${d.data.link.startsWith('http') ? d.data.link : `https://${d.data.link}`}" target="_blank" class="pl-1 underline" style="text-decoration: underline;">
-                            ${linkText}
-                        </a>
+                    .html(`<a href="${d.data.link.startsWith('http') ? d.data.link : `https://${d.data.link}`}" target="_blank" class="pl-1 underline" style="text-decoration: underline;">
+                            ${linkText}</a>
                     `);
             }
         });
@@ -610,7 +625,7 @@
                         name="category"
                         items={category_options}
                         type="text"
-                        class="focus:outline-none focus:ring-transparent text-opacity-60 text-base w-full"
+                        class="focus:outline-none focus:ring-transparent text-base w-full {category ? "" : "text-opacity-60"}"
                         style="border-color: var(--darkbackground);"
                         placeholder="Select Type"
                         bind:value={category}
@@ -623,7 +638,7 @@
                 <!-- LINK URL -->
                 <div class="text-[var(--darkbackground)] w-full text-lg text-center items-center flex flex-row gap-2 scroll-m-[4rem]" id="link_url"> 
                     <!-- {selectedNode.parent.data.name} -->
-                    <Input name="link_url" type="text" class="focus:outline-none focus:ring-transparent text-base" style="border-color: var(--darkbackground);" placeholder="Link (URL)" bind:value={link_url} required maxlength="175">
+                    <Input name="link_url" type="text" class="focus:outline-none focus:ring-transparent text-base" style="border-color: var(--darkbackground);" placeholder="Link (URL)" bind:value={link_url} required maxlength="200">
                             <LinkSolid slot="left" class="w-5 h-5 text-gray-500 dark:text-gray-400" />
                             <span class="text-red-600 text-2xl align-middle {link_url ? "hidden" : ""}" slot="right">*</span>
                     </Input>
@@ -703,11 +718,47 @@
 
 <div class="tree-container overflow-auto w-[100%] h-[800px] relative bg-[var(--extradarkbackground)]">
     <div class="grid-lines absolute inset-0 pointer-events-none"></div>
-    <div class="tree relative z-1 ml-[2%] sm:ml-[5%] lg:ml-[10%] xl:ml-[15%]"></div>
+    <div class="tree relative z-1 ml-[1%] sm:ml-[3%] lg:ml-[5%] xl:ml-[10%]"></div>
 </div>
 
 {#if animate}
-    <div class="flex flex-col ml-auto mr-auto pt-6 pb-6 max-w-[90%]" in:fade={{duration: 300}}>
+    <div class="pt-6 pb-6 mx-auto max-w-[90%] sm:max-w-[50%]">
+        <Accordion flush >
+            <AccordionItem transitionType="slide" transitionParams={{ duration: 250 }}>
+                <span slot="header" class="text-2xl text-[var(--white)] mx-auto">How to Contribute?</span>
+                <div slot="arrowup"><ChevronUpOutline class="h-4 w-4 -me-0.5 text-white" /></div>
+                  <span slot="arrowdown"><ChevronDownOutline class="h-4 w-4 -me-0.5 text-white" /></span>
+                <p class="mb-2">
+                    1. Find a location in the tree where your contribution fits (try to be mindful of the categories).<br /><br />
+                    2. Click the dotted line "Add" button.<br /><br />
+                    3. Select Node or URL, fill out the necessary information.<br /><br />
+                    4. Submit your recommendation!
+                </p>
+            </AccordionItem>
+            <AccordionItem transitionType="slide" transitionParams={{ duration: 250 }}>
+                <span slot="header" class="text-2xl text-[var(--white)] mx-auto">What is Allowed?</span>
+                <div slot="arrowup"><ChevronUpOutline class="h-4 w-4 -me-0.5 text-white" /></div>
+                  <span slot="arrowdown"><ChevronDownOutline class="h-4 w-4 -me-0.5 text-white" /></span>
+                <p class="mb-2">
+                    The best contributions are treatments you have personal experience with.<br /><br />
+                    The first categories (Pharmacological, Dietary Supplements, Detox & Herx) are for single active ingredients.<br /><br />
+                    Blended products, mixes by your physician, and other less commonly established ideas need to be placed in the Brands & Blends, or Miscellaneous category.
+                </p>
+            </AccordionItem>
+            <AccordionItem transitionType="slide" transitionParams={{ duration: 250 }}>
+                <span slot="header" class="text-2xl text-[var(--white)] mx-auto">Can't Find Contribution?</span>
+                <div slot="arrowup"><ChevronUpOutline class="h-4 w-4 -me-0.5 text-white" /></div>
+                  <span slot="arrowdown"><ChevronDownOutline class="h-4 w-4 -me-0.5 text-white" /></span>
+                <p class="mb-2">
+                    Your contribution was likely moved!<br /><br />
+                    I try my best not to delete community additions, but I do recategorize them.<br /><br />
+                    Take a look around & see if it's in a new location.<br /><br />
+                    In the future, I'll add a way to search the contents of the tree.
+                </p>
+            </AccordionItem>
+        </Accordion>
+    </div>
+    <div class="flex flex-col ml-auto mr-auto pt-6 pb-6 max-w-[90%] opacity-30" in:fade={{duration: 300}}>
         <MedicalDisclaimer />
     </div>
 {/if}
