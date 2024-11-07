@@ -544,7 +544,7 @@
 
 {#if contributeMode}
 <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-    <div class="w-full flex justify-center bg-[var(--white)] px-4 py-4 rounded-lg my-5 max-w-[90%] sm:max-w-[60%] 2xl:max-w-[50%] mx-auto relative" in:fade={{duration: 200}}>
+    <div class="w-full flex justify-center bg-[var(--white)] px-4 py-4 rounded-lg my-5 max-w-[90%] sm:max-w-[60%] 2xl:max-w-[50%] mx-auto relative">
         <div class="absolute top-2 right-2">
             <button class="px-2 py-2 tems-center justify-center rounded-lg opacity-50" on:click={() => {contributeMode = false}}><CloseOutline size="xs" /></button>
         </div>
@@ -691,7 +691,7 @@
 
 {#if deleteMode}
 <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-    <div class="w-fit flex flex-col justify-center bg-[var(--white)] px-8 pt-8 pb-6 rounded-lg my-5 max-w-[90%] mx-auto relative gap-2" in:fade={{duration: 200}}>
+    <div class="w-fit flex flex-col justify-center bg-[var(--white)] px-8 pt-8 pb-6 rounded-lg my-5 max-w-[90%] mx-auto relative gap-2">
         <div class="absolute top-2 right-2">
             <button class="px-2 py-2 flex items-center justify-center rounded-lg opacity-50" on:click={() => {deleteMode = false}}>
                 <CloseOutline size="xs" />
@@ -725,48 +725,48 @@
 </div>
 
 {#if animate}
-    <div class="pt-6 pb-6 mx-auto max-w-[90%] sm:max-w-[50%]">
-        <Accordion flush >
-            <AccordionItem transitionType="slide" transitionParams={{ duration: 250 }}>
-                <span slot="header" class="text-2xl text-[var(--white)] mx-auto">How to Contribute?</span>
-                <div slot="arrowup"><ChevronUpOutline class="h-4 w-4 -me-0.5 text-white" /></div>
-                  <span slot="arrowdown"><ChevronDownOutline class="h-4 w-4 -me-0.5 text-white" /></span>
-                <p class="mb-2">
-                    1. Find a location in the tree where your contribution fits (try to be mindful of the categories).<br /><br />
-                    2. Click the dotted line "Add" button.<br /><br />
-                    3. Select Node or URL, fill out the necessary information.<br /><br />
-                    4. Submit your recommendation!
-                </p>
-            </AccordionItem>
-            <AccordionItem transitionType="slide" transitionParams={{ duration: 250 }}>
-                <span slot="header" class="text-2xl text-[var(--white)] mx-auto">What is Allowed?</span>
-                <div slot="arrowup"><ChevronUpOutline class="h-4 w-4 -me-0.5 text-white" /></div>
-                  <span slot="arrowdown"><ChevronDownOutline class="h-4 w-4 -me-0.5 text-white" /></span>
-                <p class="mb-2">
-                    The best contributions are treatments you have personal experience with.<br /><br />
-                    The first categories (Pharmacological, Dietary Supplements, Detox & Herx) are for single active ingredients.<br /><br />
-                    Blended products, mixes by your physician, and other less commonly established ideas need to be placed in the Brands & Blends, or Miscellaneous category.
-                </p>
-            </AccordionItem>
-            <AccordionItem transitionType="slide" transitionParams={{ duration: 250 }}>
-                <span slot="header" class="text-2xl text-[var(--white)] mx-auto">Can't Find Contribution?</span>
-                <div slot="arrowup"><ChevronUpOutline class="h-4 w-4 -me-0.5 text-white" /></div>
-                  <span slot="arrowdown"><ChevronDownOutline class="h-4 w-4 -me-0.5 text-white" /></span>
-                <p class="mb-2">
-                    Your contribution was likely moved!<br /><br />
-                    I try my best not to delete community additions, but I do recategorize them.<br /><br />
-                    Take a look around & see if it's in a new location.<br /><br />
-                    In the future, I'll add a way to search the contents of the tree.
-                </p>
-            </AccordionItem>
-        </Accordion>
-    </div>
-    <div class="flex flex-col ml-auto mr-auto pt-6 pb-6 max-w-[90%] opacity-30" in:fade={{duration: 300}}>
-        <MedicalDisclaimer />
-    </div>
-{/if}
+<div class="pt-6 pb-6 mx-auto max-w-[90%] sm:max-w-[50%]" in:fade={{duration: 300}}>
+    <Accordion flush >
+        <AccordionItem>
+            <span slot="header" class="text-2xl text-[var(--white)] mx-auto">How to Contribute?</span>
+            <div slot="arrowup"><ChevronUpOutline class="h-4 w-4 -me-0.5 text-white" /></div>
+                <span slot="arrowdown"><ChevronDownOutline class="h-4 w-4 -me-0.5 text-white" /></span>
+            <p class="mb-2">
+                1. Find a location in the tree where your contribution fits (try to be mindful of the categories).<br /><br />
+                2. Click the dotted line "Add" button.<br /><br />
+                3. Select Node or URL, fill out the necessary information.<br /><br />
+                4. Submit your recommendation!
+            </p>
+        </AccordionItem>
+        <AccordionItem>
+            <span slot="header" class="text-2xl text-[var(--white)] mx-auto">What is Allowed?</span>
+            <div slot="arrowup"><ChevronUpOutline class="h-4 w-4 -me-0.5 text-white" /></div>
+                <span slot="arrowdown"><ChevronDownOutline class="h-4 w-4 -me-0.5 text-white" /></span>
+            <p class="mb-2">
+                The best contributions are treatments you have personal experience with.<br /><br />
+                The first categories (Pharmacological, Dietary Supplements, Detox & Herx) are for single active ingredients.<br /><br />
+                Blended products, mixes by your physician, and other less commonly established ideas need to be placed in the Brands & Blends, or Miscellaneous category.
+            </p>
+        </AccordionItem>
+        <AccordionItem>
+            <span slot="header" class="text-2xl text-[var(--white)] mx-auto">Can't Find Contribution?</span>
+            <div slot="arrowup"><ChevronUpOutline class="h-4 w-4 -me-0.5 text-white" /></div>
+                <span slot="arrowdown"><ChevronDownOutline class="h-4 w-4 -me-0.5 text-white" /></span>
+            <p class="mb-2">
+                Your contribution was likely moved!<br /><br />
+                I try my best not to delete community additions, but I do recategorize them.<br /><br />
+                Take a look around & see if it's in a new location.<br /><br />
+                In the future, I'll add a way to search the contents of the tree.
+            </p>
+        </AccordionItem>
+    </Accordion>
+</div>
+<div class="flex flex-col ml-auto mr-auto pt-6 pb-6 max-w-[90%] opacity-40">
+    <MedicalDisclaimer />
+</div>
 
 <Footer />
+{/if}
 
 <style>
     .tree-container {
