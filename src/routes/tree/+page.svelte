@@ -35,7 +35,8 @@
     const category_options = [
         { value: 'Amazon', name: 'Amazon Link' },
         { value: 'Article', name: 'Article Link' },
-        { value: 'Purchase', name: 'Purchase Link' }
+        { value: 'Purchase', name: 'Purchase Link' },
+        { value: 'Website', name: 'Website Link' }
     ];
 
     let scale = 1; // Scale factor for zoom
@@ -331,6 +332,8 @@
                     return `<tspan class="icon-amazon">🛒</tspan>`;
                 } else if (d.data.name === "Purchase") {
                     return `<tspan class="icon-purchase">💰</tspan>`;
+                } else if (d.data.name === "Website") {
+                    return `<tspan class="icon-purchase">🔗</tspan>`;
                 } else {
                     return d.data.name;
                 }
