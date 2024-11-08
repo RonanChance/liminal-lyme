@@ -4,7 +4,7 @@ export function findNodeByIdIgnoringHidden(node, id) {
     if (node.data.id === id) return node;
     if (node.children) {
         for (let child of node.children) {
-            const result = findNodeById(child, id);
+            const result = findNodeByIdIgnoringHidden(child, id);
             if (result) return result;
         }
     }

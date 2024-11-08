@@ -3,10 +3,13 @@
     import { fade } from 'svelte/transition';
     import { Confetti } from "svelte-confetti";
     import TopBanner from '../../lib/components/TopBanner.svelte';
-    import Footer from "../../lib/components/Footer.svelte";
+    import Footer from '../../lib/components/Footer.svelte';
     import { Input, Select, Popover, Spinner, AccordionItem, Accordion} from 'flowbite-svelte';
     import { FileEditSolid, LinkSolid, CloseOutline, UserCircleSolid, InfoCircleSolid, ChevronDownOutline, ChevronUpOutline, SearchOutline } from 'flowbite-svelte-icons';
-    import MedicalDisclaimer from "../../lib/components/MedicalDisclaimer.svelte";
+    import MedicalDisclaimer from '../../lib/components/MedicalDisclaimer.svelte';
+    import { isValidUrl } from '../../lib/utils/validations.js';
+    import { initTouchEvents, initDragging } from '../../lib/utils/touchEvents.js';
+    import { buildNestedRecords, findNodeByIdIgnoringHidden, findNodeById, collapse, expand } from '../../lib/utils/treeUtils';
     import * as d3 from 'd3';
 
     /** @type {import('./$types').PageData} */
@@ -20,9 +23,6 @@
     let deleteMode = false;
     let isDeleting = false;
     let selectedNode;
-
-    let isDragging = false;
-    let startX, startY;
 
     let contributeType = 'treatment';
     let suggestion = "";
@@ -39,11 +39,6 @@
         { value: 'Website', name: 'Website Link' }
     ];
 
-    let scale = 1; // Scale factor for zoom
-    const minScale = 0.5; // Minimum zoom level
-    const maxScale = 3; // Maximum zoom level
-    let initialDistance = null; // Distance between touch points
-
     let searchResults = [];
     let searchQuery = "";
 
@@ -53,84 +48,17 @@
     const duration = 600;
     let recordsTree = null;
 
+    let container;
+
     onMount(async () => {
         animate = true
         recordsTree = buildNestedRecords(data.records)
         initTree();
-        initDragging();
-        initTouchEvents(); // pinch-to-zoom
+        initDragging(container);
+        initTouchEvents(container); // pinch-to-zoom
     });
 
-    function initTouchEvents() {
-        const container = document.querySelector('.tree');
-
-        container.addEventListener('touchstart', (e) => {
-            if (e.touches.length === 2) {
-                // Calculate initial distance between touches
-                initialDistance = getDistance(e.touches[0], e.touches[1]);
-            }
-        });
-
-        container.addEventListener('touchmove', (e) => {
-            if (e.touches.length === 2) {
-                e.preventDefault(); // Prevent default behavior to avoid scrolling
-                const newDistance = getDistance(e.touches[0], e.touches[1]);
-                const scaleChange = newDistance / initialDistance;
-
-                scale = Math.min(maxScale, Math.max(minScale, scale * scaleChange));
-                container.style.transform = `scale(${scale})`;
-                initialDistance = newDistance; // Update initial distance for next move
-            }
-        });
-
-        container.addEventListener('touchend', () => {
-            initialDistance = null; // Reset distance on touch end
-        });
-    }
-
-    // Calculate the distance between two touch points
-    function getDistance(touch1, touch2) {
-        const dx = touch1.clientX - touch2.clientX;
-        const dy = touch1.clientY - touch2.clientY;
-        return Math.sqrt(dx * dx + dy * dy);
-    }
-
-    function isValidUrl(str) {
-        try {
-            const url = new URL(str.includes("://") ? str : `https://${str}`); // This will throw if `str` is not a valid URL
-            return true;
-        } catch (_) {
-            return false;
-        }
-    }
-
-    function initDragging() {
-        const container = document.querySelector('.tree');
-
-        container.addEventListener('mousedown', (e) => {
-            isDragging = true;
-            startX = e.clientX;
-            startY = e.clientY;
-        });
-
-        document.addEventListener('mousemove', (e) => {
-            if (!isDragging) return;
-            const dx = e.clientX - startX;
-            const dy = e.clientY - startY;
-
-            const currentTransform = container.style.transform || 'translate(0, 0)';
-            const matrix = new WebKitCSSMatrix(currentTransform);
-            container.style.transform = `translate(${matrix.m41 + dx}px, ${matrix.m42 + dy}px)`;
-
-            startX = e.clientX;
-            startY = e.clientY;
-        });
-
-        document.addEventListener('mouseup', () => {
-            isDragging = false;
-            container.style.cursor = 'grab';
-        });
-    }
+    // ADDITIONS
 
     async function onSubmit() {
 
@@ -178,7 +106,7 @@
         if (result.success) {
             alert('Thank you for contributing \u{1F389}\n\nCheck the tree to see your addition!\n\nNew additions can be removed by you or the community until verified by an admin.');
             data.records.push(result.record);
-            addNode(selectedNode.parent, result.record);
+            addNodeToLocalTree(selectedNode.parent, result.record);
             suggestion = category = link_text = link_url = username = "";
             contributeMode = false;
         } else {
@@ -188,31 +116,7 @@
         
     }
 
-    function findNodeByIdIgnoringHidden(node, id) {
-        if (node.data.id === id) return node;
-        if (node.children) {
-            for (let child of node.children) {
-                const result = findNodeByIdIgnoringHidden(child, id);
-                if (result) return result;
-            }
-        }
-        return null;
-    }
-
-    function findNodeById(node, id) {
-        if (node.data.id === id) return node;
-        const children = node.children || node._children;
-
-        if (children) {
-            for (let child of children) {
-                const result = findNodeById(child, id);
-                if (result) return result;
-            }
-        }
-        return null;
-    }
-
-    function addNode(parentNode, newNodeData) {
+    function addNodeToLocalTree(parentNode, newNodeData) {
         // Locate the existing node in the hierarchy
         const parent = findNodeByIdIgnoringHidden(root, parentNode.data.id);
 
@@ -252,7 +156,29 @@
         update(root);
     }
 
-    function removeNode(nodeToRemove) {
+    //  DELETIONS
+
+    async function handleDelete() {
+        isDeleting = true;
+        const response = await fetch('/tree/deleteNode', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({"nodeId": selectedNode.data.id})
+            });
+
+        const result = await response.json();
+        if (result.success) {
+            removeNodeFromLocalTree(selectedNode);
+        } else {
+            isDeleting = deleteMode = false;
+            alert("Error deleting, plese refresh and try again.");
+        }
+        isDeleting = deleteMode = false;
+    }
+
+    function removeNodeFromLocalTree(nodeToRemove) {
         // Locate the existing node in the hierarchy
         const parent = nodeToRemove.parent;
         if (!parent) {
@@ -270,58 +196,6 @@
         }
 
         update(root);
-    }
-
-    async function handleDelete() {
-        isDeleting = true;
-        const response = await fetch('/tree/deleteNode', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({"nodeId": selectedNode.data.id})
-            });
-
-        const result = await response.json();
-        if (result.success) {
-            removeNode(selectedNode);
-        } else {
-            isDeleting = deleteMode = false;
-            alert("Error deleting, plese refresh and try again.");
-        }
-        isDeleting = deleteMode = false;
-    }
-
-    function collapse(d) {
-        if (d.children && d.depth !== 0) {
-            d._children = d.children;
-            d._children.forEach(collapse);
-            d.children = null;
-        }
-    }
-
-    function expand(d) {
-        if (d._children) {
-            d.children = d._children;
-            d._children = null;
-        }
-    }
-
-    function toggle(d) {
-        // console.log(d);
-        if (d.data.isDummy){
-            selectedNode = d;
-            contributeType = '';
-            contributeMode = true;
-        } else {
-            if (d.children) {
-                d._children = d.children;
-                d.children = null;
-            } else {
-                d.children = d._children;
-                d._children = null;
-            }
-        }
     }
 
     function update(source) {
@@ -514,45 +388,23 @@
         update(root);
     }
 
-    function buildNestedRecords(records) {
-        // Map each node by its ID for easy access
-        const nodeMap = {};
-        records.forEach(record => {
-            nodeMap[record.id] = { ...record, children: [] };
-        });
+    // SUPPORTING FUNCTIONS
 
-        let root = null;
-
-        // Build the tree structure by linking children to parents
-        records.forEach(record => {
-            // Check if `relation` is empty, single, or an array
-            if (!record.relation || record.relation.length === 0) {
-                // Set as root node if it has no parent relations
-                root = nodeMap[record.id];
-            } else if (Array.isArray(record.relation)) {
-                // If multiple parents, add this node to each parent’s children
-                record.relation.forEach(parentId => {
-                    const parent = nodeMap[parentId];
-                    if (parent) {
-                        parent.children.push(nodeMap[record.id]);
-                    }
-                });
+    function toggle(d) {
+        // console.log(d);
+        if (d.data.isDummy){
+            selectedNode = d;
+            contributeType = '';
+            contributeMode = true;
+        } else {
+            if (d.children) {
+                d._children = d.children;
+                d.children = null;
             } else {
-                // If single relation
-                const parent = nodeMap[record.relation];
-                if (parent) {
-                    parent.children.push(nodeMap[record.id]);
-                }
+                d.children = d._children;
+                d._children = null;
             }
-        });
-
-        Object.values(nodeMap).forEach(node => {
-            if (node !== root && node.children.length >= 0 && !node.children.some(child => child.isDummy) && !node.link) {
-                node.children.push({ name: '<tspan class="opacity-50">Add <tspan style="font-size: 1.2em;">⊕</tspan></tspan>', isDummy: true, verified: true, parent: node });
-            }
-        });
-        
-        return root;
+        }
     }
 
     function openTreeById(id) {
@@ -768,7 +620,7 @@
 
 <div class="tree-container overflow-auto w-[100%] h-[800px] relative bg-[var(--extradarkbackground)]">
     <div class="grid-lines absolute inset-0 pointer-events-none"></div>
-    <div class="tree relative z-1 ml-[1%] sm:ml-[3%] lg:ml-[5%] xl:ml-[10%]"></div>
+    <div class="tree relative z-1 ml-[1%] sm:ml-[3%] lg:ml-[5%] xl:ml-[10%]" bind:this={container}></div>
 </div>
 
 {#if animate}
