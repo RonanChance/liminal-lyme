@@ -118,7 +118,7 @@
 
     function addNodeToLocalTree(parentNode, newNodeData) {
         // Locate the existing node in the hierarchy
-        const parent = findNodeByIdIgnoringHidden(root, parentNode.data.id);
+        const parent = findNodeByIdIgnoringHidden(root, parentNode.id);
 
         // Create a new node with D3 hierarchy structure, use parent x,y 
         // which will be adjusted in the update function
@@ -391,7 +391,6 @@
     // SUPPORTING FUNCTIONS
 
     function toggle(d) {
-        // console.log(d);
         if (d.data.isDummy){
             selectedNode = d;
             contributeType = '';
@@ -422,7 +421,6 @@
             if (element.name.toLowerCase().includes(searchQuery.toLowerCase())) {
                 // make sure it's not "Amazon", "Article", etc.
                 if (!category_options.some(option => option.value === element.name)){
-                    console.log(element);
                     searchResults.push({id: element.id, name: element.name})
                 }
             }

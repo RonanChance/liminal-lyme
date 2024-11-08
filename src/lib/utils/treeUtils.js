@@ -1,7 +1,7 @@
 // Tree search functions
 
 export function findNodeByIdIgnoringHidden(node, id) {
-    if (node.data.id === id) return node;
+    if (node.id === id) return node;
     if (node.children) {
         for (let child of node.children) {
             const result = findNodeByIdIgnoringHidden(child, id);
