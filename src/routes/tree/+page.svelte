@@ -5,7 +5,7 @@
     import TopBanner from '../../lib/components/TopBanner.svelte';
     import Footer from "../../lib/components/Footer.svelte";
     import { Input, Select, Popover, Spinner, AccordionItem, Accordion} from 'flowbite-svelte';
-    import { FileEditSolid, LinkSolid, CloseOutline, UserCircleSolid, InfoCircleSolid, ChevronDownOutline, ChevronUpOutline } from 'flowbite-svelte-icons';
+    import { FileEditSolid, LinkSolid, CloseOutline, UserCircleSolid, InfoCircleSolid, ChevronDownOutline, ChevronUpOutline, SearchOutline } from 'flowbite-svelte-icons';
     import MedicalDisclaimer from "../../lib/components/MedicalDisclaimer.svelte";
     import * as d3 from 'd3';
 
@@ -43,6 +43,23 @@
     const minScale = 0.5; // Minimum zoom level
     const maxScale = 3; // Maximum zoom level
     let initialDistance = null; // Distance between touch points
+
+    let searchResults = [];
+    let searchQuery = "";
+
+    let width = 2560;
+    let height = 800;
+    let i = 0;
+    const duration = 600;
+    let recordsTree = null;
+
+    onMount(async () => {
+        animate = true
+        recordsTree = buildNestedRecords(data.records)
+        initTree();
+        initDragging();
+        initTouchEvents(); // pinch-to-zoom
+    });
 
     function initTouchEvents() {
         const container = document.querySelector('.tree');
@@ -171,10 +188,23 @@
         
     }
 
-    function findNodeById(node, id) {
+    function findNodeByIdIgnoringHidden(node, id) {
         if (node.data.id === id) return node;
         if (node.children) {
             for (let child of node.children) {
+                const result = findNodeByIdIgnoringHidden(child, id);
+                if (result) return result;
+            }
+        }
+        return null;
+    }
+
+    function findNodeById(node, id) {
+        if (node.data.id === id) return node;
+        const children = node.children || node._children;
+
+        if (children) {
+            for (let child of children) {
                 const result = findNodeById(child, id);
                 if (result) return result;
             }
@@ -184,7 +214,7 @@
 
     function addNode(parentNode, newNodeData) {
         // Locate the existing node in the hierarchy
-        const parent = findNodeById(root, parentNode.data.id);
+        const parent = findNodeByIdIgnoringHidden(root, parentNode.data.id);
 
         // Create a new node with D3 hierarchy structure, use parent x,y 
         // which will be adjusted in the update function
@@ -525,19 +555,36 @@
         return root;
     }
 
-    let width = 2560;
-    let height = 800;
-    let i = 0;
-    const duration = 600;
-    let recordsTree = null;
+    function openTreeById(id) {
+        let tempNode = findNodeById(root, id);
+        while (tempNode != null) {
+            expand(tempNode);
+            tempNode = tempNode.parent;
+        }
+        update(root);
+    }
 
-    onMount(async () => {
-        animate = true
-        recordsTree = buildNestedRecords(data.records)
-        initTree();
-        initDragging();
-        initTouchEvents(); // pinch-to-zoom
-    });
+    function findItemsByString() {
+        searchResults = [];
+        data.records.forEach(element => {
+            if (element.name.toLowerCase().includes(searchQuery.toLowerCase())) {
+                // make sure it's not "Amazon", "Article", etc.
+                if (!category_options.some(option => option.value === element.name)){
+                    console.log(element);
+                    searchResults.push({id: element.id, name: element.name})
+                }
+            }
+        });
+    }
+    
+    // Reactive statement that searches when searchQuery changes
+    $: {
+        if (searchQuery.length >= 3) {
+            findItemsByString();
+        } else {
+            searchResults = [];
+        }
+    }
 </script>
 
 <TopBanner />
@@ -611,7 +658,7 @@
                 <div class="flex flex-row justify-center">
                     <div class="text-[var(--darkbackground)] w-full text-lg text-center items-center flex flex-row gap-2 scroll-m-[4rem]" id="contribute"> 
                         <!-- {selectedNode.parent.data.name} -->
-                        <Input name="name" type="text" class="focus:outline-none focus:ring-transparent text-base" style="border-color: var(--darkbackground);" placeholder="Treatment/Category" bind:value={suggestion} required maxlength="75">
+                        <Input name="name" type="text" class="focus:outline-none focus:ring-transparent text-base" style="border-color: var(--darkbackground);" placeholder="Treatment/Category" bind:value={suggestion} required maxlength="75" autocomplete="off">
                                 <FileEditSolid slot="left" class="w-5 h-5 text-gray-500 dark:text-gray-400" />
                                 <span class="text-red-600 text-2xl align-middle {suggestion ? "hidden" : ""}" slot="right">*</span>
                         </Input>
@@ -641,7 +688,7 @@
                 <!-- LINK URL -->
                 <div class="text-[var(--darkbackground)] w-full text-lg text-center items-center flex flex-row gap-2 scroll-m-[4rem]" id="link_url"> 
                     <!-- {selectedNode.parent.data.name} -->
-                    <Input name="link_url" type="text" class="focus:outline-none focus:ring-transparent text-base" style="border-color: var(--darkbackground);" placeholder="Link (URL)" bind:value={link_url} required maxlength="200">
+                    <Input name="link_url" type="text" class="focus:outline-none focus:ring-transparent text-base" style="border-color: var(--darkbackground);" placeholder="Link (URL)" bind:value={link_url} required maxlength="200" autocomplete="off">
                             <LinkSolid slot="left" class="w-5 h-5 text-gray-500 dark:text-gray-400" />
                             <span class="text-red-600 text-2xl align-middle {link_url ? "hidden" : ""}" slot="right">*</span>
                     </Input>
@@ -650,7 +697,7 @@
                 <!-- LINK TEXT -->
                     <div class="text-[var(--darkbackground)] w-full text-lg text-center items-center flex flex-row gap-2 scroll-m-[4rem]" id="link_text"> 
                         <!-- {selectedNode.parent.data.name} -->
-                        <Input name="link_text" type="text" class="focus:outline-none focus:ring-transparent text-base" style="border-color: var(--darkbackground);" placeholder="Link Description" bind:value={link_text} required maxlength="175">
+                        <Input name="link_text" type="text" class="focus:outline-none focus:ring-transparent text-base" style="border-color: var(--darkbackground);" placeholder="Link Description" bind:value={link_text} required maxlength="175" autocomplete="off">
                                 <FileEditSolid slot="left" class="w-5 h-5 text-gray-500 dark:text-gray-400" />
                                 <span class="text-red-600 text-2xl align-middle {link_text ? "hidden" : ""}" slot="right">*</span>
                         </Input>
@@ -671,7 +718,7 @@
 
             {#if contributeType}
                 <div class="text-[var(--darkbackground)] w-full text-lg text-center items-center flex flex-row gap-2 scroll-m-[4rem]" id="username"> 
-                    <Input name="link_url" type="text" class="focus:outline-none focus:ring-transparent text-base" style="border-color: var(--darkbackground);" placeholder="Username" bind:value={username} maxlength="10">
+                    <Input name="link_url" type="text" class="focus:outline-none focus:ring-transparent text-base" style="border-color: var(--darkbackground);" placeholder="Username" bind:value={username} maxlength="10" autocomplete="off">
                             <UserCircleSolid slot="left" class="w-5 h-5 text-gray-500 dark:text-gray-400" />
                             <span class="align-middle opacity-50" slot="right" id="usernameinfo"><InfoCircleSolid size="sm" /></span>
                     </Input>
@@ -703,7 +750,7 @@
                 <span class="opacity-50">"{selectedNode.data.link_text}"</span>
             </div>
         {/if}
-        <div class="flex flex-row justify-center gap-2">
+        <div class="flex flex-row justify-center items-center gap-2">
             <button class="py-2 px-3 rounded-lg bg-white outline outline-1 text-base" style="outline-color: rgba(0, 0, 0, 0.15);" on:click={() => { deleteMode = false }}>
                 Cancel
             </button>
@@ -725,42 +772,65 @@
 </div>
 
 {#if animate}
-<div class="pt-6 pb-6 mx-auto max-w-[90%] sm:max-w-[50%]" in:fade={{duration: 300}}>
-    <Accordion flush >
-        <AccordionItem>
-            <span slot="header" class="text-2xl text-[var(--white)] mx-auto">How to Contribute?</span>
-            <div slot="arrowup"><ChevronUpOutline class="h-4 w-4 -me-0.5 text-white" /></div>
-                <span slot="arrowdown"><ChevronDownOutline class="h-4 w-4 -me-0.5 text-white" /></span>
-            <p class="mb-2">
-                1. Find a location in the tree where your contribution fits (try to be mindful of the categories).<br /><br />
-                2. Click the dotted line "Add" button.<br /><br />
-                3. Select Node or URL, fill out the necessary information.<br /><br />
-                4. Submit your recommendation!
-            </p>
-        </AccordionItem>
-        <AccordionItem>
-            <span slot="header" class="text-2xl text-[var(--white)] mx-auto">What is Allowed?</span>
-            <div slot="arrowup"><ChevronUpOutline class="h-4 w-4 -me-0.5 text-white" /></div>
-                <span slot="arrowdown"><ChevronDownOutline class="h-4 w-4 -me-0.5 text-white" /></span>
-            <p class="mb-2">
-                The best contributions are treatments you have personal experience with.<br /><br />
-                The first categories (Pharmacological, Dietary Supplements, Detox & Herx) are for single active ingredients.<br /><br />
-                Blended products, mixes by your physician, and other less commonly established ideas need to be placed in the Brands & Blends, or Miscellaneous category.
-            </p>
-        </AccordionItem>
-        <AccordionItem>
-            <span slot="header" class="text-2xl text-[var(--white)] mx-auto">Can't Find Contribution?</span>
-            <div slot="arrowup"><ChevronUpOutline class="h-4 w-4 -me-0.5 text-white" /></div>
-                <span slot="arrowdown"><ChevronDownOutline class="h-4 w-4 -me-0.5 text-white" /></span>
-            <p class="mb-2">
-                Your contribution was likely moved!<br /><br />
-                I try my best not to delete community additions, but I do recategorize them.<br /><br />
-                Take a look around & see if it's in a new location.<br /><br />
-                In the future, I'll add a way to search the contents of the tree.
-            </p>
-        </AccordionItem>
-    </Accordion>
+<div class="pt-6 pb-6 mx-auto max-w-[90%] sm:max-w-[60%] lg:max-w-[40%] flex flex-col gap-5" in:fade={{duration: 300}}>
+    <div class="w-[100%] sm:max-w-[50%] mx-auto text-[var(--white)]">
+        <div class="flex flex-col">
+            <Input name="name" type="text" class="focus:outline-none focus:ring-transparent text-base" style="border-color: var(--darkbackground);" placeholder="Search Tree" bind:value={searchQuery} autocomplete="off">
+                <SearchOutline slot="left" class="w-5 h-5 text-gray-500 dark:text-gray-400" />
+            </Input>
+        </div>
+        <div class="pt-2 w-[95%] mx-auto">
+            {#if searchResults.length > 0}
+                {#each searchResults as result}
+                    <div class="flex flex-row justify-between pb-1">
+                        {result.name} <button class="underline" on:click={() => {openTreeById(result.id)}}>Open in Tree</button>
+                    </div>
+                {/each}
+            {:else}
+                {#if searchQuery.length >= 3}
+                    No results.
+                {/if}
+            {/if}
+        </div>
+    </div>
+
+    <div>
+        <Accordion flush >
+            <AccordionItem>
+                <span slot="header" class="text-2xl text-[var(--white)] mx-auto">How to Contribute?</span>
+                <div slot="arrowup"><ChevronUpOutline class="h-4 w-4 -me-0.5 text-white" /></div>
+                    <span slot="arrowdown"><ChevronDownOutline class="h-4 w-4 -me-0.5 text-white" /></span>
+                <p class="mb-2">
+                    1. Find a location in the tree where your contribution fits (try to be mindful of the categories).<br /><br />
+                    2. Click the dotted line "Add" button.<br /><br />
+                    3. Select Node or URL, fill out the necessary information.<br /><br />
+                    4. Submit your recommendation!
+                </p>
+            </AccordionItem>
+            <AccordionItem>
+                <span slot="header" class="text-2xl text-[var(--white)] mx-auto">What is Allowed?</span>
+                <div slot="arrowup"><ChevronUpOutline class="h-4 w-4 -me-0.5 text-white" /></div>
+                    <span slot="arrowdown"><ChevronDownOutline class="h-4 w-4 -me-0.5 text-white" /></span>
+                <p class="mb-2">
+                    The best contributions are treatments you have personal experience with.<br /><br />
+                    The first categories (Pharmacological, Dietary Supplements, Detox & Herx) are for single active ingredients.<br /><br />
+                    Blended products, mixes by your physician, and other less commonly established ideas need to be placed in the Brands & Blends, or Miscellaneous category.
+                </p>
+            </AccordionItem>
+            <AccordionItem>
+                <span slot="header" class="text-2xl text-[var(--white)] mx-auto">Can't Find Contribution?</span>
+                <div slot="arrowup"><ChevronUpOutline class="h-4 w-4 -me-0.5 text-white" /></div>
+                    <span slot="arrowdown"><ChevronDownOutline class="h-4 w-4 -me-0.5 text-white" /></span>
+                <p class="mb-2">
+                    Your contribution was likely moved!<br /><br />
+                    I try my best not to delete community additions, but I do recategorize them.<br /><br />
+                    Use the search feature to find the location of specific items!
+                </p>
+            </AccordionItem>
+        </Accordion>
+    </div>
 </div>
+
 <div class="flex flex-col ml-auto mr-auto pt-6 pb-6 max-w-[90%] opacity-40">
     <MedicalDisclaimer />
 </div>
