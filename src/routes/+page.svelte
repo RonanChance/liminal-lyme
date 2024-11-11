@@ -89,7 +89,9 @@
                 md:translate-x-[75%]
                 lg:translate-x-[85%]
                 xl:translate-x-[100%]
-                2xl:translate-x-[160%]
+                2xl:translate-x-[120%]
+                3xl:translate-x-[140%]
+                4xl:translate-x-[165%]
                 sm:translate-y-[-10%]">
                 <div class="spin">
                     {@html radialClusterSVG}
