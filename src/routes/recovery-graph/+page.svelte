@@ -5,7 +5,7 @@
     import TopBanner from '../../lib/components/TopBanner.svelte';
     import { Popover, Button } from 'flowbite-svelte';
     import { themeColorLeft, themeColorRight } from "../stores";
-    import { GearSolid, TrashBinSolid, ArrowUpRightFromSquareOutline, ArrowRightFromBracketSolid, ArrowUpSolid } from 'flowbite-svelte-icons';
+    import { CogSolid, TrashBinSolid, ArrowUpRightFromSquareOutline, ArrowRightToBracketOutline, ArrowUpOutline } from 'flowbite-svelte-icons';
     import PocketBase from 'pocketbase';
     import chroma from 'chroma-js';
     import * as d3 from 'd3';
@@ -329,7 +329,7 @@
     {:else}
         <div class="flex flex-row">
             <a href="/" class="text-white underline absolute left-4 bottom-4">Home</a>
-            <button class="absolute right-5 bottom-5 text-white"><GearSolid size="lg" /></button>
+            <button class="absolute right-5 bottom-5 text-white"><CogSolid size="lg" /></button>
             <Popover arrow={false} class="text-sm font-light bg-[var(--white)] z-50" trigger="click">
                 <div class="flex flex-col">
                     <div class="flex flex-col gap-4">
@@ -347,7 +347,7 @@
                         </div>
                         <div class="flex flex-row justify-end items-center gap-2">
                             <div>Logout</div>
-                            <button class="px-4 py-2 bg-red-700 rounded text-white" onclick={logout}><ArrowRightFromBracketSolid size="xs" /></button>
+                            <button class="px-4 py-2 bg-red-700 rounded text-white" onclick={logout}><ArrowRightToBracketOutline size="xs" /></button>
                         </div>
                     </div>
                 </div>
@@ -393,7 +393,7 @@
                 <div class="px-[5px] flex flex-row gap-2 items-center">
                     <input class="w-full range-slider" style="accent-color: #fff" bind:value={curValue} type="range" min="0" max="100">
                     <button class="bg-[var(--white)] text-[var(--darkbackground)] w-12 py-2 rounded-2xl disabled:bg-gray-300 flex items-center justify-center outline-none" onclick={addScore} disabled={updating}>
-                        <ArrowUpSolid class="outline-none" />
+                        <ArrowUpOutline class="outline-none" />
                     </button>
                 </div>
                 <textarea class="mt-4 w-full bg-[var(--white)] rounded-2xl outline-0 border-0 text-center text-[var(--darkbackground)] focus:outline-none focus:outline-1 focus:ring-white" bind:value={comment} maxlength="250" placeholder="Start typing to comment"></textarea>
