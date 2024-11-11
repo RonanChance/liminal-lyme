@@ -9,9 +9,9 @@
     import { total_scanned, total_cataloged, medications, supplements } from "../lib/components/constants";
     import radialClusterSVG from '../lib/assets/radialCluster.svg?raw';
     import { Popover } from 'flowbite-svelte';
-    import { ArrowRightSolid, SearchOutline, ArrowDownSolid } from 'flowbite-svelte-icons';
+    import { ArrowRightOutline, SearchOutline, ArrowDownOutline } from 'flowbite-svelte-icons';
     
-    let animate = false;
+    let animate = $state(false);
     onMount(() => {
         animate = true;
         if (browser) {
@@ -74,7 +74,7 @@
             <!-- show on non-mobile -->
             <div class="flex">
                 <button id="scrollDown1" class="hidden sm:inline-flex flex flex-row whitebutton mt-4 gap-2 h-[50px] justify-center items-center mx-auto" type="button">
-                    <ArrowDownSolid class="w-7 h-7 pb-[3px]"/> 
+                    <ArrowDownOutline class="w-7 h-7 pb-[3px]"/> 
                     Get Started
                 </button>
             </div>
@@ -100,8 +100,8 @@
 
     <!-- show on mobile -->
     <div class="pt-4 mr-4 z-10 flex sm:hidden">
-        <button id="scrollDown2" class="whitebutton flex flex-row gap-2 h-[50px] justify-center items-center w-full" type="button">
-            <ArrowDownSolid class="w-7 h-7 pb-[3px]"/> 
+        <button id="scrollDown2" class="whitebutton flex flex-row gap-1 h-[50px] justify-center items-center w-full" type="button">
+            <ArrowDownOutline class="w-7 h-7 pb-[3px]"/> 
             Get Started
         </button>
     </div>
@@ -138,7 +138,7 @@
         <div class="pt-12 pb-3 flex flex-col gap-2">
             {#each Array(5) as _, index}
                 <div class="flex gap-2 overflow-x-hidden">
-                    <div on:scroll={handleScroll} class="scroll-container flex gap-2 overflow-x-auto whitespace-nowrap" style="flex: 1; min-width: 0;">
+                    <div onscroll={handleScroll} class="scroll-container flex gap-2 overflow-x-auto whitespace-nowrap" style="flex: 1; min-width: 0;">
                         {#each supplements.slice(index * Math.ceil(supplements.length / 5), (index + 1) * Math.ceil(supplements.length / 5)) as supplement}
                             <a href="/search" class="px-4 py-1 whitespace-nowrap rounded opacity-35 text-[var(--white)] bg-[var(--darkbackground)] text-md">{supplement}</a>
                         {/each}
@@ -152,39 +152,49 @@
 {#if animate}
 <div class="flex flex-col relative">
     
-    <div class="flex flex-col md:flex-row space-evenly bg-[var(--lightbackground)] pt-3 pb-10 gap-6">
-        <div class="flex flex-row md:flex-col flex-1 items-center mt-6 ml-[2%] mr-[2%]" in:blur={{duration: 450}}>
+    <div class="flex flex-col md:flex-row md:justify-center bg-[var(--lightbackground)] pt-3 pb-10">
+        
+        <div class="flex flex-row md:flex-col flex-1 items-center mt-6 ml-[2%] mr-[2%] md:max-w-[30%]" in:blur={{duration: 450}}>
             <div class="min-w-[50%] max-w-[50%] md:min-w-[70%] md:max-w-[70%] xl:min-w-[60%] xl:max-w-[60%] 2xl:min-w-[40%] 2xl:max-w-[40%]">
-                <video src="videos/search.mp4" type="video/mp4" class="rounded-xl" playsinline autoplay loop muted></video>
+                <video src="videos/search.mp4" type="video/mp4" class="mx-auto rounded-xl" playsinline autoplay loop muted></video>
             </div>
             <div class="flex flex-col flex-grow items-center text-center text-[var(--white)] text-lg max-w-[75%] px-[2%] md:mt-5 gap-1">
-                <strong class="text-2xl">Search</strong>
-                Query our database to find tick-borne illness experiences
-                <a href="/search" class="px-4 py-1 bg-[--darkbackground] rounded text-[var(--white)] mt-3">Search <ArrowRightSolid class="text-[var(--white)] inline" /></a>
+                <strong class="text-2xl">Search Reddit</strong>
+                Find specific tick-borne illness experiences
+                <a href="/search" class="px-4 py-1 bg-[--darkbackground] rounded text-[var(--white)] mt-3 flex items-center">
+                    Search
+                    <ArrowRightOutline class="text-[var(--white)] inline ml-1" />
+                </a>                
             </div>
         </div>
         
-        <div class="flex flex-row md:flex-col flex-1 items-center mt-6 pl-[2%] pr-[2%]" in:blur={{duration: 450}}>
+        <div class="flex flex-row md:flex-col flex-1 items-center mt-6 ml-[2%] mr-[2%] md:max-w-[30%]" in:blur={{duration: 450}}>
             <div class="min-w-[50%] max-w-[50%] md:min-w-[70%] md:max-w-[70%] xl:min-w-[60%] xl:max-w-[60%] 2xl:min-w-[40%] 2xl:max-w-[40%]">
-                <video src="videos/tree.mp4" type="video/mp4" class="rounded-xl" playsinline autoplay loop muted></video>
+                <video src="videos/tree.mp4" type="video/mp4" class="mx-auto rounded-xl" playsinline autoplay loop muted></video>
             </div>
             <div class="flex flex-col items-center text-center text-[var(--white)] text-lg max-w-[75%] px-[2%] md:mt-5 gap-1">
-                <strong class="text-2xl">Explore</strong>
-                Find treatment ideas based on scientific research articles
-                <a href="/tree" class="px-4 py-1 bg-[--darkbackground] rounded text-[var(--white)] mt-3">Explore <ArrowRightSolid class="text-[var(--white)] inline" /></a>
+                <strong class="text-2xl">Treatment Tree</strong>
+                Find treatment ideas using the community research tree
+                <a href="/tree" class="px-4 py-1 bg-[--darkbackground] rounded text-[var(--white)] mt-3 flex items-center">
+                    Tree
+                    <ArrowRightOutline class="text-[var(--white)] inline ml-1" />
+                </a>
             </div>
         </div>
 
-        <div class="flex flex-row md:flex-col flex-1 items-center mt-6 pl-[2%] pr-[2%]" in:blur={{duration: 450}}>
+        <!-- <div class="flex flex-row md:flex-col flex-1 items-center mt-6 pl-[2%] pr-[2%]" in:blur={{duration: 450}}>
             <div class="min-w-[50%] max-w-[50%] md:min-w-[70%] md:max-w-[70%] xl:min-w-[60%] xl:max-w-[60%] 2xl:min-w-[40%] 2xl:max-w-[40%]">
                 <video src="videos/recovery.mp4" type="video/mp4" class="rounded-xl" playsinline autoplay loop muted></video>
             </div>
             <div class="flex flex-col items-center text-center text-[var(--white)] text-lg max-w-[75%] px-[2%] md:mt-5 gap-1">
                 <strong class="text-2xl">Track</strong>
                 Log your experiences and track changes in your health
-                <a href="/recovery-graph" class="px-4 py-1 bg-[--darkbackground] rounded text-[var(--white)] mt-3">Track <ArrowRightSolid class="text-[var(--white)] inline" /></a>
+                <a href="/recovery-graph" class="px-4 py-1 bg-[--darkbackground] rounded text-[var(--white)] mt-3 flex items-center">
+                    Track
+                    <ArrowRightOutline class="text-[var(--white)] inline ml-1" />
+                </a>
             </div>
-        </div>
+        </div> -->
     </div>
     
     <div class="flex flex-col items-center" in:blur={{duration: 450}}>

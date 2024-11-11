@@ -8,7 +8,7 @@
     import TBDMap from '$lib/assets/TBDMap.jpg';
     import coinfections from '$lib/assets/coinfections.jpg';
 
-    let animate = false;
+    let animate = $state(false);
     onMount(() => animate = true);
 </script>
 

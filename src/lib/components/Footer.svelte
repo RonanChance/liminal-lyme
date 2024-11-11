@@ -1,7 +1,7 @@
 <script>
     import { fade } from 'svelte/transition';
     import { onMount } from 'svelte';
-    let animate = false;
+    let animate = $state(false);
     onMount(() => animate = true);
 </script>
 

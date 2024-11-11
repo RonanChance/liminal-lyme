@@ -10,29 +10,29 @@
 
 	const pb = new PocketBase('https://data.liminallyme.com/');
     
-	let animate = false;
+	let animate = $state(false);
     onMount(() => animate = true);
 
-	let toastMessage = "";
-	let isLoading = false;
-	let searchTerm = "";
+	let toastMessage = $state("");
+	let isLoading = $state(false);
+	let searchTerm = $state("");
 
-	let selectedItems = [];
+	let selectedItems = $state([]);
 	let selectedMedications = [];
 	let selectedSupplements = [];
-	let excludedConditions = [];
-	let requiredConditions = ["Lyme Disease"];
-    let result_list = [];
+	let excludedConditions = $state([]);
+	let requiredConditions = $state(["Lyme Disease"]);
+    let result_list = $state([]);
 
-	let slicedItems = all_tags.slice(0, 9);
-	let filtered = all_tags;
+	let slicedItems = $state(all_tags.slice(0, 9));
+	let filtered = $state(all_tags);
 
-	let dropdownOpen = false;
+	let dropdownOpen = $state(false);
 	function toggleDropdown(boolean) {
 		dropdownOpen = boolean;
 	}
 
-	let advancedOn = false;
+	let advancedOn = $state(false);
 	function toggleAdvanced() {
 		advancedOn = !advancedOn;
 	}
@@ -88,7 +88,7 @@
 
 			console.log(filterQuery)
 
-			const fetched_posts = await pb.collection('posts').getList(1, 30, {
+			const fetched_posts = await pb.collection('posts').getList(1, 80, {
 				sort: '-score',
 				filter: filterQuery,
 			});
@@ -109,7 +109,7 @@
 			}
 		}
 
-	let isToastVisible = false;
+	let isToastVisible = $state(false);
 	function showToast() {
 		isToastVisible = true;
 		setTimeout(() => {
@@ -175,22 +175,22 @@
             
 			<div class="flex mt-6 gap-2 flex-wrap">
 				{#each slicedItems as item}
-					<button class="text-[11pt] flex flex-row whitespace-nowrap px-[14px] py-[6px] rounded" on:click={() => handleSelection(item)} style="background-color: {selectedItems.includes(item) ? (tag_counts[item]['label'] === 'SUP' ? 'var(--supplement)' : 'var(--medication)') : 'var(--white)'}; color: {selectedItems.includes(item) ? 'var(--white)' : '#000'}; font-weight: {selectedItems.includes(item) ? 'bold' : 'normal'};">
+					<button class="text-[11pt] flex flex-row whitespace-nowrap px-[14px] py-[6px] rounded" onclick={() => handleSelection(item)} style="background-color: {selectedItems.includes(item) ? (tag_counts[item]['label'] === 'SUP' ? 'var(--supplement)' : 'var(--medication)') : 'var(--white)'}; color: {selectedItems.includes(item) ? 'var(--white)' : '#000'}; font-weight: {selectedItems.includes(item) ? 'bold' : 'normal'};">
 						{item}
 					</button>				
 				{/each}
 			</div>
 
-            <div class="text-center text-white italic text-sm mt-4">Recommend: 1-3 selections</div>
+            <div class="text-center text-white italic text-sm mt-4">Recommended: 1-3 selections</div>
 
-			<input class="mt-4 rounded w-full" type="text" bind:value={searchTerm} on:focus={() => {toggleDropdown(true)}} on:blur={() => {setTimeout(() => toggleDropdown(false), 100)}} placeholder="Search Medications & Supplements..." on:input={(event) => {filterOptions(event.target.value)}}>
+			<input class="mt-4 rounded w-full" type="text" bind:value={searchTerm} onfocus={() => {toggleDropdown(true)}} onblur={() => {setTimeout(() => toggleDropdown(false), 100)}} placeholder="Search Medications & Supplements..." oninput={(event) => {filterOptions(event.target.value)}}>
 
 			<div class="max-h-[170px] overflow-y-auto text-[12pt] bg-white rounded" style="display: {dropdownOpen ? 'block' : 'none'}">
 				{#each filtered as option}
 					<div
 						class="mt-1 mb-1 pl-3"
-						on:click={() => handleSelection(option)}
-						on:keydown={(event) => {
+						onclick={() => handleSelection(option)}
+						onkeydown={(event) => {
 							if (event.key === 'Enter') {
 								handleSelection(option);
 								event.preventDefault();
@@ -207,7 +207,7 @@
 			</div>
 			
 			<div style="display: flex; justify-content: right;">
-				<button class="text-[var(--white)] underline mt-3 text-sm" on:click={toggleAdvanced}>Advanced Mode: {advancedOn ? 'On' : 'Off'}</button>
+				<button class="text-[var(--white)] underline mt-3 text-sm" onclick={toggleAdvanced}>Advanced Mode: {advancedOn ? 'On' : 'Off'}</button>
 			</div>
 			
 			<div class="flex flex-wrap text-[var(--white)]" style="display: {advancedOn ? 'block' : 'none'}">
@@ -217,23 +217,27 @@
 				</div>
 				<div class="flex mt-6 gap-2 flex-wrap">
 					{#each illnesses as illness}
-						<button on:click={() => {handleAdv(illness)}} style="text-decoration: { excludedConditions.includes(illness) ? 'line-through' : 'none'}; background-color: { requiredConditions.includes(illness) ? 'var(--accent)' : 'var(--lightbackground)'}; font-weight: { requiredConditions.includes(illness) ? 'bold' : 'normal'}; color: { requiredConditions.includes(illness) ? 'var(--black)' : 'var(--white)'};" class="text-[11pt] flex flex-row rounded whitespace-nowrap px-[14px] py-[6px]">{illness}</button>
+						<button onclick={() => {handleAdv(illness)}} style="text-decoration: { excludedConditions.includes(illness) ? 'line-through' : 'none'}; background-color: { requiredConditions.includes(illness) ? 'var(--accent)' : 'var(--lightbackground)'}; font-weight: { requiredConditions.includes(illness) ? 'bold' : 'normal'}; color: { requiredConditions.includes(illness) ? 'var(--black)' : 'var(--white)'};" class="text-[11pt] flex flex-row rounded whitespace-nowrap px-[14px] py-[6px]">{illness}</button>
 					{/each}
 				</div>	
 			</div>
 
 			<div style="display: flex; justify-content: center;">
-				<a href="#_" on:click={fetchDataForPostList} class="whitebutton mt-6 align-middle">
-					<div class="flex items-center" style="gap:8px; font-weight: bold; font-size: 20px;">
-					{#if isLoading}
-						<Spinner size={6} color="gray" />
-					{:else}
-						<SearchOutline size="lg"/>
-					{/if}
-					Search
-					{#if selectedItems.length >= 1}
-						({selectedItems.length})
-					{/if}
+				<a href="#_" onclick={fetchDataForPostList} class="whitebutton mt-6">
+					<div class="flex flex-row gap-1">
+                        <div class="">
+                            {#if isLoading}
+                                <Spinner size={6} color="gray" />
+                            {:else}
+                                <SearchOutline size="lg"/>
+                            {/if}
+                        </div>
+                        <div class="text-xl font-semibold items-center align-middle">
+                            Search
+                            {#if selectedItems.length >= 1}
+                                ({selectedItems.length})
+                            {/if}
+                        </div>
 					</div>
 				</a>
 			</div>
@@ -255,7 +259,7 @@
 			<div class="pb-2">
 				<PostList posts={result_list}/>
 			</div>
-			<div class="med-disclaimer mt-12 mb-12" in:fade={{duration: 200}}>
+			<div class="med-disclaimer mt-12 mb-12 opacity-30" in:fade={{duration: 200}}>
 				<MedicalDisclaimer />
 			</div>
 		</main>
@@ -264,12 +268,12 @@
 
 <div class="fixed left-1/2 top-[110pt] transform -translate-x-1/2 -translate-y-1/2 z-10">
 	{#if isToastVisible}
-	<Toast color="orange">
-		<svelte:fragment slot="icon">
-		  <ExclamationCircleSolid class="w-5 h-5" />
-		  <span class="sr-only">Warning icon</span>
-		</svelte:fragment>
-		{toastMessage}
-	  </Toast>
+        <Toast >
+            <svelte:fragment slot="icon">
+                <ExclamationCircleSolid class="w-5 h-5" color=orange />
+                <span class="sr-only">Warning icon</span>
+            </svelte:fragment>
+            {toastMessage}
+        </Toast>
 	{/if}
 </div>

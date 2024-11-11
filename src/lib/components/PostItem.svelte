@@ -1,13 +1,15 @@
 <script>
-    import { AngleUpSolid, ChevronRightSolid, ClockSolid, ArrowUpFromBracketOutline, CheckSolid} from 'flowbite-svelte-icons';
+    import { preventDefault } from 'svelte/legacy';
+
+    import { AngleUpOutline, ChevronRightOutline, ClockSolid, ArrowUpFromBracketOutline, CheckOutline } from 'flowbite-svelte-icons';
     import Card from './Card.svelte'
     import Modal from './Modal.svelte';
     import { chronology_usernames } from '../../lib/components/constants.js'
 
-    export let item;
-    let showModal = false;
-    let showEntirePost = false;
-	let clickedItem = "NA";
+    let { item } = $props();
+    let showModal = $state(false);
+    let showEntirePost = $state(false);
+	let clickedItem = $state("NA");
 
     function formatDate(dateString) {
         // Remove the time part and the milliseconds and replace ' ' with 'T' for compatibility
@@ -61,7 +63,7 @@
         }
     }
 
-    let copiedPopupVisible = false;
+    let copiedPopupVisible = $state(false);
     const showCopiedPopup = () => {
         copiedPopupVisible = true;
         setTimeout(() => { copiedPopupVisible = false; }, 1500);
@@ -104,26 +106,26 @@
     </div>
     <div class="tags">
         {#each item.conditions as con}
-            <button class="tagstyle" style="background-color: var(--condition_highlight); display: inline-block;" on:click|preventDefault={handleClick}>{con}</button>
+            <button class="tagstyle" style="background-color: var(--condition_highlight); display: inline-block;" onclick={preventDefault(handleClick)}>{con}</button>
         {/each}
     </div>
     <div class="tags">
         {#each item.medications as med}
-            <button class="tagstyle" style="background-color: var(--medication_highlight); display: inline-block;" on:click|preventDefault={handleClick}>{med}</button>
+            <button class="tagstyle" style="background-color: var(--medication_highlight); display: inline-block;" onclick={preventDefault(handleClick)}>{med}</button>
         {/each}
     </div>
     <div class="tags">
         {#each item.supplements as sup}
-            <button class="tagstyle" style="background-color: var(--supplement_highlight); display: inline-block;" on:click|preventDefault={handleClick}>{sup}</button>
+            <button class="tagstyle" style="background-color: var(--supplement_highlight); display: inline-block;" onclick={preventDefault(handleClick)}>{sup}</button>
         {/each}
     </div>
     <div class="num-rating">
-        <AngleUpSolid size=xs /> 
+        <AngleUpOutline size=xs /> 
         {item.score}
     </div>
-    <!-- svelte-ignore a11y-click-events-have-key-events -->
-    <!-- svelte-ignore a11y-no-static-element-interactions -->
-    <div class="str-review {showEntirePost ? 'no-mask' : ''}" on:click|preventDefault={handleClick}>
+    <!-- svelte-ignore a11y_click_events_have_key_events -->
+    <!-- svelte-ignore a11y_no_static_element_interactions -->
+    <div class="str-review {showEntirePost ? 'no-mask' : ''}" onclick={preventDefault(handleClick)}>
         {#if showEntirePost}
             {@html decodeHTMLEntities(item.body)}
         {:else}
@@ -132,29 +134,29 @@
     </div>
     {#if !showEntirePost}
         <div class="flex justify-center">
-            <button class="italic pt-4" on:click={() => {showEntirePost = true}}>Read More </button>
+            <button class="italic pt-4" onclick={() => {showEntirePost = true}}>Read More </button>
         </div>
     {:else}
         <div class="flex justify-center">
-            <button class="italic pt-4" on:click={() => {scrollToTop(item.id); setTimeout(() => { showEntirePost = false; }, 1000);}}>Read Less </button>
+            <button class="italic pt-4" onclick={() => {scrollToTop(item.id); setTimeout(() => { showEntirePost = false; }, 1000);}}>Read Less </button>
         </div>
     {/if}
     <div class="flex flex-row pt-7 gap-4 justify-around">
-        <a href="/search?path=chronologyTab&username={item.author}" target="_blank" class="inline-flex items-center justify-center max-w-[55px] flex-grow flex-1 aspect-square mr-2 transition-colors duration-150 rounded-xl focus:shadow-outline hover:bg-[var(--extralightbackground)] hover:text-white {item.author in chronology_usernames ? 'bg-[var(--lightbackground)] text-white' : 'text-gray-400 bg-gray-200 pointer-events-none'}">
+        <a href="/search?path=chronologyTab&username={item.author}" target="_blank" class="inline-flex items-center justify-center max-w-[50px] flex-grow flex-1 aspect-square mr-2 transition-colors duration-150 rounded-xl focus:shadow-outline hover:bg-[var(--extralightbackground)] hover:text-white {item.author in chronology_usernames ? 'bg-[var(--lightbackground)] text-white' : 'text-gray-400 bg-gray-200 pointer-events-none'}">
             <ClockSolid class="w-5 h-5" style="bg-white" />
         </a>
         
-        <button on:click={() => {sharePost("https://LiminalLyme.com/search?path=shareTab&keyid=" + item.keyid)}} class="inline-flex items-center flex-col text-xs justify-center max-w-[55px] flex-grow flex-1 aspect-square mr-2 text-[var(--white)] transition-colors duration-150 bg-[var(--lightbackground)] rounded-xl focus:shadow-outline hover:bg-[var(--extralightbackground)] hover:text-white">
+        <button onclick={() => {sharePost("https://LiminalLyme.com/search?path=shareTab&keyid=" + item.keyid)}} class="inline-flex items-center flex-col text-xs justify-center max-w-[50px] flex-grow flex-1 aspect-square mr-2 text-[var(--white)] transition-colors duration-150 bg-[var(--lightbackground)] rounded-xl focus:shadow-outline hover:bg-[var(--extralightbackground)] hover:text-white">
             {#if !copiedPopupVisible}
                 <ArrowUpFromBracketOutline class="w-5 h-5" style="bg-white" />
             {:else}
-                <CheckSolid class="w-5 h-5" style="bg-white" />
+                <CheckOutline class="w-5 h-5" style="bg-white" />
                 copied
             {/if}
         </button>
 
-        <a href="{item.permalink}" target="_blank" class="inline-flex items-center justify-center max-w-[55px] flex-grow flex-1 aspect-square mr-2 text-[var(--white)] transition-colors duration-150 bg-[var(--lightbackground)] rounded-xl focus:shadow-outline hover:bg-[var(--extralightbackground)] hover:text-white">
-            <ChevronRightSolid class="w-5 h-5" style="bg-white" />
+        <a href="{item.permalink}" target="_blank" class="inline-flex items-center justify-center max-w-[50px] flex-grow flex-1 aspect-square mr-2 text-[var(--white)] transition-colors duration-150 bg-[var(--lightbackground)] rounded-xl focus:shadow-outline hover:bg-[var(--extralightbackground)] hover:text-white">
+            <ChevronRightOutline class="w-7 h-7" style="bg-white" />
         </a>
     </div>
 </Card>

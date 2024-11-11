@@ -9,10 +9,10 @@
     import { page } from '$app/stores'
     let keyid = $page.url.searchParams.get('keyid')
 
-    let animate = false;
+    let animate = $state(false);
     onMount(() => animate = true);
 
-    let result_list;
+    let result_list = $state();
     async function getPosts(){
         result_list = await pb.collection('posts').getList(1, 2, {
             filter: 'keyid="'+ keyid + '"',

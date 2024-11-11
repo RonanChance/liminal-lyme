@@ -3,11 +3,17 @@
   import PostItem from "./PostItem.svelte";
   import { ClockSolid } from 'flowbite-svelte-icons';
 
-  export let posts = [];
-  export let chronologyMode = false;
+  /**
+   * @typedef {Object} Props
+   * @property {any} [posts]
+   * @property {boolean} [chronologyMode]
+   */
+
+  /** @type {Props} */
+  let { posts = [], chronologyMode = false } = $props();
 
   let itemsPerPage = 10; // Number of items to load per page
-  let currentPage = 1;
+  let currentPage = $state(1);
 
   function loadMore() {
     currentPage++;
@@ -22,7 +28,7 @@
     return differenceDays;
   }
 
-  $: visiblePosts = posts.slice(0, currentPage * itemsPerPage);
+  let visiblePosts = $derived(posts.slice(0, currentPage * itemsPerPage));
 
   onMount(loadMore);
 </script>
@@ -52,7 +58,7 @@
   {/if}
   <div class="flex justify-center">
     {#if visiblePosts.length < posts.length}
-      <button class="whitebutton" on:click={loadMore}>Load More</button>
+      <button class="whitebutton" onclick={loadMore}>Load More</button>
     {/if}
   </div>
 {/if}

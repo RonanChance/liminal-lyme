@@ -5,32 +5,38 @@
     import TopBanner from '../../lib/components/TopBanner.svelte';
     import Footer from '../../lib/components/Footer.svelte';
     import { Input, Select, Popover, Spinner, AccordionItem, Accordion} from 'flowbite-svelte';
-    import { FileEditSolid, LinkSolid, CloseOutline, UserCircleSolid, InfoCircleSolid, ChevronDownOutline, ChevronUpOutline, SearchOutline } from 'flowbite-svelte-icons';
+    import { FilePenSolid, LinkOutline, CloseOutline, UserCircleSolid, InfoCircleSolid, ChevronDownOutline, ChevronUpOutline, SearchOutline } from 'flowbite-svelte-icons';
     import MedicalDisclaimer from '../../lib/components/MedicalDisclaimer.svelte';
     import { isValidUrl } from '../../lib/utils/validations.js';
     import { initTouchEvents, initDragging } from '../../lib/utils/touchEvents.js';
     import { buildNestedRecords, findNodeByIdIgnoringHidden, findNodeById, collapse, expand } from '../../lib/utils/treeUtils';
     import * as d3 from 'd3';
 
-    /** @type {import('./$types').PageData} */
-	export let data;
+    
+    /**
+     * @typedef {Object} Props
+     * @property {import('./$types').PageData} data
+     */
+
+    /** @type {Props} */
+    let { data } = $props();
 
     let svg, root, tree, diagonal;
-    let animate = false;
+    let animate = $state(false);
 
-    let throwConfetti = false;
-    let contributeMode = false;
-    let deleteMode = false;
-    let isDeleting = false;
-    let selectedNode;
+    let throwConfetti = $state(false);
+    let contributeMode = $state(false);
+    let deleteMode = $state(false);
+    let isDeleting = $state(false);
+    let selectedNode = $state();
 
-    let contributeType = 'treatment';
-    let suggestion = "";
+    let contributeType = $state('treatment');
+    let suggestion = $state("");
 
-    let category = "";
-    let link_text = "";
-    let link_url = "";
-    let username = "";
+    let category = $state("");
+    let link_text = $state("");
+    let link_url = $state("");
+    let username = $state("");
 
     const category_options = [
         { value: 'Amazon', name: 'Amazon Link' },
@@ -39,8 +45,8 @@
         { value: 'Website', name: 'Website Link' }
     ];
 
-    let searchResults = [];
-    let searchQuery = "";
+    let searchResults = $state([]);
+    let searchQuery = $state("");
 
     let width = 2560;
     let height = 800;
@@ -48,7 +54,7 @@
     const duration = 600;
     let recordsTree = null;
 
-    let container;
+    let container = $state();
 
     onMount(async () => {
         animate = true
@@ -414,27 +420,27 @@
         }
         update(root);
     }
-
-    function findItemsByString() {
-        searchResults = [];
-        data.records.forEach(element => {
-            if (element.name.toLowerCase().includes(searchQuery.toLowerCase())) {
-                // make sure it's not "Amazon", "Article", etc.
-                if (!category_options.some(option => option.value === element.name)){
-                    searchResults.push({id: element.id, name: element.name})
-                }
-            }
-        });
-    }
     
-    // Reactive statement that searches when searchQuery changes
-    $: {
+    function findItemsByString(searchQuery) {
+        let internalSearchResults = [];
+        
         if (searchQuery.length >= 3) {
-            findItemsByString();
+            data.records.forEach(element => {
+                if (element.name.toLowerCase().includes(searchQuery.toLowerCase())) {
+                    // make sure it's not "Amazon", "Article", etc.
+                    if (!category_options.some(option => option.value === element.name)){
+                        internalSearchResults.push({id: element.id, name: element.name})
+                    }
+                }
+            });
+            searchResults = internalSearchResults;
         } else {
             searchResults = [];
         }
     }
+    
+    // Reactive statement that searches when searchQuery changes
+    $effect(() => { findItemsByString(searchQuery); });
 </script>
 
 <TopBanner />
@@ -443,13 +449,13 @@
 <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
     <div class="w-full flex justify-center bg-[var(--white)] px-4 py-4 rounded-lg my-5 max-w-[90%] sm:max-w-[60%] 2xl:max-w-[50%] mx-auto relative">
         <div class="absolute top-2 right-2">
-            <button class="px-2 py-2 tems-center justify-center rounded-lg opacity-50" on:click={() => {contributeMode = false}}><CloseOutline size="xs" /></button>
+            <button class="px-2 py-2 tems-center justify-center rounded-lg opacity-50" onclick={() => {contributeMode = false}}><CloseOutline size="xs" /></button>
         </div>
 
         <div class="w-[85%] sm:w-[65%] md:w-[55%] lg:w-[45%] xl:w-[35%] flex flex-col gap-4">
             <div class="text-center">Add to: <span class="opacity-60">{selectedNode.parent.data.name}</span></div>
             <div class="w-full flex flex-row justify-center gap-3">
-                <button class="text-[var(--darkbackground)] px-4 py-1 rounded-lg outline outline-1 {contributeType === 'treatment' ? 'bg-[var(--darkbackground)] text-white' : ' bg-[var(--white)] text-[var(--darkbackground)]'}" style="outline-color: rgba(0, 0, 0, 0.2);" on:click={()=> {contributeType = 'treatment'}}>
+                <button class="text-[var(--darkbackground)] px-4 py-1 rounded-lg outline outline-1 {contributeType === 'treatment' ? 'bg-[var(--darkbackground)] text-white' : ' bg-[var(--white)] text-[var(--darkbackground)]'}" style="outline-color: rgba(0, 0, 0, 0.2);" onclick={()=> {contributeType = 'treatment'}}>
                     <span class="flex flex-col">
                         <span>
                             Node
@@ -462,7 +468,7 @@
                 <div class="flex justify-center items-center h-full">
                     or
                 </div>
-                <button class="text-[var(--darkbackground)] px-4 py-1 rounded-lg outline outline-1 {contributeType === 'link' ? 'bg-[var(--darkbackground)] text-white' : ' bg-[var(--white)] text-[var(--darkbackground)]'}" style="outline-color: rgba(0, 0, 0, 0.2);" on:click={()=> {contributeType =  'link'}}>
+                <button class="text-[var(--darkbackground)] px-4 py-1 rounded-lg outline outline-1 {contributeType === 'link' ? 'bg-[var(--darkbackground)] text-white' : ' bg-[var(--white)] text-[var(--darkbackground)]'}" style="outline-color: rgba(0, 0, 0, 0.2);" onclick={()=> {contributeType =  'link'}}>
                     <span class="flex flex-col">
                         <span>
                             URL
@@ -509,7 +515,7 @@
                     <div class="text-[var(--darkbackground)] w-full text-lg text-center items-center flex flex-row gap-2 scroll-m-[4rem]" id="contribute"> 
                         <!-- {selectedNode.parent.data.name} -->
                         <Input name="name" type="text" class="focus:outline-none focus:ring-transparent text-base" style="border-color: var(--darkbackground);" placeholder="Treatment/Category" bind:value={suggestion} required maxlength="75" autocomplete="off">
-                                <FileEditSolid slot="left" class="w-5 h-5 text-gray-500 dark:text-gray-400" />
+                                <FilePenSolid slot="left" class="w-5 h-5 text-gray-500 dark:text-gray-400" />
                                 <span class="text-red-600 text-2xl align-middle {suggestion ? "hidden" : ""}" slot="right">*</span>
                         </Input>
                     </div>
@@ -539,7 +545,7 @@
                 <div class="text-[var(--darkbackground)] w-full text-lg text-center items-center flex flex-row gap-2 scroll-m-[4rem]" id="link_url"> 
                     <!-- {selectedNode.parent.data.name} -->
                     <Input name="link_url" type="text" class="focus:outline-none focus:ring-transparent text-base" style="border-color: var(--darkbackground);" placeholder="Link (URL)" bind:value={link_url} required maxlength="200" autocomplete="off">
-                            <LinkSolid slot="left" class="w-5 h-5 text-gray-500 dark:text-gray-400" />
+                            <LinkOutline slot="left" class="w-5 h-5 text-gray-500 dark:text-gray-400" />
                             <span class="text-red-600 text-2xl align-middle {link_url ? "hidden" : ""}" slot="right">*</span>
                     </Input>
                 </div>
@@ -548,7 +554,7 @@
                     <div class="text-[var(--darkbackground)] w-full text-lg text-center items-center flex flex-row gap-2 scroll-m-[4rem]" id="link_text"> 
                         <!-- {selectedNode.parent.data.name} -->
                         <Input name="link_text" type="text" class="focus:outline-none focus:ring-transparent text-base" style="border-color: var(--darkbackground);" placeholder="Link Description" bind:value={link_text} required maxlength="175" autocomplete="off">
-                                <FileEditSolid slot="left" class="w-5 h-5 text-gray-500 dark:text-gray-400" />
+                                <FilePenSolid slot="left" class="w-5 h-5 text-gray-500 dark:text-gray-400" />
                                 <span class="text-red-600 text-2xl align-middle {link_text ? "hidden" : ""}" slot="right">*</span>
                         </Input>
                     </div>
@@ -575,7 +581,7 @@
                     <Popover class="w-64 text-sm font-light" triggeredBy="#usernameinfo" data-popper-placement="left">(optional) username will appear next to your contribution</Popover>
                 </div>
                 <div class="text-right">
-                    <button type="submit" class="py-2 px-3 rounded-lg bg-white outline outline-1 text-base" style="outline-color: rgba(0, 0, 0, 0.15);" on:click={ onSubmit }>
+                    <button type="submit" class="py-2 px-3 rounded-lg bg-white outline outline-1 text-base" style="outline-color: rgba(0, 0, 0, 0.15);" onclick={onSubmit}>
                         Submit
                         {#if throwConfetti} <Confetti x={[-0.7, 0.7]} y={[-0.7, .7]} /> {/if}
                     </button>
@@ -590,7 +596,7 @@
 <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
     <div class="w-fit flex flex-col justify-center bg-[var(--white)] px-8 pt-8 pb-6 rounded-lg my-5 max-w-[90%] mx-auto relative gap-2">
         <div class="absolute top-2 right-2">
-            <button class="px-2 py-2 flex items-center justify-center rounded-lg opacity-50" on:click={() => {deleteMode = false}}>
+            <button class="px-2 py-2 flex items-center justify-center rounded-lg opacity-50" onclick={() => {deleteMode = false}}>
                 <CloseOutline size="xs" />
             </button>
         </div>
@@ -601,11 +607,11 @@
             </div>
         {/if}
         <div class="flex flex-row justify-center items-center gap-2">
-            <button class="py-2 px-3 rounded-lg bg-white outline outline-1 text-base" style="outline-color: rgba(0, 0, 0, 0.15);" on:click={() => { deleteMode = false }}>
+            <button class="py-2 px-3 rounded-lg bg-white outline outline-1 text-base" style="outline-color: rgba(0, 0, 0, 0.15);" onclick={() => { deleteMode = false }}>
                 Cancel
             </button>
             {#if !isDeleting}
-                <button class="py-2 px-3 rounded-lg bg-white outline outline-1 text-base" style="outline-color: rgba(0, 0, 0, 0.15);" on:click={handleDelete}>
+                <button class="py-2 px-3 rounded-lg bg-white outline outline-1 text-base" style="outline-color: rgba(0, 0, 0, 0.15);" onclick={handleDelete}>
                     Delete
                 </button>
             {:else}
@@ -623,7 +629,7 @@
 
 {#if animate}
 <div class="pt-6 pb-6 mx-auto max-w-[90%] sm:max-w-[60%] lg:max-w-[40%] flex flex-col gap-5" in:fade={{duration: 300}}>
-    <div class="w-[100%] sm:max-w-[50%] mx-auto text-[var(--white)]">
+    <div class="w-[100%] sm:max-w-[80%] mx-auto text-[var(--white)]">
         <div class="flex flex-col">
             <Input name="name" type="text" class="focus:outline-none focus:ring-transparent text-base" style="border-color: var(--darkbackground);" placeholder="Search Tree" bind:value={searchQuery} autocomplete="off">
                 <SearchOutline slot="left" class="w-5 h-5 text-gray-500 dark:text-gray-400" />
@@ -633,7 +639,7 @@
             {#if searchResults.length > 0}
                 {#each searchResults as result}
                     <div class="flex flex-row justify-between pb-1">
-                        {result.name} <button class="underline" on:click={() => {openTreeById(result.id)}}>Open in Tree</button>
+                        {result.name} <button class="underline" onclick={() => {openTreeById(result.id)}}>Open in Tree</button>
                     </div>
                 {/each}
             {:else}
