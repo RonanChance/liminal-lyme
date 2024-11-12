@@ -77,7 +77,7 @@ export function buildNestedRecords(records) {
 
     Object.values(nodeMap).forEach(node => {
         if (node !== root && node.children.length >= 0 && !node.children.some(child => child.isDummy) && !node.link) {
-            node.children.push({ name: '<tspan class="opacity-50">Add <tspan style="font-size: 1.2em;">⊕</tspan></tspan>', isDummy: true, verified: true, parent: node });
+            node.children.push({ name: 'Add Node', isDummy: true, verified: true, parent: node });
         }
     });
     
