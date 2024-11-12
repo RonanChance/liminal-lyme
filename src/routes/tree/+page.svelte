@@ -40,10 +40,12 @@
     let username = $state("");
 
     const category_options = [
-        { value: 'Amazon', name: 'Amazon Link' },
-        { value: 'Article', name: 'Article Link' },
-        { value: 'Purchase', name: 'Purchase Link' },
-        { value: 'Website', name: 'Website Link' }
+        { value: 'Amazon', name: 'Amazon' },
+        { value: 'Article', name: 'Article' },
+        { value: 'Podcast', name: 'Podcast' },
+        { value: 'Purchase', name: 'Purchase' },
+        { value: 'Website', name: 'Website' },
+        { value: 'YouTube', name: 'YouTube'}
     ];
 
     let searchResults = $state([]);
@@ -238,14 +240,18 @@
             .attr('text-anchor', d => d.children || d._children ? 'end' : 'start')
             .html(d => {
                 // Display different icons based on the node name
-                if (d.data.name === "Article") {
-                    return `<tspan class="icon-article">🔍</tspan>`;
-                } else if (d.data.name === "Amazon") {
-                    return `<tspan class="icon-amazon">🛒</tspan>`;
+                if (d.data.name === "Amazon") {
+                    return `<tspan>🛒</tspan>`;
+                } else if (d.data.name === "Article") {
+                    return `<tspan>🔍</tspan>`;
+                } else if (d.data.name === "Podcast") {
+                    return `<tspan>🎧</tspan>`;
                 } else if (d.data.name === "Purchase") {
-                    return `<tspan class="icon-purchase">💰</tspan>`;
+                    return `<tspan>💰</tspan>`;
                 } else if (d.data.name === "Website") {
-                    return `<tspan class="icon-purchase">🔍</tspan>`;
+                    return `<tspan>🔍</tspan>`;
+                } else if (d.data.name === "YouTube") {
+                    return `<tspan>🎥</tspan>`;
                 } else {
                     return d.data.name;
                 }
@@ -416,7 +422,7 @@
 
     function openTreeById(id) {
         window.scrollTo({
-            top: 0,
+            top: 130,
             behavior: 'smooth'
         });
         let tempNode = findNodeById(root, id);
@@ -563,7 +569,7 @@
                         type="text"
                         class="focus:outline-none focus:ring-transparent text-base w-full {category ? "" : "text-opacity-60"}"
                         style="border-color: var(--darkbackground);"
-                        placeholder="Select Type"
+                        placeholder="🏷&nbsp;&nbsp;&nbsp;Type"
                         bind:value={category}
                         required
                     >
@@ -685,12 +691,18 @@
         {#each data.recentRecords as { id, created, name, link, link_text } (id)}
             <div class="bg-[var(--white)] text-[var(--darkbackground)] rounded-lg p-2 my-2 flex flex-row items-center justify-between">
                 <div class="icon ml-2 mr-4 scale-125">
-                    {#if name === "Article" || name === "Website" }
+                    {#if name === "Amazon"}
+                    🛒
+                    {:else if name === "Article"}
                     🔍
+                    {:else if name === "Podcast"}
+                    🎧
                     {:else if name === "Purchase"}
                     💰
-                    {:else if name === "Amazon"}
-                    🛒
+                    {:else if name === "Website"}
+                    🔍
+                    {:else if name === "YouTube"}
+                    🎥
                     {:else}
                     💡
                     {/if}
@@ -848,6 +860,7 @@
         -ms-overflow-style: none; /* for Internet Explorer, Edge */
         scrollbar-width: none; /* for Firefox */
         overflow-y: auto;
+        -webkit-mask-image: linear-gradient(180deg, var(--darkbackground) 80%, transparent);
     }
     .notification-scroll-container::-webkit-scrollbar {
         display: none; /* Chrome, Safari */
