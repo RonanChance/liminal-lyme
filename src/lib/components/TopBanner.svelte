@@ -21,7 +21,7 @@
 
 <meta charset="utf-8" name="theme-color" content="#f8f8f8"/>
 
-{#if !isStandAlone}
+{#if !isStandAlone && !selected.includes("/tree") && !selected.includes("/search") && !selected.includes("/search") && !selected.includes("/about")}
     <ModalPWA bind:showModal>
     <div class="flex justify-center">
         <video autoplay loop muted playsinline class="w-[85%]">
