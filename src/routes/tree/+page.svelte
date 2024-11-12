@@ -59,6 +59,7 @@
 
     onMount(async () => {
         animate = true
+        window.addEventListener('scroll', updateScrollPosition);
         recordsTree = buildNestedRecords(data.records)
         initTree();
         initDragging(container);
@@ -447,14 +448,33 @@
     // Reactive statement that searches when searchQuery changes
     $effect(() => { findItemsByString(searchQuery); });
 
+    let pagePosition = $state(0);
+    const updateScrollPosition = () => {
+        pagePosition = window.scrollY;
+    };
+
+    function scrollPage() {
+        if (pagePosition > 550) {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        } else {
+            window.scrollTo({
+                top: 850,
+                behavior: 'smooth'
+            });
+        }
+    }
+
     function timeAgo(dateStr) {
         const date = parseISO(dateStr); // Parse the ISO date string
         return "~"+formatDistanceToNowStrict(date) + " ago"; // Calculate and return the time ago string
     }
+
 </script>
 
 <TopBanner />
-
 {#if contributeMode}
 <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
     <div class="w-full flex justify-center bg-[var(--white)] px-4 py-4 rounded-lg my-5 max-w-[90%] sm:max-w-[60%] 2xl:max-w-[50%] mx-auto relative">
@@ -738,6 +758,23 @@
 </div>
 
 <Footer />
+
+<!-- svelte-ignore a11y_consider_explicit_label -->
+<button class="sm:hidden fixed bottom-0 left-0 ml-8 bg-white rounded-t w-11 h-11 z-10 flex items-center justify-center p-2" onclick={scrollPage}>
+    {#if pagePosition < 550}
+        <svg fill="var(--darkbackground)" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="icon flat-color w-full h-full">
+            <g>
+                <path id="primary" d="M2.13,4.51A1,1,0,0,1,3,4a1,1,0,0,1,.49.13L12,8.86l8.51-4.73a1,1,0,0,1,1,1.74l-9,5a1,1,0,0,1-1,0l-9-5A1,1,0,0,1,2.13,4.51Zm18.38,8.62L12,17.86,3.49,13.13A1,1,0,0,0,3,13a1,1,0,0,0-.49,1.87l9,5a1,1,0,0,0,1,0l9-5a1,1,0,1,0-1-1.74Z" style="fill: var(--darkbackground);"></path>
+            </g>
+        </svg>
+    {:else}
+        <svg fill="var(--darkbackground)" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="icon flat-color w-full h-full">
+            <g transform="rotate({pagePosition < 550 ? 0 : 180}, 12, 12)">
+                <path id="primary" d="M2.13,4.51A1,1,0,0,1,3,4a1,1,0,0,1,.49.13L12,8.86l8.51-4.73a1,1,0,0,1,1,1.74l-9,5a1,1,0,0,1-1,0l-9-5A1,1,0,0,1,2.13,4.51Zm18.38,8.62L12,17.86,3.49,13.13A1,1,0,0,0,3,13a1,1,0,0,0-.49,1.87l9,5a1,1,0,0,0,1,0l9-5a1,1,0,1,0-1-1.74Z" style="fill: var(--darkbackground);"></path>
+            </g>
+        </svg>
+    {/if}
+</button>
 
 {/if}
 
