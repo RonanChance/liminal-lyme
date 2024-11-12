@@ -10,6 +10,7 @@
     import { isValidUrl } from '../../lib/utils/validations.js';
     import { initTouchEvents, initDragging } from '../../lib/utils/touchEvents.js';
     import { buildNestedRecords, findNodeByIdIgnoringHidden, findNodeById, collapse, expand } from '../../lib/utils/treeUtils';
+    import { formatDistanceToNowStrict, parseISO } from 'date-fns';
     import * as d3 from 'd3';
 
     
@@ -237,13 +238,13 @@
             .html(d => {
                 // Display different icons based on the node name
                 if (d.data.name === "Article") {
-                    return `<tspan class="icon-article">📃</tspan>`;
+                    return `<tspan class="icon-article">🔍</tspan>`;
                 } else if (d.data.name === "Amazon") {
                     return `<tspan class="icon-amazon">🛒</tspan>`;
                 } else if (d.data.name === "Purchase") {
                     return `<tspan class="icon-purchase">💰</tspan>`;
                 } else if (d.data.name === "Website") {
-                    return `<tspan class="icon-purchase">🔗</tspan>`;
+                    return `<tspan class="icon-purchase">🔍</tspan>`;
                 } else {
                     return d.data.name;
                 }
@@ -413,6 +414,10 @@
     }
 
     function openTreeById(id) {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
         let tempNode = findNodeById(root, id);
         while (tempNode != null) {
             expand(tempNode);
@@ -441,6 +446,11 @@
     
     // Reactive statement that searches when searchQuery changes
     $effect(() => { findItemsByString(searchQuery); });
+
+    function timeAgo(dateStr) {
+        const date = parseISO(dateStr); // Parse the ISO date string
+        return "~"+formatDistanceToNowStrict(date) + " ago"; // Calculate and return the time ago string
+    }
 </script>
 
 <TopBanner />
@@ -629,6 +639,7 @@
 
 {#if animate}
 <div class="pt-6 pb-6 mx-auto max-w-[90%] sm:max-w-[60%] lg:max-w-[40%] flex flex-col gap-5" in:fade={{duration: 300}}>
+    
     <div class="w-[100%] sm:max-w-[80%] mx-auto text-[var(--white)]">
         <div class="flex flex-col">
             <Input name="name" type="text" class="focus:outline-none focus:ring-transparent text-base" style="border-color: var(--darkbackground);" placeholder="Search Tree" bind:value={searchQuery} autocomplete="off">
@@ -639,7 +650,7 @@
             {#if searchResults.length > 0}
                 {#each searchResults as result}
                     <div class="flex flex-row justify-between pb-1">
-                        {result.name} <button class="underline" onclick={() => {openTreeById(result.id)}}>Open in Tree</button>
+                        {result.name} <button class="underline" onclick={() => {openTreeById(result.id)}}>Show</button>
                     </div>
                 {/each}
             {:else}
@@ -648,6 +659,41 @@
                 {/if}
             {/if}
         </div>
+    </div>
+
+    <div class="notification-scroll-container w-[90%] sm:max-w-[80%] mx-auto text-[var(--white)] max-h-[250px] overflow-y-auto rounded-lg">
+        {#each data.recentRecords as { id, created, name, link, link_text } (id)}
+            <div class="bg-[var(--white)] text-[var(--darkbackground)] rounded-lg p-2 my-2 flex flex-row items-center justify-between">
+                <div class="icon ml-2 mr-4 scale-125">
+                    {#if name === "Article" || name === "Website" }
+                    🔍
+                    {:else if name === "Purchase"}
+                    💰
+                    {:else if name === "Amazon"}
+                    🛒
+                    {:else}
+                    💡
+                    {/if}
+                </div>
+                <div class="flex flex-col">
+                    <div class="title w-[20ch] text-sm truncate overflow-hidden whitespace-nowrap text-ellipsis">
+                        {#if link_text}
+                            {link_text}
+                        {:else}
+                            {name}
+                        {/if}
+                    </div>
+                </div>
+                <div class="ml-auto mr-2">
+                    <div class="time text-xs">
+                        {timeAgo(created)}
+                    </div>
+                    <div class="flex flex-row justify-end">
+                        <button class="underline text-xs" onclick={() => {openTreeById(id)}}>Show</button>
+                    </div>
+                </div>
+            </div>
+        {/each}
     </div>
 
     <div>
@@ -692,6 +738,7 @@
 </div>
 
 <Footer />
+
 {/if}
 
 <style>
@@ -760,6 +807,15 @@
         animation: scroll 2s linear infinite; /* Adjust timing for speed */
     }
 
+    .notification-scroll-container {
+        -ms-overflow-style: none; /* for Internet Explorer, Edge */
+        scrollbar-width: none; /* for Firefox */
+        overflow-y: auto;
+    }
+    .notification-scroll-container::-webkit-scrollbar {
+        display: none; /* Chrome, Safari */
+    }
+
 @keyframes scroll {
     0% {
         background-position: 0 0;
@@ -768,4 +824,5 @@
         background-position: 20px 0; /* This should match the background size */
     }
 }
+
 </style>

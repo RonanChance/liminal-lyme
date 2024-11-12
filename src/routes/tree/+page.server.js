@@ -17,5 +17,10 @@ export async function load() {
         page++;
     } while (records.items.length === perPage);
 
-    return { records: allRecords };
+    const recentRecords = await pb.collection('tree').getList(1, 20, { sort: '-created' });
+
+    return { 
+        records: allRecords,
+        recentRecords: recentRecords.items
+    };
 }
