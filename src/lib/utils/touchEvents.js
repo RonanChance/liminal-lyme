@@ -10,7 +10,7 @@ export function initTouchEvents(container) {
             // Calculate initial distance between touches
             initialDistance = getDistance(e.touches[0], e.touches[1]);
         }
-    });
+    }, { passive: true });
 
     container.addEventListener('touchmove', (e) => {
         if (e.touches.length === 2) {
@@ -22,11 +22,11 @@ export function initTouchEvents(container) {
             container.style.transform = `scale(${scale})`;
             initialDistance = newDistance; // Update initial distance for next move
         }
-    });
+    }, { passive: false });
 
     container.addEventListener('touchend', () => {
         initialDistance = null; // Reset distance on touch end
-    });
+    }, { passive: true });
 }
 
 export function initDragging(container) {
