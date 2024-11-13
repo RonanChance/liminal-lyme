@@ -13,13 +13,6 @@
     import { formatDistanceToNowStrict, parseISO } from 'date-fns';
     import * as d3 from 'd3';
 
-    
-    /**
-     * @typedef {Object} Props
-     * @property {import('./$types').PageData} data
-     */
-
-    /** @type {Props} */
     let { data } = $props();
 
     let svg, root, tree, diagonal;
@@ -60,21 +53,24 @@
     let searchResults = $state([]);
     let searchQuery = $state("");
 
-    let width = 2560;
+    let width = 3000;
     let height = 800;
     let i = 0;
     const duration = 600;
     let recordsTree = null;
 
     let container = $state();
+    let outerContainer = $state();
 
     onMount(async () => {
         animate = true
-        window.addEventListener('scroll', updateScrollPosition);
         recordsTree = buildNestedRecords(data.records)
         initTree();
         initDragging(container);
         initTouchEvents(container); // pinch-to-zoom
+        if (outerContainer) {
+            outerContainer.scrollTop = 180;
+        }
     });
 
     // ADDITIONS
@@ -524,25 +520,6 @@
     // Reactive statement that searches when searchQuery changes
     $effect(() => { findItemsByString(searchQuery); });
 
-    let pagePosition = $state(0);
-    const updateScrollPosition = () => {
-        pagePosition = window.scrollY;
-    };
-
-    function scrollPage() {
-        if (pagePosition > 550) {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        } else {
-            window.scrollTo({
-                top: 850,
-                behavior: 'smooth'
-            });
-        }
-    }
-
     function timeAgo(dateStr) {
         const date = parseISO(dateStr); // Parse the ISO date string
         return "~"+formatDistanceToNowStrict(date) + " ago"; // Calculate and return the time ago string
@@ -728,8 +705,9 @@
 </div>
 {/if}
 
-<div class="tree-container overflow-auto w-[100%] h-[800px] relative bg-[var(--extradarkbackground)]">
-    <div class="grid-lines absolute inset-0 pointer-events-none"></div>
+<!-- w-[100%] h-[800px] -->
+<div class="tree-container overflow-auto relative bg-[var(--extradarkbackground)] max-h-[55vh] sm:max-h-[62vh] rounded-xl" bind:this={outerContainer}>
+    <div class="grid-lines absolute top-0 left-0 w-full h-full pointer-events-none" style="height: 1000px;"></div>
     <div class="tree relative z-1 ml-[1%] sm:ml-[3%] lg:ml-[5%] xl:ml-[10%]" bind:this={container}></div>
 </div>
 
@@ -828,23 +806,6 @@
 </div>
 
 <Footer />
-
-<!-- svelte-ignore a11y_consider_explicit_label -->
-<button class="sm:hidden fixed bottom-0 left-0 ml-8 bg-white rounded-t w-11 h-11 z-10 flex items-center justify-center p-2" onclick={scrollPage}>
-    {#if pagePosition < 550}
-        <svg fill="var(--darkbackground)" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="icon flat-color w-full h-full">
-            <g>
-                <path id="primary" d="M2.13,4.51A1,1,0,0,1,3,4a1,1,0,0,1,.49.13L12,8.86l8.51-4.73a1,1,0,0,1,1,1.74l-9,5a1,1,0,0,1-1,0l-9-5A1,1,0,0,1,2.13,4.51Zm18.38,8.62L12,17.86,3.49,13.13A1,1,0,0,0,3,13a1,1,0,0,0-.49,1.87l9,5a1,1,0,0,0,1,0l9-5a1,1,0,1,0-1-1.74Z" style="fill: var(--darkbackground);"></path>
-            </g>
-        </svg>
-    {:else}
-        <svg fill="var(--darkbackground)" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="icon flat-color w-full h-full">
-            <g transform="rotate({pagePosition < 550 ? 0 : 180}, 12, 12)">
-                <path id="primary" d="M2.13,4.51A1,1,0,0,1,3,4a1,1,0,0,1,.49.13L12,8.86l8.51-4.73a1,1,0,0,1,1,1.74l-9,5a1,1,0,0,1-1,0l-9-5A1,1,0,0,1,2.13,4.51Zm18.38,8.62L12,17.86,3.49,13.13A1,1,0,0,0,3,13a1,1,0,0,0-.49,1.87l9,5a1,1,0,0,0,1,0l9-5a1,1,0,1,0-1-1.74Z" style="fill: var(--darkbackground);"></path>
-            </g>
-        </svg>
-    {/if}
-</button>
 
 {/if}
 
