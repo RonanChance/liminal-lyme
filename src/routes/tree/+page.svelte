@@ -54,7 +54,7 @@
     let searchQuery = $state("");
 
     let width = 3000;
-    let height = 800;
+    let height = 8000;
     let i = 0;
     const duration = 600;
     let recordsTree = null;
@@ -69,7 +69,15 @@
         initDragging(container);
         initTouchEvents(container); // pinch-to-zoom
         if (outerContainer) {
-            outerContainer.scrollTop = 180;
+            let scrollAmount;
+            if (window.innerWidth <= 400) scrollAmount = 3800;
+            else if (window.innerWidth <= 768) scrollAmount = 3770;
+            else if (window.innerWidth <= 1280) scrollAmount = 3680;
+            else if (window.innerWidth <= 1440) scrollAmount = 3730;
+            else if (window.innerWidth <= 1920) scrollAmount = 3700;
+            else if (window.innerWidth <= 2560) scrollAmount = 3600;
+            else scrollAmount = 3600;
+            outerContainer.scrollTop = scrollAmount;
         }
     });
 
@@ -220,7 +228,9 @@
 
         // Reduce distance for leaf nodes
         nodes.forEach(d => {
-            d.y = d.depth * (d.children || d._children ? 250 : 210);
+            // d.y = d.depth * (d.children || d._children ? 250 : 210);
+            d.y = d.y + (d.children || d._children ? 0 : -150);
+            // d.x = d.x / 2.5;
         });
 
         const node = svg.selectAll('g.node').data(nodes, d => d.id || (d.id = ++i));
@@ -448,6 +458,7 @@
     function initTree() {
         // Initialize the tree layout and diagonal projection
         tree = d3.tree().size([height, width]);
+        tree.nodeSize([40, 235])
         diagonal = d3.linkHorizontal()
             .x(d => d.y)
             .y(d => d.x);
@@ -457,7 +468,7 @@
             .attr('width', width)
             .attr('height', height)
             .append('g')
-            .attr('transform', `translate(120,10)`);
+            .attr('transform', `translate(105,4000)`);
 
         // Load data
         root = d3.hierarchy(recordsTree);
@@ -488,7 +499,7 @@
 
     function openTreeById(id) {
         window.scrollTo({
-            top: 130,
+            top: 10,
             behavior: 'smooth'
         });
         let tempNode = findNodeById(root, id);
@@ -705,10 +716,9 @@
 </div>
 {/if}
 
-<!-- w-[100%] h-[800px] -->
-<div class="tree-container overflow-auto relative bg-[var(--extradarkbackground)] max-h-[55vh] sm:max-h-[62vh] rounded-xl" bind:this={outerContainer}>
-    <div class="grid-lines absolute top-0 left-0 w-full h-full pointer-events-none" style="height: 1000px;"></div>
-    <div class="tree relative z-1 ml-[1%] sm:ml-[3%] lg:ml-[5%] xl:ml-[10%]" bind:this={container}></div>
+<div class="tree-container overflow-auto bg-[var(--darkbackground)] max-h-[55vh] sm:max-h-[70vh] sm:max-w-[80%] sm:mx-auto sm:mt-4 rounded-lg outline outline-1 mx-2 mt-2" style="outline-color: rgba(255, 255, 255, 0.4);" bind:this={outerContainer}>
+    <div class="grid-lines absolute top-0 left-0 w-full h-full pointer-events-none" style="height: 8000px;"></div>
+    <div class="tree relative z-1 sm:ml-[6%] lg:ml-[5%] xl:ml-[13%] 3xl:ml-[18%] 4xl:ml-[25%]" bind:this={container}></div>
 </div>
 
 {#if animate}
@@ -864,8 +874,8 @@
     }
 
     .grid-lines {
-        background-size: 30px 30px;
-        opacity: 0.05;
+        background-size: 15px 15px;
+        opacity: 0.04;
         width: 500%;
         height: 120%;
         background-image:
