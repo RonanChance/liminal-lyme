@@ -130,6 +130,7 @@
             alert('Thank you for contributing \u{1F389}\n\nCheck the tree to see your addition!\n\nNew additions can be removed by you or the community until verified by an admin.');
             data.records.push(result.record);
             addNodeToLocalTree(selectedNode.parent, result.record);
+            addNodeToRecentRecords(result.record);
             suggestion = category = link_text = link_url = username = "";
             contributeMode = false;
         } else {
@@ -179,6 +180,11 @@
         update(root);
     }
 
+    function addNodeToRecentRecords(record) {
+        data.recentRecords.unshift(record);
+        data = { ...data };
+    }
+
     //  DELETIONS
 
     async function handleDelete() {
@@ -194,6 +200,7 @@
         const result = await response.json();
         if (result.success) {
             removeNodeFromLocalTree(selectedNode);
+            removeNodeFromRecentRecords();
         } else {
             isDeleting = deleteMode = false;
             alert("Error deleting, plese refresh and try again.");
@@ -220,6 +227,13 @@
 
         update(root);
     }
+
+    function removeNodeFromRecentRecords() {
+        data.recentRecords.shift();
+        data = { ...data };
+    }
+
+    // TREE UPDATES
 
     function update(source) {
         
