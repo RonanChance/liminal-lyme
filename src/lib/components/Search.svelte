@@ -79,14 +79,14 @@
 					const excludeFilter = excludedConditions.map(condition => `conditions!~'${condition}'`).join(' && ');
 					filterQuery += (filterQuery ? ' && ' : '') + `(${excludeFilter})`;
 				}
-			}
+			} else {
+                // If advanced mode is not on, we're going to require results to have Lyme disease 
+                // since it's applicable to most people using this app
+                const requiredFilter = `conditions?~'LYME DISEASE'`;
+                filterQuery += (filterQuery ? ' && ' : '') + `(${requiredFilter})`;
+            }
 
-			// If advanced mode is not on, we're going to require results to have Lyme disease 
-			// since it's applicable to most people using this app
-			const requiredFilter = `conditions?~'LYME DISEASE'`;
-			filterQuery += (filterQuery ? ' && ' : '') + `(${requiredFilter})`;
-
-			console.log(filterQuery)
+			console.log("Query", filterQuery)
 
 			const fetched_posts = await pb.collection('posts').getList(1, 80, {
 				sort: '-score',
