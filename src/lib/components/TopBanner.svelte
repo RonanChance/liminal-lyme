@@ -104,7 +104,7 @@
         <div class="text-center text-sm opacity-60">Explore crowd-sourced insights</div>
     </div>
 {:else if selected.includes("/about")}
-    <div class="lg:hidden text-center text-xl sm:text-2xl text-darkbg pb-4 bg-[var(--white)] rounded-b-lg text-bold flex flex-col">
+    <!-- <div class="lg:hidden text-center text-xl sm:text-2xl text-darkbg pb-4 bg-[var(--white)] text-bold flex flex-col">
         <div class="flex flex-row justify-center items-center gap-2">
             <svg class="w-8 h-8 pb-[4px]">
                 <use xlink:href="#icon-about"></use>
@@ -112,7 +112,7 @@
             <div class="text-center">The Story of Liminal Lyme</div>
         </div>
         <div class="text-center text-sm opacity-60">And the people it supports</div>
-    </div>
+    </div> -->
 {/if}
 
 <!-- Define SVGs -->
