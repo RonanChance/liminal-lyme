@@ -41,7 +41,7 @@
         <div class="text-[var(--white)] text-base">
             <ul class="ml-16 relative list-none StepProgress">
                 <div class="StepProgress-item relative is-done mr-5 font-light"><span class="text-xl font-semibold">Collect Reddit & Tree Data</span><br />Source initial data and create database</div>
-                <div class="StepProgress-item relative is-done mr-5 font-light"><span class="text-xl font-semibold">Launch Open-Source Website</span><br />LiminalLyme.com: Search Reddit posts & explore a treatment tree</div>
+                <div class="StepProgress-item relative is-done mr-5 font-light"><span class="text-xl font-semibold">Launch Open-Source Website</span><br />LiminalLyme.com: Search Reddit posts & explore a research tree</div>
                 <div class="StepProgress-item relative current mr-5 font-light"><span class="text-xl font-semibold">Crowdsource Treatment Ideas</span><br />Get insights from <span class="font-bold">YOU</span>! Make this website a community effort: <a href="tree#contribute" class="text-[var(--accent)]">contribute your ideas</a></div>
                 <div class="StepProgress-item relative current mr-5 font-light"><span class="text-xl font-semibold">Launch a Survey Research Study</span><br />Correlate medications, supplements, and treatments with outcomes in the tick-borne illness community</div>
             </ul>

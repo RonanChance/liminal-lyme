@@ -8,7 +8,7 @@
     import { fade, blur } from 'svelte/transition';
     import { total_scanned, total_cataloged, medications, supplements } from "../lib/components/constants";
     import radialClusterSVG from '../lib/assets/radialCluster.svg?raw';
-    import { Popover } from 'flowbite-svelte';
+    import { Popover, Button } from 'flowbite-svelte';
     import { ArrowRightOutline, SearchOutline, ArrowDownOutline } from 'flowbite-svelte-icons';
     
     let animate = $state(false);
@@ -127,14 +127,14 @@
         <Popover class="w-64 text-sm font-light" triggeredBy="#info-button" data-popper-placement="left">This research is focused on tick-borne disease data from Reddit, but might expand in the future</Popover>
     
         <div class="pt-6 text-center flex flex-col md:flex-row justify-center items-center gap-3 bg-[var(--lightbackground)]" in:blur={{duration: 300}}>
-            <a href="/search" class="whitebutton flex flex-row gap-2 w-[220px] h-[50px] justify-center items-center" type="button">
-                <SearchOutline class="w-7 h-7 pb-[3px]"/> 
+            <Button href="/search" color="light" class="gap-2 text-lg font-semibold">
+                <SearchOutline class="w-7 h-7 pb-[3px]"/>
                 Search Reddit
-            </a>
-            <a href="/tree" class="whitebutton flex flex-row gap-2 items-center w-[220px] h-[50px] justify-center" type="button">
-                <svg fill="#000000" class="w-9 h-9 pb-[3px]" viewBox="0 0 256.00 256.00" id="Flat" xmlns="http://www.w3.org/2000/svg" stroke="#000000" stroke-width="6.4"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M168,108h48a12.01343,12.01343,0,0,0,12-12V48a12.01343,12.01343,0,0,0-12-12H168a12.01343,12.01343,0,0,0-12,12V68H144a28.03146,28.03146,0,0,0-28,28v28H84V108A12.01343,12.01343,0,0,0,72,96H32a12.01343,12.01343,0,0,0-12,12v40a12.01343,12.01343,0,0,0,12,12H72a12.01343,12.01343,0,0,0,12-12V132h32v28a28.03146,28.03146,0,0,0,28,28h12v20a12.01343,12.01343,0,0,0,12,12h48a12.01343,12.01343,0,0,0,12-12V160a12.01343,12.01343,0,0,0-12-12H168a12.01343,12.01343,0,0,0-12,12v20H144a20.02229,20.02229,0,0,1-20-20V96a20.02229,20.02229,0,0,1,20-20h12V96A12.01343,12.01343,0,0,0,168,108ZM76,148a4.00427,4.00427,0,0,1-4,4H32a4.00427,4.00427,0,0,1-4-4V108a4.00427,4.00427,0,0,1,4-4H72a4.00427,4.00427,0,0,1,4,4Zm88,12a4.00427,4.00427,0,0,1,4-4h48a4.00427,4.00427,0,0,1,4,4v48a4.00427,4.00427,0,0,1-4,4H168a4.00427,4.00427,0,0,1-4-4Zm0-112a4.00427,4.00427,0,0,1,4-4h48a4.00427,4.00427,0,0,1,4,4V96a4.00427,4.00427,0,0,1-4,4H168a4.00427,4.00427,0,0,1-4-4Z"></path> </g></svg>
-                Treatment Tree
-            </a>
+            </Button>
+            <Button href="/tree" color="light" class="gap-2 text-lg font-semibold">
+                <svg fill="#000000" class="w-7 h-7 pb-[3px]" viewBox="0 0 256.00 256.00" id="Flat" xmlns="http://www.w3.org/2000/svg" stroke="#000000" stroke-width="6.4"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M168,108h48a12.01343,12.01343,0,0,0,12-12V48a12.01343,12.01343,0,0,0-12-12H168a12.01343,12.01343,0,0,0-12,12V68H144a28.03146,28.03146,0,0,0-28,28v28H84V108A12.01343,12.01343,0,0,0,72,96H32a12.01343,12.01343,0,0,0-12,12v40a12.01343,12.01343,0,0,0,12,12H72a12.01343,12.01343,0,0,0,12-12V132h32v28a28.03146,28.03146,0,0,0,28,28h12v20a12.01343,12.01343,0,0,0,12,12h48a12.01343,12.01343,0,0,0,12-12V160a12.01343,12.01343,0,0,0-12-12H168a12.01343,12.01343,0,0,0-12,12v20H144a20.02229,20.02229,0,0,1-20-20V96a20.02229,20.02229,0,0,1,20-20h12V96A12.01343,12.01343,0,0,0,168,108ZM76,148a4.00427,4.00427,0,0,1-4,4H32a4.00427,4.00427,0,0,1-4-4V108a4.00427,4.00427,0,0,1,4-4H72a4.00427,4.00427,0,0,1,4,4Zm88,12a4.00427,4.00427,0,0,1,4-4h48a4.00427,4.00427,0,0,1,4,4v48a4.00427,4.00427,0,0,1-4,4H168a4.00427,4.00427,0,0,1-4-4Zm0-112a4.00427,4.00427,0,0,1,4-4h48a4.00427,4.00427,0,0,1,4,4V96a4.00427,4.00427,0,0,1-4,4H168a4.00427,4.00427,0,0,1-4-4Z"></path> </g></svg>
+                Research Tree
+            </Button>
         </div>
         
         <div class="pt-12 pb-3 flex flex-col gap-2">
@@ -175,7 +175,7 @@
                 <video src="videos/tree.mp4" type="video/mp4" class="mx-auto rounded-xl" playsinline autoplay loop muted></video>
             </div>
             <div class="flex flex-col items-center text-center text-[var(--white)] text-lg max-w-[75%] px-[2%] md:mt-5 gap-1">
-                <strong class="text-2xl">Treatment Tree</strong>
+                <strong class="text-2xl">Research Tree</strong>
                 Find treatment ideas using the community research tree
                 <a href="/tree" class="px-4 py-1 bg-[--darkbackground] rounded text-[var(--white)] mt-3 flex items-center">
                     Tree
