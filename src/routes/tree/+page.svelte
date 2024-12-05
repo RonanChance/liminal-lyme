@@ -376,8 +376,21 @@
                 .attr('x', d.children || d._children ? -(nameWidth + 35) : -20)
                 .attr('y', -8);
         })
-        .append('use')
-        .attr('xlink:href', '#icon-remove');
+        // Add an invisible rectangle for a larger click target width/height
+        .append('rect')
+        .attr('width', 32)
+        .attr('height', 32)
+        .attr('x', -8)
+        .attr('y', -8)
+        .style('fill', 'transparent')
+        .style('pointer-events', 'all');
+        
+        // Add the icon inside the svg
+        nodeEnter.select('.remove-button')
+            .append('use')
+            .attr('xlink:href', '#icon-remove')
+            .attr('x', 0)
+            .attr('y', 0);
 
         // Append username text if available
         nodeEnter.append('text')
