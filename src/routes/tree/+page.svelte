@@ -176,7 +176,13 @@
             newNode._children = null;
         }
 
-        parent.children.push(newNode);
+        // add the new node alphabetically
+        let insertionIndex = parent.children.findIndex(element => element.data.name.localeCompare(newNodeData.name, undefined, { sensitivity: 'base' }) > 0);
+        if (insertionIndex === -1) {
+            parent.children.push(newNode);
+        } else {
+            parent.children.splice(insertionIndex, 0, newNode);
+        }
         update(root);
     }
 
