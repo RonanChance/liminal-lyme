@@ -21,7 +21,7 @@
 
 <meta charset="utf-8" name="theme-color" content="#f8f8f8"/>
 
-{#if !isStandAlone && !selected.includes("/tree") && !selected.includes("/search") && !selected.includes("/search") && !selected.includes("/about")}
+<!-- {#if !isStandAlone && !selected.includes("/tree") && !selected.includes("/search") && !selected.includes("/search") && !selected.includes("/about")}
     <ModalPWA bind:showModal>
     <div class="flex justify-center">
         <video autoplay loop muted playsinline class="w-[85%]">
@@ -43,14 +43,14 @@
             <button type="submit" class="bg-[#007AFF] text-white font-semibold pt-1 pb-0.5 px-3.5 rounded-3xl flex items-center justify-center" onclick={()=> {showModal = true;}}>ADD</button>
         </div>
     </div>
-{/if}
+{/if} -->
 
 <div class="navbar flex flex-row gap-4 bg-[var(--white)]">
     <a href="/">
         <img src="/banner.png" class="mainlogo w-[200px] sm:w-[250px] xl:w-[250px] px-1 py-1 md:px-0" alt="LiminalLyme" />
     </a>
     {#if selected.includes("/search")}
-        <div class="hidden lg:block pt-[18px] text-center text-xl sm:text-2xl text-darkbg text-bold flex flex-col">
+        <div class="hidden lg:block pt-[18px] text-center text-xl sm:text-2xl text-[var(--darkbackground)] text-bold flex flex-col">
             <div class="flex flex-row justify-center items-center gap-1">
                 <SearchOutline class="w-7 h-7 pb-[2px]"/>
                 <div class="text-center">Medication & Supplement Search</div>
@@ -58,7 +58,7 @@
             <div class="text-center text-sm opacity-60">Search <a class="underline" href="/about#where_is_the_data_from">subreddits</a> with key terms</div>
         </div>
     {:else if selected.includes("/tree")}
-        <div class="hidden lg:block pt-[18px] text-center text-xl sm:text-2xl text-darkbg text-bold flex flex-col">
+        <div class="hidden lg:block pt-[18px] text-center text-xl sm:text-2xl text-[var(--darkbackground)] text-bold flex flex-col">
             <div class="flex flex-row justify-center items-center gap-1">
                 <svg class="w-8 h-8 pb-[2px]">
                     <use xlink:href="#icon-tree"></use>
@@ -68,7 +68,7 @@
             <div class="text-center text-sm opacity-60">Explore crowd-sourced insights</div>
         </div>
     {:else if selected.includes("/about")}
-        <div class="hidden lg:block pt-[18px] text-center text-xl sm:text-2xl text-darkbg text-bold flex flex-col">
+        <div class="hidden lg:block pt-[18px] text-center text-xl sm:text-2xl text-[var(--darkbackground)] text-bold flex flex-col">
             <div class="flex flex-row justify-center items-center gap-2">
                 <svg class="w-8 h-8 pb-[2px]">
                     <use xlink:href="#icon-about"></use>
@@ -79,14 +79,14 @@
         </div>
     {/if}
     <nav class="flex flex-row gap-3 md:gap-6">
-        <a class="flex justify-center font-medium text-lg text-darkbg" href="/search" onclick={() => {changeSelected("/search");}} style="text-decoration: {selected.includes("search") ? "underline" : "none"}; text-decoration-thickness: 2px; text-underline-offset: 3px;" type="button">Search</a>
-        <a class="flex justify-center font-medium text-lg text-darkbg" href="/tree" onclick={() => {changeSelected("/tree");}} style="text-decoration: {selected.includes("tree") ? "underline" : "none"}; text-decoration-thickness: 2px; text-underline-offset: 3px;" type="button">Tree</a>
-        <a class="flex justify-center font-medium text-lg text-darkbg" href="/about" onclick={() => {changeSelected("/about");}} style="text-decoration: {selected.includes("about") ? "underline" : "none"}; text-decoration-thickness: 2px; text-underline-offset: 3px;" type="button">About</a>
+        <a class="flex justify-center font-medium text-lg text-[var(--darkbackground)]" href="/search" onclick={() => {changeSelected("/search");}} style="text-decoration: {selected.includes("search") ? "underline" : "none"}; text-decoration-thickness: 2px; text-underline-offset: 3px;" type="button">Search</a>
+        <a class="flex justify-center font-medium text-lg text-[var(--darkbackground)]" href="/tree" onclick={() => {changeSelected("/tree");}} style="text-decoration: {selected.includes("tree") ? "underline" : "none"}; text-decoration-thickness: 2px; text-underline-offset: 3px;" type="button">Tree</a>
+        <a class="flex justify-center font-medium text-lg text-[var(--darkbackground)]" href="/about" onclick={() => {changeSelected("/about");}} style="text-decoration: {selected.includes("about") ? "underline" : "none"}; text-decoration-thickness: 2px; text-underline-offset: 3px;" type="button">About</a>
     </nav>
 </div>
 
 {#if selected.includes("/search")}
-    <div class="lg:hidden text-center text-xl sm:text-2xl text-darkbg pb-4 bg-[var(--white)] rounded-b-lg text-bold flex flex-col">
+    <div class="lg:hidden text-center text-xl sm:text-2xl text-[var(--darkbackground)] pb-4 bg-[var(--white)] rounded-b-lg text-bold flex flex-col">
         <div class="flex flex-row justify-center items-center gap-1">
             <SearchOutline class="w-7 h-7 pb-[4px]"/> 
             <div class="text-center">Medication & Supplement Search</div>
@@ -94,7 +94,7 @@
         <div class="text-center text-sm opacity-60">Search <a class="underline" href="/about#where_is_the_data_from">subreddits</a> with key terms</div>
     </div>
 {:else if selected.includes("/tree")}
-    <div class="lg:hidden text-center text-xl sm:text-2xl text-darkbg pb-4 bg-[var(--white)] rounded-b-lg text-bold flex flex-col">
+    <div class="lg:hidden text-center text-xl sm:text-2xl text-[var(--darkbackground)] pb-4 bg-[var(--white)] rounded-b-lg text-bold flex flex-col">
         <div class="flex flex-row justify-center items-center gap-1">
             <svg class="w-8 h-8 pb-[2px]">
                 <use xlink:href="#icon-tree"></use>
@@ -104,7 +104,7 @@
         <div class="text-center text-sm opacity-60">Explore crowd-sourced insights</div>
     </div>
 {:else if selected.includes("/about")}
-    <!-- <div class="lg:hidden text-center text-xl sm:text-2xl text-darkbg pb-4 bg-[var(--white)] text-bold flex flex-col">
+    <!-- <div class="lg:hidden text-center text-xl sm:text-2xl text-[var(--darkbackground)] pb-4 bg-[var(--white)] text-bold flex flex-col">
         <div class="flex flex-row justify-center items-center gap-2">
             <svg class="w-8 h-8 pb-[4px]">
                 <use xlink:href="#icon-about"></use>
