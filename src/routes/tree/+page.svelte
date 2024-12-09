@@ -17,6 +17,7 @@
 
     let svg, root, tree, diagonal;
     let animate = $state(false);
+    let loading = $state(true);
 
     let throwConfetti = $state(false);
     let contributeMode = $state(false);
@@ -63,21 +64,28 @@
     let outerContainer = $state();
 
     onMount(async () => {
-        animate = true
-        recordsTree = buildNestedRecords(data.records)
-        initTree();
-        initDragging(container);
-        initTouchEvents(container); // pinch-to-zoom
-        if (outerContainer) {
-            let scrollAmount;
-            if (window.innerWidth <= 400) scrollAmount = 3800;
-            else if (window.innerWidth <= 768) scrollAmount = 3770;
-            else if (window.innerWidth <= 1280) scrollAmount = 3680;
-            else if (window.innerWidth <= 1440) scrollAmount = 3730;
-            else if (window.innerWidth <= 1920) scrollAmount = 3700;
-            else if (window.innerWidth <= 2560) scrollAmount = 3600;
-            else scrollAmount = 3600;
-            outerContainer.scrollTop = scrollAmount;
+        try {
+            animate = true
+            data = await data.fetchPromise;
+            recordsTree = buildNestedRecords(data.records)
+            initTree();
+            initDragging(container);
+            initTouchEvents(container); // pinch-to-zoom
+            if (outerContainer) {
+                let scrollAmount;
+                if (window.innerWidth <= 400) scrollAmount = 3800;
+                else if (window.innerWidth <= 768) scrollAmount = 3770;
+                else if (window.innerWidth <= 1280) scrollAmount = 3680;
+                else if (window.innerWidth <= 1440) scrollAmount = 3730;
+                else if (window.innerWidth <= 1920) scrollAmount = 3700;
+                else if (window.innerWidth <= 2560) scrollAmount = 3600;
+                else scrollAmount = 3600;
+                outerContainer.scrollTop = scrollAmount;
+            }
+        } catch (error) {
+            console.log("Error fetching data", error);
+        } finally {
+            loading = false;
         }
     });
 
@@ -749,13 +757,19 @@
 </div>
 {/if}
 
-<div class="tree-container overflow-auto bg-[var(--darkbackground)] max-h-[55vh] sm:max-h-[70vh] sm:max-w-[80%] sm:mx-auto sm:mt-4 rounded-lg outline outline-1 mx-2 mt-2" style="outline-color: rgba(255, 255, 255, 0.4);" bind:this={outerContainer}>
+{#if loading}
+    <div class="pt-[200px] text-center text-[var(--white)]">
+        <Spinner size=10 color="green" />
+    </div>
+{/if}
+
+<div class="{loading ? 'invisible' : 'visible'} tree-container overflow-auto bg-[var(--darkbackground)] max-h-[55vh] sm:max-h-[70vh] sm:max-w-[80%] sm:mx-auto sm:mt-4 rounded-lg outline outline-1 mx-2 mt-2" style="outline-color: rgba(255, 255, 255, 0.4);" bind:this={outerContainer}>
     <div class="grid-lines absolute top-0 left-0 w-full h-full pointer-events-none" style="height: 8000px;"></div>
     <div class="tree relative z-1 sm:ml-[6%] lg:ml-[5%] xl:ml-[13%] 3xl:ml-[18%] 4xl:ml-[25%]" bind:this={container}></div>
 </div>
 
 {#if animate}
-<div class="pt-6 pb-6 mx-auto max-w-[90%] sm:max-w-[60%] lg:max-w-[40%] flex flex-col gap-5" in:fade={{duration: 300}}>
+<div class="{loading ? 'invisible' : 'visible'} pt-6 pb-6 mx-auto max-w-[90%] sm:max-w-[60%] lg:max-w-[40%] flex flex-col gap-5" in:fade={{duration: 300}}>
     
     <div class="w-[100%] sm:max-w-[80%] mx-auto text-[var(--white)]">
         <div class="flex flex-col">
@@ -844,11 +858,13 @@
     </div>
 </div>
 
-<div class="flex flex-col ml-auto mr-auto pt-6 pb-6 max-w-[90%] opacity-40">
+<div class="{loading ? 'invisible' : 'visible'} flex flex-col ml-auto mr-auto pt-6 pb-6 max-w-[90%] opacity-40">
     <MedicalDisclaimer />
 </div>
 
-<Footer />
+<div class="{loading ? 'invisible' : 'visible'}">
+    <Footer />
+</div>
 
 {/if}
 
