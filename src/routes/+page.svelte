@@ -126,14 +126,14 @@
         </h3>
         <Popover class="w-64 text-sm font-light" triggeredBy="#info-button" data-popper-placement="left">This research is focused on tick-borne disease data from Reddit, but might expand in the future</Popover>
     
-        <div class="pt-6 text-center flex flex-col md:flex-row justify-center items-center gap-3 bg-[var(--lightbackground)]" in:blur={{duration: 300}}>
-            <Button href="/search" color="light" class="gap-2 text-lg font-semibold">
-                <SearchOutline class="w-7 h-7 pb-[3px]"/>
-                Search Reddit
-            </Button>
-            <Button href="/tree" color="light" class="gap-2 text-lg font-semibold">
+        <div class="pt-6 text-center flex flex-row md:flex-row justify-center items-center gap-2 bg-[var(--lightbackground)]" in:blur={{duration: 300}}>
+            <Button href="/tree" color="light" size="sm" class="gap-2 text-lg font-normal">
                 <svg fill="#000000" class="w-7 h-7 pb-[3px]" viewBox="0 0 256.00 256.00" id="Flat" xmlns="http://www.w3.org/2000/svg" stroke="#000000" stroke-width="6.4"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M168,108h48a12.01343,12.01343,0,0,0,12-12V48a12.01343,12.01343,0,0,0-12-12H168a12.01343,12.01343,0,0,0-12,12V68H144a28.03146,28.03146,0,0,0-28,28v28H84V108A12.01343,12.01343,0,0,0,72,96H32a12.01343,12.01343,0,0,0-12,12v40a12.01343,12.01343,0,0,0,12,12H72a12.01343,12.01343,0,0,0,12-12V132h32v28a28.03146,28.03146,0,0,0,28,28h12v20a12.01343,12.01343,0,0,0,12,12h48a12.01343,12.01343,0,0,0,12-12V160a12.01343,12.01343,0,0,0-12-12H168a12.01343,12.01343,0,0,0-12,12v20H144a20.02229,20.02229,0,0,1-20-20V96a20.02229,20.02229,0,0,1,20-20h12V96A12.01343,12.01343,0,0,0,168,108ZM76,148a4.00427,4.00427,0,0,1-4,4H32a4.00427,4.00427,0,0,1-4-4V108a4.00427,4.00427,0,0,1,4-4H72a4.00427,4.00427,0,0,1,4,4Zm88,12a4.00427,4.00427,0,0,1,4-4h48a4.00427,4.00427,0,0,1,4,4v48a4.00427,4.00427,0,0,1-4,4H168a4.00427,4.00427,0,0,1-4-4Zm0-112a4.00427,4.00427,0,0,1,4-4h48a4.00427,4.00427,0,0,1,4,4V96a4.00427,4.00427,0,0,1-4,4H168a4.00427,4.00427,0,0,1-4-4Z"></path> </g></svg>
                 Research Tree
+            </Button>
+            <Button href="/search" color="light" size="sm" class="gap-2 text-lg font-normal">
+                <SearchOutline class="w-7 h-7 pb-[3px]"/>
+                Search Reddit
             </Button>
         </div>
         
@@ -158,29 +158,29 @@
         
         <div class="flex flex-row md:flex-col flex-1 items-center mt-6 ml-[2%] mr-[2%] md:max-w-[30%]" in:blur={{duration: 450}}>
             <div class="min-w-[50%] max-w-[50%] md:min-w-[70%] md:max-w-[70%] xl:min-w-[60%] xl:max-w-[60%] 2xl:min-w-[40%] 2xl:max-w-[40%]">
-                <video src="videos/search.mp4" type="video/mp4" class="mx-auto rounded-xl" playsinline autoplay loop muted></video>
-            </div>
-            <div class="flex flex-col flex-grow items-center text-center text-[var(--white)] text-lg max-w-[75%] px-[2%] md:mt-5 gap-1">
-                <strong class="text-2xl">Search Reddit</strong>
-                Find specific tick-borne illness experiences
-                <a href="/search" class="px-4 py-1 bg-[--darkbackground] rounded text-[var(--white)] mt-3 flex items-center">
-                    Search
-                    <ArrowRightOutline class="text-[var(--white)] inline ml-1" />
-                </a>                
-            </div>
-        </div>
-        
-        <div class="flex flex-row md:flex-col flex-1 items-center mt-6 ml-[2%] mr-[2%] md:max-w-[30%]" in:blur={{duration: 450}}>
-            <div class="min-w-[50%] max-w-[50%] md:min-w-[70%] md:max-w-[70%] xl:min-w-[60%] xl:max-w-[60%] 2xl:min-w-[40%] 2xl:max-w-[40%]">
                 <video src="videos/tree.mp4" type="video/mp4" class="mx-auto rounded-xl" playsinline autoplay loop muted></video>
             </div>
             <div class="flex flex-col items-center text-center text-[var(--white)] text-lg max-w-[75%] px-[2%] md:mt-5 gap-1">
-                <strong class="text-2xl">Research Tree</strong>
-                Find treatment ideas using the community research tree
+                <strong class="text-2xl font-medium">Research Tree</strong>
+                <div class="italic opacity-90 font-light">Locate treatment ideas with the community research tree</div>
                 <a href="/tree" class="px-4 py-1 bg-[--darkbackground] rounded text-[var(--white)] mt-3 flex items-center">
                     Tree
                     <ArrowRightOutline class="text-[var(--white)] inline ml-1" />
                 </a>
+            </div>
+        </div>
+
+        <div class="flex flex-row md:flex-col flex-1 items-center mt-6 ml-[2%] mr-[2%] md:max-w-[30%]" in:blur={{duration: 450}}>
+            <div class="min-w-[50%] max-w-[50%] md:min-w-[70%] md:max-w-[70%] xl:min-w-[60%] xl:max-w-[60%] 2xl:min-w-[40%] 2xl:max-w-[40%]">
+                <video src="videos/search.mp4" type="video/mp4" class="mx-auto rounded-xl" playsinline autoplay loop muted></video>
+            </div>
+            <div class="flex flex-col flex-grow items-center text-center text-[var(--white)] text-lg max-w-[75%] px-[2%] md:mt-5 gap-1">
+                <strong class="text-2xl font-medium">Search Reddit</strong>
+                <div class="italic opacity-90 font-light">Find specific tick-borne illness experiences</div>
+                <a href="/search" class="px-4 py-1 bg-[--darkbackground] rounded text-[var(--white)] mt-3 flex items-center">
+                    Search
+                    <ArrowRightOutline class="text-[var(--white)] inline ml-1" />
+                </a>                
             </div>
         </div>
 
@@ -201,24 +201,24 @@
     
     <div class="flex flex-col items-center" in:blur={{duration: 450}}>
         <div class="pt-10 text-[var(--accent)] opacity-50 text-2xl">Scanned Comments</div>
-        <div class="text-[var(--white)] font-bold text-6xl mt-5 mb-5">{total_scanned}</div>
+        <div class="text-[var(--white)] font-medium text-6xl mt-5 mb-5">{total_scanned}</div>
 
         <hr class="opacity-50 mt-2 bg-[var(--white)] w-[80%]" />
         <div class="mt-5 text-[var(--accent)] opacity-50 text-2xl">Cataloged Experiences</div>
-        <div class="text-[var(--white)] font-bold text-6xl mt-5 mb-5">{total_cataloged}</div>
+        <div class="text-[var(--white)] font-medium text-6xl mt-5 mb-5">{total_cataloged}</div>
         
         <hr class="opacity-50 mt-2 bg-[var(--white)] w-[80%]" />
         <div class="mt-5 text-[var(--accent)] opacity-50 text-2xl">Supported Medications</div>
-        <div class="text-[var(--white)] font-bold text-6xl mt-5 mb-5">{medications.length}</div>
+        <div class="text-[var(--white)] font-medium text-6xl mt-5 mb-5">{medications.length}</div>
         
         <hr class="opacity-50 mt-2 bg-[var(--white)] w-[80%]" />
         <div class="mt-5 text-[var(--accent)] opacity-50 text-2xl">Supported Supplements</div>
-        <div class="text-[var(--white)] font-bold text-6xl mt-5 pb-10">{supplements.length}</div>
+        <div class="text-[var(--white)] font-medium text-6xl mt-5 pb-10">{supplements.length}</div>
     </div>
 
-    <div class="italic text-2xl sm:text-3xl font-semibold bg-[var(--white)] text-[var(--darkbackground)] px-[10%] pt-10 pb-10" in:fade={{duration: 450}}>
+    <div class="italic text-2xl sm:text-3xl font-light bg-[var(--white)] text-[var(--darkbackground)] px-[10%] pt-10 pb-10" in:fade={{duration: 450}}>
         The highest form of knowledge is empathy, for it requires us to suspend our egos and live in another's world.
-        <div class="quoteattribution text-right font-normal not-italic">
+        <div class="quoteattribution text-right font-light not-italic">
             - Plato
         </div>
     </div>

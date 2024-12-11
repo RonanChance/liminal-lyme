@@ -79,8 +79,8 @@
         </div>
     {/if}
     <nav class="flex flex-row gap-3 md:gap-6">
-        <a class="flex justify-center font-medium text-lg text-[var(--darkbackground)]" href="/search" onclick={() => {changeSelected("/search");}} style="text-decoration: {selected.includes("search") ? "underline" : "none"}; text-decoration-thickness: 2px; text-underline-offset: 3px;" type="button">Search</a>
         <a class="flex justify-center font-medium text-lg text-[var(--darkbackground)]" href="/tree" onclick={() => {changeSelected("/tree");}} style="text-decoration: {selected.includes("tree") ? "underline" : "none"}; text-decoration-thickness: 2px; text-underline-offset: 3px;" type="button">Tree</a>
+        <a class="flex justify-center font-medium text-lg text-[var(--darkbackground)]" href="/search" onclick={() => {changeSelected("/search");}} style="text-decoration: {selected.includes("search") ? "underline" : "none"}; text-decoration-thickness: 2px; text-underline-offset: 3px;" type="button">Search</a>
         <a class="flex justify-center font-medium text-lg text-[var(--darkbackground)]" href="/about" onclick={() => {changeSelected("/about");}} style="text-decoration: {selected.includes("about") ? "underline" : "none"}; text-decoration-thickness: 2px; text-underline-offset: 3px;" type="button">About</a>
     </nav>
 </div>
