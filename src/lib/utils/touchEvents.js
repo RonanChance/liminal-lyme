@@ -37,16 +37,26 @@ export function initDragging(container) {
         isDragging = true;
         startX = e.clientX;
         startY = e.clientY;
+        container.style.cursor = 'grabbing'; // Optional: Change cursor during drag
     });
 
     document.addEventListener('mousemove', (e) => {
         if (!isDragging) return;
+
         const dx = e.clientX - startX;
         const dy = e.clientY - startY;
 
-        const currentTransform = container.style.transform || 'translate(0, 0)';
+        // Parse the current transform matrix
+        const currentTransform = container.style.transform || 'translate(0, 0) scale(1)';
         const matrix = new WebKitCSSMatrix(currentTransform);
-        container.style.transform = `translate(${matrix.m41 + dx}px, ${matrix.m42 + dy}px)`;
+
+        // Preserve the scale and only update the translation
+        const scale = matrix.a; // Extract the scale value from the matrix
+        const newTranslateX = matrix.m41 + dx;
+        const newTranslateY = matrix.m42 + dy;
+
+        // Apply the new transformation
+        container.style.transform = `translate(${newTranslateX}px, ${newTranslateY}px) scale(${scale})`;
 
         startX = e.clientX;
         startY = e.clientY;
@@ -54,7 +64,7 @@ export function initDragging(container) {
 
     document.addEventListener('mouseup', () => {
         isDragging = false;
-        container.style.cursor = 'grab';
+        container.style.cursor = 'grab'; // Reset cursor after drag
     });
 }
 

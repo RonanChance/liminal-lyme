@@ -4,7 +4,7 @@
     import { Confetti } from "svelte-confetti";
     import TopBanner from '../../lib/components/TopBanner.svelte';
     import Footer from '../../lib/components/Footer.svelte';
-    import { Input, Select, Popover, Spinner, AccordionItem, Accordion} from 'flowbite-svelte';
+    import { Input, Button, Select, Popover, Spinner, AccordionItem, Accordion} from 'flowbite-svelte';
     import { FilePenSolid, LinkOutline, CloseOutline, UserCircleSolid, InfoCircleSolid, ChevronDownOutline, ChevronUpOutline, SearchOutline } from 'flowbite-svelte-icons';
     import MedicalDisclaimer from '../../lib/components/MedicalDisclaimer.svelte';
     import { isValidUrl } from '../../lib/utils/validations.js';
@@ -59,6 +59,7 @@
     let i = 0;
     const duration = 600;
     let recordsTree = null;
+    let scrollAmount = 0;
 
     let container = $state();
     let outerContainer = $state();
@@ -72,15 +73,14 @@
             initDragging(container);
             initTouchEvents(container); // pinch-to-zoom
             if (outerContainer) {
-                let scrollAmount;
-                if (window.innerWidth <= 400) scrollAmount = 3800;
-                else if (window.innerWidth <= 768) scrollAmount = 3770;
-                else if (window.innerWidth <= 1280) scrollAmount = 3680;
-                else if (window.innerWidth <= 1440) scrollAmount = 3730;
-                else if (window.innerWidth <= 1920) scrollAmount = 3700;
-                else if (window.innerWidth <= 2560) scrollAmount = 3600;
+                if (window.innerWidth <= 400) scrollAmount = 3700;
+                else if (window.innerWidth <= 768) scrollAmount = 3790;
+                else if (window.innerWidth <= 1280) scrollAmount = 3580;
+                else if (window.innerWidth <= 1920) scrollAmount = 3630;
+                else if (window.innerWidth <= 2560) scrollAmount = 3630;
                 else scrollAmount = 3600;
                 outerContainer.scrollTop = scrollAmount;
+                outerContainer.scrollLeft = 180;
             }
         } catch (error) {
             console.log("Error fetching data", error);
@@ -509,7 +509,7 @@
             .attr('width', width)
             .attr('height', height)
             .append('g')
-            .attr('transform', `translate(105,4000)`);
+            .attr('transform', `translate(300,4000)`);
 
         // Load data
         root = d3.hierarchy(recordsTree);
@@ -543,12 +543,20 @@
             top: 10,
             behavior: 'smooth'
         });
-        let tempNode = findNodeById(root, id);
-        while (tempNode != null) {
-            expand(tempNode);
-            tempNode = tempNode.parent;
+        
+        let foundNode = findNodeById(root, id);
+        let currentNode = foundNode;
+        
+        while (currentNode != null) {
+            expand(currentNode);
+            currentNode = currentNode.parent;
         }
         update(root);
+
+        let x = foundNode.x;
+        let y = foundNode.y;
+        outerContainer.scrollTop = scrollAmount + x * zoomLevel;
+        outerContainer.scrollLeft = y * zoomLevel;
     }
     
     function findItemsByString(searchQuery) {
@@ -568,6 +576,39 @@
             searchResults = [];
         }
     }
+
+    // function openAllNodes(node) {
+    //     if (node._children) {
+    //         node.children = node._children;
+    //         node._children = null;
+    //     }
+    //     if (node.children) {
+    //         node.children.forEach(child => openAllNodes(child));
+    //     }
+    // }
+
+    // function closeAllNodes(node) {
+    //     if (node.children) {
+    //         node._children = node.children;
+    //         node.children = null;
+    //     }
+    //     if (node._children) {
+    //         node._children.forEach(closeAllNodes);
+    //     }
+    // }
+
+    // let nodesToggled = $state(false);
+    // function toggleAllNodes() {
+    //     if (!nodesToggled) {
+    //         openAllNodes(root);
+    //         update(root);
+    //         nodesToggled = true;
+    //     } else {
+    //         closeAllNodes(root);
+    //         update(root);
+    //         nodesToggled = false;
+    //     }
+    // }
     
     // Reactive statement that searches when searchQuery changes
     $effect(() => { findItemsByString(searchQuery); });
@@ -575,6 +616,25 @@
     function timeAgo(dateStr) {
         const date = parseISO(dateStr); // Parse the ISO date string
         return "~"+formatDistanceToNowStrict(date) + " ago"; // Calculate and return the time ago string
+    }
+
+    // ZOOM FUNCTIONS
+
+    let zoomLevel = $state(1);
+    
+    function zoomIn() {
+        zoomLevel = Math.min(zoomLevel * 1.15, 3);
+        container.style.transform = `scale(${zoomLevel})`;
+    }
+
+    function zoomOut() {
+        zoomLevel = Math.max(zoomLevel / 1.15, 0.5);
+        container.style.transform = `scale(${zoomLevel})`;
+    }
+
+    function centerView() {
+        outerContainer.scrollTop = scrollAmount;
+        outerContainer.scrollLeft = 180;
     }
 
 </script>
@@ -763,9 +823,42 @@
     </div>
 {/if}
 
-<div class="{loading ? 'invisible' : 'visible'} tree-container overflow-auto bg-[var(--darkbackground)] max-h-[55vh] sm:max-h-[70vh] sm:max-w-[80%] sm:mx-auto sm:mt-4 rounded-lg outline outline-1 mx-2 mt-2" style="outline-color: rgba(255, 255, 255, 0.4);" bind:this={outerContainer}>
-    <div class="grid-lines absolute top-0 left-0 w-full h-full pointer-events-none" style="height: 8000px;"></div>
+<div class="{loading ? 'invisible' : 'visible'} tree-container relative overflow-auto bg-[var(--darkbackground)] max-h-[55vh] sm:max-h-[70vh] sm:max-w-[80%] sm:mx-auto sm:mt-4 rounded-lg outline outline-1 mx-2 mt-2" style="outline-color: rgba(255, 255, 255, 0.4);" bind:this={outerContainer}>
+    <div class="grid-lines absolute top-0 left-0 w-full h-full pointer-events-none" style="height: 8000px; width: 4000px;"></div>
     <div class="tree relative z-1 sm:ml-[6%] lg:ml-[5%] xl:ml-[13%] 3xl:ml-[18%] 4xl:ml-[25%]" bind:this={container}></div>
+    
+    <div class="absolute sticky bottom-0 left-0 flex justify-between">
+        <div class="flex mb-2 ml-2">
+            <Button class="text-base focus:ring-1 z-10 rounded-xl" id="centerTreeButton" color="alternative" size="xs" onclick={centerView} style="touch-action: manipulation;">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M12 3V7M12 17V21M3 12H7M17 12H21M12 12H12.01M19 12C19 15.866 15.866 19 12 19C8.13401 19 5 15.866 5 12C5 8.13401 8.13401 5 12 5C15.866 5 19 8.13401 19 12Z" stroke="var(--darkbackground)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+            </Button>
+            <Popover class="w-32 text-sm font-normal text-center" triggeredBy="#centerTreeButton" placement="top" data-popper-placement="">Re-center tree</Popover>
+            
+            <!-- <Button class="text-base focus:ring-1 z-10 rounded-r-xl rounded-l-none" id="toggleAllNodes" color="alternative" size="xs" onclick={toggleAllNodes} style="touch-action: manipulation;">
+                {#if !nodesToggled}
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M15 9L21 3M21 3H16.5M21 3V7.5M9 15L3 21M3 21L7.5 21M3 21L3 16.5M15 15L9 9" stroke="var(--darkbackground)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                {:else}
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M15 9L21 3M15 9H19.5M15 9V4.5M9 15L3 21M9 15H4.5M9 15V19.5M15 15L9 9" stroke="var(--darkbackground)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                {/if}
+            </Button>
+            <Popover class="w-32 text-sm font-normal text-center" triggeredBy="#toggleAllNodes" placement="top" data-popper-placement="">
+                {#if !nodesToggled}
+                Open all nodes
+                {:else}
+                Close all nodes
+                {/if}
+            </Popover> -->
+        </div>
+    
+        <div class="flex mb-2 mr-2">
+            <Button class="text-base focus:ring-1 z-10 rounded-l-xl rounded-r-none" id="zoomOut" color="alternative" size="xs" onclick={zoomOut} style="touch-action: manipulation;">
+                <svg viewBox="0 0 24 24" fill="none" class="w-5 h-5" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M21 21L15.8033 15.8033M7.5 10.5H13.5M15.8033 15.8033C17.1605 14.4461 18 12.5711 18 10.5C18 6.35786 14.6421 3 10.5 3C6.35786 3 3 6.35786 3 10.5C3 14.6421 6.35786 18 10.5 18C12.5711 18 14.4461 17.1605 15.8033 15.8033Z" stroke="var(--darkbackground)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+            </Button>
+            <Button class="text-base focus:ring-1 z-10 rounded-r-xl rounded-l-none" id="zoomIn" color="alternative" size="xs" onclick={zoomIn} style="touch-action: manipulation;">
+                <svg viewBox="0 0 24 24" fill="none" class="w-5 h-5" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M15.8053 15.8013L21 21M10.5 7.5V13.5M7.5 10.5H13.5M18 10.5C18 14.6421 14.6421 18 10.5 18C6.35786 18 3 14.6421 3 10.5C3 6.35786 6.35786 3 10.5 3C14.6421 3 18 6.35786 18 10.5Z" stroke="var(--darkbackground)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+            </Button>
+        </div>
+    </div>
 </div>
 
 {#if animate}
@@ -792,7 +885,7 @@
         </div>
     </div>
 
-    <div class="notification-scroll-container w-[90%] sm:max-w-[80%] mx-auto text-[var(--white)] max-h-[250px] overflow-y-auto rounded-lg">
+    <div class="notification-scroll-container w-[90%] sm:max-w-[80%] mx-auto text-[var(--white)] max-h-[325px] overflow-y-auto rounded-lg">
         {#each data.recentRecords as { id, created, name, link, link_text } (id)}
             <div class="bg-[var(--white)] text-[var(--darkbackground)] rounded-lg p-2 my-2 flex flex-row items-center justify-between">
                 <div class="icon ml-2 mr-4">
