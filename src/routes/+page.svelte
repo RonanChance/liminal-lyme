@@ -73,7 +73,7 @@
             <h3 class="pt-6 pb-6 text-left sm:text-center">Medications and supplements should <br class="sm:hidden" /> improve your health, not set you back.</h3>
             <!-- show on non-mobile -->
             <div class="flex">
-                <button id="scrollDown1" class="hidden sm:inline-flex flex flex-row whitebutton mt-4 gap-2 h-[50px] justify-center items-center mx-auto" type="button">
+                <button id="scrollDown1" class="hidden sm:inline-flex flex flex-row whitebutton rounded-lg mt-4 gap-2 h-[50px] justify-center items-center mx-auto" type="button">
                     <ArrowDownOutline class="w-7 h-7 pb-[3px]"/> 
                     Get Started
                 </button>
@@ -102,7 +102,7 @@
 
     <!-- show on mobile -->
     <div class="pt-4 mr-4 z-10 flex sm:hidden">
-        <button id="scrollDown2" class="whitebutton flex flex-row gap-1 h-[50px] justify-center items-center w-full" type="button">
+        <button id="scrollDown2" class="whitebutton rounded-lg flex flex-row gap-1 h-[50px] justify-center items-center w-full" type="button">
             <ArrowDownOutline class="w-7 h-7 pb-[3px]"/> 
             Get Started
         </button>

@@ -58,7 +58,7 @@
   {/if}
   <div class="flex justify-center">
     {#if visiblePosts.length < posts.length}
-      <button class="whitebutton" onclick={loadMore}>Load More</button>
+      <button class="whitebutton rounded-lg" onclick={loadMore}>Load More</button>
     {/if}
   </div>
 {/if}

@@ -169,101 +169,101 @@
 
 </script>
 
-<div class="intro-container">
-	{#if animate}
-		<main class="flex flex-col max-w-[90%] sm:max-w-[60%] mx-auto my-0" in:fade={{duration: 300}}>
-            
-			<div class="flex mt-6 gap-2 flex-wrap">
-				{#each slicedItems as item}
-					<button class="text-[11pt] flex flex-row whitespace-nowrap px-[14px] py-[6px] rounded" onclick={() => handleSelection(item)} style="background-color: {selectedItems.includes(item) ? (tag_counts[item]['label'] === 'SUP' ? 'var(--supplement)' : 'var(--medication)') : 'var(--white)'}; color: {selectedItems.includes(item) ? 'var(--white)' : '#000'}; font-weight: {selectedItems.includes(item) ? 'bold' : 'normal'};">
-						{item}
-					</button>				
-				{/each}
-			</div>
+{#if animate}
+    <div class="flex flex-col max-w-[90%] sm:max-w-[60%] mx-auto" in:fade={{duration: 300}}>
+        
+        <div class="flex mt-6 gap-2 flex-wrap">
+            {#each slicedItems as item}
+                <button class="text-[11pt] flex flex-row whitespace-nowrap px-[14px] py-[6px] rounded" onclick={() => handleSelection(item)} style="background-color: {selectedItems.includes(item) ? (tag_counts[item]['label'] === 'SUP' ? 'var(--supplement)' : 'var(--medication)') : 'var(--white)'}; color: {selectedItems.includes(item) ? 'var(--white)' : '#000'}; font-weight: {selectedItems.includes(item) ? 'bold' : 'normal'};">
+                    {item}
+                </button>				
+            {/each}
+        </div>
 
-            <div class="text-center text-white italic text-sm mt-4">Recommended: 1-3 selections</div>
+        <div class="text-center text-white italic text-sm mt-4">Recommended: 1-3 selections</div>
 
-			<input class="mt-4 rounded w-full" type="text" bind:value={searchTerm} onfocus={() => {toggleDropdown(true)}} onblur={() => {setTimeout(() => toggleDropdown(false), 100)}} placeholder="Search Medications & Supplements..." oninput={(event) => {filterOptions(event.target.value)}}>
+        <input class="mt-4 rounded w-full" type="text" bind:value={searchTerm} onfocus={() => {toggleDropdown(true)}} onblur={() => {setTimeout(() => toggleDropdown(false), 100)}} placeholder="Search Medications & Supplements..." oninput={(event) => {filterOptions(event.target.value)}}>
 
-			<div class="max-h-[170px] overflow-y-auto text-[12pt] bg-white rounded" style="display: {dropdownOpen ? 'block' : 'none'}">
-				{#each filtered as option}
-					<div
-						class="mt-1 mb-1 pl-3"
-						onclick={() => handleSelection(option)}
-						onkeydown={(event) => {
-							if (event.key === 'Enter') {
-								handleSelection(option);
-								event.preventDefault();
-							}
-						}}
-						value={option}
-						role="button"
-						tabindex="0"
-					>
-						<span class="count" style="color: #575757;">({tag_counts[option]['count']})</span> 
-						<span class="option" style="color: { tag_counts[option]['label'] === 'MED' ? 'var(--medication)' : 'var(--supplement)'}; font-weight: 500;">{option}</span>
-					</div>
-				{/each}
-			</div>
-			
-			<div style="display: flex; justify-content: right;">
-				<button class="text-[var(--white)] underline mt-3 text-sm" onclick={toggleAdvanced}>Advanced Mode: {advancedOn ? 'On' : 'Off'}</button>
-			</div>
-			
-			<div class="flex flex-wrap text-[var(--white)]" style="display: {advancedOn ? 'block' : 'none'}">
-				<div class="advanceddescription" style="margin-bottom: 10px;">
-					<span style="font-weight: bold;">Bold</span>: Required <br />
-					<span style="text-decoration: line-through;">Strikethrough</span>: Excluded
-				</div>
-				<div class="flex mt-6 gap-2 flex-wrap">
-					{#each illnesses as illness}
-						<button onclick={() => {handleAdv(illness)}} style="text-decoration: { excludedConditions.includes(illness) ? 'line-through' : 'none'}; background-color: { requiredConditions.includes(illness) ? 'var(--accent)' : 'var(--lightbackground)'}; font-weight: { requiredConditions.includes(illness) ? 'bold' : 'normal'}; color: { requiredConditions.includes(illness) ? 'var(--black)' : 'var(--white)'};" class="text-[11pt] flex flex-row rounded whitespace-nowrap px-[14px] py-[6px]">{illness}</button>
-					{/each}
-				</div>	
-			</div>
+        <div class="max-h-[170px] overflow-y-auto text-[12pt] bg-white rounded" style="display: {dropdownOpen ? 'block' : 'none'}">
+            {#each filtered as option}
+                <div
+                    class="mt-1 mb-1 pl-3"
+                    onclick={() => handleSelection(option)}
+                    onkeydown={(event) => {
+                        if (event.key === 'Enter') {
+                            handleSelection(option);
+                            event.preventDefault();
+                        }
+                    }}
+                    value={option}
+                    role="button"
+                    tabindex="0"
+                >
+                    <span class="count" style="color: #575757;">({tag_counts[option]['count']})</span> 
+                    <span class="option" style="color: { tag_counts[option]['label'] === 'MED' ? 'var(--medication)' : 'var(--supplement)'}; font-weight: 500;">{option}</span>
+                </div>
+            {/each}
+        </div>
+        
+        <div style="display: flex; justify-content: right;">
+            <button class="text-[var(--white)] underline mt-3 text-sm" onclick={toggleAdvanced}>Advanced Mode: {advancedOn ? 'On' : 'Off'}</button>
+        </div>
+        
+        <div class="flex flex-wrap text-[var(--white)]" style="display: {advancedOn ? 'block' : 'none'}">
+            <div class="advanceddescription" style="margin-bottom: 10px;">
+                <span style="font-weight: bold;">Bold</span>: Required <br />
+                <span style="text-decoration: line-through;">Strikethrough</span>: Excluded
+            </div>
+            <div class="flex mt-6 gap-2 flex-wrap">
+                {#each illnesses as illness}
+                    <button onclick={() => {handleAdv(illness)}} style="text-decoration: { excludedConditions.includes(illness) ? 'line-through' : 'none'}; background-color: { requiredConditions.includes(illness) ? 'var(--accent)' : 'var(--lightbackground)'}; font-weight: { requiredConditions.includes(illness) ? 'bold' : 'normal'}; color: { requiredConditions.includes(illness) ? 'var(--black)' : 'var(--white)'};" class="text-[11pt] flex flex-row rounded whitespace-nowrap px-[14px] py-[6px]">{illness}</button>
+                {/each}
+            </div>	
+        </div>
 
-			<div style="display: flex; justify-content: center;">
-				<a href="#_" onclick={fetchDataForPostList} class="whitebutton mt-6">
-					<div class="flex flex-row gap-1">
-                        <div class="">
-                            {#if isLoading}
-                                <Spinner size={6} color="gray" />
-                            {:else}
-                                <SearchOutline size="lg"/>
-                            {/if}
-                        </div>
-                        <div class="text-xl font-semibold items-center align-middle">
-                            Search
-                            {#if selectedItems.length >= 1}
-                                ({selectedItems.length})
-                            {/if}
-                        </div>
-					</div>
-				</a>
-			</div>
+        <div style="display: flex; justify-content: center;">
+            <a href="#_" onclick={fetchDataForPostList} class="whitebutton rounded-lg mt-6">
+                <div class="flex flex-row gap-1">
+                    <div class="">
+                        {#if isLoading}
+                            <Spinner size={6} color="gray" />
+                        {:else}
+                            <SearchOutline size="lg"/>
+                        {/if}
+                    </div>
+                    <div class="text-xl font-semibold items-center align-middle">
+                        Search
+                        {#if selectedItems.length >= 1}
+                            ({selectedItems.length})
+                        {/if}
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+{/if}
 
-			{#if result_list.length > 1}
-				<div class="text-[var(--white)] mt-6 text-center">
-					{#if result_list.length === 30}
-						30+ Results
-					{:else}
-						{result_list.length} Results
-					{/if}
-					<div class="flex flex-row items-center justify-center">
-						<svg class="w-8 h-8 me-1" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M9 3.5V2M5.06066 5.06066L4 4M5.06066 13L4 14.0607M13 5.06066L14.0607 4M3.5 9H2M15.8645 16.1896L13.3727 20.817C13.0881 21.3457 12.9457 21.61 12.7745 21.6769C12.6259 21.7349 12.4585 21.7185 12.324 21.6328C12.1689 21.534 12.0806 21.2471 11.9038 20.6733L8.44519 9.44525C8.3008 8.97651 8.2286 8.74213 8.28669 8.58383C8.33729 8.44595 8.44595 8.33729 8.58383 8.2867C8.74213 8.22861 8.9765 8.3008 9.44525 8.44519L20.6732 11.9038C21.247 12.0806 21.5339 12.169 21.6327 12.324C21.7185 12.4586 21.7348 12.6259 21.6768 12.7745C21.61 12.9458 21.3456 13.0881 20.817 13.3728L16.1896 15.8645C16.111 15.9068 16.0717 15.9279 16.0374 15.9551C16.0068 15.9792 15.9792 16.0068 15.9551 16.0374C15.9279 16.0717 15.9068 16.111 15.8645 16.1896Z" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
-						Click the highlighted terms!
-					</div>
-				</div>
-			{/if}
+<div class="flex flex-col max-w-[90%] sm:max-w-[60%] mx-auto my-0" in:fade={{duration: 300}}>
+    {#if result_list.length > 1}
+        <div class="text-[var(--white)] mt-6 text-center">
+            {#if result_list.length === 30}
+                30+ Results
+            {:else}
+                {result_list.length}+ Results
+            {/if}
+            <div class="flex flex-row items-center justify-center">
+                <svg class="w-8 h-8 me-1" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M9 3.5V2M5.06066 5.06066L4 4M5.06066 13L4 14.0607M13 5.06066L14.0607 4M3.5 9H2M15.8645 16.1896L13.3727 20.817C13.0881 21.3457 12.9457 21.61 12.7745 21.6769C12.6259 21.7349 12.4585 21.7185 12.324 21.6328C12.1689 21.534 12.0806 21.2471 11.9038 20.6733L8.44519 9.44525C8.3008 8.97651 8.2286 8.74213 8.28669 8.58383C8.33729 8.44595 8.44595 8.33729 8.58383 8.2867C8.74213 8.22861 8.9765 8.3008 9.44525 8.44519L20.6732 11.9038C21.247 12.0806 21.5339 12.169 21.6327 12.324C21.7185 12.4586 21.7348 12.6259 21.6768 12.7745C21.61 12.9458 21.3456 13.0881 20.817 13.3728L16.1896 15.8645C16.111 15.9068 16.0717 15.9279 16.0374 15.9551C16.0068 15.9792 15.9792 16.0068 15.9551 16.0374C15.9279 16.0717 15.9068 16.111 15.8645 16.1896Z" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                Click the highlighted terms!
+            </div>
+        </div>
+    {/if}
 
-			<div class="pb-2">
-				<PostList posts={result_list}/>
-			</div>
-			<div class="med-disclaimer mt-12 mb-12 opacity-30" in:fade={{duration: 200}}>
-				<MedicalDisclaimer />
-			</div>
-		</main>
-	{/if}
+    <div class="pb-2">
+        <PostList posts={result_list}/>
+    </div>
+    <div class="med-disclaimer mt-12 mb-12 opacity-30" in:fade={{duration: 200}}>
+        <MedicalDisclaimer />
+    </div>
 </div>
 
 <div class="fixed left-1/2 top-[110pt] transform -translate-x-1/2 -translate-y-1/2 z-10">

@@ -21,7 +21,7 @@
 }
 
 ::selection {
-    background: #42badec2;
+    background: var(--extralightbackground);
 }
 
 * {
@@ -100,7 +100,6 @@ ul {
     padding-left: 1rem;
     padding-right: 1rem;
 
-    border-radius: 0.5rem;
     border: 2px solid var(--white);
 }
   

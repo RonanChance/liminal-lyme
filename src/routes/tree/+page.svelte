@@ -73,7 +73,7 @@
             initDragging(container);
             initTouchEvents(container); // pinch-to-zoom
             if (outerContainer) {
-                if (window.innerWidth <= 400) scrollAmount = 3700;
+                if (window.innerWidth <= 400) scrollAmount = 3810;
                 else if (window.innerWidth <= 768) scrollAmount = 3790;
                 else if (window.innerWidth <= 1280) scrollAmount = 3580;
                 else if (window.innerWidth <= 1920) scrollAmount = 3630;
