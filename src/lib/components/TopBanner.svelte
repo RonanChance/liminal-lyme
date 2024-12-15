@@ -91,7 +91,7 @@
             <SearchOutline class="w-7 h-7 pb-[4px]"/> 
             <div class="text-center">Medication & Supplement Search</div>
         </div>
-        <div class="text-center text-sm opacity-60">Search <a class="underline" href="/about#where_is_the_data_from">subreddits</a> with key terms</div>
+        <!-- <div class="text-center text-sm opacity-60">Search <a class="underline" href="/about#where_is_the_data_from">subreddits</a> with key terms</div> -->
     </div>
 {:else if selected.includes("/tree")}
     <div class="lg:hidden text-center text-xl sm:text-2xl text-[var(--darkbackground)] pb-4 bg-[var(--white)] rounded-b-lg text-bold flex flex-col">
