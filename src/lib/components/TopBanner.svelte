@@ -50,13 +50,13 @@
         <img src="/banner.png" class="mainlogo w-[200px] sm:w-[250px] xl:w-[250px] px-1 py-1 md:px-0" alt="LiminalLyme" />
     </a>
     {#if selected.includes("/search")}
-        <div class="hidden lg:block pt-[18px] text-center text-xl sm:text-2xl text-[var(--darkbackground)] text-bold flex flex-col">
+        <!-- <div class="hidden lg:block pt-[18px] text-center text-xl sm:text-2xl text-[var(--darkbackground)] text-bold flex flex-col">
             <div class="flex flex-row justify-center items-center gap-1">
                 <SearchOutline class="w-7 h-7 pb-[2px]"/>
                 <div class="text-center">Medication & Supplement Search</div>
             </div>
             <div class="text-center text-sm opacity-60">Search <a class="underline" href="/about#where_is_the_data_from">subreddits</a> with key terms</div>
-        </div>
+        </div> -->
     {:else if selected.includes("/tree")}
         <div class="hidden lg:block pt-[18px] text-center text-xl sm:text-2xl text-[var(--darkbackground)] text-bold flex flex-col">
             <div class="flex flex-row justify-center items-center gap-1">
@@ -86,13 +86,13 @@
 </div>
 
 {#if selected.includes("/search")}
-    <div class="lg:hidden text-center text-xl sm:text-2xl text-[var(--darkbackground)] pb-4 bg-[var(--white)] rounded-b-lg text-bold flex flex-col">
+    <!-- <div class="lg:hidden text-center text-xl sm:text-2xl text-[var(--darkbackground)] pb-4 bg-[var(--white)] rounded-b-lg text-bold flex flex-col">
         <div class="flex flex-row justify-center items-center gap-1">
             <SearchOutline class="w-7 h-7 pb-[4px]"/> 
             <div class="text-center">Medication & Supplement Search</div>
         </div>
-        <!-- <div class="text-center text-sm opacity-60">Search <a class="underline" href="/about#where_is_the_data_from">subreddits</a> with key terms</div> -->
-    </div>
+        <div class="text-center text-sm opacity-60">Search <a class="underline" href="/about#where_is_the_data_from">subreddits</a> with key terms</div>
+    </div> -->
 {:else if selected.includes("/tree")}
     <div class="lg:hidden text-center text-xl sm:text-2xl text-[var(--darkbackground)] pb-4 bg-[var(--white)] rounded-b-lg text-bold flex flex-col">
         <div class="flex flex-row justify-center items-center gap-1">
