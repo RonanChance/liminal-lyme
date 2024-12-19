@@ -283,6 +283,7 @@
                 AIItemCount = response.totalItems;
             }
 		} catch (error) {
+            AIItemCount = null;
 			console.error('Error fetching count:', error);
         } finally {
             isLoading = false;
@@ -431,7 +432,7 @@
                         </div>
                         <div class="flex items-center text-left h-full">Details</div>
                     </div>
-                    <textarea class="border-0 rounded bg-[var(--white)] my-2 mr-2 text-regular text-[var(--darkbackground)] placeholder-gray-400" placeholder="(optional) details you want considered" bind:value={AIOptionalText} maxlength=200></textarea>
+                    <textarea class="border-0 rounded bg-[var(--white)] my-2 mr-2 text-regular text-[var(--darkbackground)] placeholder-gray-400 w-full" placeholder="(optional) details you would like considered" bind:value={AIOptionalText} maxlength=200></textarea>
                 </div>
             </div>
 
@@ -441,7 +442,7 @@
                     {#if isLoading}
                         <Spinner size={6} color="gray" />
                     {:else}
-                        {AIItemCount.toLocaleString()}
+                        {AIItemCount ? AIItemCount.toLocaleString() : '---'}
                     {/if}
                     <button data-popover-target="popover-description" data-popover-placement="bottom-end" type="button" id="info-button" class="pb-1">
                         <svg class="w-5 h-5 ml-0 text-gray-400 hover:text-gray-500" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -449,7 +450,7 @@
                         </svg>
                         <span class="sr-only">Show information</span>
                     </button>
-                    <Popover class="w-64 text-sm font-light" triggeredBy="#info-button" data-popper-placement="right" placement="right">The number of posts matching your search criteria. Keep it above 0 for best results.</Popover>
+                    <Popover class="w-64 text-sm font-light" triggeredBy="#info-button" data-popper-placement="right" placement="right">The number of online posts matching your search criteria. Keep it above 0 for best results.</Popover>
                 </div>
                 <a href="#_" onclick={AISearch} class="rounded bg-[var(--white)] text-normal px-[1rem] py-[0.5rem] border-2 border-[var(--white)] hover:shadow-[0_0_5px_var(--white)]">
                     <div class="flex flex-row gap-1">
@@ -477,11 +478,17 @@
 <!-- MEDICATION / SUPPLEMENT SELECTION -->
 {#if selectItemMode}
     <!-- svelte-ignore a11y_click_events_have_key_events -->
-    <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75 z-50" role="button" tabindex="0" onclick={() => {selectItemMode = false; toggleDropdown(false);}}>
-        <div class="flex flex-col min-w-[90%] max-w-[90%] sm:min-w-[60%] sm:max-w-[60%] mx-auto" role="button" tabindex="0" onclick={(event) => event.stopPropagation()}>
-            <input class="mt-4 rounded w-[100%]" type="text" bind:value={searchTerm} onfocus={() => {toggleDropdown(true)}} onblur={() => {setTimeout(() => toggleDropdown(false), 100)}} placeholder="Search Medication or Supplement" oninput={(event) => {filterOptions(event.target.value)}}>
+    <div class="fixed inset-0 flex justify-center items-center bg-black bg-opacity-75 z-50" role="button" tabindex="0" onclick={() => {selectItemMode = false; toggleDropdown(false);}}>
+        <div class="flex flex-col min-w-[80%] max-w-[80%] sm:min-w-[40%] sm:max-w-[40%] 2xl:min-w-[20%] 2xl:max-w-[20%] mx-auto" role="button" tabindex="0" onclick={(event) => event.stopPropagation()}>
 
-            <div class="max-h-[170px] overflow-y-auto text-[12pt] bg-white rounded" style="display: {dropdownOpen ? 'block' : 'none'}">
+            <button class="relative transform translate-y-[52px] ml-auto mr-[5px] flex flex-row outline outline-1 bg-[var(--white)] py-[0.05rem] px-[0.5rem] rounded truncate gap-1 items-center justify-around w-[70px]" onclick={() => {AISelectedItem = searchTerm; selectItemMode = false;}}>
+                <div class="pt-1 text-[var(--lightbackground)]">Add</div>
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <circle cx="12" cy="12" r="10" stroke="#2e473f" stroke-width="1.5"></circle> <path d="M15 12L12 12M12 12L9 12M12 12L12 9M12 12L12 15" stroke="#2e473f" stroke-width="1.5" stroke-linecap="round"></path> </g></svg>
+            </button>
+            
+            <input class="mt-4 rounded w-[100%] text-[var(--darkbackground)]" type="text" bind:value={searchTerm} onfocus={() => {toggleDropdown(true)}} onblur={() => {setTimeout(() => toggleDropdown(false), 100)}} placeholder="Type a Medication/Supplement" oninput={(event) => {filterOptions(event.target.value)}}>
+
+            <div class="scroll-container max-h-[170px] overflow-y-auto text-[12pt] bg-[var(--white)] rounded mt-1" style="display: {dropdownOpen ? 'block' : 'none'}">
                 {#each filtered as option}
                     <div
                         class="mt-1 mb-1 pl-3"
@@ -513,10 +520,10 @@
 {#if selectIllnessMode}
     <!-- svelte-ignore a11y_click_events_have_key_events -->
     <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75 z-50" role="button" tabindex="0" onclick={() => {selectIllnessMode = false}}>
-        <div class="flex flex-col min-w-[90%] max-w-[90%] sm:min-w-[60%] sm:max-w-[60%] mx-auto" role="button" tabindex="0" onclick={(event) => event.stopPropagation()}>
+        <div class="flex flex-col min-w-[80%] max-w-[80%] sm:min-w-[40%] sm:max-w-[40%] 2xl:min-w-[20%] 2xl:max-w-[20%] mx-auto" role="button" tabindex="0" onclick={(event) => event.stopPropagation()}>
             <!-- <input class="mt-4 rounded w-[100%]" type="text" bind:value={searchTerm} onfocus={() => {toggleIllnessesDropdown(true)}} onblur={() => {setTimeout(() => toggleDropdown(false), 100)}} placeholder="Select Illness"> -->
 
-            <div class="max-h-[170px] overflow-y-auto text-[12pt] bg-white rounded" style="display: {illnessesDropdownOpen ? 'block' : 'none'}">
+            <div class="scroll-container max-h-[170px] overflow-y-auto text-[12pt] bg-white rounded" style="display: {illnessesDropdownOpen ? 'block' : 'none'}">
                 {#each illnesses as option}
                     <div
                         class="mt-1 mb-1 pl-3"
@@ -546,17 +553,21 @@
 <!-- DEFAULT REDDIT SEARCH MODE -->
 {#if !isAiModeEnabled}
     {#if animate}
+
+        <div class="flex flex-col min-w-[90%] max-w-[90%] sm:min-w-[60%] sm:max-w-[60%] mx-auto mt-8">
+            <h2 class="mb-0 text-center">Reddit Search</h2>
+            <h4 class="text-gray-200 opacity-70 text-center">Find posts by medication & supplement</h4>
+        </div>
+
         <div class="flex flex-col max-w-[90%] sm:max-w-[60%] mx-auto" in:fade={{duration: 300}}>
             
-            <div class="flex mt-6 gap-2 flex-wrap">
+            <div class="flex mt-8 gap-2 flex-wrap">
                 {#each slicedItems as item}
                     <button class="text-[11pt] flex flex-row whitespace-nowrap px-[14px] py-[6px] rounded" onclick={() => handleSelection(item)} style="background-color: {selectedItems.includes(item) ? (tag_counts[item]['label'] === 'SUP' ? 'var(--supplement)' : 'var(--medication)') : 'var(--white)'}; color: {selectedItems.includes(item) ? 'var(--white)' : '#000'}; font-weight: {selectedItems.includes(item) ? 'bold' : 'normal'};">
                         {item}
                     </button>				
                 {/each}
             </div>
-
-            <div class="text-center text-white italic text-sm mt-4">Recommended: 1-3 selections</div>
 
             <input class="mt-4 rounded w-full" type="text" bind:value={searchTerm} onfocus={() => {toggleDropdown(true)}} onblur={() => {setTimeout(() => toggleDropdown(false), 100)}} placeholder="Search Medication or Supplement" oninput={(event) => {filterOptions(event.target.value)}}>
 
@@ -581,7 +592,7 @@
                 {/each}
             </div>
             
-            <div style="display: flex; justify-content: right;">
+            <div class="flex flex-row justify-start">
                 <button class="text-[var(--white)] underline mt-3 text-sm" onclick={toggleAdvanced}>Advanced Mode: {advancedOn ? 'On' : 'Off'}</button>
             </div>
             
@@ -597,8 +608,8 @@
                 </div>	
             </div>
 
-            <div style="display: flex; justify-content: center;">
-                <a href="#_" onclick={fetchDataForPostList} class="whitebutton rounded-lg mt-6">
+            <div class="flex flex-row justify-end">
+                <a href="#_" onclick={fetchDataForPostList} class="whitebutton rounded mt-6">
                     <div class="flex flex-row gap-1">
                         <div class="">
                             {#if isLoading}
@@ -657,7 +668,7 @@
 
 
 <style>
-.gsi-material-button {
+    .gsi-material-button {
         -moz-user-select: none;
         -webkit-user-select: none;
         -ms-user-select: none;
@@ -759,5 +770,14 @@
     .gsi-material-button:not(:disabled):hover .gsi-material-button-state {
         background-color: #303030;
         opacity: 8%;
+    }
+
+    .scroll-container {
+        -ms-overflow-style: none; /* for Internet Explorer, Edge */
+        scrollbar-width: none; /* for Firefox */
+        overflow-y: auto;
+    }
+    .scroll-container::-webkit-scrollbar {
+        display: none; /* Chrome, Safari */
     }
 </style>
