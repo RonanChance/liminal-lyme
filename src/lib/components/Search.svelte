@@ -60,7 +60,6 @@
                 username = storedUsername;
                 userId = storedUserId;
                 authorized = true;
-                // await loadAllData();
             }
         }
     });
@@ -76,18 +75,35 @@
                     w.location.href = url;
                  }
             });
+            
             email = data.meta.email;
             username = data.meta?.username || data.meta?.name;
             userId = data.record.id;
-            authorized = true;
 
             document.cookie = `username=${username}; path=/;`;
             document.cookie = `email=${email}; path=/;`;
             document.cookie = `userId=${userId}; path=/;`;
+            
+            authorized = true;
             promptLogin = false;
 
-        } catch (error) {
-            console.error(error);
+            // fix username if necessary
+            if (data.record.username !== username) {
+                try {
+                    const response = await fetch('/search/updateUsername', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({"userId": userId, "username": username})
+                        });
+                } catch (e) {
+                    console.log(e);
+                }
+            }
+
+        } catch (e) {
+            console.error(e);
         }
     }
 
@@ -350,7 +366,7 @@
 <div class="flex flex-row justify-between items-center pt-4 px-[5%] sm:px-3">
     <div class="text-[var(--white)]">
         {#if email}
-            <Button color="alternative" class="text-[var(--darkbackground)] hover:text-[var(--darkbackground)] focus:text-[var(--darkbackground)] py-2 pl-3 pr-2" style="touch-action: manipulation;">{email}<ChevronDownOutline class="w-4 h-4 text-[var(--darkbackground)]" /></Button>
+            <Button color="alternative" class="text-[var(--darkbackground)] hover:text-[var(--darkbackground)] focus:text-[var(--darkbackground)] py-2 pl-3 pr-2" style="touch-action: manipulation;">{username}<ChevronDownOutline class="w-4 h-4 text-[var(--darkbackground)]" /></Button>
             <Dropdown>
                 <!-- <DropdownItem onclick={logout}>Test</DropdownItem> -->
                 <DropdownItem onclick={logout}>Sign out</DropdownItem>
@@ -386,7 +402,7 @@
                         </div>
                         <div class="flex items-center text-left h-full">Supplement, Medication</div>
                     </div>
-                    <button class="bg-[var(--white)] py-[0.25rem] px-[0.5rem] w-full rounded-r truncate {AISelectedItem ? 'text-[var(--darkbackground)]' : 'text-gray-400'}" onclick={() => {selectItemMode = true; toggleDropdown(true);}}>
+                    <button class="bg-[var(--white)] py-[0.25rem] px-[0.5rem] w-full rounded-r truncate {AISelectedItem ? 'text-[var(--darkbackground)]' : 'text-gray-400'}" onclick={() => {selectItemMode = true; toggleDropdown(true);}} onkeydown={(event) => { if (event.key === 'Escape') { selectItemMode = false; toggleDropdown(false)}}}>
                         {#if AISelectedItem}
                             <div class="flex flex-row items-center text-center">
                                 {AISelectedItem}
@@ -409,14 +425,14 @@
                         </div>
                         <div class="flex items-center text-left h-full">Condition</div>
                     </div>
-                    <button class="bg-[var(--white)] py-[0.25rem] px-[0.5rem] w-full rounded-r truncate {AISelectedIllness ? 'text-[var(--darkbackground)]' : 'text-gray-400'}" onclick={() => {selectIllnessMode = true; toggleIllnessesDropdown(true);}}>
+                    <button class="bg-[var(--white)] py-[0.25rem] px-[0.5rem] w-full rounded-r truncate {AISelectedIllness ? 'text-[var(--darkbackground)]' : 'text-gray-400'}" onclick={() => {selectIllnessMode = true; toggleIllnessesDropdown(true);}} onkeydown={(event) => { if (event.key === 'Escape') { selectIllnessMode = false; toggleDropdown(false)}}} >
                         {#if AISelectedIllness}
                             <div class="flex flex-row items-center text-center">
                                 {AISelectedIllness}
                                 <!-- <ChevronDownOutline class="text-gray-400" /> -->
                             </div>
                         {:else}
-                            <div class="flex flex-row items-center text-left">
+                            <div class="flex flex-row items-center text-left" >
                                 Select
                                 <ChevronDownOutline />
                             </div>
@@ -478,7 +494,9 @@
 <!-- MEDICATION / SUPPLEMENT SELECTION -->
 {#if selectItemMode}
     <!-- svelte-ignore a11y_click_events_have_key_events -->
-    <div class="fixed inset-0 flex justify-center items-center bg-black bg-opacity-75 z-50" role="button" tabindex="0" onclick={() => {selectItemMode = false; toggleDropdown(false);}}>
+    <div class="fixed inset-0 flex justify-center items-center bg-black bg-opacity-75 z-50" role="button" tabindex="0" onclick={() => {selectItemMode = false; toggleDropdown(false);}} onkeydown={(event) => {
+        if (event.key === 'Escape') { selectItemMode = false; toggleDropdown(false)}
+    }}>
         <div class="flex flex-col min-w-[80%] max-w-[80%] sm:min-w-[40%] sm:max-w-[40%] 2xl:min-w-[20%] 2xl:max-w-[20%] mx-auto" role="button" tabindex="0" onclick={(event) => event.stopPropagation()}>
 
             <button class="relative transform translate-y-[52px] ml-auto mr-[5px] flex flex-row outline outline-1 bg-[var(--white)] py-[0.05rem] px-[0.5rem] rounded truncate gap-1 items-center justify-around w-[70px]" onclick={() => {AISelectedItem = searchTerm; selectItemMode = false;}}>
@@ -486,7 +504,14 @@
                 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <circle cx="12" cy="12" r="10" stroke="#2e473f" stroke-width="1.5"></circle> <path d="M15 12L12 12M12 12L9 12M12 12L12 9M12 12L12 15" stroke="#2e473f" stroke-width="1.5" stroke-linecap="round"></path> </g></svg>
             </button>
             
-            <input class="mt-4 rounded w-[100%] text-[var(--darkbackground)]" type="text" bind:value={searchTerm} onfocus={() => {toggleDropdown(true)}} onblur={() => {setTimeout(() => toggleDropdown(false), 100)}} placeholder="Type a Medication/Supplement" oninput={(event) => {filterOptions(event.target.value)}}>
+            <input class="mt-4 rounded w-[100%] text-[var(--darkbackground)]" type="text" bind:value={searchTerm} onfocus={() => {toggleDropdown(true)}} onblur={() => {setTimeout(() => toggleDropdown(false), 100)}} placeholder="Type a Medication/Supplement" oninput={(event) => {filterOptions(event.target.value)}} onkeydown={(event) => {
+                if (event.key === 'Enter') {
+                    AISelectedItem = searchTerm;
+                    selectItemMode = false;
+                    toggleDropdown(false)
+                    event.preventDefault();
+                }
+            }}>
 
             <div class="scroll-container max-h-[170px] overflow-y-auto text-[12pt] bg-[var(--white)] rounded mt-1" style="display: {dropdownOpen ? 'block' : 'none'}">
                 {#each filtered as option}
