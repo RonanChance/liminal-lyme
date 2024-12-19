@@ -9,6 +9,7 @@
 	import PostList from './PostList.svelte';
     import MedicalDisclaimer from './MedicalDisclaimer.svelte';
 	import { all_tags, illnesses, tag_counts } from './constants.js';
+    import { Skeleton } from 'flowbite-svelte';
 
 	const PB_DATA = new PocketBase('https://data.liminallyme.com');
     const PB_USERS = new PocketBase('https://pb.liminallyme.com');
@@ -18,7 +19,8 @@
 
 	let toastMessage = $state("");
 	let isLoading = $state(false);
-    let isAiModeEnabled = $state(true);
+    let isAIModeEnabled = $state(true);
+    let isAIResultsEnabled = $state(true);
 	let searchTerm = $state("");
 
 	let selectedItems = $state([]);
@@ -267,7 +269,7 @@
   	}
 
     // reset values if user toggles between AI mode and regular search
-    $effect(() => { resetValues(isAiModeEnabled); });
+    $effect(() => { resetValues(isAIModeEnabled); });
     function resetValues() {
         selectedItems = [];
     }
@@ -306,12 +308,23 @@
         }
     }
 
-    function AISearch() {
+    async function AISearch() {
         if (AISelectedItem && AISelectedIllness) {
             if (!authorized)
                 promptLogin = true;
             else {
+                isAIResultsEnabled = true;
+                
                 console.log('Begin search for', AISelectedItem, AISelectedIllness, AIOptionalText);
+                const response = await fetch('/search/queryAI', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({"AISelectedItem": AISelectedItem, "AISelectedIllness": AISelectedIllness, "AIOptionalText": AIOptionalText})
+                });
+
+                const result = await response.json();
             }
         } else {
             toastMessage = '';
@@ -376,7 +389,7 @@
         {/if}
     </div>
     <label class="flex flex-row gap-2 cursor-pointer">
-        <input type="checkbox" value="" class="sr-only peer" bind:checked={isAiModeEnabled} />
+        <input type="checkbox" value="" class="sr-only peer" bind:checked={isAIModeEnabled} />
         <div class="flex items-center pt-[2px] text-sm text-[var(--white)] ">AI Mode</div>
         <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-white rounded-full peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[var(--extralightbackground)]"></div>
     </label>
@@ -384,7 +397,7 @@
 
 <!-- AI MODE -->
 
-{#if isAiModeEnabled}
+{#if isAIModeEnabled && !isAIResultsEnabled}
     {#if animate}
         <div class="flex flex-col min-w-[90%] max-w-[90%] sm:min-w-[60%] sm:max-w-[60%] mx-auto mt-8">
             <h2 class="mb-0 text-center">AI Treatment Insights</h2>
@@ -490,6 +503,31 @@
     {/if}
 {/if}
 
+<!-- AI MODE RESULTS -->
+{#if isAIModeEnabled && isAIResultsEnabled}
+    <div class="flex flex-col min-w-[90%] max-w-[90%] sm:min-w-[60%] sm:max-w-[60%] mx-auto mt-8">
+        <h2 class="mb-0 text-center">Results</h2>
+        <h4 class="flex flex-col text-gray-200 opacity-70 text-center">
+            <div class="">
+                <div class="font-bold inline opacity-100 text-gray-300">Treatment: </div> 
+                test
+            </div>
+            <div class="">
+                <div class="font-bold inline opacity-100 text-gray-300">Illness: </div> 
+                test
+            </div>
+        </h4>
+
+        <Skeleton size="sm" class="my-8" />
+        <Skeleton size="sm" class="my-8" />
+        <Skeleton size="sm" class="my-8" />
+        <Skeleton size="sm" class="my-8" />
+    </div>
+    <div class="flex flex-col min-w-[90%] max-w-[90%] sm:min-w-[60%] sm:max-w-[60%] mx-auto gap-4 mt-8">
+        test
+    </div>
+{/if}
+
 
 <!-- MEDICATION / SUPPLEMENT SELECTION -->
 {#if selectItemMode}
@@ -576,7 +614,7 @@
 
 
 <!-- DEFAULT REDDIT SEARCH MODE -->
-{#if !isAiModeEnabled}
+{#if !isAIModeEnabled}
     {#if animate}
 
         <div class="flex flex-col min-w-[90%] max-w-[90%] sm:min-w-[60%] sm:max-w-[60%] mx-auto mt-8">
