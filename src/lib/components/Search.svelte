@@ -10,6 +10,7 @@
     import MedicalDisclaimer from './MedicalDisclaimer.svelte';
 	import { all_tags, illnesses, tag_counts } from './constants.js';
     import { Skeleton } from 'flowbite-svelte';
+    import Footer from '../../lib/components/Footer.svelte';
 
 	const PB_DATA = new PocketBase('https://data.liminallyme.com');
     const PB_USERS = new PocketBase('https://pb.liminallyme.com');
@@ -20,7 +21,7 @@
 	let toastMessage = $state("");
 	let isLoading = $state(false);
     let isAIModeEnabled = $state(true);
-    let isAIResultsEnabled = $state(true);
+    let isAIResultsEnabled = $state(false);
 	let searchTerm = $state("");
 
 	let selectedItems = $state([]);
@@ -308,23 +309,64 @@
         }
     }
 
+    let segments = $state(Array(3).fill("inactive"));
+    let activeSegment = $state(0);
+    let result1 = $state('');
+    let result2 = $state('');
+    let result3 = $state('');
+    let result4 = $state('');
+    let result5 = $state('');
+    let result6 = $state('');
+    let isExpanded1 = $state(false);
+    let isExpanded2 = $state(false);
+    let isExpanded3 = $state(false);
+    let isExpanded4 = $state(false);
+    let isExpanded5 = $state(false);
+    let isExpanded6 = $state(false);
+
+    // result1 = 'Doxycycline may benefit Babesiosis by targeting the parasite that causes the infection. It works by inhibiting the growth and reproduction of the parasite, helping to reduce the severity of the illness and aiding in recovery. It is important to note that treatment for Babesiosis should be overseen by a healthcare professional, as individual cases may vary in terms of severity and response to medication.';
+    // result2 = 'Doxycycline may benefit Babesiosis through its ability to inhibit the growth of the parasite responsible for the disease, Babesia microti. Babesiosis is a tick-borne illness caused by the Babesia parasite, which infects red blood cells and can lead to symptoms such as fever, chills, fatigue, and anemia. Doxycycline is a tetracycline antibiotic that has been shown to have anti-parasitic properties. Although Babesia is primarily an intraerythrocytic parasite, meaning it resides within red blood cells, doxycycline has been found to have activity against certain intraerythrocytic parasites, including Plasmodium species, which are responsible for malaria. While Babesia and Plasmodium are distinct parasites, they share some similarities in terms of their intraerythrocytic lifecycle, and it is plausible that doxycycline may also exert some effect against Babesia. Additionally, doxycycline has been studied for its potential to reduce the severity of Babesia infection in animal models. It has been shown to decrease parasitemia, which refers to the presence of the parasite in the blood, and improve survival rates in animal subjects infected with Babesia parasites. This suggests that doxycycline may have a direct inhibitory effect on the growth and replication of Babesia microti within the host. Furthermore, doxycyclines anti-inflammatory properties may also be beneficial in the context of Babesiosis. The disease can trigger an inflammatory response in the body as the immune system tries to combat the parasite, and this inflammation can contribute to tissue damage and other complications. Doxycycline has been shown to exert anti-inflammatory effects by inhibiting the production of inflammatory mediators, which could help mitigate the inflammatory response associated with Babesiosis and potentially reduce the severity of symptoms. Its important to note that the use of';
+    // AISelectedItem = "Doxycycline"
+    // AISelectedIllness = "Lyme Disease"
+    // isAIResultsEnabled = true;
+
+    function resetSearchValues() {
+        result1 = result2 = result3 = result4 = result5 = result6 = '';
+    }
+
+    async function sendQuery(data) {
+        const response = await fetch('/search/queryAI', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+        const responseJSON = await response.json();
+        return { result: responseJSON.result, recordId: responseJSON.recordId };
+    }
+
     async function AISearch() {
         if (AISelectedItem && AISelectedIllness) {
             if (!authorized)
                 promptLogin = true;
             else {
                 isAIResultsEnabled = true;
-                
-                console.log('Begin search for', AISelectedItem, AISelectedIllness, AIOptionalText);
-                const response = await fetch('/search/queryAI', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({"AISelectedItem": AISelectedItem, "AISelectedIllness": AISelectedIllness, "AIOptionalText": AIOptionalText})
-                });
+                let recordId = '';
 
-                const result = await response.json();
+                segments[0] = "pulsing";
+                
+                const userInputs = {"AISelectedItem": AISelectedItem, "AISelectedIllness": AISelectedIllness, "AIOptionalText": AIOptionalText};
+                let result = await sendQuery({ ...userInputs, 'queryNum': 1, 'recordId': recordId });
+                result1 = result.result;
+                segments[0] = "completed";
+                segments[1] = "pulsing";
+                
+                result = await sendQuery({ ...userInputs, 'queryNum': 2, 'recordId': result.recordId });
+                result2 = result.result;
+                segments[1] = "completed";
+                segments[2] = "pulsing";
+
+                segments[2] = "completed";
+
             }
         } else {
             toastMessage = '';
@@ -481,22 +523,8 @@
                     </button>
                     <Popover class="w-64 text-sm font-light" triggeredBy="#info-button" data-popper-placement="right" placement="right">The number of online posts matching your search criteria. Keep it above 0 for best results.</Popover>
                 </div>
-                <a href="#_" onclick={AISearch} class="rounded bg-[var(--white)] text-normal px-[1rem] py-[0.5rem] border-2 border-[var(--white)] hover:shadow-[0_0_5px_var(--white)]">
-                    <div class="flex flex-row gap-1">
-                        <div class="">
-                            <!-- {#if isLoading}
-                                <Spinner size={6} color="gray" />
-                            {:else}
-                                <SearchOutline size="md"/>
-                            {/if}
-                        </div> -->
-                        <div class="text-lg font-semibold items-center align-middle">
-                            Search
-                            {#if selectedItems.length >= 1}
-                                ({selectedItems.length})
-                            {/if}
-                        </div>
-                    </div>
+                <a href="#_" onclick={() => {resetSearchValues(); AISearch();}} class="rounded bg-[var(--white)] text-normal px-[1rem] py-[0.5rem] border-2 border-[var(--white)] hover:shadow-[0_0_5px_var(--white)]">
+                    <div class="text-lg font-semibold items-center align-middle">Search</div>
                 </a>
             </div>
         </div>
@@ -505,27 +533,75 @@
 
 <!-- AI MODE RESULTS -->
 {#if isAIModeEnabled && isAIResultsEnabled}
-    <div class="flex flex-col min-w-[90%] max-w-[90%] sm:min-w-[60%] sm:max-w-[60%] mx-auto mt-8">
-        <h2 class="mb-0 text-center">Results</h2>
-        <h4 class="flex flex-col text-gray-200 opacity-70 text-center">
-            <div class="">
-                <div class="font-bold inline opacity-100 text-gray-300">Treatment: </div> 
-                test
+    <div class="flex flex-col min-w-[90%] max-w-[90%] sm:min-w-[60%] sm:max-w-[60%] mx-auto mt-8 mb-8">
+        
+        <!-- <h2 class="mb-0 text-center">Search Results</h2> -->
+        <h4 class="flex flex-row w-full mx-auto text-gray-200 opacity-70 text-center gap-6">
+            <div class="flex w-full justify-end">
+                <img src={`/bacteria_images/${AISelectedIllness}.jpg`} alt={`${AISelectedIllness} illustration`} class="w-24 h-24 object-cover rounded-full"/>
             </div>
-            <div class="">
-                <div class="font-bold inline opacity-100 text-gray-300">Illness: </div> 
-                test
+            <div class="flex w-full justify-start font-bold inline opacity-100 text-gray-300">
+                {AISelectedItem}
             </div>
         </h4>
 
-        <Skeleton size="sm" class="my-8" />
-        <Skeleton size="sm" class="my-8" />
-        <Skeleton size="sm" class="my-8" />
-        <Skeleton size="sm" class="my-8" />
+        <div class="progress-bar mt-4 mx-auto w-[50%]">
+            {#each segments as segment, i}
+                <div class="segment {segment}" class:completed={segment === "completed"} class:pulsing={segment === "pulsing"}></div>
+            {/each}
+        </div>
+
+        <div class="flex flex-col bg-[var(--white)] mt-4 rounded px-4 py-4 gap-2 transition-all duration-500">
+            <div class="text-2xl text-[var(--darkbackground)]">Overview</div>
+            {#if !result1}
+                <Skeleton size="xs" class="max-h-[80px] overflow-hidden" />
+            {:else}
+                <div class={`overflow-hidden transition-all duration-500 ${isExpanded1 ? 'max-h-full' : 'max-h-[50px]'}`}>
+                    {result1}
+                </div>
+                <button 
+                onclick={() => {isExpanded1 = !isExpanded1;}}
+                class="mt-2 text-blue-600 underline hover:text-blue-600">
+                {isExpanded1 ? 'Show Less' : 'Show More'}
+                </button>
+            {/if}
+        </div>
+
+        <div class="flex flex-col bg-[var(--white)] mt-4 rounded px-4 py-4 gap-2 transition-all duration-500">
+            <div class="text-2xl text-[var(--darkbackground)]">Detailed Analysis</div>
+            {#if !result2}
+                <Skeleton size="xs" class="max-h-[80px] overflow-hidden" />
+            {:else}
+                <div class={`overflow-hidden transition-all duration-500 ${isExpanded2 ? 'max-h-full' : 'max-h-[50px]'}`}>
+                    {result2}
+                </div>
+                <button 
+                onclick={() => {isExpanded2 = !isExpanded2;}}
+                class="mt-2 text-blue-600 underline hover:text-blue-600">
+                    {isExpanded2 ? 'Show Less' : 'Show More'}
+                </button>
+            {/if}
+        </div>
+
+        <div class="flex flex-col bg-[var(--white)] mt-4 rounded px-4 py-4 gap-2 transition-all duration-500">
+            <div class="text-2xl text-[var(--darkbackground)]">Another Analysis</div>
+            {#if !result3}
+                <Skeleton size="xs" class="max-h-[80px] overflow-hidden" />
+            {:else}
+                <div class={`overflow-hidden transition-all duration-500 ${isExpanded3 ? 'max-h-full' : 'max-h-[50px]'}`}>
+                    {result3}
+                </div>
+                <button 
+                onclick={() => {isExpanded2 = !isExpanded2;}}
+                class="mt-2 text-blue-600 underline hover:text-blue-600">
+                    {isExpanded3 ? 'Show Less' : 'Show More'}
+                </button>
+            {/if}
+        </div>
+        
     </div>
-    <div class="flex flex-col min-w-[90%] max-w-[90%] sm:min-w-[60%] sm:max-w-[60%] mx-auto gap-4 mt-8">
-        test
-    </div>
+    
+    <Footer />
 {/if}
 
 
@@ -842,5 +918,38 @@
     }
     .scroll-container::-webkit-scrollbar {
         display: none; /* Chrome, Safari */
+    }
+
+    .progress-bar {
+        display: flex;
+        gap: 8px; /* Space between segments */
+    }
+
+    .segment {
+        flex: 1; /* Equal size for all segments */
+        height: 6px; /* Adjust height as needed */
+        background-color: var(--white);
+        border-radius: 3px;
+    }
+
+    .segment.pulsing {
+        animation: pulse 1s infinite;
+        background-color: var(--accent);
+    }
+
+    .segment.completed {
+        background-color: var(--accent); /* Completed color */
+    }
+
+    @keyframes pulse {
+        0% {
+            opacity: 0.25;
+        }
+        50% {
+            opacity: 1;
+        }
+        100% {
+            opacity: 0.25;
+        }
     }
 </style>
