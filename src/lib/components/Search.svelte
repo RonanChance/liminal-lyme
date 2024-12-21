@@ -1,5 +1,5 @@
 <script>
-    import { SearchOutline, ExclamationCircleSolid, ChevronDownOutline } from 'flowbite-svelte-icons';
+    import { SearchOutline, ExclamationCircleSolid, ChevronDownOutline, UserSolid, DotsVerticalOutline, CheckCircleSolid, FileCopySolid, FileCopyOutline, CirclePlusOutline } from 'flowbite-svelte-icons';
     import { browser } from '$app/environment';
     import { getCookie } from '../../lib/components/constants';
 	import { Toast, Spinner, Popover, Button, Dropdown, DropdownItem } from 'flowbite-svelte';
@@ -11,6 +11,9 @@
 	import { all_tags, illnesses, tag_counts } from './constants.js';
     import { Skeleton } from 'flowbite-svelte';
     import Footer from '../../lib/components/Footer.svelte';
+    import { page } from '$app/stores'
+    import { marked } from 'marked';
+    import DOMPurify from 'dompurify';
 
 	const PB_DATA = new PocketBase('https://data.liminallyme.com');
     const PB_USERS = new PocketBase('https://pb.liminallyme.com');
@@ -19,9 +22,11 @@
     onMount(() => animate = true);
 
 	let toastMessage = $state("");
+    let toastColor = $state("");
 	let isLoading = $state(false);
     let isAIModeEnabled = $state(true);
     let isAIResultsEnabled = $state(false);
+    let recordId = '';
 	let searchTerm = $state("");
 
 	let selectedItems = $state([]);
@@ -63,6 +68,10 @@
                 username = storedUsername;
                 userId = storedUserId;
                 authorized = true;
+            }
+            let loadRecordId = $page.url.searchParams.get('id');
+            if (loadRecordId) {
+                loadRecord(loadRecordId);
             }
         }
     });
@@ -199,6 +208,7 @@
 
 			if (result_list.length === 0) {
 				toastMessage = "No matches found.. check back soon!";
+                toastColor = "orange";
 				showToast();
 			}
 
@@ -296,6 +306,8 @@
                     filterQuery += (filterQuery ? ' && ' : '') + `(conditions?~'${AISelectedIllness}')`;
                 }
 
+                console.log(filterQuery);
+
                 const response = await PB_DATA.collection('posts').getList(1, 1, {
                     filter: filterQuery,
                 });
@@ -309,29 +321,33 @@
         }
     }
 
-    let segments = $state(Array(3).fill("inactive"));
+    let segments = $state(Array(4).fill("inactive"));
     let activeSegment = $state(0);
-    let result1 = $state('');
-    let result2 = $state('');
-    let result3 = $state('');
-    let result4 = $state('');
-    let result5 = $state('');
-    let result6 = $state('');
-    let isExpanded1 = $state(false);
-    let isExpanded2 = $state(false);
-    let isExpanded3 = $state(false);
-    let isExpanded4 = $state(false);
-    let isExpanded5 = $state(false);
-    let isExpanded6 = $state(false);
+    let results = $state({});
 
-    // result1 = 'Doxycycline may benefit Babesiosis by targeting the parasite that causes the infection. It works by inhibiting the growth and reproduction of the parasite, helping to reduce the severity of the illness and aiding in recovery. It is important to note that treatment for Babesiosis should be overseen by a healthcare professional, as individual cases may vary in terms of severity and response to medication.';
-    // result2 = 'Doxycycline may benefit Babesiosis through its ability to inhibit the growth of the parasite responsible for the disease, Babesia microti. Babesiosis is a tick-borne illness caused by the Babesia parasite, which infects red blood cells and can lead to symptoms such as fever, chills, fatigue, and anemia. Doxycycline is a tetracycline antibiotic that has been shown to have anti-parasitic properties. Although Babesia is primarily an intraerythrocytic parasite, meaning it resides within red blood cells, doxycycline has been found to have activity against certain intraerythrocytic parasites, including Plasmodium species, which are responsible for malaria. While Babesia and Plasmodium are distinct parasites, they share some similarities in terms of their intraerythrocytic lifecycle, and it is plausible that doxycycline may also exert some effect against Babesia. Additionally, doxycycline has been studied for its potential to reduce the severity of Babesia infection in animal models. It has been shown to decrease parasitemia, which refers to the presence of the parasite in the blood, and improve survival rates in animal subjects infected with Babesia parasites. This suggests that doxycycline may have a direct inhibitory effect on the growth and replication of Babesia microti within the host. Furthermore, doxycyclines anti-inflammatory properties may also be beneficial in the context of Babesiosis. The disease can trigger an inflammatory response in the body as the immune system tries to combat the parasite, and this inflammation can contribute to tissue damage and other complications. Doxycycline has been shown to exert anti-inflammatory effects by inhibiting the production of inflammatory mediators, which could help mitigate the inflammatory response associated with Babesiosis and potentially reduce the severity of symptoms. Its important to note that the use of';
+    // results = {0:{'title': 'Overview', 'result': 'Doxycycline may benefit Babesiosis by targeting the parasite that causes the infection. It works by inhibiting the growth and reproduction of the parasite, helping to reduce the severity of the illness and aiding in recovery. It is important to note that treatment for Babesiosis should be overseen by a healthcare professional, as individual cases may vary in terms of severity and response to medication.', 'expanded': false}, 1:{'title': 'Positive Effects', 'result': 'Doxycycline may benefit Babesiosis through its ability to inhibit the growth of the parasite responsible fo', 'expanded': false}}
     // AISelectedItem = "Doxycycline"
     // AISelectedIllness = "Lyme Disease"
     // isAIResultsEnabled = true;
+    // segments = ['completed', 'pulsing', 'inactive', 'inactive'];
 
     function resetSearchValues() {
-        result1 = result2 = result3 = result4 = result5 = result6 = '';
+        results = {};
+        activeSegment = 0;
+        segments = segments.map(() => 'inactive');
+        isAIResultsEnabled = false;
+    }
+
+    function progressLoadingBar() {
+        if (activeSegment === 0) {
+            segments[0] = "pulsing";
+        } else if (activeSegment < segments.length) {
+            segments[activeSegment - 1] = "completed";
+            segments[activeSegment] = "pulsing";
+        } else if (activeSegment === segments.length) {
+            segments[activeSegment - 1] = "completed";
+        }
+        activeSegment += 1;
     }
 
     async function sendQuery(data) {
@@ -340,8 +356,7 @@
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
         });
-        const responseJSON = await response.json();
-        return { result: responseJSON.result, recordId: responseJSON.recordId };
+        return await response.json();
     }
 
     async function AISearch() {
@@ -349,34 +364,101 @@
             if (!authorized)
                 promptLogin = true;
             else {
-                isAIResultsEnabled = true;
-                let recordId = '';
-
-                segments[0] = "pulsing";
-                
                 const userInputs = {"AISelectedItem": AISelectedItem, "AISelectedIllness": AISelectedIllness, "AIOptionalText": AIOptionalText};
-                let result = await sendQuery({ ...userInputs, 'queryNum': 1, 'recordId': recordId });
-                result1 = result.result;
-                segments[0] = "completed";
-                segments[1] = "pulsing";
+                isAIResultsEnabled = true;
+                let result = {};
+                progressLoadingBar();
                 
-                result = await sendQuery({ ...userInputs, 'queryNum': 2, 'recordId': result.recordId });
-                result2 = result.result;
-                segments[1] = "completed";
-                segments[2] = "pulsing";
-
-                segments[2] = "completed";
-
+                for (let i = 0; i <= 3; i++) {
+                    result = await sendQuery({ ...userInputs, 'queryNum': i, 'recordId': recordId });
+                    results[i] = {'title': result.title, 'result': result.result, 'expanded': false };
+                    recordId = result.recordId;
+                    progressLoadingBar();
+                    await wait(3000);
+                }
+                console.log(results);
             }
         } else {
-            toastMessage = '';
+            toastMessage = 'Required:';
+            toastColor = 'orange';
             if (!AISelectedItem)
-                toastMessage += (toastMessage ? '\n' : '') + "Required: Supplement/Medication";
+                toastMessage += (toastMessage ? '\n' : '') + "Supplement/Medication";
             if (!AISelectedIllness)
-                toastMessage += (toastMessage ? '\n' : '') + "Required: Condition";
+                toastMessage += (toastMessage ? '\n' : '') + "Condition";
             showToast();
         }
-    } 
+    }
+
+    async function loadRecord(id) {
+        recordId = id;
+        isAIModeEnabled = true;
+        isAIResultsEnabled = true;
+        resetValues();
+        let categoryNames = ['Overview', 'Positive Effects', 'Negative Effects', 'Detailed Analysis'];
+        const response = await fetch('/search/loadReport', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({id})
+        });
+        try {
+            const result = await response.json();
+            console.log(result);
+            categoryNames.forEach((category, i) => {
+                try {
+                    results[i] = {
+                        'title': category, 
+                        'result': result.record[category.replace(/\s+/g, '_').toLowerCase()],
+                        'expanded': false
+                    }
+                } catch {
+                    console.log('error with', category);
+                }
+            });
+            console.log(results);
+            AISelectedItem = result.record.treatment;
+            AISelectedIllness = result.record.illness;
+            segments = segments.map(() => 'completed');
+        } catch {
+            console.log('failed');
+        }
+    }
+
+    async function copyLink() {
+        try {
+            const link = "https://www.liminallyme.com/search?id=" + recordId;
+
+            // Create textarea only when necessary
+            const textArea = document.createElement("textarea");
+            textArea.value = link;
+
+            // Temporarily add it to the DOM with minimal layout impact
+            textArea.style.position = "absolute";
+            textArea.style.opacity = "0";
+            textArea.style.pointerEvents = "none";
+            textArea.style.height = "1px"; // Minimal height to avoid jump
+            textArea.style.width = "1px"; // Minimal width to avoid jump
+            textArea.style.margin = "0";  // Ensure it doesn't cause shifts
+
+            // Use `requestAnimationFrame` to defer the DOM changes for smoother UI
+            requestAnimationFrame(() => {
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand("copy");
+                document.body.removeChild(textArea);
+
+                // Show success message
+                toastMessage = "Copied!";
+                toastColor = "green";
+                showToast();
+            });
+        } catch (err) {
+            console.log("Failed to copy:", err);
+        }
+    }
+
+    function wait(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
     
 </script>
 
@@ -388,7 +470,7 @@
                 <img src="/banner.png" class="mainlogo w-[200px] sm:w-[250px] xl:w-[250px] px-1 py-1 md:px-0" alt="LiminalLyme" />
             </div>
             <div class="text-[var(--darkbackground)] font-regular text-2xl">Login</div>
-            <div class="text-center text-[var(--darkbackground)] font-regular font-light max-w-[70%]">Authorization is required to generate AI insights</div>
+            <div class="text-center text-[var(--darkbackground)] font-regular font-light max-w-[70%]">Authorization required to generate AI insights</div>
             <div class="flex flex-col justify-center items-center mt-2 gap-2">
                 <button data-value="google" onclick={loginHandler} class="gsi-material-button">
                     <div class="gsi-material-button-state"></div>
@@ -418,21 +500,20 @@
     </div>
 {/if}
 
-<div class="flex flex-row justify-between items-center pt-4 px-[5%] sm:px-3">
+<div class="flex flex-row justify-between items-center px-[5%] sm:px-3 bg-[var(--white)] pt-1 pb-4">
     <div class="text-[var(--white)]">
         {#if email}
             <Button color="alternative" class="text-[var(--darkbackground)] hover:text-[var(--darkbackground)] focus:text-[var(--darkbackground)] py-2 pl-3 pr-2" style="touch-action: manipulation;">{username}<ChevronDownOutline class="w-4 h-4 text-[var(--darkbackground)]" /></Button>
             <Dropdown>
-                <!-- <DropdownItem onclick={logout}>Test</DropdownItem> -->
                 <DropdownItem onclick={logout}>Sign out</DropdownItem>
             </Dropdown>
         {:else}
-        <button class="text-[var(--darkbackground)] bg-[var(--white)] py-2 px-4 rounded-full text-xs" onclick={() => {promptLogin = true}}>Sign in</button>
+            <Button color="alternative" class="text-[var(--darkbackground)] hover:text-[var(--darkbackground)] focus:text-[var(--darkbackground)] py-2 pl-3 pr-3" style="touch-action: manipulation;" onclick={() => {promptLogin = true}}><UserSolid class="w-4 h-4 text-[var(--darkbackground)] mr-1" /> Sign in</Button>
         {/if}
     </div>
     <label class="flex flex-row gap-2 cursor-pointer">
         <input type="checkbox" value="" class="sr-only peer" bind:checked={isAIModeEnabled} />
-        <div class="flex items-center pt-[2px] text-sm text-[var(--white)] ">AI Mode</div>
+        <div class="flex items-center pt-[2px] text-sm text-[var(--darkbackground)] ">AI Mode</div>
         <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-white rounded-full peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[var(--extralightbackground)]"></div>
     </label>
 </div>
@@ -523,9 +604,9 @@
                     </button>
                     <Popover class="w-64 text-sm font-light" triggeredBy="#info-button" data-popper-placement="right" placement="right">The number of online posts matching your search criteria. Keep it above 0 for best results.</Popover>
                 </div>
-                <a href="#_" onclick={() => {resetSearchValues(); AISearch();}} class="rounded bg-[var(--white)] text-normal px-[1rem] py-[0.5rem] border-2 border-[var(--white)] hover:shadow-[0_0_5px_var(--white)]">
+                <button onclick={() => {resetSearchValues(); AISearch();}} class="rounded bg-[var(--white)] text-normal px-[1rem] py-[0.5rem] border-2 border-[var(--white)] hover:shadow-[0_0_5px_var(--white)]">
                     <div class="text-lg font-semibold items-center align-middle">Search</div>
-                </a>
+                </button>
             </div>
         </div>
     {/if}
@@ -533,72 +614,58 @@
 
 <!-- AI MODE RESULTS -->
 {#if isAIModeEnabled && isAIResultsEnabled}
-    <div class="flex flex-col min-w-[90%] max-w-[90%] sm:min-w-[60%] sm:max-w-[60%] mx-auto mt-8 mb-8">
-        
-        <!-- <h2 class="mb-0 text-center">Search Results</h2> -->
-        <h4 class="flex flex-row w-full mx-auto text-gray-200 opacity-70 text-center gap-6">
-            <div class="flex w-full justify-end">
-                <img src={`/bacteria_images/${AISelectedIllness}.jpg`} alt={`${AISelectedIllness} illustration`} class="w-24 h-24 object-cover rounded-full"/>
-            </div>
-            <div class="flex w-full justify-start font-bold inline opacity-100 text-gray-300">
-                {AISelectedItem}
-            </div>
-        </h4>
 
-        <div class="progress-bar mt-4 mx-auto w-[50%]">
+    <div class="bg-[var(--white)] w-full">
+        <div class="flex flex-col bg-[var(--white)] rounded min-w-[90%] max-w-[90%] sm:min-w-[60%] sm:max-w-[60%] mx-auto px-1 pb-4">
+            <div class="flex flex-row gap-4">
+                <div class="flex min-w-24 min-h-24 justify-start">
+                    {#if AISelectedIllness}
+                        <img src={`/bacteria_images/${AISelectedIllness}.jpg`} alt={`${AISelectedIllness} illustration`} class="w-24 h-24 object-cover rounded-full"/>
+                    {:else}
+                        <img src={`/bacteria_images/questionmark.jpg`} alt={`question mark illustration`} class="w-24 h-24 object-cover rounded-full opacity-50"/>
+                    {/if}
+                </div>
+                <div class="flex flex-col w-full justify-start my-auto">
+                    <div class="font-medium text-2xl text-[var(--lightbackground)]">{AISelectedIllness}</div>
+                    <div class="font-medium text-[var(--lightbackground)] opacity-50">{AISelectedItem}</div>
+                </div>
+                <button class="w-8 h-8 my-auto" style="touch-action: manipulation;">
+                    <DotsVerticalOutline class="w-8 h-8 opacity-50" />
+                    <Dropdown>
+                        <DropdownItem class="min-w-[200px] flex flex-row gap-1 text-md items-center" onclick={copyLink}><FileCopyOutline />Copy Link</DropdownItem>
+                        <DropdownItem class="min-w-[200px] flex flex-row gap-1 text-md items-center" onclick={() => {resetSearchValues(); window.scrollTo(0, 0);}}><CirclePlusOutline />New Report</DropdownItem>
+                    </Dropdown>
+                </button>
+            </div>
+
+            <div class="progress-bar mt-4 mx-auto min-w-full text-gray-200">
+                {#each segments as segment, i}
+                    <div class="segment {segment} outline outline-1" class:completed={segment === "completed"} class:pulsing={segment === "pulsing"} class:inactive={segment === "inactive"}></div>
+                {/each}
+            </div>
+        </div>
+    </div>
+
+    <div class="flex flex-col min-w-[90%] max-w-[90%] sm:min-w-[60%] sm:max-w-[60%] mx-auto mb-8">
+
             {#each segments as segment, i}
-                <div class="segment {segment}" class:completed={segment === "completed"} class:pulsing={segment === "pulsing"}></div>
+                <div class="flex flex-col bg-[var(--white)] mt-4 rounded px-4 py-4 gap-2 transition-all duration-500">
+                    {#if !results[i]}
+                        <Skeleton size="xs" class="max-h-[80px] overflow-hidden" />
+                    {:else}
+                        <div class="text-2xl text-[var(--darkbackground)]">{results[i]['title']}</div>
+                        <div class={`overflow-hidden transition-all duration-500 text-black ${results[i]['expanded'] ? 'max-h-full' : 'max-h-[50px]'}`}>
+                            {@html DOMPurify.sanitize(marked(results[i].result.replace(/\n/g, '<br>')))}
+                        </div>
+                        <button 
+                        onclick={() => {results[i]['expanded'] = !results[i]['expanded'];}}
+                        class="mt-2 text-blue-600 underline hover:text-blue-600 opacity-75">
+                        {results[i]['expanded'] ? 'Show Less' : 'Show More'}
+                        </button>
+                    {/if}
+                </div>
             {/each}
-        </div>
 
-        <div class="flex flex-col bg-[var(--white)] mt-4 rounded px-4 py-4 gap-2 transition-all duration-500">
-            <div class="text-2xl text-[var(--darkbackground)]">Overview</div>
-            {#if !result1}
-                <Skeleton size="xs" class="max-h-[80px] overflow-hidden" />
-            {:else}
-                <div class={`overflow-hidden transition-all duration-500 ${isExpanded1 ? 'max-h-full' : 'max-h-[50px]'}`}>
-                    {result1}
-                </div>
-                <button 
-                onclick={() => {isExpanded1 = !isExpanded1;}}
-                class="mt-2 text-blue-600 underline hover:text-blue-600">
-                {isExpanded1 ? 'Show Less' : 'Show More'}
-                </button>
-            {/if}
-        </div>
-
-        <div class="flex flex-col bg-[var(--white)] mt-4 rounded px-4 py-4 gap-2 transition-all duration-500">
-            <div class="text-2xl text-[var(--darkbackground)]">Detailed Analysis</div>
-            {#if !result2}
-                <Skeleton size="xs" class="max-h-[80px] overflow-hidden" />
-            {:else}
-                <div class={`overflow-hidden transition-all duration-500 ${isExpanded2 ? 'max-h-full' : 'max-h-[50px]'}`}>
-                    {result2}
-                </div>
-                <button 
-                onclick={() => {isExpanded2 = !isExpanded2;}}
-                class="mt-2 text-blue-600 underline hover:text-blue-600">
-                    {isExpanded2 ? 'Show Less' : 'Show More'}
-                </button>
-            {/if}
-        </div>
-
-        <div class="flex flex-col bg-[var(--white)] mt-4 rounded px-4 py-4 gap-2 transition-all duration-500">
-            <div class="text-2xl text-[var(--darkbackground)]">Another Analysis</div>
-            {#if !result3}
-                <Skeleton size="xs" class="max-h-[80px] overflow-hidden" />
-            {:else}
-                <div class={`overflow-hidden transition-all duration-500 ${isExpanded3 ? 'max-h-full' : 'max-h-[50px]'}`}>
-                    {result3}
-                </div>
-                <button 
-                onclick={() => {isExpanded2 = !isExpanded2;}}
-                class="mt-2 text-blue-600 underline hover:text-blue-600">
-                    {isExpanded3 ? 'Show Less' : 'Show More'}
-                </button>
-            {/if}
-        </div>
-        
     </div>
     
     <Footer />
@@ -748,7 +815,7 @@
             </div>
 
             <div class="flex flex-row justify-end">
-                <a href="#_" onclick={fetchDataForPostList} class="whitebutton rounded mt-6">
+                <button onclick={fetchDataForPostList} class="whitebutton rounded mt-6">
                     <div class="flex flex-row gap-1">
                         <div class="">
                             {#if isLoading}
@@ -764,7 +831,7 @@
                             {/if}
                         </div>
                     </div>
-                </a>
+                </button>
             </div>
         </div>
     {/if}
@@ -795,13 +862,23 @@
 
 <div class="fixed left-1/2 top-[110pt] transform -translate-x-1/2 -translate-y-1/2 z-10">
 	{#if isToastVisible}
-        <Toast >
+        {#if toastColor === 'green'}
+            <Toast color="green" class="rounded py-3 px-4">
+                <svelte:fragment slot="icon">
+                <CheckCircleSolid class="w-5 h-5" />
+                <span class="sr-only">Check icon</span>
+                </svelte:fragment>
+                {toastMessage}
+            </Toast>
+        {:else}
+          <Toast color="blue" class="rounded py-3 px-4">
             <svelte:fragment slot="icon">
-                <ExclamationCircleSolid class="w-5 h-5" color=orange />
-                <span class="sr-only">Warning icon</span>
+              <ExclamationCircleSolid class="w-5 h-5" />
+              <span class="sr-only">Warning icon</span>
             </svelte:fragment>
             {toastMessage}
-        </Toast>
+          </Toast>
+        {/if}
 	{/if}
 </div>
 
@@ -926,19 +1003,19 @@
     }
 
     .segment {
-        flex: 1; /* Equal size for all segments */
-        height: 6px; /* Adjust height as needed */
+        flex: 1;
+        height: 6px;
         background-color: var(--white);
         border-radius: 3px;
     }
 
     .segment.pulsing {
         animation: pulse 1s infinite;
-        background-color: var(--accent);
+        background-color: #22c55e;
     }
 
     .segment.completed {
-        background-color: var(--accent); /* Completed color */
+        background-color: #22c55e;
     }
 
     @keyframes pulse {

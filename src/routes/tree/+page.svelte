@@ -920,7 +920,7 @@
                 <span slot="header" class="text-2xl text-[var(--white)] mx-auto">How to Contribute?</span>
                 <div slot="arrowup"><ChevronUpOutline class="h-4 w-4 -me-0.5 text-white" /></div>
                     <span slot="arrowdown"><ChevronDownOutline class="h-4 w-4 -me-0.5 text-white" /></span>
-                <p class="mb-2">
+                <p class="mb-2 text-[var(--white)]">
                     1. Find a location in the tree where your contribution fits (try to be mindful of the categories).<br /><br />
                     2. Click the dotted line "Add" button.<br /><br />
                     3. Select Node or URL, fill out the necessary information.<br /><br />
@@ -931,7 +931,7 @@
                 <span slot="header" class="text-2xl text-[var(--white)] mx-auto">What is Allowed?</span>
                 <div slot="arrowup"><ChevronUpOutline class="h-4 w-4 -me-0.5 text-white" /></div>
                     <span slot="arrowdown"><ChevronDownOutline class="h-4 w-4 -me-0.5 text-white" /></span>
-                <p class="mb-2">
+                <p class="mb-2 text-[var(--white)]">
                     The best contributions are treatments you have personal experience with.<br /><br />
                     The first categories (Pharmacological, Dietary Supplements, Detox & Herx) are for single active ingredients.<br /><br />
                     Blended products, mixes by your physician, and other less commonly established ideas need to be placed in the Brands & Blends, or Miscellaneous category.
@@ -941,7 +941,7 @@
                 <span slot="header" class="text-2xl text-[var(--white)] mx-auto">Can't Find Contribution?</span>
                 <div slot="arrowup"><ChevronUpOutline class="h-4 w-4 -me-0.5 text-white" /></div>
                     <span slot="arrowdown"><ChevronDownOutline class="h-4 w-4 -me-0.5 text-white" /></span>
-                <p class="mb-2">
+                <p class="mb-2 text-[var(--white)]">
                     Your contribution was likely moved!<br /><br />
                     I try my best not to delete community additions, but I do recategorize them.<br /><br />
                     Use the search feature to find the location of specific items!
