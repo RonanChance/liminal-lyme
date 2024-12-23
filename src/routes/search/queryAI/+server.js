@@ -65,8 +65,16 @@ async function createDatabaseEntry(userId, AISelectedItem, AISelectedIllness, AI
 
 async function pushDataToServer(recordId, title, content) {
     try {
-        const data = { [title.replace(/\s+/g, '_').toLowerCase()]: content };
+        const record = await pb.collection("reports").getOne(recordId);
+        let order = record.order || "";
+        order += (order ? "," : "") + title;
+        
+        const data = { 
+            [title.replace(/\s+/g, '_').toLowerCase()]: content,
+            "order": order
+        };
         await pb.collection("reports").update(recordId, data);
+
         console.log("Data successfully pushed to server");
     } catch (error) {
         console.error("Failed to push data to server", error);

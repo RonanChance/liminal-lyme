@@ -2,7 +2,7 @@
     import { SearchOutline, ExclamationCircleSolid, ChevronDownOutline, UserSolid, DotsVerticalOutline, CheckCircleSolid, FileCopySolid, FileCopyOutline, CirclePlusOutline } from 'flowbite-svelte-icons';
     import { browser } from '$app/environment';
     import { getCookie } from '../../lib/components/constants';
-	import { Toast, Spinner, Popover, Button, Dropdown, DropdownItem } from 'flowbite-svelte';
+	import { Toast, Spinner, Popover, Button, Dropdown, DropdownItem, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell } from 'flowbite-svelte';
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
     import PocketBase from 'pocketbase';
@@ -58,6 +58,8 @@
     let userId = $state('');
 
     let maxRequests = 4;
+    let previousSearches = $state();
+    let showSearchHistory = $state(false);
 
     onMount(async () => {
         if (browser) {
@@ -80,13 +82,8 @@
                     username = storedUsername;
                     userId = storedUserId;
                     authorized = true;
-                    console.log("auth yes", authorized)
-                } else {
-                    console.log('auth no', authorized, email, userId, username);
-                }
+                } 
             } catch (e) {
-                console.log("User not authenticated:", e);
-                console.log("auth no", authorized)
                 authorized = false;
             }
         }
@@ -416,6 +413,14 @@
     }
 
     async function searchHistory() {
+        showSearchHistory = true;
+        const response = await fetch('/search/searchHistory', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ userId })
+        });
+        let responseJSON = await response.json();
+        previousSearches = responseJSON.records;
         return;
     }
 
@@ -424,29 +429,20 @@
         isAIModeEnabled = true;
         isAIResultsEnabled = true;
         resetValues();
-        let categoryNames = ['Overview', 'Positive Effects', 'Negative Effects', 'Detailed Analysis'];
-        const response = await fetch('/search/loadReport', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({id})
-        });
+
         try {
+            const response = await fetch('/search/loadReport', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({id})
+            });
             const result = await response.json();
             console.log(result);
-            categoryNames.forEach((category, i) => {
-                try {
-                    results[i] = {
-                        'title': category, 
-                        'result': result.record[category.replace(/\s+/g, '_').toLowerCase()],
-                        'expanded': false
-                    }
-                } catch {
-                    console.log('error with', category);
-                }
-            });
-            console.log(results);
-            AISelectedItem = result.record.treatment;
-            AISelectedIllness = result.record.illness;
+            results = result.results;
+
+            AISelectedItem = result.AISelectedItem;
+            AISelectedIllness = result.AISelectedIllness;
+            AIOptionalText = result.AIOptionalText;
             segments = segments.map(() => 'completed');
         } catch {
             console.log('failed');
@@ -535,13 +531,13 @@
         {#if email}
             <Button color="alternative" class="text-[var(--darkbackground)] hover:text-[var(--darkbackground)] focus:text-[var(--darkbackground)] py-2 pl-3 pr-2" style="touch-action: manipulation;">{username}<ChevronDownOutline class="w-4 h-4 text-[var(--darkbackground)]" /></Button>
             <Dropdown>
-                <DropdownItem onclick={logout}>Sign out</DropdownItem>
                 <DropdownItem onclick={searchHistory}>Search History</DropdownItem>
+                <DropdownItem onclick={logout}>Sign Out</DropdownItem>
             </Dropdown>
         {:else}
             <Button color="alternative" class="flex flex-row items-center text-[var(--darkbackground)] hover:text-[var(--darkbackground)] focus:text-[var(--darkbackground)] py-2 pl-3 pr-3" style="touch-action: manipulation;" onclick={() => {promptLogin = true}}>
                 <UserSolid class="w-4 h-4 text-[var(--darkbackground)] mr-1" />
-                Sign in
+                Sign In
             </Button>
         {/if}
     </div>
@@ -786,6 +782,38 @@
                 {/each}
             </div>
         </div>
+    </div>
+{/if}
+
+{#if showSearchHistory}
+    <!-- svelte-ignore a11y_click_events_have_key_events -->
+    <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75 z-50" role="button" tabindex="0" onclick={() => {showSearchHistory = false}}>
+        <Table divClass="relative overflow-x-auto rounded-lg shadow-lg" onclick={(event) => event.stopPropagation()}>
+            <TableHead>
+              <TableHeadCell>Illness</TableHeadCell>
+              <TableHeadCell>Treatment</TableHeadCell>
+              <TableHeadCell>Link</TableHeadCell>
+            </TableHead>
+            <TableBody tableBodyClass="divide-y">
+                {#if previousSearches}
+                    {#each previousSearches as searchItem}
+                        <TableBodyRow>
+                            <TableBodyCell>{searchItem.illness}</TableBodyCell>
+                            <TableBodyCell>{searchItem.treatment}</TableBodyCell>
+                            <TableBodyCell>
+                                <a class="rounded text-[var(--white)] bg-[var(--lightbackground)] px-3 py-2" href={`https://www.liminallyme.com/search?id=${searchItem.id}`}>Open</a>
+                            </TableBodyCell>
+                        </TableBodyRow>
+                    {/each}
+                {:else}
+                    <TableBodyRow>
+                        <TableBodyCell>Loading..</TableBodyCell>
+                        <TableBodyCell>Loading..</TableBodyCell>
+                        <TableBodyCell>Loading..</TableBodyCell>
+                    </TableBodyRow>
+                {/if}
+            </TableBody>
+        </Table>
     </div>
 {/if}
 
