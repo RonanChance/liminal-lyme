@@ -57,24 +57,42 @@
     let username = $state('');
     let userId = $state('');
 
+    let maxRequests = 4;
+
     onMount(async () => {
         if (browser) {
-            // window.addEventListener('keydown', handleKeydown);
-            const storedEmail = getCookie('email');
-            const storedUsername = getCookie('username');
-            const storedUserId = getCookie('userId');
-            if (storedEmail && storedEmail.length >= 5 && storedUserId) {
-                email = storedEmail;
-                username = storedUsername;
-                userId = storedUserId;
-                authorized = true;
-            }
+            revalidateUser();
             let loadRecordId = $page.url.searchParams.get('id');
             if (loadRecordId) {
                 loadRecord(loadRecordId);
             }
         }
     });
+
+    function revalidateUser(a) {
+        if (browser) {
+            try {
+                const storedEmail = getCookie('email');
+                const storedUsername = getCookie('username');
+                const storedUserId = getCookie('userId');
+                if (storedEmail && storedEmail.length >= 5 && storedUserId) {
+                    email = storedEmail;
+                    username = storedUsername;
+                    userId = storedUserId;
+                    authorized = true;
+                    console.log("auth yes", authorized)
+                } else {
+                    console.log('auth no', authorized, email, userId, username);
+                }
+            } catch (e) {
+                console.log("User not authenticated:", e);
+                console.log("auth no", authorized)
+                authorized = false;
+            }
+        }
+    }
+
+    $effect(() => { revalidateUser(authorized); });
 
     async function loginHandler(event) {
         const providerChoice = event.currentTarget.dataset.value;
@@ -361,22 +379,30 @@
 
     async function AISearch() {
         if (AISelectedItem && AISelectedIllness) {
-            if (!authorized)
-                promptLogin = true;
+            if (!authorized){
+                console.log(authorized);
+            }
             else {
                 const userInputs = {"AISelectedItem": AISelectedItem, "AISelectedIllness": AISelectedIllness, "AIOptionalText": AIOptionalText};
                 isAIResultsEnabled = true;
                 let result = {};
+                maxRequests = 1;
                 progressLoadingBar();
                 
-                for (let i = 0; i <= 3; i++) {
-                    result = await sendQuery({ ...userInputs, 'queryNum': i, 'recordId': recordId });
+                for (let i = 0; i < maxRequests; i++) {
+                    result = await sendQuery({ ...userInputs, 'queryNum': i, 'recordId': recordId, 'userId': userId });
                     results[i] = {'title': result.title, 'result': result.result, 'expanded': false };
                     recordId = result.recordId;
+                    maxRequests = result.maxRequests;
+
+                    if (segments.length < maxRequests) {
+                        segments = [...segments, ...Array(maxRequests - segments.length).fill("inactive")];
+                    }
+
                     progressLoadingBar();
-                    await wait(3000);
+                    await wait(2200);
                 }
-                console.log(results);
+                console.log(results, maxRequests);
             }
         } else {
             toastMessage = 'Required:';
@@ -387,6 +413,10 @@
                 toastMessage += (toastMessage ? '\n' : '') + "Condition";
             showToast();
         }
+    }
+
+    async function searchHistory() {
+        return;
     }
 
     async function loadRecord(id) {
@@ -506,9 +536,13 @@
             <Button color="alternative" class="text-[var(--darkbackground)] hover:text-[var(--darkbackground)] focus:text-[var(--darkbackground)] py-2 pl-3 pr-2" style="touch-action: manipulation;">{username}<ChevronDownOutline class="w-4 h-4 text-[var(--darkbackground)]" /></Button>
             <Dropdown>
                 <DropdownItem onclick={logout}>Sign out</DropdownItem>
+                <DropdownItem onclick={searchHistory}>Search History</DropdownItem>
             </Dropdown>
         {:else}
-            <Button color="alternative" class="text-[var(--darkbackground)] hover:text-[var(--darkbackground)] focus:text-[var(--darkbackground)] py-2 pl-3 pr-3" style="touch-action: manipulation;" onclick={() => {promptLogin = true}}><UserSolid class="w-4 h-4 text-[var(--darkbackground)] mr-1" /> Sign in</Button>
+            <Button color="alternative" class="flex flex-row items-center text-[var(--darkbackground)] hover:text-[var(--darkbackground)] focus:text-[var(--darkbackground)] py-2 pl-3 pr-3" style="touch-action: manipulation;" onclick={() => {promptLogin = true}}>
+                <UserSolid class="w-4 h-4 text-[var(--darkbackground)] mr-1" />
+                Sign in
+            </Button>
         {/if}
     </div>
     <label class="flex flex-row gap-2 cursor-pointer">
