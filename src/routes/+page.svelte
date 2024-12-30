@@ -70,7 +70,7 @@
     <div class="flex flex-row sm:max-w-[80%] sm:mx-auto">
         <div class="z-10">
             <h1 class="leading-tight tracking-wide text-left sm:text-center">Optimize<br class="sm:hidden" /> <span class="text-[var(--accent)]">Tick-Borne</span> <br class="hidden" />Illness <br class="sm:hidden" />Recovery</h1>
-            <h3 class="pt-6 pb-6 text-left sm:text-center">Medications and supplements should <br class="sm:hidden" /> improve your health, not set you back.</h3>
+            <h3 class="pt-6 pb-6 text-left sm:text-center text-[var(--white)]">Medications and supplements should <br class="sm:hidden" /> improve your health, not set you back.</h3>
             <!-- show on non-mobile -->
             <div class="flex">
                 <button id="scrollDown1" class="hidden sm:inline-flex flex flex-row whitebutton rounded-lg mt-4 gap-2 h-[50px] justify-center items-center mx-auto" type="button">
@@ -116,7 +116,7 @@
         </div>
     
         
-        <h3 class="mt-4 mb-4 max-w-[80%] mx-auto text-center" in:blur={{duration: 400}}>Use Reddit & crowd-sourced tick-borne disease data to see how people with your <a class="text-[var(--accent)]" href="/about#what_conditions_are_supported">conditions</a> react to <a class="text-[var(--accent)]" href="/about#what_supplements_are_supported">supplements</a> & <a class="text-[var(--accent)]" href="/about#what_medications_are_supported">medications</a>
+        <h3 class="mt-4 mb-4 max-w-[80%] mx-auto text-center text-[var(--white)]" in:blur={{duration: 400}}>Use Reddit & crowd-sourced tick-borne disease data to see how people with your <a class="text-[var(--accent)]" href="/about#what_conditions_are_supported">conditions</a> react to <a class="text-[var(--accent)]" href="/about#what_supplements_are_supported">supplements</a> & <a class="text-[var(--accent)]" href="/about#what_medications_are_supported">medications</a>
             <button data-popover-target="popover-description" data-popover-placement="bottom-end" type="button" id="info-button">
                 <svg class="w-4 h-4 ml-0 text-gray-400 hover:text-gray-500" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                     <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"></path>

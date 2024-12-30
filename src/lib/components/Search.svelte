@@ -82,7 +82,7 @@
                     username = storedUsername;
                     userId = storedUserId;
                     authorized = true;
-                } 
+                }
             } catch (e) {
                 authorized = false;
             }
@@ -127,6 +127,10 @@
                 } catch (e) {
                     console.log(e);
                 }
+            }
+
+            if (AISelectedItem && AISelectedIllness) {
+                AISearch();
             }
 
         } catch (e) {
@@ -377,9 +381,8 @@
     async function AISearch() {
         if (AISelectedItem && AISelectedIllness) {
             if (!authorized){
-                console.log(authorized);
-            }
-            else {
+                promptLogin = true;
+            } else {
                 const userInputs = {"AISelectedItem": AISelectedItem, "AISelectedIllness": AISelectedIllness, "AIOptionalText": AIOptionalText};
                 isAIResultsEnabled = true;
                 let result = {};
@@ -400,6 +403,7 @@
                     await wait(2200);
                 }
                 console.log(results, maxRequests);
+                history.pushState({}, '', `/search?id=${recordId}`);
             }
         } else {
             toastMessage = 'Required:';
@@ -645,8 +649,8 @@
 <!-- AI MODE RESULTS -->
 {#if isAIModeEnabled && isAIResultsEnabled}
 
-    <div class="bg-[var(--white)] w-full">
-        <div class="flex flex-col bg-[var(--white)] rounded min-w-[90%] max-w-[90%] sm:min-w-[60%] sm:max-w-[60%] mx-auto px-1 pb-4">
+    <div class="w-full mt-6">
+        <div class="flex flex-col rounded min-w-[90%] max-w-[90%] sm:min-w-[60%] sm:max-w-[60%] mx-auto px-1 pb-4">
             <div class="flex flex-row gap-4">
                 <div class="flex min-w-24 min-h-24 justify-start">
                     {#if AISelectedIllness}
@@ -656,11 +660,11 @@
                     {/if}
                 </div>
                 <div class="flex flex-col w-full justify-start my-auto">
-                    <div class="font-medium text-2xl text-[var(--lightbackground)]">{AISelectedIllness}</div>
-                    <div class="font-medium text-[var(--lightbackground)] opacity-50">{AISelectedItem}</div>
+                    <div class="font-medium text-2xl text-[var(--white)]">{AISelectedIllness}</div>
+                    <div class="font-medium text-[var(--white)] opacity-70">{AISelectedItem}</div>
                 </div>
                 <button class="w-8 h-8 my-auto" style="touch-action: manipulation;">
-                    <DotsVerticalOutline class="w-8 h-8 opacity-50" />
+                    <DotsVerticalOutline class="w-8 h-8 opacity-90 text-[var(--white)]" />
                     <Dropdown>
                         <DropdownItem class="min-w-[200px] flex flex-row gap-1 text-md items-center" onclick={copyLink}><FileCopyOutline />Copy Link</DropdownItem>
                         <DropdownItem class="min-w-[200px] flex flex-row gap-1 text-md items-center" onclick={() => {resetSearchValues(); window.scrollTo(0, 0);}}><CirclePlusOutline />New Report</DropdownItem>
@@ -668,7 +672,7 @@
                 </button>
             </div>
 
-            <div class="progress-bar mt-4 mx-auto min-w-full text-gray-200">
+            <div class="progress-bar mt-6 mb-2 mx-auto min-w-full text-gray-200">
                 {#each segments as segment, i}
                     <div class="segment {segment} outline outline-1" class:completed={segment === "completed"} class:pulsing={segment === "pulsing"} class:inactive={segment === "inactive"}></div>
                 {/each}
@@ -676,15 +680,15 @@
         </div>
     </div>
 
-    <div class="flex flex-col min-w-[90%] max-w-[90%] sm:min-w-[60%] sm:max-w-[60%] mx-auto mb-8">
+    <div class="flex flex-col min-w-[95%] max-w-[95%] sm:min-w-[60%] sm:max-w-[60%] mx-auto mb-4">
 
             {#each segments as segment, i}
-                <div class="flex flex-col bg-[var(--white)] mt-4 rounded px-4 py-4 gap-2 transition-all duration-500">
+                <div class="flex flex-col bg-[var(--white)] mb-4 rounded px-4 py-4 gap-2 transition-all duration-500">
                     {#if !results[i]}
                         <Skeleton size="xs" class="max-h-[80px] overflow-hidden" />
                     {:else}
                         <div class="text-2xl text-[var(--darkbackground)]">{results[i]['title']}</div>
-                        <div class={`overflow-hidden transition-all duration-500 text-black ${results[i]['expanded'] ? 'max-h-full' : 'max-h-[50px]'}`}>
+                        <div class={`overflow-hidden transition-all duration-500 text-black ${results[i]['expanded'] ? 'max-h-full' : 'max-h-[95px]'}`}>
                             {@html DOMPurify.sanitize(marked(results[i].result.replace(/\n/g, '<br>')))}
                         </div>
                         <button 
@@ -788,7 +792,7 @@
 {#if showSearchHistory}
     <!-- svelte-ignore a11y_click_events_have_key_events -->
     <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75 z-50" role="button" tabindex="0" onclick={() => {showSearchHistory = false}}>
-        <Table divClass="relative overflow-x-auto rounded-lg shadow-lg" onclick={(event) => event.stopPropagation()}>
+        <Table divClass="relative overflow-x-auto rounded-lg shadow-lg max-h-[50%] overflow-y-auto" onclick={(event) => event.stopPropagation()}>
             <TableHead>
               <TableHeadCell>Illness</TableHeadCell>
               <TableHeadCell>Treatment</TableHeadCell>
@@ -801,7 +805,7 @@
                             <TableBodyCell>{searchItem.illness}</TableBodyCell>
                             <TableBodyCell>{searchItem.treatment}</TableBodyCell>
                             <TableBodyCell>
-                                <a class="rounded text-[var(--white)] bg-[var(--lightbackground)] px-3 py-2" href={`https://www.liminallyme.com/search?id=${searchItem.id}`}>Open</a>
+                                <a class="rounded text-[var(--white)] bg-[var(--lightbackground)] px-3 py-2" href={`/search?id=${searchItem.id}`}>Open</a>
                             </TableBodyCell>
                         </TableBodyRow>
                     {/each}

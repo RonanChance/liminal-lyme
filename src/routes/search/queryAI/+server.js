@@ -30,9 +30,9 @@ export const POST = async ({ request }) => {
         prompt = record.prompt;
 
         // replace placeholders
-        prompt = prompt.replace('${AISelectedItem}', AISelectedItem);
-        prompt = prompt.replace('${AISelectedIllness}', AISelectedIllness);
-        prompt = prompt.replace('${AIOptionalText}', AIOptionalText);
+        prompt = prompt.replaceAll('${AISelectedItem}', AISelectedItem);
+        prompt = prompt.replaceAll('${AISelectedIllness}', AISelectedIllness);
+        prompt = prompt.replaceAll('${AIOptionalText}', AIOptionalText);
 
         messages.push({ role: "user", content: prompt});
 
