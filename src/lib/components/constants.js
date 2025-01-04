@@ -25,6 +25,14 @@ export function getCookie(name) {
     return null;
 }
 
+export function incrementCounterCookie() {
+    const currentCount = parseInt(getCookie("searchCount"), 10) || 0;
+    const date = new Date();
+    date.setTime(date.getTime() + 7 * 24 * 60 * 60 * 1000);
+    const expires = `expires=${date.toUTCString()}`;
+    document.cookie = `searchCount=${encodeURIComponent(currentCount + 1)}; ${expires}; path=/`;
+}
+
 export function shuffleArray(array) {
     let currentIndex = array.length,  randomIndex;
   

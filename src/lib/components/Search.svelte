@@ -1,7 +1,7 @@
 <script>
-    import { SearchOutline, ExclamationCircleSolid, ChevronDownOutline, UserSolid, DotsVerticalOutline, CheckCircleSolid, FileCopySolid, FileCopyOutline, CirclePlusOutline } from 'flowbite-svelte-icons';
+    import { SearchOutline, ExclamationCircleSolid, ChevronDownOutline, UserSolid, DotsVerticalOutline, CheckCircleSolid, FileCopySolid, FileCopyOutline, CirclePlusOutline, ForwardSolid } from 'flowbite-svelte-icons';
     import { browser } from '$app/environment';
-    import { getCookie } from '../../lib/components/constants';
+    import { getCookie, incrementCounterCookie } from '../../lib/components/constants';
 	import { Toast, Spinner, Popover, Button, Dropdown, DropdownItem, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell } from 'flowbite-svelte';
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
@@ -53,7 +53,6 @@
     let authorized = $state(false);
     let promptLogin = $state(false);
 
-    let email = $state('');
     let username = $state('');
     let userId = $state('');
 
@@ -74,11 +73,9 @@
     function revalidateUser(a) {
         if (browser) {
             try {
-                const storedEmail = getCookie('email');
                 const storedUsername = getCookie('username');
                 const storedUserId = getCookie('userId');
-                if (storedEmail && storedEmail.length >= 5 && storedUserId) {
-                    email = storedEmail;
+                if (storedUserId && storedUsername) {
                     username = storedUsername;
                     userId = storedUserId;
                     authorized = true;
@@ -102,13 +99,11 @@
                     w.location.href = url;
                  }
             });
-            
-            email = data.meta.email;
+
             username = data.meta?.username || data.meta?.name;
             userId = data.record.id;
 
             document.cookie = `username=${username}; path=/;`;
-            document.cookie = `email=${email}; path=/;`;
             document.cookie = `userId=${userId}; path=/;`;
             
             authorized = true;
@@ -141,11 +136,9 @@
     async function logout() {
     try {
             await PB_USERS.authStore.clear();
-            email = '';
             username = '';
             userId = '';
             document.cookie = `username=${username}; path=/;`;
-            document.cookie = `email=${email}; path=/;`;
             document.cookie = `userId=${userId}; path=/;`;
             authorized = false;
         } catch (error) {
@@ -379,41 +372,47 @@
     }
 
     async function AISearch() {
-        if (AISelectedItem && AISelectedIllness) {
-            if (!authorized){
-                promptLogin = true;
-            } else {
-                const userInputs = {"AISelectedItem": AISelectedItem, "AISelectedIllness": AISelectedIllness, "AIOptionalText": AIOptionalText};
-                isAIResultsEnabled = true;
-                let result = {};
-                maxRequests = 1;
-                progressLoadingBar();
-                
-                for (let i = 0; i < maxRequests; i++) {
-                    result = await sendQuery({ ...userInputs, 'queryNum': i, 'recordId': recordId, 'userId': userId });
-                    results[i] = {'title': result.title, 'result': result.result, 'expanded': false };
-                    recordId = result.recordId;
-                    maxRequests = result.maxRequests;
-
-                    if (segments.length < maxRequests) {
-                        segments = [...segments, ...Array(maxRequests - segments.length).fill("inactive")];
-                    }
-
-                    progressLoadingBar();
-                    await wait(2200);
-                }
-                console.log(results, maxRequests);
-                history.pushState({}, '', `/search?id=${recordId}`);
-            }
-        } else {
-            toastMessage = 'Required:';
-            toastColor = 'orange';
-            if (!AISelectedItem)
-                toastMessage += (toastMessage ? '\n' : '') + "Supplement/Medication";
-            if (!AISelectedIllness)
-                toastMessage += (toastMessage ? '\n' : '') + "Condition";
-            showToast();
+        if (!AISelectedItem || !AISelectedIllness) {
+            requireSelection()
+            return;
         }
+
+        let searchNumber = parseInt(getCookie("searchCount"), 10) || 0;
+        if (!authorized && searchNumber > 3){
+            promptLogin = true;
+            return;
+        }
+
+        const userInputs = {"AISelectedItem": AISelectedItem, "AISelectedIllness": AISelectedIllness, "AIOptionalText": AIOptionalText};
+        isAIResultsEnabled = true;
+        let result = {};
+        maxRequests = 4;
+        progressLoadingBar();
+        incrementCounterCookie();
+        
+        for (let i = 0; i < maxRequests; i++) {
+            result = await sendQuery({ ...userInputs, 'queryNum': i, 'recordId': recordId, 'userId': userId });
+            results[i] = {'title': result.title, 'result': result.result, 'expanded': false };
+            recordId = result.recordId;
+            maxRequests = result.maxRequests;
+
+            if (segments.length < maxRequests) {
+                segments = [...segments, ...Array(maxRequests - segments.length).fill("inactive")];
+            }
+
+            progressLoadingBar();
+            await wait(1000);
+        }
+        history.pushState({}, '', `/search?id=${recordId}`);
+    }
+
+    function requireSelection(){
+        toastMessage = 'Required:'; toastColor = 'orange';
+        if (!AISelectedItem)
+            toastMessage += (toastMessage ? '\n' : '') + "Supplement/Medication";
+        if (!AISelectedIllness)
+            toastMessage += (toastMessage ? '\n' : '') + "Condition";
+        showToast();
     }
 
     async function searchHistory() {
@@ -523,24 +522,30 @@
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="mr-2 mb-1" viewBox="0 0 1792 1792">
                         <path d="M896 128q209 0 385.5 103t279.5 279.5 103 385.5q0 251-146.5 451.5t-378.5 277.5q-27 5-40-7t-13-30q0-3 .5-76.5t.5-134.5q0-97-52-142 57-6 102.5-18t94-39 81-66.5 53-105 20.5-150.5q0-119-79-206 37-91-8-204-28-9-81 11t-92 44l-38 24q-93-26-192-26t-192 26q-16-11-42.5-27t-83.5-38.5-85-13.5q-45 113-8 204-79 87-79 206 0 85 20.5 150t52.5 105 80.5 67 94 39 102.5 18q-39 36-49 103-21 10-45 15t-57 5-65.5-21.5-55.5-62.5q-19-32-48.5-52t-49.5-24l-20-3q-21 0-29 4.5t-5 11.5 9 14 13 12l7 5q22 10 43.5 38t31.5 51l10 23q13 38 44 61.5t67 30 69.5 7 55.5-3.5l23-4q0 38 .5 88.5t.5 54.5q0 18-13 30t-40 7q-232-77-378.5-277.5t-146.5-451.5q0-209 103-385.5t279.5-279.5 385.5-103zm-477 1103q3-7-7-12-10-3-13 2-3 7 7 12 9 6 13-2zm31 34q7-5-2-16-10-9-16-3-7 5 2 16 10 10 16 3zm30 45q9-7 0-19-8-13-17-6-9 5 0 18t17 7zm42 42q8-8-4-19-12-12-20-3-9 8 4 19 12 12 20 3zm57 25q3-11-13-16-15-4-19 7t13 15q15 6 19-6zm63 5q0-13-17-11-16 0-16 11 0 13 17 11 16 0 16-11zm58-10q-2-11-18-9-16 3-14 15t18 8 14-14z"></path>
                     </svg>
-                    <span class="text-center items-center">Continue with GitHub</span>
+                    <span class="flex text-center items-center">Continue with GitHub</span>
                 </button>
             </div>
         </div>
     </div>
 {/if}
 
-<div class="flex flex-row justify-between items-center px-[5%] sm:px-3 bg-[var(--white)] pt-1 pb-4">
-    <div class="text-[var(--white)]">
-        {#if email}
-            <Button color="alternative" class="text-[var(--darkbackground)] hover:text-[var(--darkbackground)] focus:text-[var(--darkbackground)] py-2 pl-3 pr-2" style="touch-action: manipulation;">{username}<ChevronDownOutline class="w-4 h-4 text-[var(--darkbackground)]" /></Button>
+<div class="flex flex-row justify-between items-center px-[5%] sm:px-3 bg-[var(--white)] pt-1 pb-4 text-[var(--white)]">
+    <div class="flex flex-row gap-2">
+        {#if isAIResultsEnabled}
+            <Button color="alternative" class="flex flex-row items-center text-[var(--darkbackground)] hover:text-[var(--darkbackground)] focus:text-[var(--darkbackground)] py-2 pl-3 pr-3" style="touch-action: manipulation;" onclick={() => window.location.href = '/search'}>
+                <ForwardSolid class="w-4 h-4 text-[var(--darkbackground)] mr-1 transform scale-x-[-1] mb-0.5" />
+                Back
+            </Button>
+        {/if}
+        {#if username}
+            <Button color="alternative" class="text-[var(--darkbackground)] hover:text-[var(--darkbackground)] focus:text-[var(--darkbackground)] py-2 pl-3 pr-2" style="touch-action: manipulation;">{username}<ChevronDownOutline class="w-4 h-4 text-[var(--darkbackground)] mb-0.5" /></Button>
             <Dropdown>
                 <DropdownItem onclick={searchHistory}>Search History</DropdownItem>
                 <DropdownItem onclick={logout}>Sign Out</DropdownItem>
             </Dropdown>
         {:else}
             <Button color="alternative" class="flex flex-row items-center text-[var(--darkbackground)] hover:text-[var(--darkbackground)] focus:text-[var(--darkbackground)] py-2 pl-3 pr-3" style="touch-action: manipulation;" onclick={() => {promptLogin = true}}>
-                <UserSolid class="w-4 h-4 text-[var(--darkbackground)] mr-1" />
+                <UserSolid class="w-4 h-4 text-[var(--darkbackground)] mr-1 mb-0.5" />
                 Sign In
             </Button>
         {/if}

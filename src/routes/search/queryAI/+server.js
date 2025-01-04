@@ -2,8 +2,22 @@ import OpenAI from "openai";
 import PocketBase from 'pocketbase';
 import { OPENAI_API_KEY } from '$env/static/private';
 import { PB_EMAIL, PB_PASSWORD } from '$env/static/private';
+import { TELEGRAM_BOT_TOKEN, TELEGRAM_USER_ID  } from '$env/static/private';
 
 const pb = new PocketBase("https://pb.liminallyme.com");
+
+async function sendTelegramMessage(message) {
+    const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+    const response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            chat_id: TELEGRAM_USER_ID,
+            text: message,
+        }),
+    });
+    return response.json();
+}
 
 export const POST = async ({ request }) => {
     let { AISelectedItem, AISelectedIllness, AIOptionalText, queryNum, recordId, maxRequests, userId } = await request.json();
@@ -55,11 +69,16 @@ export const POST = async ({ request }) => {
 
 async function createDatabaseEntry(userId, AISelectedItem, AISelectedIllness, AIOptionalText) {
     const newEntry = await pb.collection("reports").create({
-        'userid': userId,
+        'userid': userId || 'mx6msaz4il8031y',
         'treatment': AISelectedItem,
         'illness': AISelectedIllness,
         'optional': AIOptionalText,
     });
+
+    try {
+        sendTelegramMessage(`Generating: ${AISelectedItem} for ${AISelectedIllness}`);
+    } catch (e) {}
+
     return newEntry.id;
 }
 
