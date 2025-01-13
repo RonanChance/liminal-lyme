@@ -3,7 +3,7 @@
 
 // const pb = new PocketBase("https://pb.liminallyme.com");
 
-// export const POST = async ({ request }) => {
+// export const GET = async ({}) => {
 //     try {
 //         // Authenticate
 //         await pb.admins.authWithPassword(PB_EMAIL, PB_PASSWORD);
@@ -11,6 +11,7 @@
 //         let page = 1;
 //         const perPage = 50; // Adjust based on your preference
 //         let records;
+//         console.log("APPROVING ALL");
 
 //         // Loop through pages to fetch and update all records
 //         do {

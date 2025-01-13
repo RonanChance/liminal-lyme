@@ -1,10 +1,10 @@
 <script>
     import { onMount } from 'svelte';
-    import { fade } from 'svelte/transition';
+    import { fade, fly } from 'svelte/transition';
     import { Confetti } from "svelte-confetti";
     import TopBanner from '../../lib/components/TopBanner.svelte';
     import Footer from '../../lib/components/Footer.svelte';
-    import { Input, Button, Select, Popover, Spinner, AccordionItem, Accordion} from 'flowbite-svelte';
+    import { Input, Button, Select, Popover, Spinner, AccordionItem, Accordion, Alert } from 'flowbite-svelte';
     import { FilePenSolid, LinkOutline, CloseOutline, UserCircleSolid, InfoCircleSolid, ChevronDownOutline, ChevronUpOutline, SearchOutline } from 'flowbite-svelte-icons';
     import MedicalDisclaimer from '../../lib/components/MedicalDisclaimer.svelte';
     import { isValidUrl } from '../../lib/utils/validations.js';
@@ -20,6 +20,7 @@
     let loading = $state(true);
 
     let throwConfetti = $state(false);
+    let showSuccessfulAddAlert = $state(false);
     let contributeMode = $state(false);
     let deleteMode = $state(false);
     let isDeleting = $state(false);
@@ -76,7 +77,7 @@
                 if (window.innerWidth <= 400) scrollAmount = 3810;
                 else if (window.innerWidth <= 768) scrollAmount = 3790;
                 else if (window.innerWidth <= 1280) scrollAmount = 3580;
-                else if (window.innerWidth <= 1920) scrollAmount = 3630;
+                else if (window.innerWidth <= 1920) scrollAmount = 3730;
                 else if (window.innerWidth <= 2560) scrollAmount = 3630;
                 else scrollAmount = 3600;
                 outerContainer.scrollTop = scrollAmount;
@@ -135,7 +136,7 @@
         const result = await response.json();
 
         if (result.success) {
-            alert('Thank you for contributing \u{1F389}\n\nCheck the tree to see your addition!\n\nNew additions can be removed by you or the community until verified by an admin.');
+            showSuccessfulAddAlert = true;
             data.records.push(result.record);
             addNodeToLocalTree(selectedNode.parent, result.record);
             addNodeToRecentRecords(result.record);
@@ -823,7 +824,17 @@
     </div>
 {/if}
 
-<div class="{loading ? 'invisible' : 'visible'} tree-container relative overflow-auto bg-[var(--darkbackground)] max-h-[55vh] sm:max-h-[70vh] sm:max-w-[80%] sm:mx-auto sm:mt-4 rounded-lg outline outline-1 mx-2 mt-2" style="outline-color: rgba(255, 255, 255, 0.4);" bind:this={outerContainer}>
+{#if showSuccessfulAddAlert}
+  <div class="flex absolute z-50 w-full justify-center mt-2 px-4" transition:fly={{ y: -50, duration: 500 }}>
+    <Alert color="green" class="border-b-4" defaultClass="p-3 gap-3 text-sm" onclick={() => { showSuccessfulAddAlert = false }}>
+      <InfoCircleSolid slot="icon" class="w-5 h-5" />
+      Success! An admin will review your contribution. It can be edited by the
+      community until approved.
+    </Alert>
+  </div>
+{/if}
+
+<div class="{loading ? 'invisible' : 'visible'} tree-container relative overflow-auto bg-[var(--darkbackground)] max-h-[55vh] sm:max-h-[70vh] rounded-lg outline outline-1 mx-1 mt-1" style="outline-color: rgba(255, 255, 255, 0.4);" bind:this={outerContainer}>
     <div class="grid-lines absolute top-0 left-0 w-full h-full pointer-events-none" style="height: 8000px; width: 4000px;"></div>
     <div class="tree relative z-1 sm:ml-[6%] lg:ml-[5%] xl:ml-[13%] 3xl:ml-[18%] 4xl:ml-[25%]" bind:this={container}></div>
     
