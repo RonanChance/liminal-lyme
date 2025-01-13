@@ -897,15 +897,15 @@
     </div>
 
     <div class="notification-scroll-container w-[90%] sm:max-w-[80%] mx-auto text-[var(--white)] max-h-[325px] overflow-y-auto rounded-lg">
-        {#each data.recentRecords as { id, created, name, link, link_text } (id)}
-            <div class="bg-[var(--white)] text-[var(--darkbackground)] rounded-lg p-2 my-2 flex flex-row items-center justify-between">
-                <div class="icon ml-2 mr-4">
+        {#each data.recentRecords as { id, created, name, link_text } (id)}
+            <div class="bg-[var(--white)] text-[var(--darkbackground)] rounded-lg p-2 my-2 flex items-center">
+                <div class="icon ml-2 mr-4 flex-shrink-0">
                     <svg width="25" height="25">
                         <use href={icons[name] || "#icon-tree"} />
                     </svg>
                 </div>
-                <div class="flex flex-col">
-                    <div class="title w-[20ch] text-sm truncate overflow-hidden whitespace-nowrap text-ellipsis">
+                <div class="flex flex-1 flex-col min-w-0">
+                    <div class="title text-sm truncate overflow-hidden whitespace-nowrap text-ellipsis">
                         {#if link_text}
                             {link_text}
                         {:else}
@@ -913,7 +913,7 @@
                         {/if}
                     </div>
                 </div>
-                <div class="ml-auto mr-2">
+                <div class="ml-4 mr-2 flex-shrink-0">
                     <div class="time text-xs">
                         {timeAgo(created)}
                     </div>
@@ -923,7 +923,7 @@
                 </div>
             </div>
         {/each}
-    </div>
+    </div>    
 
     <div>
         <Accordion flush >

@@ -19,7 +19,7 @@ export async function load() {
             page++;
         } while (records.items.length === perPage);
 
-        const recentRecords = await pb.collection('tree').getList(1, 25, { sort: '-created' });
+        const recentRecords = await pb.collection('tree').getList(1, 30, { sort: '-created' });
 
         return { 
             records: allRecords,
