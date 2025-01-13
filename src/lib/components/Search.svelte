@@ -694,7 +694,7 @@
                     {:else}
                         <div class="text-2xl text-[var(--darkbackground)]">{results[i]['title']}</div>
                         <div class={`overflow-hidden transition-all duration-500 text-black ${results[i]['expanded'] ? 'max-h-full' : 'max-h-[95px]'}`}>
-                            {@html DOMPurify.sanitize(marked(results[i].result.replace(/\n/g, '<br>')))}
+                            {@html DOMPurify.sanitize(marked(results[i].result))}
                         </div>
                         <button 
                         onclick={() => {results[i]['expanded'] = !results[i]['expanded'];}}
