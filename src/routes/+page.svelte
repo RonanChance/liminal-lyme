@@ -155,20 +155,6 @@
 <div class="flex flex-col relative">
     
     <div class="flex flex-col md:flex-row md:justify-center bg-[var(--lightbackground)] pt-3 pb-10">
-        
-        <div class="flex flex-row md:flex-col flex-1 items-center mt-6 ml-[2%] mr-[2%] md:max-w-[30%]" in:blur={{duration: 450}}>
-            <div class="min-w-[50%] max-w-[50%] md:min-w-[70%] md:max-w-[70%] xl:min-w-[60%] xl:max-w-[60%] 2xl:min-w-[40%] 2xl:max-w-[40%]">
-                <video src="videos/tree.mp4" type="video/mp4" class="mx-auto rounded-xl" playsinline autoplay loop muted></video>
-            </div>
-            <div class="flex flex-col items-center text-center text-[var(--white)] text-lg max-w-[75%] px-[2%] md:mt-5 gap-1">
-                <strong class="text-2xl font-medium">Research Tree</strong>
-                <div class="italic opacity-90 font-light">Locate treatment ideas with the community research tree</div>
-                <a href="/tree" class="px-4 py-1 bg-[--darkbackground] rounded text-[var(--white)] mt-3 flex items-center">
-                    Tree
-                    <ArrowRightOutline class="text-[var(--white)] inline ml-1" />
-                </a>
-            </div>
-        </div>
 
         <div class="flex flex-row md:flex-col flex-1 items-center mt-6 ml-[2%] mr-[2%] md:max-w-[30%]" in:blur={{duration: 450}}>
             <div class="min-w-[50%] max-w-[50%] md:min-w-[70%] md:max-w-[70%] xl:min-w-[60%] xl:max-w-[60%] 2xl:min-w-[40%] 2xl:max-w-[40%]">
@@ -181,6 +167,20 @@
                     Search
                     <ArrowRightOutline class="text-[var(--white)] inline ml-1" />
                 </a>                
+            </div>
+        </div>
+        
+        <div class="flex flex-row md:flex-col flex-1 items-center mt-6 ml-[2%] mr-[2%] md:max-w-[30%]" in:blur={{duration: 450}}>
+            <div class="min-w-[50%] max-w-[50%] md:min-w-[70%] md:max-w-[70%] xl:min-w-[60%] xl:max-w-[60%] 2xl:min-w-[40%] 2xl:max-w-[40%]">
+                <video src="videos/tree.mp4" type="video/mp4" class="mx-auto rounded-xl" playsinline autoplay loop muted></video>
+            </div>
+            <div class="flex flex-col items-center text-center text-[var(--white)] text-lg max-w-[75%] px-[2%] md:mt-5 gap-1">
+                <strong class="text-2xl font-medium">Research Tree</strong>
+                <div class="italic opacity-90 font-light">Locate treatment ideas with the community research tree</div>
+                <a href="/tree" class="px-4 py-1 bg-[--darkbackground] rounded text-[var(--white)] mt-3 flex items-center">
+                    Tree
+                    <ArrowRightOutline class="text-[var(--white)] inline ml-1" />
+                </a>
             </div>
         </div>
 
