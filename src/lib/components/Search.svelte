@@ -298,8 +298,8 @@
     }
 
     // find number of posts matching the criteria
-    $effect(() => { calculateNumberRedditPosts(AISelectedItem, AISelectedIllness)});
-    async function calculateNumberRedditPosts(AISelectedItem, AISelectedIllness) {
+    $effect(() => { calculateRedditPostsNumber(AISelectedItem, AISelectedIllness)});
+    async function calculateRedditPostsNumber(AISelectedItem, AISelectedIllness) {
         try {
 			isLoading = true;
             if (AISelectedItem || AISelectedIllness) {
@@ -333,7 +333,7 @@
         }
     }
 
-    let segments = $state(Array(4).fill("inactive"));
+    let segments = $state(Array(6).fill("inactive"));
     let activeSegment = $state(0);
     let results = $state({});
 
@@ -386,7 +386,7 @@
         const userInputs = {"AISelectedItem": AISelectedItem, "AISelectedIllness": AISelectedIllness, "AIOptionalText": AIOptionalText};
         isAIResultsEnabled = true;
         let result = {};
-        maxRequests = 4;
+        maxRequests = 6;
         progressLoadingBar();
         incrementCounterCookie();
         
@@ -401,7 +401,7 @@
             }
 
             progressLoadingBar();
-            await wait(1000);
+            await wait(250);
         }
         history.pushState({}, '', `/search?id=${recordId}`);
     }
@@ -623,7 +623,7 @@
                         </div>
                         <div class="flex items-center text-left h-full">Details</div>
                     </div>
-                    <textarea class="border-0 rounded bg-[var(--white)] my-2 mr-2 text-regular text-[var(--darkbackground)] placeholder-gray-400 w-full" placeholder="(optional) details you would like considered" bind:value={AIOptionalText} maxlength=200></textarea>
+                    <textarea class="border-0 rounded bg-[var(--white)] my-2 mr-2 text-regular text-[var(--darkbackground)] placeholder-gray-400 w-full" placeholder="(optional) questions/details you want considered" bind:value={AIOptionalText} maxlength=200></textarea>
                 </div>
             </div>
 
@@ -679,7 +679,7 @@
 
             <div class="progress-bar mt-6 mb-2 mx-auto min-w-full text-gray-200">
                 {#each segments as segment, i}
-                    <div class="segment {segment} outline outline-1" class:completed={segment === "completed"} class:pulsing={segment === "pulsing"} class:inactive={segment === "inactive"}></div>
+                    <div class="segment {segment}" class:completed={segment === "completed"} class:pulsing={segment === "pulsing"} class:inactive={segment === "inactive"}></div>
                 {/each}
             </div>
         </div>
@@ -688,19 +688,32 @@
     <div class="flex flex-col min-w-[95%] max-w-[95%] sm:min-w-[60%] sm:max-w-[60%] mx-auto mb-4">
 
             {#each segments as segment, i}
-                <div class="flex flex-col bg-[var(--white)] mb-4 rounded px-4 py-4 gap-2 transition-all duration-500">
+                <div class={`flex flex-col mb-4 rounded px-4 py-4 gap-2 transition-all duration-500 ${results[i]?.result ? 'bg-[var(--white)]' : 'bg-gray-300 opacity-40'} ${results[i]?.title === "Reddit Summary" ? 'outline outline-orange-500' : ''}`}>
                     {#if !results[i]}
                         <Skeleton size="xs" class="max-h-[80px] overflow-hidden" />
                     {:else}
-                        <div class="text-2xl text-[var(--darkbackground)]">{results[i]['title']}</div>
-                        <div class={`overflow-hidden transition-all duration-500 text-black ${results[i]['expanded'] ? 'max-h-full' : 'max-h-[95px]'}`}>
-                            {@html DOMPurify.sanitize(marked(results[i].result))}
+                        <div class="text-2xl text-[var(--darkbackground)] flex flex-row justify-between mr-2 items-center">
+                            {results[i]['title']}
+                            {#if results[i]['title'] === "Reddit Summary"}
+                                <svg class="w-7 h-7 mb-1" viewBox="0 0 256 256" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="xMidYMid" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <circle fill="#FF4500" cx="128" cy="128" r="128"> </circle> <path d="M213.149867,129.220267 C213.149867,118.843733 204.758756,110.603378 194.532978,110.603378 C189.498311,110.603378 184.918756,112.585956 181.562311,115.791644 C168.745244,106.635378 151.195022,100.6848 131.662222,99.9224889 L140.206933,59.9409778 L167.980089,65.8915556 C168.287289,72.9116444 174.084267,78.5578667 181.257956,78.5578667 C188.5824,78.5578667 194.532978,72.6072889 194.532978,65.28 C194.532978,57.9555556 188.5824,52.0049778 181.257956,52.0049778 C176.069689,52.0049778 171.490133,55.0570667 169.353956,59.4830222 L138.377956,52.9208889 C137.462044,52.7672889 136.546133,52.9208889 135.934578,53.3788444 C135.172267,53.8368 134.714311,54.5991111 134.563556,55.5150222 L125.100089,100.073244 C105.262933,100.6848 87.4083556,106.635378 74.4376889,115.945244 C71.0812444,112.739556 66.5016889,110.756978 61.4670222,110.756978 C51.0904889,110.756978 42.8501333,119.148089 42.8501333,129.373867 C42.8501333,137.002667 47.4268444,143.4112 53.8382222,146.312533 C53.5310222,148.141511 53.3802667,149.973333 53.3802667,151.958756 C53.3802667,180.644978 86.7996444,203.995022 128.001422,203.995022 C169.2032,203.995022 202.622578,180.798578 202.622578,151.958756 C202.622578,150.126933 202.468978,148.141511 202.164622,146.312533 C208.573156,143.4112 213.149867,136.849067 213.149867,129.220267 Z M85.2721778,142.495289 C85.2721778,135.170844 91.2227556,129.220267 98.5500444,129.220267 C105.874489,129.220267 111.825067,135.170844 111.825067,142.495289 C111.825067,149.819733 105.874489,155.773156 98.5500444,155.773156 C91.2227556,155.923911 85.2721778,149.819733 85.2721778,142.495289 Z M159.588978,177.746489 C150.432711,186.902756 133.036089,187.514311 128.001422,187.514311 C122.813156,187.514311 105.416533,186.749156 96.4110222,177.746489 C95.04,176.372622 95.04,174.236444 96.4110222,172.862578 C97.7848889,171.491556 99.9210667,171.491556 101.294933,172.862578 C107.094756,178.6624 119.303111,180.644978 128.001422,180.644978 C136.699733,180.644978 149.058844,178.6624 154.705067,172.862578 C156.078933,171.491556 158.215111,171.491556 159.588978,172.862578 C160.809244,174.236444 160.809244,176.372622 159.588978,177.746489 Z M157.1456,155.923911 C149.821156,155.923911 143.870578,149.973333 143.870578,142.648889 C143.870578,135.324444 149.821156,129.373867 157.1456,129.373867 C164.472889,129.373867 170.423467,135.324444 170.423467,142.648889 C170.423467,149.819733 164.472889,155.923911 157.1456,155.923911 Z" fill="#FFFFFF" fill-rule="nonzero"> </path> </g> </g></svg>
+                            {/if}
                         </div>
-                        <button 
-                        onclick={() => {results[i]['expanded'] = !results[i]['expanded'];}}
-                        class="mt-2 text-blue-600 underline hover:text-blue-600 opacity-75">
-                        {results[i]['expanded'] ? 'Show Less' : 'Show More'}
-                        </button>
+                        <div class={`overflow-hidden transition-all duration-500 text-black ${results[i]['expanded'] ? 'max-h-full' : 'max-h-[95px]'}`}>
+                            {#if results[i].result}
+                                {@html DOMPurify.sanitize(marked(results[i].result))}
+                            {:else}
+                                {#if results[i]['title'] === 'Reddit Summary'}
+                                    Coming Soon!
+                                {:else}
+                                    N/A
+                                {/if}
+                            {/if}
+                        </div>
+                        {#if results[i].result}
+                            <button onclick={() => {results[i]['expanded'] = !results[i]['expanded'];}} class="mt-2 text-blue-600 underline hover:text-blue-600 opacity-75">
+                                {results[i]['expanded'] ? 'Show Less' : 'Show More'}
+                            </button>
+                        {/if}
                     {/if}
                 </div>
             {/each}
@@ -733,7 +746,7 @@
                 }
             }}>
 
-            <div class="scroll-container max-h-[170px] overflow-y-auto text-[12pt] bg-[var(--white)] rounded mt-1" style="display: {dropdownOpen ? 'block' : 'none'}">
+            <div class="scroll-container max-h-[300px] overflow-y-auto text-[12pt] bg-[var(--white)] rounded mt-1" style="display: {dropdownOpen ? 'block' : 'none'}">
                 {#each filtered as option}
                     <div
                         class="mt-1 mb-1 pl-3"
@@ -768,7 +781,7 @@
         <div class="flex flex-col min-w-[80%] max-w-[80%] sm:min-w-[40%] sm:max-w-[40%] 2xl:min-w-[20%] 2xl:max-w-[20%] mx-auto" role="button" tabindex="0" onclick={(event) => event.stopPropagation()}>
             <!-- <input class="mt-4 rounded w-[100%]" type="text" bind:value={searchTerm} onfocus={() => {toggleIllnessesDropdown(true)}} onblur={() => {setTimeout(() => toggleDropdown(false), 100)}} placeholder="Select Illness"> -->
 
-            <div class="scroll-container max-h-[170px] overflow-y-auto text-[12pt] bg-white rounded" style="display: {illnessesDropdownOpen ? 'block' : 'none'}">
+            <div class="scroll-container max-h-[300px] overflow-y-auto text-[12pt] bg-white rounded" style="display: {illnessesDropdownOpen ? 'block' : 'none'}">
                 {#each illnesses as option}
                     <div
                         class="mt-1 mb-1 pl-3"

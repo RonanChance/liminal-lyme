@@ -5,6 +5,7 @@ import { PB_EMAIL, PB_PASSWORD } from '$env/static/private';
 import { TELEGRAM_BOT_TOKEN, TELEGRAM_USER_ID  } from '$env/static/private';
 
 const pb = new PocketBase("https://pb.liminallyme.com");
+const PB_DATA = new PocketBase("https://data.liminallyme.com");
 
 async function sendTelegramMessage(message) {
     const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
@@ -19,6 +20,30 @@ async function sendTelegramMessage(message) {
     return response.json();
 }
 
+async function calculateRedditFilterQuery(AISelectedItem, AISelectedIllness) {
+    try {
+        let filterQuery1 = `(medications?~'${AISelectedItem}') && (conditions?~'${AISelectedIllness}')`;
+        let filterQuery2 = `(supplements?~'${AISelectedItem}') && (conditions?~'${AISelectedIllness}')`;
+        console.log(filterQuery1, filterQuery2)
+        const response1 = await PB_DATA.collection('posts').getList(1, 1, { filter: filterQuery1 });
+        const response2 = await PB_DATA.collection('posts').getList(1, 1, { filter: filterQuery2 });
+        console.log(response1, response2);
+        let total1 = response1.totalItems || 0;
+        let total2 = response2.totalItems || 0;
+        console.log(total1, total2);
+
+        if (total1 > total2) {
+            return filterQuery1;
+        } else if (total2 > total1) {
+            return filterQuery2;
+        } else {
+            return null;
+        }
+    } catch (error) {
+        console.error('Error fetching count:', error);
+    }
+}
+
 export const POST = async ({ request }) => {
     let { AISelectedItem, AISelectedIllness, AIOptionalText, queryNum, recordId, maxRequests, userId } = await request.json();
     const openai = new OpenAI({ apiKey: OPENAI_API_KEY });
@@ -26,6 +51,7 @@ export const POST = async ({ request }) => {
     let response;
     let record;
     let prompt;
+    let allPosts;
 
     try {
 
@@ -43,13 +69,42 @@ export const POST = async ({ request }) => {
         record = record[queryNum.toString()];
         prompt = record.prompt;
 
+        if (record.title === "Reddit Summary") {
+            let filterQuery = await calculateRedditFilterQuery(AISelectedItem, AISelectedIllness);
+
+            console.log(filterQuery);
+            if (filterQuery) {
+                // we should proceed with the existing labeled posts
+                const fetched_posts = await PB_DATA.collection('posts').getList(1, 10, { sort: '-score', filter: filterQuery });
+                let result_list = fetched_posts.items;
+
+                console.log(result_list.length);
+
+                if (!result_list || result_list.length === 0) {
+                    return; // Return early if no posts are found
+                }
+
+                // Combine all posts into a single string
+                allPosts = result_list.map(element => {let cleanBody = element.body.replace(/<\/?[^>]+(>|$)/g, ""); return cleanBody.split(/\s+/).slice(0, 75).join(" ");}).join(" "); // Join with space, max 75 words
+                console.log(allPosts);
+            } else {
+                // TODO: scan through them all on our own, but for now skipping this
+            }
+        }
+
+        if (record.title === "Your Questions" && AIOptionalText.length <= 5) {
+            await pushDataToServer(recordId, record.title, null);
+            return new Response(JSON.stringify({ success: true, title: record.title, result: null, recordId: recordId, maxRequests: maxRequests }));
+        }
+        
         // replace placeholders
         prompt = prompt.replaceAll('${AISelectedItem}', AISelectedItem);
         prompt = prompt.replaceAll('${AISelectedIllness}', AISelectedIllness);
         prompt = prompt.replaceAll('${AIOptionalText}', AIOptionalText);
+        prompt = prompt.replaceAll('${AIRedditPosts}', allPosts);
 
-        messages.push({ role: "user", content: prompt});
-
+        messages.push({ role: "user", content: prompt });
+        
         response = await openai.chat.completions.create({ 
             model: model,
             messages,
@@ -57,9 +112,8 @@ export const POST = async ({ request }) => {
             max_tokens: record.max_tokens
         });
 
-        await pushDataToServer(recordId, record.title, response.choices[0]?.message?.content);
-        
-        return new Response(JSON.stringify({ success: true, title: record.title, result: response.choices[0]?.message?.content || "No result", recordId: recordId, maxRequests: maxRequests }));
+        await pushDataToServer(recordId, record.title, response?.choices?.[0]?.message?.content || null);
+        return new Response(JSON.stringify({ success: true, title: record.title, result: response?.choices?.[0]?.message?.content || null, recordId: recordId, maxRequests: maxRequests }));
     
     } catch (e) {
         console.log('Query failed', e);
