@@ -60,6 +60,20 @@
     let previousSearches = $state();
     let showSearchHistory = $state(false);
 
+    const illnessUrlMapping = {
+        "Lyme Disease": "https://commons.wikimedia.org/wiki/File:Borrelia_burgdorferi_(CDC-PHIL_-6631)_lores.jpg", 
+        "Bartonellosis": "https://commons.wikimedia.org/wiki/File:PMC3294597_10-0647-F.png",
+        "Babesiosis": "https://commons.wikimedia.org/wiki/File:Blood_smear_of_Babesia_microti,_original.png",
+        "Mycoplasma": "https://commons.wikimedia.org/wiki/File:Mycoplasma_felis.jpg",
+        "Rickettsia": "https://commons.wikimedia.org/wiki/File:Rickettsia_rickettsii.jpg",
+        "Anaplasmosis": "https://commons.wikimedia.org/wiki/File:Anaplasma-phagocytophilum-sheep.jpg",
+        "Ehrlichiosis": "https://commons.wikimedia.org/wiki/File:Echaff.jpg",
+        "Toxoplasmosis": "https://commons.wikimedia.org/wiki/File:Toxoplasma_gondii_tachy.jpg",
+        "Relapsing Fever": "https://commons.wikimedia.org/wiki/File:PMC3016790_03-0280-F1.png",
+        "Tularemia": "https://commons.wikimedia.org/wiki/File:Macrophage_Infected_with_Francisella_tularensis_Bacteria_(5950310835).jpg",
+        "Tickborne Encephalitis (TBE)": "https://commons.wikimedia.org/wiki/File:Tick-borne_encephalitis_virus_(crop).png",
+    } 
+
     onMount(async () => {
         if (browser) {
             revalidateUser();
@@ -659,7 +673,9 @@
             <div class="flex flex-row gap-4">
                 <div class="flex min-w-24 min-h-24 justify-start">
                     {#if AISelectedIllness}
+                    <a href="{illnessUrlMapping[AISelectedIllness]}">
                         <img src={`/bacteria_images/${AISelectedIllness}.jpg`} alt={`${AISelectedIllness} illustration`} class="w-24 h-24 object-cover rounded-full"/>
+                    </a>
                     {:else}
                         <img src={`/bacteria_images/questionmark.jpg`} alt={`question mark illustration`} class="w-24 h-24 object-cover rounded-full opacity-50"/>
                     {/if}
