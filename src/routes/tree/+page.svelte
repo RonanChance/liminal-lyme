@@ -565,11 +565,8 @@
         
         if (searchQuery.length >= 3) {
             data.records.forEach(element => {
-                if (element.name.toLowerCase().includes(searchQuery.toLowerCase())) {
-                    // make sure it's not "Amazon", "Article", etc.
-                    if (!category_options.some(option => option.value === element.name)){
-                        internalSearchResults.push({id: element.id, name: element.name})
-                    }
+                if (element.name.toLowerCase().includes(searchQuery.toLowerCase()) || element.link_text.toLowerCase().includes(searchQuery.toLowerCase())) {
+                    internalSearchResults.push({id: element.id, name: element.name, link_text: element.link_text})
                 }
             });
             searchResults = internalSearchResults;
@@ -884,9 +881,14 @@
         <div class="pt-2 w-[95%] mx-auto">
             {#if searchResults.length > 0}
                 {#each searchResults as result}
-                    <div class="flex flex-row justify-between pb-1">
-                        {result.name} <button class="underline" onclick={() => {openTreeById(result.id)}}>Show</button>
+                    <div class="flex flex-row justify-between">
+                        {#if category_options.some(option => option.name === result.name)}
+                            <span class="break-words items-center">{result.link_text}</span><button class="underline ml-6" onclick={() => {openTreeById(result.id)}}>Show</button>
+                        {:else}
+                            {result.name} <button class="underline" onclick={() => {openTreeById(result.id)}}>Show</button>
+                        {/if}
                     </div>
+                    <hr class="opacity-25 mx-auto my-2" />
                 {/each}
             {:else}
                 {#if searchQuery.length >= 3}
