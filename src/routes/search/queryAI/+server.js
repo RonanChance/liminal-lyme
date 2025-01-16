@@ -85,7 +85,7 @@ export const POST = async ({ request }) => {
                 }
 
                 // Combine all posts into a single string
-                allPosts = result_list.map(element => {let cleanBody = element.body.replace(/<\/?[^>]+(>|$)/g, ""); return cleanBody.split(/\s+/).slice(0, 75).join(" ");}).join(" "); // Join with space, max 75 words
+                allPosts = result_list.map(element => {let cleanBody = element.body.replace(/<\/?[^>]+(>|$)/g, ""); return cleanBody.split(/\s+/).slice(0, 125).join(" ");}).join(" "); // Join with space, max 75 words
                 console.log(allPosts);
             } else {
                 // TODO: scan through them all on our own, but for now skipping this

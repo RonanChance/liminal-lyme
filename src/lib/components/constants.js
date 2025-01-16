@@ -14,6 +14,38 @@ export const chat_ideas = ['Bee Venom Therapy', 'Ozone Therapy', 'Hyperbaric Oxy
 export const total_scanned = '23,826,765';
 export const total_cataloged = '9,605';
 
+export const categoryOptions = [
+    { value: 'Amazon', name: 'Amazon' },
+    { value: 'Article', name: 'Article' },
+    { value: 'Podcast', name: 'Podcast' },
+    { value: 'Purchase', name: 'Purchase' },
+    { value: 'Website', name: 'Website' },
+    { value: 'YouTube', name: 'YouTube'}
+];
+
+export const categoryIcons = {
+    Amazon: "#icon-amazon",
+    Article: "#icon-article",
+    Podcast: "#icon-podcast",
+    Purchase: "#icon-purchase",
+    Website: "#icon-website",
+    YouTube: "#icon-youtube"
+};
+
+export const illnessUrlMapping = {
+    "Lyme Disease": "https://commons.wikimedia.org/wiki/File:Borrelia_burgdorferi_(CDC-PHIL_-6631)_lores.jpg", 
+    "Bartonellosis": "https://commons.wikimedia.org/wiki/File:PMC3294597_10-0647-F.png",
+    "Babesiosis": "https://commons.wikimedia.org/wiki/File:Blood_smear_of_Babesia_microti,_original.png",
+    "Mycoplasma": "https://commons.wikimedia.org/wiki/File:Mycoplasma_felis.jpg",
+    "Rickettsia": "https://commons.wikimedia.org/wiki/File:Rickettsia_rickettsii.jpg",
+    "Anaplasmosis": "https://commons.wikimedia.org/wiki/File:Anaplasma-phagocytophilum-sheep.jpg",
+    "Ehrlichiosis": "https://commons.wikimedia.org/wiki/File:Echaff.jpg",
+    "Toxoplasmosis": "https://commons.wikimedia.org/wiki/File:Toxoplasma_gondii_tachy.jpg",
+    "Relapsing Fever": "https://commons.wikimedia.org/wiki/File:PMC3016790_03-0280-F1.png",
+    "Tularemia": "https://commons.wikimedia.org/wiki/File:Macrophage_Infected_with_Francisella_tularensis_Bacteria_(5950310835).jpg",
+    "Tickborne Encephalitis (TBE)": "https://commons.wikimedia.org/wiki/File:Tick-borne_encephalitis_virus_(crop).png",
+} 
+
 export function getCookie(name) {
     const cookies = document.cookie.split('; ');
     for (const cookie of cookies) {

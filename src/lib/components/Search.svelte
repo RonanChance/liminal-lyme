@@ -11,8 +11,10 @@
 	import { all_tags, illnesses, tag_counts } from './constants.js';
     import { Skeleton } from 'flowbite-svelte';
     import Footer from '../../lib/components/Footer.svelte';
-    import { page } from '$app/stores'
+    import { page } from '$app/stores';
     import { marked } from 'marked';
+    import { illnessUrlMapping, categoryOptions } from './constants.js';
+
     import DOMPurify from 'dompurify';
 
 	const PB_DATA = new PocketBase('https://data.liminallyme.com');
@@ -38,6 +40,7 @@
 
 	let slicedItems = $state(all_tags.slice(0, 9));
 	let filtered = $state(all_tags);
+    let treeRecords = $state([]);
 
     let AISelectedItem = $state("");
     let AISelectedIllness = $state("");
@@ -59,20 +62,6 @@
     let maxRequests = 4;
     let previousSearches = $state();
     let showSearchHistory = $state(false);
-
-    const illnessUrlMapping = {
-        "Lyme Disease": "https://commons.wikimedia.org/wiki/File:Borrelia_burgdorferi_(CDC-PHIL_-6631)_lores.jpg", 
-        "Bartonellosis": "https://commons.wikimedia.org/wiki/File:PMC3294597_10-0647-F.png",
-        "Babesiosis": "https://commons.wikimedia.org/wiki/File:Blood_smear_of_Babesia_microti,_original.png",
-        "Mycoplasma": "https://commons.wikimedia.org/wiki/File:Mycoplasma_felis.jpg",
-        "Rickettsia": "https://commons.wikimedia.org/wiki/File:Rickettsia_rickettsii.jpg",
-        "Anaplasmosis": "https://commons.wikimedia.org/wiki/File:Anaplasma-phagocytophilum-sheep.jpg",
-        "Ehrlichiosis": "https://commons.wikimedia.org/wiki/File:Echaff.jpg",
-        "Toxoplasmosis": "https://commons.wikimedia.org/wiki/File:Toxoplasma_gondii_tachy.jpg",
-        "Relapsing Fever": "https://commons.wikimedia.org/wiki/File:PMC3016790_03-0280-F1.png",
-        "Tularemia": "https://commons.wikimedia.org/wiki/File:Macrophage_Infected_with_Francisella_tularensis_Bacteria_(5950310835).jpg",
-        "Tickborne Encephalitis (TBE)": "https://commons.wikimedia.org/wiki/File:Tick-borne_encephalitis_virus_(crop).png",
-    } 
 
     onMount(async () => {
         if (browser) {
@@ -403,6 +392,7 @@
         maxRequests = 6;
         progressLoadingBar();
         incrementCounterCookie();
+        isLoading = true;
         
         for (let i = 0; i < maxRequests; i++) {
             result = await sendQuery({ ...userInputs, 'queryNum': i, 'recordId': recordId, 'userId': userId });
@@ -417,7 +407,10 @@
             progressLoadingBar();
             await wait(250);
         }
-        history.pushState({}, '', `/search?id=${recordId}`);
+
+        await searchTree(AISelectedItem);
+        isLoading = false;
+        return;
     }
 
     function requireSelection(){
@@ -427,6 +420,39 @@
         if (!AISelectedIllness)
             toastMessage += (toastMessage ? '\n' : '') + "Condition";
         showToast();
+    }
+
+    async function searchTree(AISelectedItem) {
+        let internalSearchResults = [];
+
+        try {
+            const response = await fetch('/search/searchTree', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userId })
+            });
+
+            const responseJSON = await response.json();
+            const records = responseJSON.records;
+
+            records.forEach(element => {
+                if (
+                    element.name.toLowerCase().includes(AISelectedItem.toLowerCase()) || 
+                    element.link_text.toLowerCase().includes(AISelectedItem.toLowerCase())
+                ) {
+                    internalSearchResults.push({
+                        id: element.id,
+                        name: element.name,
+                        link_text: element.link_text
+                    });
+                }
+            });
+        } catch (e) {
+            console.error('Error searching tree:', e);
+            return [];
+        }
+        treeRecords = internalSearchResults;
+        return;
     }
 
     async function searchHistory() {
@@ -442,6 +468,7 @@
     }
 
     async function loadRecord(id) {
+        isLoading = true;
         recordId = id;
         isAIModeEnabled = true;
         isAIResultsEnabled = true;
@@ -461,6 +488,9 @@
             AISelectedIllness = result.AISelectedIllness;
             AIOptionalText = result.AIOptionalText;
             segments = segments.map(() => 'completed');
+
+            await searchTree(AISelectedItem);
+            isLoading = false;
         } catch {
             console.log('failed');
         }
@@ -733,6 +763,27 @@
                     {/if}
                 </div>
             {/each}
+
+            <div class={`flex flex-col mb-4 rounded px-4 py-4 gap-2 transition-all duration-500 ${treeRecords.length >= 1 ? 'bg-[var(--white)] outline outline-green-600' : 'bg-gray-300 opacity-40'}`}>
+                {#if treeRecords.length >= 1}
+                    <div class="text-2xl text-[var(--darkbackground)] flex flex-row justify-between mr-2 items-center">
+                        {"Research Tree"}
+                        <svg fill="#000000" class="w-7 h-7 pb-[3px]" viewBox="0 0 256.00 256.00" id="Flat" xmlns="http://www.w3.org/2000/svg" stroke="#000000" stroke-width="6.4"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M168,108h48a12.01343,12.01343,0,0,0,12-12V48a12.01343,12.01343,0,0,0-12-12H168a12.01343,12.01343,0,0,0-12,12V68H144a28.03146,28.03146,0,0,0-28,28v28H84V108A12.01343,12.01343,0,0,0,72,96H32a12.01343,12.01343,0,0,0-12,12v40a12.01343,12.01343,0,0,0,12,12H72a12.01343,12.01343,0,0,0,12-12V132h32v28a28.03146,28.03146,0,0,0,28,28h12v20a12.01343,12.01343,0,0,0,12,12h48a12.01343,12.01343,0,0,0,12-12V160a12.01343,12.01343,0,0,0-12-12H168a12.01343,12.01343,0,0,0-12,12v20H144a20.02229,20.02229,0,0,1-20-20V96a20.02229,20.02229,0,0,1,20-20h12V96A12.01343,12.01343,0,0,0,168,108ZM76,148a4.00427,4.00427,0,0,1-4,4H32a4.00427,4.00427,0,0,1-4-4V108a4.00427,4.00427,0,0,1,4-4H72a4.00427,4.00427,0,0,1,4,4Zm88,12a4.00427,4.00427,0,0,1,4-4h48a4.00427,4.00427,0,0,1,4,4v48a4.00427,4.00427,0,0,1-4,4H168a4.00427,4.00427,0,0,1-4-4Zm0-112a4.00427,4.00427,0,0,1,4-4h48a4.00427,4.00427,0,0,1,4,4V96a4.00427,4.00427,0,0,1-4,4H168a4.00427,4.00427,0,0,1-4-4Z"></path> </g></svg>
+                    </div>
+                    {#each treeRecords as result}
+                        <div class="flex flex-row justify-between">
+                            {#if categoryOptions.some(option => option.name === result.name)}
+                                <span class="break-words items-center">{result.link_text}</span><a class="ml-3 underline" href="/tree?id={result.id}">Show</a>
+                            {:else}
+                                {result.name} <a class="ml-3 underline" href="/tree?id={result.id}">Show</a>
+                            {/if}
+                        </div>
+                        <hr class="flex mx-auto w-[100%] my-2 border-t-2" />
+                    {/each}
+                {:else}
+                    <Spinner size={6} color="gray" />
+                {/if}
+            </div>
 
     </div>
     
@@ -1099,7 +1150,7 @@
 
     .progress-bar {
         display: flex;
-        gap: 8px; /* Space between segments */
+        gap: 4px; /* Space between segments */
     }
 
     .segment {

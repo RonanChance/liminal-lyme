@@ -11,6 +11,8 @@
     import { initTouchEvents, initDragging } from '../../lib/utils/touchEvents.js';
     import { buildNestedRecords, findNodeByIdIgnoringHidden, findNodeById, collapse, expand } from '../../lib/utils/treeUtils';
     import { formatDistanceToNowStrict, parseISO } from 'date-fns';
+    import { categoryOptions, categoryIcons } from '../../lib/components/constants.js';
+    import { page } from '$app/stores';
     import * as d3 from 'd3';
 
     let { data } = $props();
@@ -33,24 +35,6 @@
     let link_text = $state("");
     let link_url = $state("");
     let username = $state("");
-
-    const category_options = [
-        { value: 'Amazon', name: 'Amazon' },
-        { value: 'Article', name: 'Article' },
-        { value: 'Podcast', name: 'Podcast' },
-        { value: 'Purchase', name: 'Purchase' },
-        { value: 'Website', name: 'Website' },
-        { value: 'YouTube', name: 'YouTube'}
-    ];
-
-    const icons = {
-        Amazon: "#icon-amazon",
-        Article: "#icon-article",
-        Podcast: "#icon-podcast",
-        Purchase: "#icon-purchase",
-        Website: "#icon-website",
-        YouTube: "#icon-youtube"
-    };
 
     let searchResults = $state([]);
     let searchQuery = $state("");
@@ -82,6 +66,10 @@
                 else scrollAmount = 3600;
                 outerContainer.scrollTop = scrollAmount;
                 outerContainer.scrollLeft = 180;
+            }
+            let recordId = $page.url.searchParams.get('id');
+            if (recordId) {
+                openTreeById(recordId);
             }
         } catch (error) {
             console.log("Error fetching data", error);
@@ -722,7 +710,7 @@
                 <div class="relative inline-flex items-center w-full">
                     <Select
                         name="category"
-                        items={category_options}
+                        items={categoryOptions}
                         type="text"
                         class="focus:outline-none focus:ring-transparent text-base w-full {category ? "" : "text-opacity-60"}"
                         style="border-color: var(--darkbackground);"
@@ -882,10 +870,10 @@
             {#if searchResults.length > 0}
                 {#each searchResults as result}
                     <div class="flex flex-row justify-between">
-                        {#if category_options.some(option => option.name === result.name)}
-                            <span class="break-words items-center">{result.link_text}</span><button class="underline ml-6" onclick={() => {openTreeById(result.id)}}>Show</button>
+                        {#if categoryOptions.some(option => option.name === result.name)}
+                            <span class="break-words items-center">{result.link_text}</span><button class="underline ml-2" onclick={() => {openTreeById(result.id)}}>Show</button>
                         {:else}
-                            {result.name} <button class="underline" onclick={() => {openTreeById(result.id)}}>Show</button>
+                            {result.name} <button class="ml-2 underline" onclick={() => {openTreeById(result.id)}}>Show</button>
                         {/if}
                     </div>
                     <hr class="opacity-25 mx-auto my-2" />
@@ -903,7 +891,7 @@
             <div class="bg-[var(--white)] text-[var(--darkbackground)] rounded-lg p-2 my-2 flex items-center">
                 <div class="icon ml-2 mr-4 flex-shrink-0">
                     <svg width="25" height="25">
-                        <use href={icons[name] || "#icon-tree"} />
+                        <use href={categoryIcons[name] || "#icon-tree"} />
                     </svg>
                 </div>
                 <div class="flex flex-1 flex-col min-w-0">
